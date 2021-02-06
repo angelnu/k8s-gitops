@@ -24,3 +24,10 @@ Secrets encrypted with [Ansible Vault](https://docs.ansible.com/ansible/latest/u
    ```
    ansible-playbook -i hosts-production flux_install.yaml
    ```
+
+## Uninstall
+
+3. Uninstall flux2
+   ```
+   flux uinstall
+   ```
