@@ -1,0 +1,65 @@
+- name: "Prepare nodes"
+  hosts: nodes
+  tasks:
+
+  - name: Download flux2 installer
+    get_url:
+      url: https://toolkit.fluxcd.io/install.sh
+      dest: /tmp/flux2-installer.sh
+      mode: u+rwx
+    register: flux2_download
+
+  - name: Execute the flux2-installer.sh
+    shell: /tmp/flux2-installer.sh
+    when: flux2_download.changed
+  
+  - name: Install SOPS
+    apt:
+      deb: https://github.com/mozilla/sops/releases/download/v{{ SOPS_VERSION }}/sops_{{ SOPS_VERSION }}_amd64.deb
+    when: ansible_architecture == "x86_64"
+  
+  - name: Install SOPS GPG key
+    shell: >
+      echo "{{ SOPS_GPG }}"| gpg --batch
+      --pinentry-mode loopback
+      --import /dev/stdin
+  
+  - name: Create secret with SOPS GPG key
+    shell: >
+      {{ KUBECTL_BIN }} create -n {{ FLUX_NAMESPACE }} secret generic sops-gpg
+      --save-config --dry-run=client
+      --from-literal=sops.asc="{{ SOPS_GPG }}"
+      -o yaml
+      | {{ KUBECTL_BIN }} apply -f -
+    run_once: True
+    register: result
+    changed_when:
+    - "'unchanged'  not in result.stdout| join('')"
+    - "'configured' not in result.stdout| join('')"
+  
+  - name: Create flux NS
+    shell: "{{ KUBECTL_BIN }} create ns {{ FLUX_NAMESPACE }}"
+    run_once: True
+    register: result
+    failed_when:
+    - "'already exists' not in result.stderr"
+    - result.rc != 0
+    changed_when:
+    - "'already exists'  not in result.stderr|join('')"
+  
+  - name: "Install flux in cluster"
+    shell: > 
+      export GITHUB_TOKEN={{ FLUX2_GITHUB_TOKEN }};
+      flux bootstrap github
+      --context={{ FLUX2_CONTEXT }}
+      --owner={{FLUX_GIT_USER}}
+      --repository={{FLUX_GIT_REPO}}
+      --branch={{ FLUX_GIT_BRANCH }}
+      --personal \
+      --path={{ FLUX_GIT_PATH }}
+      --namespace={{ FLUX_NAMESPACE }} 
+    run_once: True
+    register: result
+    changed_when:
+    - "'unchanged'  not in result.stdout| join('')"
+    - "'configured' not in result.stdout| join('')"

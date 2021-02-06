@@ -1,0 +1,146 @@
+- name: "Prepare nodes for development"
+  hosts: nodes
+  tasks:
+  - name: Insert/update ssh authorised_keys
+    blockinfile:
+      path: .ssh/authorized_keys
+      block: |
+        {%- for key in SSH_PUB_KEYS_2_INSTALL %}
+        #{{ key.description }}
+        {{ key.value }}"
+        {% endfor %}
+
+  - name: Copy ssh files
+    copy:
+      dest: "{{ item[0] }}"
+      mode: 0600
+      content: "{{ item[1] }}"
+    with_items: '{{ SSH_FILES_2_INSTALL.items() }}'
+
+  - name: Insert/Update bash aliases
+    blockinfile:
+      path: .bashrc
+      block: |
+        {%- for alias in ALIAS_2_INSTALL %}
+        alias {{ alias }}="{{ ALIAS_2_INSTALL[alias] }}"
+        {% endfor %}
+
+- name: "Prepare nodes"
+  hosts: nodes
+  tasks:
+  - import_role: name=microk8s-reset
+    when: K8S_RESET
+
+  - name: Install microk8s
+    community.general.snap:
+      name: microk8s
+      classic: true
+  
+  - name: Add the domain
+    lineinfile:
+      path: /var/snap/microk8s/current/certs/csr.conf.template
+      #regexp: '^DNS.10'
+      insertafter: '^\[ alt_names \]'
+      line: DNS.10 = angelnu.com
+  
+  - name: "First node actions"
+    run_once: True
+    when: inventory_hostname == groups.nodes[0]
+
+    block:
+
+    - name: Create K8S secret
+      shell: |
+        {{ KUBECTL_BIN }} create secret docker-registry regcred \
+        --docker-username={{ DOCKER_USER }} \
+        --docker-password={{ DOCKER_PASSWORD }} \
+      # --docker-server=<your-registry-server> \
+      # --docker-email=<your-email>
+      register: result
+      failed_when:
+      - "'already exists' not in result.stderr"
+      - result.rc != 0
+      changed_when:
+      - "'already exists'  not in result.stderr|join('')"
+      retries: 60
+      delay: 5
+
+    #- name: "Define docker secret as default"
+    #  shell: |
+    #    {{ KUBECTL_BIN }} patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}'
+    #  register: result
+    #  changed_when:
+    #  - "'(no change)'  not in result.stdout|join('')"
+    
+    - name: Deploy dashboard
+      import_tasks: tasks/dashboard.yaml
+    
+    - name: Settle first node
+      import_tasks: tasks/kubernetes_node_settle.yaml
+
+    
+
+- name: Join to the first node
+  hosts: nodes[1:]
+  gather_facts: false #Already queried
+  tasks:
+
+  - name: query joined nodes
+    shell: "{{ KUBECTL_BIN }} get no -o name"
+    run_once: True
+    delegate_to: "{{ groups.nodes[0] }}"
+    changed_when: False
+    register: query_nodes_cmd
+  
+  - debug:
+      msg: "{{query_nodes_cmd.stdout_lines}}"
+    run_once: True
+  
+  - name: has this node already joined the cluster?
+    set_fact:
+      node_in_cluster: "{{ 'node/'+inventory_hostname in query_nodes_cmd.stdout_lines }}"
+  
+  - debug:
+      msg: "[{{'node/'+inventory_hostname}}, {{node_in_cluster}}]"
+    run_once: True
+  
+  - when: node_in_cluster|bool == false
+    block:
+
+    - name: create random 32 characters token
+      set_fact:
+        random_microk8s_token: "{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=32') }}"
+
+    - name: set token on first master
+      shell: "{{ MICROK8S_BIN }} add-node --token {{ random_microk8s_token }} --token-ttl 600"
+      delegate_to: "{{ groups.nodes[0] }}"
+      throttle: 1
+
+    - name: joining cluster - this will take a while...
+      shell: "{{ MICROK8S_BIN }} join {{groups.nodes[0]}}:25000/{{ random_microk8s_token }}"
+      throttle: 1
+    
+    - name: Settle remaining nodes
+      import_tasks: tasks/kubernetes_node_settle.yaml
+
+
+  - name: "Fetch kubectl config"
+    shell: |
+      rm -f ${HOME}/.kube/config
+      mkdir -p ${HOME}/.kube
+      {{ MICROK8S_BIN }} config > ${HOME}/.kube/config
+
+  - name: "Enable required microk8s addons"
+    shell: |
+      {{ MICROK8S_BIN }} enable {{ item }}
+    register: result
+    changed_when:
+    - "'already enabled' not in result.stdout"
+    - "'Nothing to do ' not in result.stderr|join('')"
+    failed_when:
+    - "'Nothing to do' not in result.stderr"
+    - result.rc != 0
+    with_items:
+    - "{{ MICROK8S_ADDONS }}"
+    #when: ansible_architecture == "x86_64" #Some only allow dep in x86_64
+    when: inventory_hostname == groups.workers[0]
