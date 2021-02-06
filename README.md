@@ -46,12 +46,13 @@ Master secret is stored in [Ansible Vault](ansible/README.md).
 
 Kubernetes passwords and secrets encrypted with [mozilla SOPS](https://github.com/mozilla/sops) which it is [supported out of the box in Flux2](https://toolkit.fluxcd.io/guides/mozilla-sops/).
 
-GPG key is deployed via [Ansible](ansible/README.md). Its hash must be kept in sync with [.sosp.yaml](.sosp.yaml).
+GPG key is deployed via [Ansible](ansible/README.md). Its hash must be kept in sync with [.sops.yaml](.sops.yaml).
 
 Based on [Vaskozl](https://github.com/Vaskozl/home-infra) I use a [pre-commit hook](scripts/find-unencrypted-secrets.sh) to ensure that secrets are never pushed unencrypted. The hook is deployed by running `cd scripts; ./install_git_hooks.sh`
 
 To encrypt files with secrets use:
 
 ```
-sops -e -i my-secret.yaml # That's it
+sops -e -i my-secret.yaml # Initial encrypt
 sops my-secret.yaml # To edit it directly in you $EDITOR
+```
