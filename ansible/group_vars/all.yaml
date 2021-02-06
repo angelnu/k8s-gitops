@@ -41,7 +41,7 @@ MICROK8S_ADDONS:
 FLUX_GIT_USER: angelnu
 FLUX_GIT_REPO: k8s-gitops
 FLUX_GIT_BRANCH: main
-FLUX_GIT_PATH: clusters/staging
+FLUX_GIT_PATH: clusters/production
 FLUX2_CONTEXT: microk8s
 FLUX_NAMESPACE: flux-system
 FLUX2_GITHUB_TOKEN: !vault |
