@@ -2,6 +2,18 @@
   hosts: nodes
   tasks:
 
+  - name: Create flux NS
+    shell: |
+      {{ KUBECTL_BIN }} create ns {{ FLUX_NAMESPACE }}
+      {{ KUBECTL_BIN }} wait   ns {{ FLUX_NAMESPACE }} --for=status=Active
+    run_once: True
+    register: result
+    failed_when:
+    - "'already exists' not in result.stderr"
+    - result.rc != 0
+    changed_when:
+    - "'already exists'  not in result.stderr|join('')"
+
   - name: Download flux2 installer
     get_url:
       url: https://toolkit.fluxcd.io/install.sh
@@ -36,17 +48,7 @@
     changed_when:
     - "'unchanged'  not in result.stdout| join('')"
     - "'configured' not in result.stdout| join('')"
-  
-  - name: Create flux NS
-    shell: "{{ KUBECTL_BIN }} create ns {{ FLUX_NAMESPACE }}"
-    run_once: True
-    register: result
-    failed_when:
-    - "'already exists' not in result.stderr"
-    - result.rc != 0
-    changed_when:
-    - "'already exists'  not in result.stderr|join('')"
-  
+
   - name: "Install flux in cluster"
     shell: > 
       export GITHUB_TOKEN={{ FLUX2_GITHUB_TOKEN }};
