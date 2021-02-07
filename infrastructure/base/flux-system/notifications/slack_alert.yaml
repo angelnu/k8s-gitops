@@ -11,3 +11,5 @@ spec:
       name: '*'
     - kind: Kustomization
       name: '*'
+    - kind: HelmRelease
+      name: '*'
