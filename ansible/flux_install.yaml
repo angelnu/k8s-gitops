@@ -49,6 +49,19 @@
     - "'unchanged'  not in result.stdout| join('')"
     - "'configured' not in result.stdout| join('')"
 
+  - name: Install GitHub secret
+    shell: >
+      {{ KUBECTL_BIN }} create -n {{ FLUX_NAMESPACE }} secret generic github
+      --save-config --dry-run=client
+      --from-literal=token="{{ FLUX2_GITHUB_TOKEN }}"
+      -o yaml
+      | {{ KUBECTL_BIN }} apply -f -
+    run_once: True
+    register: result
+    changed_when:
+    - "'unchanged'  not in result.stdout| join('')"
+    - "'configured' not in result.stdout| join('')"
+
   - name: "Install flux in cluster"
     shell: > 
       export GITHUB_TOKEN={{ FLUX2_GITHUB_TOKEN }};
