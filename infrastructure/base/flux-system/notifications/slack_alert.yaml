@@ -5,7 +5,7 @@ metadata:
 spec:
   providerRef:
     name: slack
-  eventSeverity: debug
+  eventSeverity: info
   eventSources:
     - kind: GitRepository
       name: '*'
