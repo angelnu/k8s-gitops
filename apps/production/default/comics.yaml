@@ -1,0 +1,247 @@
+# ------------------- CronJob ------------------- #
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: comics-scrapper
+spec:
+  schedule: "0 10 * * *"
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: comics-scrapper:latest
+        spec:
+          containers:
+            - name: comics-scrapper
+              image: "angelnu/comics:latest"
+              imagePullPolicy: Always
+              env:
+                - name: RSS_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: comic-secrets
+                      key: RSS_URL
+                - name: RSS_LOGIN
+                  valueFrom:
+                    secretKeyRef:
+                      name: comic-secrets
+                      key: RSS_LOGIN
+                - name: RSS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: comic-secrets
+                      key: RSS_PASSWORD
+                - name: XML_FOLDER
+                  valueFrom:
+                    secretKeyRef:
+                      name: comic-secrets
+                      key: XML_FOLDER
+                - name: RSS_SCRAPPER_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: comic-secrets
+                      key: RSS_SCRAPPER_URL
+              resources:
+                requests:
+                  memory: "10Mi"
+                  cpu: "5m"
+                limits:
+                  #memory: "128Mi"
+                  #cpu: "500m"
+              volumeMounts:
+                - mountPath: /feeds
+                  name: nfs-kubernetes
+                  subPath: ttrss/feeds
+          restartPolicy: OnFailure
+          volumes:
+            - name: nfs-kubernetes
+              persistentVolumeClaim:
+                claimName: nfs-kubernetes
+---
+# ------------------- Test Job ------------------- #
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: comics-scrapper-test
+  labels:
+    app: comics-scrapper-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comics-scrapper-test
+  template:
+    metadata:
+      name: comics-scrapper-test
+      labels:
+        app: comics-scrapper-test
+    spec:
+      nodeSelector: #Only schedule in the big server
+        kubernetes.io/hostname: server.angelnu.com
+      containers:
+      - name: comics-scrapper-test
+        image: angelnu/comics:latest
+        imagePullPolicy: Always
+        env:
+          - name: RSS_URL
+            valueFrom:
+              secretKeyRef:
+                name: comic-secrets
+                key: RSS_URL
+          - name: RSS_LOGIN
+            valueFrom:
+              secretKeyRef:
+                name: comic-secrets
+                key: RSS_LOGIN
+          - name: RSS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: comic-secrets
+                key: RSS_PASSWORD
+          - name: XML_FOLDER
+            valueFrom:
+              secretKeyRef:
+                name: comic-secrets
+                key: XML_FOLDER
+          - name: RSS_SCRAPPER_URL
+            valueFrom:
+              secretKeyRef:
+                name: comic-secrets
+                key: RSS_SCRAPPER_URL
+        resources:
+          requests:
+            memory: "5Mi"
+            cpu: "2m"
+          limits:
+            #memory: "128Mi"
+            #cpu: "500m"
+        command:
+        - "/bin/sh"
+        - "-c"
+        - |
+          trap 'exit' INT TERM
+          while [ 1 ]; do
+            sleep 600 &
+            wait $!
+          done
+        volumeMounts:
+        - mountPath: /feeds
+          name: nfs-kubernetes
+          subPath: ttrss/feeds
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 1
+      volumes:
+      - name: nfs-kubernetes
+        persistentVolumeClaim:
+          claimName: nfs-kubernetes
+---
+# ------------------- NGINX Deployment ------------------- #
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: comics-nginx
+  labels:
+    app: comics-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comics-nginx
+  template:
+    metadata:
+      labels:
+        app: comics-nginx
+    spec:
+      containers:
+      - name: comics-nginx
+        image: nginx
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "3Mi"
+            cpu: "2m"
+          limits:
+            #memory: "128Mi"
+            #cpu: "500m"
+        env:
+        - name: PGDATA
+          value: /var/lib/postgresql/data
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 60 # 1 minutes
+          timeoutSeconds: 10
+          failureThreshold: 12 # 2 minutes
+        volumeMounts:
+          - mountPath: /usr/share/nginx/html/scrapping
+            name: nfs-kubernetes
+            subPath: ttrss/feeds
+      volumes:
+      - name: nfs-kubernetes
+        persistentVolumeClaim:
+          claimName: nfs-kubernetes
+
+---
+# -------------------- Service ------------------- #
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: comics-nginx
+  name: comics-nginx
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: comics-nginx
+---
+
+# ------------------- Ingress ------------------- #
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: comics-nginx
+  annotations:
+    traefik.frontend.priority: "2"
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  tls:
+  - hosts:
+    - rss.$(GLOBAL_DOMAIN)
+    secretName: $(GLOBAL_DOMAIN_CERT)
+  rules:
+  - host: rss.$(GLOBAL_DOMAIN)
+    http:
+      paths:
+      - path: /scrapping/
+        backend:
+          serviceName: comics-nginx
+          servicePort: http
+---
+# ------------------- Ingress ------------------- #
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: comics-nginx-backup
+  annotations:
+spec:
+  tls:
+  - hosts:
+    - rnginx.home.$(GLOBAL_DOMAIN)
+    secretName: $(GLOBAL_DOMAIN_CERT)
+  rules:
+  - host: nginx.home.$(GLOBAL_DOMAIN)
+    http:
+      paths:
+      - backend:
+          serviceName: comics-nginx
+          servicePort: http

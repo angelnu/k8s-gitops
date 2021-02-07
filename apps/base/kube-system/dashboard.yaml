@@ -1,0 +1,84 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: kubernetes-dashboard
+  namespace: kube-system
+spec:
+  type: ExternalName
+  externalName: kubernetes-dashboard.kubernetes-dashboard.svc.cluster.local
+  ports:
+  - port: 80
+---
+# ------------------- Ingress ------------------- #
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dashboard
+  namespace: kube-system
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.$(GLOBAL_DOMAIN)/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.$(GLOBAL_DOMAIN)/start?rd=$scheme://$host$request_uri"
+    ingress.kubernetes.io/ssl-redirect: "true"
+    #nginx.ingress.kubernetes.io/auth-response-headers: "x-auth-request-user, x-auth-request-email, authorization"
+    #nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  tls:
+  - hosts:
+    - dashboard.$(GLOBAL_DOMAIN)
+    - dashboard.home.$(GLOBAL_DOMAIN)
+    secretName: $(GLOBAL_DOMAIN_CERT)
+  rules:
+  - host: dashboard.$(GLOBAL_DOMAIN)
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80
+  - host: dashboard.home.$(GLOBAL_DOMAIN)
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  #name: kubernetes-dashboard
+  name: cluster-admin
+subjects:
+  - kind: User
+    name: angel@angelnu.com
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard-admin-mireille
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  #name: kubernetes-dashboard
+  name: cluster-admin
+subjects:
+  - kind: User
+    name: mireille@mgregoire.eu
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard-admin-javier
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  #name: kubernetes-dashboard
+  name: cluster-admin
+subjects:
+  - kind: User
+    name: javier@nunnez.com

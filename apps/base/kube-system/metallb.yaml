@@ -1,0 +1,36 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: metallb
+spec:
+  releaseName: metallb
+  chart:
+    spec:
+      chart: metallb
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: flux-system
+  interval: 60m
+  install:
+    remediation:
+      retries: 3
+  # Default values
+  # https://github.com/bitnami/charts/tree/master/bitnami/metallb/
+  values:
+    controller:
+      image:
+        #bitnami version only has x86_64
+        repository: metallb/controller
+        tag: main
+    speaker:
+      image:
+        #bitnami version only has x86_64
+        repository: metallb/speaker
+        tag: main
+    configInline:
+      address-pools:
+      - name: default
+        protocol: layer2
+        #addresses: "$(GLOBAL_EXTERNAL_SUBNET_PREFIX).128-$(GLOBAL_EXTERNAL_SUBNET_PREFIX).191"
+        addresses: "192.168.2.128-192.168.2.191"

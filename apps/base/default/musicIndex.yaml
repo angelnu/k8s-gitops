@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: music-index
+spec:
+  selector:
+    matchLabels:
+      app: music-index
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      name: music-index
+      labels:
+        app: music-index
+    spec:
+      hostname: music-index
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+      - name: music-index
+        image: angelnu/apache-musicindex:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "20Mi"
+            cpu: "1m"
+          limits:
+            #memory: "128Mi"
+            #cpu: "500m"
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+        - mountPath: /music
+          name: music
+        - mountPath: /cache
+          name: cache
+          subPath: music-index/cache
+      volumes:
+        - name: cache
+          persistentVolumeClaim:
+            claimName: nfs-kubernetes
+        - name: music
+          flexVolume:
+            driver: "angelnu/cifs"
+            secretRef:
+              name: "cifs-secret"
+            options:
+              source: "//nas.home.angelnu.com/music"
+              mountOptions: "dir_mode=0555,file_mode=0444,noperm"
+---
+# -------------------- Service ------------------- #
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: music-index
+  name: music-index
+spec:
+  clusterIP: None
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  - name: https
+    port: 443
+    targetPort: 443
+  selector:
+    app: music-index
+---
+
+# ------------------- Ingress ------------------- #
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: music-index
+  annotations:
+    ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16,10.0.0.0/8"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # Require oauth2 for authentication
+    # - "traefik.frontend.auth.forward.address=https://ingress-auth.home.$(GLOBAL_DOMAIN)/auth"
+    # - "traefik.frontend.auth.forward.trustForwardHeader=true"
+    # - "traefik.frontend.auth.forward.authResponseHeaders=X-Auth-Request-User,X-Auth-Request-Email,Authorization,Set-Cookie"
+    # - "traefik.frontend.errors.401.backend=oauth2"
+    # - "traefik.frontend.errors.401.status=401"
+    # - "traefik.frontend.errors.401.query=https://ingress-auth.home.$(GLOBAL_DOMAIN)/start?rd=$scheme://$host$request_uri"
+spec:
+  tls:
+  - hosts:
+    - nginx.$(GLOBAL_DOMAIN)
+    secretName: $(GLOBAL_DOMAIN_CERT)
+  rules:
+  - host: music.home.$(GLOBAL_DOMAIN)
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: music-index
+          servicePort: https

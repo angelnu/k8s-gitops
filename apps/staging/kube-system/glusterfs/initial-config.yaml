@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: heketi-config-secret
+  namespace: kube-system
+data:
+  all.json: |+
+    {
+      "clusters": [
+        {
+          "nodes": [
+            {
+              "node": {
+                "hostnames": {
+                  "manage": [
+                    "n4.angelnu.com"
+                  ],
+                  "storage": [
+                    "192.168.2.xx"
+                  ]
+                },
+                "zone": 1
+              },
+              "devices": [
+                "/mnt/host-dev/sda4"
+              ]
+            },
+            {
+              "node": {
+                "hostnames": {
+                  "manage": [
+                    "n5.angelnu.com"
+                  ],
+                  "storage": [
+                    "192.168.2.xx"
+                  ]
+                },
+                "zone": 2
+              },
+              "devices": [
+                "/mnt/host-dev/sda4"
+              ]
+            },
+            {
+              "node": {
+                "hostnames": {
+                  "manage": [
+                    "n6.angelnu.com"
+                  ],
+                  "storage": [
+                    "192.168.2.xx"
+                  ]
+                },
+                "zone": 3
+              },
+              "devices": [
+                "/mnt/host-dev/sda4"
+              ]
+            }
+          ]
+        }
+      ]
+    }

@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: openvpn-server
+spec:
+  serviceName: openvpn-server
+  selector:
+    matchLabels:
+      app: openvpn-server
+  replicas: 1
+  template:
+    metadata:
+      name: openvpn-server
+      labels:
+        app: openvpn-server
+    spec:
+      #hostNetwork: true
+      hostname: openvpn-server
+      containers:
+      - name: openvpn-server
+        image: linuxserver/openvpn-as
+        imagePullPolicy: Always
+        securityContext:
+          capabilities:
+            add:
+              - NET_ADMIN
+        resources:
+          requests:
+            memory: "100Mi"
+            #cpu: "100m"
+          limits:
+            #memory: "128Mi"
+            #cpu: "500m"
+
+        ports:
+        - containerPort: 943 #admin
+        - containerPort: 9943 #tcp
+        - containerPort: 1194 #udp
+        env:
+        - name: TZ
+          value: Europe/Berlin
+        volumeMounts:
+        - mountPath: /config
+          name: config
+          subPath: openvpn/config
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: nfs-kubernetes
+---
+# -------------------- Service ------------------- #
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: openvpn-server
+  name: openvpn-server
+spec:
+  ports:
+  - name: https
+    port: 943
+  #- name: tcp
+  #  port: 9943
+  selector:
+    app: openvpn-server
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: openvpn-server-udp
+  name: openvpn-server-udp
+spec:
+  ports:
+  - name: udp
+    port: 1194
+    protocol: UDP
+  selector:
+    app: openvpn-server
+  type: LoadBalancer
+  loadBalancerIP: $(EXTERNAL_SUBNET_PREFIX).$(GLOBAL_EXTERNAL_IP_OPENVPN)
+  sessionAffinity: ClientIP
+---
+
+# ------------------- Ingress ------------------- #
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: openvpn-server
+  annotations:
+    ingress.kubernetes.io/whitelist-source-range: "$(EXTERNAL_SUBNET_PREFIX).0/16,10.0.0.0/8"
+spec:
+  rules:
+  - host: openvpn.home.$(GLOBAL_DOMAIN)
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: openvpn-server
+          servicePort: https

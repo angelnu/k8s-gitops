@@ -1,0 +1,19 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: macvlan-static
+spec:
+  config: '{
+      "cniVersion": "0.3.1",
+      "name": "macvlan-static",
+      "type": "macvlan",
+      "master": "eno2",
+      "capabilities": { "ips": true },
+      "ipam": {
+        "type": "host-local",
+        "subnet": "192.168.0.0/19",
+        "rangeStart": "$(GLOBAL_EXTERNAL_SUBNET_PREFIX).0",
+        "rangeEnd": "$(GLOBAL_EXTERNAL_SUBNET_PREFIX).63",
+        "gateway": "192.168.2.1"
+      }
+    }'

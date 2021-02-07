@@ -1,0 +1,113 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-software
+spec:
+  capacity:
+    storage: 18T
+  accessModes:
+    - ReadWriteMany
+  mountOptions:
+    - local_lock=posix
+    - nfsvers=4.1
+  nfs:
+    server: nas.home.angelnu.com
+    path: "/volume1/software"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-software
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1T
+
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-kubernetes
+spec:
+  capacity:
+    storage: 18T
+  accessModes:
+    - ReadWriteMany
+  mountOptions:
+    - local_lock=posix
+    - nfsvers=4.1
+  nfs:
+    server: nas.home.angelnu.com
+    path: "/volume1/kubernetes"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-kubernetes
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1T
+
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-video
+spec:
+  capacity:
+    storage: 18T
+  accessModes:
+    - ReadOnlyMany
+  nfs:
+    server: nas.home.angelnu.com
+    path: "/volume1/video"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-video
+spec:
+  accessModes:
+    - ReadOnlyMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 10T
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-downloads
+spec:
+  capacity:
+    storage: 18T
+  accessModes:
+    - ReadOnlyMany
+  nfs:
+    server: nas.home.angelnu.com
+    path: "/volume1/downloads"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-downloads
+spec:
+  accessModes:
+    - ReadOnlyMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 10T

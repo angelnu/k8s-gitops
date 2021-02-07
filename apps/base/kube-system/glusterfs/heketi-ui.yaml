@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heketi-ui
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: heketi-ui
+  replicas: 1
+  revisionHistoryLimit: 0
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: heketi-ui
+      labels:
+        app: heketi-ui
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+      - name: heketi-ui
+        image: orachide/heketi-ui
+        imagePullPolicy: Always
+        env:
+        - name: HEKETI_SERVER_URL
+          value: "http://heketi:8080"
+        - name: HEKETI_SERVER_USER
+          valueFrom:
+            secretKeyRef:
+              name: heketi-admin-secret
+              key: user
+        - name: HEKETI_SERVER_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: heketi-admin-secret
+              key: key
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "200m"
+          limits:
+            #memory: "128Mi"
+            #cpu: "500m"
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          tcpSocket:
+            port: 3000
+          initialDelaySeconds: 60 # 1 minutes
+          #timeoutSeconds: 5
+          #failureThreshold: 6 # 30 seconds
+
+---
+# -------------------- Service ------------------- #
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: heketi-ui
+  name: heketi-ui
+  namespace: kube-system
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 3000
+  selector:
+    app: heketi-ui
+
+---
+# ------------------- Ingress ------------------- #
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: heketi-ui
+  namespace: kube-system
+  annotations:
+    ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
+    ingress.kubernetes.io/auth-type: "basic"
+    ingress.kubernetes.io/auth-secret: "ingress-password"
+spec:
+  rules:
+  - host: heketi.home.angelnu.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: heketi-ui
+          servicePort: http

@@ -1,0 +1,73 @@
+# ------------------- Deployment ------------------- #
+
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  namespace: kube-system
+  name: mailserver
+  labels:
+    app: mailserver
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mailserver
+  template:
+    metadata:
+      namespace: kube-system
+      labels:
+        app: mailserver
+    spec:
+      containers:
+      - name: mailserver
+        image: angelnu/exim:latest
+        imagePullPolicy: Always
+        # command:
+        # - "/bin/sh"
+        # - "-ec"
+        # - |
+        #   while [ 1 ]; do sleep 2;done
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 25
+        env:
+        - name: GMAIL_USER
+          valueFrom:
+            secretKeyRef:
+              name: gmail-secret
+              key: username
+        - name: GMAIL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gmail-secret
+              key: password
+        - name: RELAY_NETWORKS
+          value: ":192.168.0.0/16:10.0.0.0/8"
+        - name: MAILNAME
+          value: server.angelnu.com
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - mailserver
+              topologyKey: "kubernetes.io/hostname"
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mailserver
+  namespace: kube-system
+spec:
+  ports:
+  - name: smtp
+    port: 25
+    targetPort: 25
+  selector:
+    app: mailserver
