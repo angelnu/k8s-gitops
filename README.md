@@ -21,15 +21,19 @@ The cluster is designed to allow tearing it completely without any data lost.
   * [code-server](https://github.com/cdr/code-server) - ~~Visual Studio~~ Code Server
 * System:
   * [flux2](https://github.com/fluxcd/flux2) - Keep cluster in sync with this repo
-  * [nginx-ingress](https://github.com/kubernetes/ingress-nginx) - Ingress controller
+    * [notifications](infrastructure/base/flux-system/notifications) - alerts to slack and GitHub
+  * [nginx-ingress](infrastructure/base/nginx) - Ingress controller
   * [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
   * [metallb](https://github.com/metallb/metallb) - Load-balancer for bare-metal
-* Persistance:
-  * Secrets stored in this git reposory wrapped - see [Secret Management](##-Secret-Management).
+* Persistance - see [Secret Management](##-Secret-Management):
+  * Secrets:
+    - [Ansible Vault](ansible) - Ansible, Deployment
+    - [SOPS](##-Secret-Management) - Flux, K8S GitOps
   * Files:
     * Fast but depending on Sinology NAS: nfs
     * Slower but replicated: custom glusterfs containers + Hekiti + custom chart to generate PVs, PVCs and backup cronjobs to the NAS.
-  * Cluster postgres: 2 instances deployed via [Zalando´s Postgres Operator](https://github.com/zalando/postgres-operator)
+  * Databases:
+    * postgres: 2 instances deployed via [Zalando´s Postgres Operator](https://github.com/zalando/postgres-operator)
 
 
 ## Installation
