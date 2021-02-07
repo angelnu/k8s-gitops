@@ -33,4 +33,4 @@ spec:
       - name: default
         protocol: layer2
         #addresses: "$(GLOBAL_EXTERNAL_SUBNET_PREFIX).128-$(GLOBAL_EXTERNAL_SUBNET_PREFIX).191"
-        addresses: "192.168.2.128-192.168.2.191"
+        addresses: "192.168.1.128-192.168.1.191"
