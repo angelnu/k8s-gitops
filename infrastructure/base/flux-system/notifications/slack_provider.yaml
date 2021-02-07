@@ -4,6 +4,6 @@ metadata:
   name: slack
 spec:
   type: slack
-  channel: general
+  channel: k8s
   secretRef:
     name: slack-url
