@@ -18,3 +18,7 @@ spec:
       kind: HelmRelease
       name: podinfo
       namespace: podinfo
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-gpg
