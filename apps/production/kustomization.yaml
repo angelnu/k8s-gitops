@@ -9,16 +9,10 @@ resources:
 
 patchesStrategicMerge:
   - podinfo/patch-values.yaml
+  - kube-system/patch-metallb.yaml
 
 configMapGenerator:
 - name: app-global-settings
-  envs:
-  - apps.env
-  - external_IPs.env
-
-configMapGenerator:
-- name: app-global-settings
-  namespace: kube-system
   envs:
   - apps.env
   - external_IPs.env
