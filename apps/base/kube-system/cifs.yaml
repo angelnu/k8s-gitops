@@ -44,7 +44,6 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: cifs-test
-  namespace: default
 spec:
   template:
     metadata:
