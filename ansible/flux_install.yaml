@@ -72,7 +72,8 @@
       --personal \
       --path={{ FLUX_GIT_PATH }}
       --namespace={{ FLUX_NAMESPACE }} 
-    run_once: True
+    #run_once: True
+    when: inventory_hostname == groups.workers[0]
     register: result
     changed_when:
     - "'unchanged'  not in result.stdout| join('')"

@@ -27,7 +27,11 @@ Secrets encrypted with [Ansible Vault](https://docs.ansible.com/ansible/latest/u
 
 ## Uninstall
 
-3. Uninstall flux2
+1. Uninstall flux2
    ```
    flux uinstall
+   ```
+2. Uninstall flux2
+   ```
+   ansible-playbook -i hosts-production microk8s_reset.yaml
    ```
