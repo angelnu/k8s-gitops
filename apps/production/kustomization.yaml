@@ -16,6 +16,13 @@ configMapGenerator:
   - apps.env
   - external_IPs.env
 
+configMapGenerator:
+- name: app-global-settings
+  namespace: kube-system
+  envs:
+  - apps.env
+  - external_IPs.env
+
 vars:
 - name: GLOBAL_DOMAIN
   objref:
