@@ -11,5 +11,13 @@ spec:
       name: '*'
     - kind: Kustomization
       name: '*'
+      
+    - kind: HelmRepository
+      name: '*'
+      namespace: '*'
+    - kind: HelmChart
+      name: '*'
+      namespace: '*'
     - kind: HelmRelease
       name: '*'
+      namespace: '*'
