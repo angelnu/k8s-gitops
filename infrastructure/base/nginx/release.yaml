@@ -3,10 +3,10 @@ kind: HelmRelease
 metadata:
   name: nginx
 spec:
-  releaseName: nginx-ingress-controller
+  releaseName: ingress-nginx
   chart:
     spec:
-      chart: nginx-ingress-controller
+      chart: ingress-nginx
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx
@@ -17,7 +17,7 @@ spec:
     remediation:
       retries: 4
   # Default values
-  # https://github.com/bitnami/charts/blob/master/bitnami/nginx-ingress-controller/values.yaml
+  # https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/values.yaml
   values:
     service:
       type: LoadBalancer
