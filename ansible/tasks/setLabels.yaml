@@ -1,0 +1,8 @@
+- name: Set labels
+  shell: "{{ KUBECTL_BIN }} label nodes {{inventory_hostname}} --overwrite {{ item.key }}={{ item.value }}"
+  delegate_to: localhost
+  environment: "{{ LOCAL_KUBECTL_ENV }}"
+  register: result
+  with_dict: "{{ k8s_labels if (k8s_labels is defined) else {} }}"
+  changed_when:
+  - "'not labeled'  not in result.stdout| join('')"

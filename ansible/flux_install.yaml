@@ -5,7 +5,6 @@
   - name: Create flux NS
     shell: |
       {{ KUBECTL_BIN }} create ns {{ FLUX_NAMESPACE }}
-      {{ KUBECTL_BIN }} wait   ns {{ FLUX_NAMESPACE }} --for=status=Active
     run_once: True
     register: result
     failed_when:

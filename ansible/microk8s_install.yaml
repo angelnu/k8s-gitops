@@ -28,8 +28,6 @@
 - name: "Prepare nodes"
   hosts: nodes
   tasks:
-  - import_role: name=microk8s-reset
-    when: K8S_RESET
 
   - name: Install microk8s
     community.general.snap:
@@ -144,3 +142,7 @@
     - "{{ MICROK8S_ADDONS }}"
     #when: ansible_architecture == "x86_64" #Some only allow dep in x86_64
     when: inventory_hostname == groups.workers[0]
+
+  - include_tasks: tasks/setLabels.yaml
+
+  - include_tasks: tasks/setTaints.yaml

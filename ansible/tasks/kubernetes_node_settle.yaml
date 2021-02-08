@@ -1,0 +1,14 @@
+- name: Wait for node to be ready
+  shell: "{{ KUBECTL_BIN }} get nodes -o json {{inventory_hostname}}"
+  environment: "{{KUBECTL_ENV}}"
+  delegate_to: "{{KUBELET_PRIMARY_MASTER_HOSTNAME}}"
+  register: result
+  vars:
+    queryStr: "status.conditions[?reason=='KubeletReady'].status"
+  until: result is succeeded and (result.stdout | from_json | json_query(queryStr) == ['True'])
+  retries: 60
+  delay: 5
+  changed_when: false
+
+- name: "Cache last node description as json variable"
+  set_fact: last_k8s_node_info={{result.stdout | from_json}}

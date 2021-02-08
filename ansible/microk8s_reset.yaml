@@ -1,0 +1,16 @@
+- name: Reset microk8s
+  hosts: all
+  gather_facts: false
+  tasks:
+  - name: export TLS certs
+    shell: |
+      {{ KUBECTL_BIN }} get -o yaml \
+        --all-namespaces \
+        issuer,clusterissuer,certificates,certificaterequests >> cert-manager-backup.yaml
+    failed_when: False #Ignore errors
+
+  - name: "uninstall microk8s snap"
+    community.general.snap:
+      name: microk8s
+      state: absent
+

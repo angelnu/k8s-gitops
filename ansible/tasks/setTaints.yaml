@@ -1,0 +1,11 @@
+- name: Set taints
+  shell: "{{ KUBECTL_BIN }} taint nodes {{inventory_hostname}} {{ item.key }}={{ item.value }}"
+  delegate_to: localhost
+  environment: "{{ LOCAL_KUBECTL_ENV }}"
+  register: result
+  with_dict: "{{ k8s_taints if (k8s_taints is defined) else {} }}"
+  changed_when:
+  - "'taint(s) with same effect(s)'  not in result.stderr| join('')"
+  failed_when:
+  - "'taint(s) with same effect(s)'  not in result.stderr| join('')"
+  - result.rc != 0
