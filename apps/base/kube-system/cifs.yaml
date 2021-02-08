@@ -43,14 +43,15 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: plop
+  name: cifs-test
+  namespace: default
 spec:
   template:
     metadata:
-      name: plop
+      name: cifs-test
     spec:
       containers:
-        - name: plop
+        - name: cifs-test
           image: "alpine:latest"
           command: ["/bin/ls", "-lah", "/mnt"]
           volumeMounts:
