@@ -12,8 +12,8 @@ spec:
       "ipam": {
         "type": "host-local",
         "subnet": "192.168.0.0/19",
-        "rangeStart": "$(GLOBAL_EXTERNAL_SUBNET_PREFIX).0",
-        "rangeEnd": "$(GLOBAL_EXTERNAL_SUBNET_PREFIX).63",
-        "gateway": "192.168.2.1"
+        "rangeStart": "192.168.3.0",
+        "rangeEnd": "192.168.3.63",
+        "gateway": "192.168.3.1"
       }
     }'
