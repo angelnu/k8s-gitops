@@ -33,5 +33,9 @@ spec:
       - name: default
         protocol: layer2
         addresses:
-        - 192.168.1.128-192.168.1.191
-        - "$(GLOBAL_EXTERNAL_SUBNET_PREFIX).128-$(GLOBAL_EXTERNAL_SUBNET_PREFIX).191"
+        #- 192.168.1.128-192.168.1.191
+  valuesFrom:
+  - kind: ConfigMap
+    name: app-global-settings
+    valuesKey: LB_RANGE
+    targetPath: configInline.address-pools[0].addresses[0]
