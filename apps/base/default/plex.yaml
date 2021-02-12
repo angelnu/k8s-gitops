@@ -30,13 +30,13 @@ spec:
     plexGid: 1001
     serviceTCP:
       type: LoadBalancer
-      loadBalancerIP: $(EXTERNAL_SUBNET_PREFIX).$(GLOBAL_EXTERNAL_IP_PLEX)
+      loadBalancerIP: "$(EXTERNAL_SUBNET_PREFIX).$(GLOBAL_EXTERNAL_IP_PLEX)"
       externalTrafficPolicy: Local
       annotations:
         metallb.universe.tf/allow-shared-ip: plex
     serviceUDP:
       type: LoadBalancer
-      loadBalancerIP: $(EXTERNAL_SUBNET_PREFIX).$(GLOBAL_EXTERNAL_IP_PLEX)
+      loadBalancerIP: "$(EXTERNAL_SUBNET_PREFIX).$(GLOBAL_EXTERNAL_IP_PLEX)"
       externalTrafficPolicy: Local
       annotations:
         metallb.universe.tf/allow-shared-ip: plex
