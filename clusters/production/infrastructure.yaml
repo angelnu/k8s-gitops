@@ -10,8 +10,15 @@ spec:
     name: flux-system
   path: ./infrastructure/production
   prune: true
-  validation: client
+  validation: none
   decryption:
     provider: sops
     secretRef:
       name: sops-gpg
+  postBuild:
+    substitute:
+      CLUSTER_ENV: "prod"
+      CLUSTER_DOMAIN: angelnu.com
+      CLUSTER_DOMAIN_CERT: prod-wildcard-angelnu-com-tls
+      CLUSTER_EXTERNAL_SUBNET_PREFIX: 192.168.1
+      CLUSTER_LB_RANGE: 192.168.1.128-192.168.1.192
