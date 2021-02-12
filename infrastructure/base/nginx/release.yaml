@@ -40,8 +40,6 @@ spec:
       tolerations:
       - key: "arm"
         operator: "Exists"
-      extraArgs:
-        default-ssl-certificate: "prod-wildcard-angelnu-com-tls"
       resources:
         requests:
           memory: 500Mi
