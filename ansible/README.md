@@ -25,6 +25,17 @@ Secrets encrypted with [Ansible Vault](https://docs.ansible.com/ansible/latest/u
    ansible-playbook -i hosts-production flux_install.yaml
    ```
 
+## Update Flux
+
+1. Update staging
+   ```
+   flux install --export>clusters/staging/flux-system/gotk-components.yaml
+   ```
+2. Update production
+   ```
+   flux install --export>clusters/production/flux-system/gotk-components.yaml
+   ```
+
 ## Uninstall
 
 1. Uninstall flux2
