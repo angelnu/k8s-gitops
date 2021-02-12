@@ -1,0 +1,12 @@
+ apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: plex
+spec:
+  values:
+    ingress:
+      enabled: true
+      hosts: [plex.angelnu.com]
+      tls:
+      - hosts:
+        - plex.angelnu.com

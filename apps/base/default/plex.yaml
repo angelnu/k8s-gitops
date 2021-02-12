@@ -21,10 +21,10 @@ spec:
       tag: 1.21.3.4021-5a0a3e4b2
     ingress:
       enabled: true
-      hosts: [plex.$(GLOBAL_DOMAIN)]
+      hosts: [plex.angelnu.com]
       tls:
       - hosts:
-        - plex.$(GLOBAL_DOMAIN)
+        - plex.angelnu.com
     timezone: "Europe/Berlin"
     plexUid: 1001
     plexGid: 1001
