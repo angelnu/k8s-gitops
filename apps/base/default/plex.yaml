@@ -1,202 +1,77 @@
-apiVersion: apps/v1
-kind: StatefulSet
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
 metadata:
   name: plex
+  namespace: default
 spec:
-  serviceName: plex
-  selector:
-    matchLabels:
-      app: plex
-  replicas: 1
-  template:
-    metadata:
-      name: plex
-      labels:
-        app: plex
-      # annotations:
-      #   k8s.v1.cni.cncf.io/networks: |
-      #     [{
-      #       "name":"macvlan-static",
-      #       "ips": ["192.168.1.2"]
-      #     }]
+  interval: 5m
+  chart:
     spec:
-      #hostNetwork: true
-      hostname: plex
-      nodeSelector:
-        beta.kubernetes.io/arch: amd64
-      containers:
-      - name: plex
-        image: plexinc/pms-docker:2.3.0
-        securityContext:
-          privileged: true
-        resources:
-          requests:
-            memory: "500Mi"
-            #cpu: "100m"
-          limits:
-            #memory: "128Mi"
-            #cpu: "500m"
-
-        ports:
-        - containerPort: 32400
-        - containerPort: 3005
-        - containerPort: 8324
-        - containerPort: 32469
-        - containerPort: 1900
-          protocol: UDP
-        - containerPort: 32410
-          protocol: UDP
-        - containerPort: 32412
-          protocol: UDP
-        - containerPort: 32413
-          protocol: UDP
-        - containerPort: 32414
-          protocol: UDP
-        env:
-        - name: TZ
-          value: Europe/Berlin
-        - name: ALLOWED_NETWORKS
-          value: 192.168.1.0/16
-        volumeMounts:
-        - mountPath: /dev/dri
-          name: dri
-        - mountPath: /config
-          name: config
-          subPath: plex/config
-        - mountPath: /downloads
-          name: downloads
-        - mountPath: /videos
-          name: videos
-        # - mountPath: /music
-        #   name: music
-      volumes:
-      - name: dri
-        hostPath:
-          path: /dev/dri
-      - name: config
-        persistentVolumeClaim:
-          claimName: nfs-kubernetes
-      - name: downloads
-        persistentVolumeClaim:
-          claimName: nfs-downloads
-        # flexVolume:
-        #   driver: "angelnu/cifs"
-        #   secretRef:
-        #     name: "cifs-secret"
-        #   options:
-        #     source: "//nas.home.angelnu.com/downloads"
-        #     mountOptions: "dir_mode=0775,file_mode=0664,noperm"
-      - name: videos
-        persistentVolumeClaim:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: plex
+      version: 2.3.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: plexinc/pms-docker
+      tag: 1.21.3.4021-5a0a3e4b2
+    ingress:
+      enabled: true
+      hosts: [plex.$(GLOBAL_DOMAIN)]
+      tls:
+      - hosts:
+        - plex.$(GLOBAL_DOMAIN)
+    timezone: "Europe/Berlin"
+    plexUid: 1001
+    plexGid: 1001
+    serviceTCP:
+      type: LoadBalancer
+      loadBalancerIP: $(EXTERNAL_SUBNET_PREFIX).$(GLOBAL_EXTERNAL_IP_PLEX)
+      externalTrafficPolicy: Local
+      annotations:
+        metallb.universe.tf/allow-shared-ip: plex
+    serviceUDP:
+      type: LoadBalancer
+      loadBalancerIP: $(EXTERNAL_SUBNET_PREFIX).$(GLOBAL_EXTERNAL_IP_PLEX)
+      externalTrafficPolicy: Local
+      annotations:
+        metallb.universe.tf/allow-shared-ip: plex
+    persistence:
+      transcode:
+        enabled: true
+        claimName: nfs-kubernetes
+        subPath: plex/transcode
+      data:
+        enabled: true
+        claimName: nfs-kubernetes
+        subPath: plex/data
+        extraMounts:
+        - name: video
           claimName: nfs-video
-        # flexVolume:
-        #   driver: "angelnu/cifs"
-        #   secretRef:
-        #     name: "cifs-secret"
-        #   options:
-        #     source: "//nas.home.angelnu.com/video"
-        #     mountOptions: "dir_mode=0775,file_mode=0664,noperm"
-      # - name: music
-      #   flexVolume:
-      #     driver: "angelnu/cifs"
-      #     secretRef:
-      #       name: "cifs-secret"
-      #     options:
-      #       source: "//nas.home.angelnu.com/music"
-      #       mountOptions: "dir_mode=0775,file_mode=0664,noperm"
----
-# -------------------- Service ------------------- #
-
-kind: Service
-apiVersion: v1
-metadata:
-  annotations:
-    metallb.universe.tf/allow-shared-ip: "true"
-  labels:
-    app: plex
-  name: plex
-spec:
-  ports:
-  - name: http
-    port: 32400
-    targetPort: 32400
-    protocol: TCP
-  - name: tbd1
-    port: 3005
-    targetPort: 3005
-    protocol: TCP
-  - name: tbd2
-    port: 8324
-    targetPort: 8324
-    protocol: TCP
-  - name: tbd3
-    port: 32469
-    targetPort: 32469
-    protocol: TCP
-  selector:
-    app: plex
-  type: LoadBalancer
-  loadBalancerIP: 192.168.1.133
-  sessionAffinity: ClientIP
----
-# -------------------- Service ------------------- #
-
-kind: Service
-apiVersion: v1
-metadata:
-  annotations:
-    metallb.universe.tf/allow-shared-ip: "true"
-  labels:
-    app: plex-udp
-  name: plex-udp
-spec:
-  ports:
-  - name: tbd4
-    port: 1900
-    targetPort: 1900
-    protocol: UDP
-  - name: tbd5
-    port: 32410
-    targetPort: 32410
-    protocol: UDP
-  - name: tbd6
-    port: 32412
-    targetPort: 32412
-    protocol: UDP
-  - name: tbd7
-    port: 32413
-    targetPort: 32413
-    protocol: UDP
-  - name: tbd8
-    port: 32414
-    targetPort: 32414
-    protocol: UDP
-  selector:
-    app: plex
-  type: LoadBalancer
-  loadBalancerIP: $(EXTERNAL_SUBNET_PREFIX).$(GLOBAL_EXTERNAL_IP_PLEX)
-  sessionAffinity: ClientIP
----
-
-# ------------------- Ingress ------------------- #
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: plex
-spec:
-  tls:
-  - hosts:
-    - plex.$(GLOBAL_DOMAIN)
-    secretName: $(GLOBAL_DOMAIN_CERT)
-  rules:
-  - host: plex.$(GLOBAL_DOMAIN)
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: plex
-            port: 
-              name: http
+          mountPath: /video
+        - name: downloads
+          claimName: nfs-downloads
+          mountPath: /downloads
+        - name: example2
+          mountPath: /dev/dri
+          volume:
+            hostPath:
+              path: /dev/dri
+      config:
+        claimName: nfs-kubernetes
+        subPath: plex/config
+    resources:
+      limits:
+        #gpu.intel.com/i915: 1
+        memory: 4900Mi
+      requests:
+        cpu: 35m
+        memory: 1500Mi
+  valuesFrom:
+  - kind: Secret
+    name: "plex-helm-values"
+    optional: false
