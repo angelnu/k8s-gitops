@@ -26,8 +26,7 @@ spec:
         beta.kubernetes.io/arch: amd64
       containers:
       - name: plex
-        image: plexinc/pms-docker:plexpass
-        imagePullPolicy: Always
+        image: plexinc/pms-docker:2.3.0
         securityContext:
           privileged: true
         resources:

@@ -21,7 +21,7 @@ spec:
       containers:
       - name: music-index
         image: angelnu/apache-musicindex:latest
-        imagePullPolicy: Always
+        #imagePullPolicy: Always
         resources:
           requests:
             memory: "20Mi"
