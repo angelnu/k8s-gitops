@@ -52,12 +52,12 @@ spec:
       extraMounts:
       - name: video
         claimName: nfs-video
-        mountPath: /video
+        mountPath: video
       - name: downloads
         claimName: nfs-downloads
-        mountPath: /downloads
+        mountPath: downloads
       - name: dri
-        mountPath: /dev/dri
+        mountPath: dev/dri
         volume:
           hostPath:
             path: /dev/dri
