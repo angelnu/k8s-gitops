@@ -4,6 +4,9 @@ metadata:
   name: nginx
 spec:
   values:
+    controller:
+      extraArgs:
+        default-ssl-certificate: "prod-wildcard-angelnu-com-tls"
     service:
       type: LoadBalancer
       loadBalancerIP: 192.168.1.128

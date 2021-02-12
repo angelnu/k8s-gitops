@@ -6,18 +6,56 @@ spec:
   releaseName: ingress-nginx
   chart:
     spec:
+      # renovate: registryUrl=https://kubernetes.github.io/ingress-nginx
       chart: ingress-nginx
+      version: 3.23.0
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx
         namespace: flux-system
-      version: "3.23.0"
-  interval: 1h0m0s
+      interval: 5m
   install:
     remediation:
       retries: 4
   # Default values
   # https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/values.yaml
   values:
+    controller:
+      replicaCount: 2
+      config:
+        custom-http-errors: 404,401,403,500,503
+        hsts-max-age: "31449600"
+        # global-auth-url: "http://oauth2-proxy.kube-system.svc.cluster.local/oauth2/auth"
+        # global-auth-signin: "https://auth.$server_name/oauth2/start"
+      use-forwarded-headers: "true"
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          namespace: kube-system
+        prometheusRule:
+          enabled: false
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
+      extraArgs:
+        default-ssl-certificate: "prod-wildcard-angelnu-com-tls"
+      resources:
+        requests:
+          memory: 500Mi
+          cpu: 25m
+        limits:
+          memory: 600Mi
+    defaultBackend:
+      enabled: true
+      image:
+        repository: billimek/custom-error-pages
+        tag: 0.4.4
+      resources:
+        requests:
+          memory: 250Mi
+          cpu: 25m
+        limits:
+          memory: 350Mi
     service:
       type: LoadBalancer
