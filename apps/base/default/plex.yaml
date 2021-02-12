@@ -49,18 +49,18 @@ spec:
         enabled: true
         claimName: nfs-kubernetes
         subPath: plex/data
-        extraMounts:
-        - name: video
-          claimName: nfs-video
-          mountPath: /video
-        - name: downloads
-          claimName: nfs-downloads
-          mountPath: /downloads
-        - name: example2
-          mountPath: /dev/dri
-          volume:
-            hostPath:
-              path: /dev/dri
+      extraMounts:
+      - name: video
+        claimName: nfs-video
+        mountPath: /video
+      - name: downloads
+        claimName: nfs-downloads
+        mountPath: /downloads
+      - name: dri
+        mountPath: /dev/dri
+        volume:
+          hostPath:
+            path: /dev/dri
       config:
         claimName: nfs-kubernetes
         subPath: plex/config
