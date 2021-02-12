@@ -14,10 +14,10 @@ spec:
       
     - kind: HelmRepository
       name: '*'
-      namespace: '*'
+      #namespace: '*'
     - kind: HelmChart
       name: '*'
-      namespace: '*'
+      #namespace: '*'
     - kind: HelmRelease
       name: '*'
-      namespace: '*'
+      #namespace: '*'

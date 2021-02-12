@@ -3,7 +3,7 @@ kind: HelmRelease
 metadata:
   name: nginx
 spec:
-  releaseName: ingress-nginx
+  interval: 5m
   chart:
     spec:
       # renovate: registryUrl=https://kubernetes.github.io/ingress-nginx
@@ -16,7 +16,7 @@ spec:
       interval: 5m
   install:
     remediation:
-      retries: 4
+      retries: 3
   # Default values
   # https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/values.yaml
   values:
@@ -28,13 +28,15 @@ spec:
         # global-auth-url: "http://oauth2-proxy.kube-system.svc.cluster.local/oauth2/auth"
         # global-auth-signin: "https://auth.$server_name/oauth2/start"
       use-forwarded-headers: "true"
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
-          namespace: kube-system
-        prometheusRule:
-          enabled: false
+      service:
+        type: LoadBalancer
+      #metrics:
+      #  enabled: true
+      #  serviceMonitor:
+      #    enabled: true
+      #    namespace: kube-system
+      #  prometheusRule:
+      #    enabled: false
       tolerations:
       - key: "arm"
         operator: "Exists"
@@ -57,5 +59,3 @@ spec:
           cpu: 25m
         limits:
           memory: 350Mi
-    service:
-      type: LoadBalancer
