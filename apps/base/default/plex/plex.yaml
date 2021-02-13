@@ -15,6 +15,7 @@ spec:
         name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
+  # All values at https://github.com/k8s-at-home/charts/blob/master/charts/plex/values.yaml
   values:
     image:
       repository: plexinc/pms-docker
@@ -30,13 +31,13 @@ spec:
     plexGid: 1001
     serviceTCP:
       type: LoadBalancer
-      loadBalancerIP: 192.168.1.133
+      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.133"
       externalTrafficPolicy: Local
       annotations:
         metallb.universe.tf/allow-shared-ip: plex
     serviceUDP:
       type: LoadBalancer
-      loadBalancerIP: 192.168.1.133
+      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.133"
       externalTrafficPolicy: Local
       annotations:
         metallb.universe.tf/allow-shared-ip: plex
@@ -44,17 +45,21 @@ spec:
       transcode:
         enabled: true
         claimName: nfs-kubernetes
+        accessMode: ReadWriteMany
         subPath: plex/transcode
       data:
         enabled: true
         claimName: nfs-kubernetes
+        accessMode: ReadWriteMany
         subPath: plex/data
       extraMounts:
       - name: video
         claimName: nfs-video
+        accessMode: ReadWriteMany
         mountPath: video
       - name: downloads
         claimName: nfs-downloads
+        accessMode: ReadWriteMany
         mountPath: downloads
       - name: dri
         mountPath: dev/dri
