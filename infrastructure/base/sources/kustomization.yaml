@@ -6,3 +6,4 @@ resources:
   - ingress-nginx.yaml
   - k8s-at-home-charts.yaml
   - podinfo.yaml
+  - jetstack-charts.yaml
