@@ -13,20 +13,28 @@ The cluster is designed to allow tearing it completely without any data lost.
 
 ** WIP ** - STILL MOVING FROM [PREVIOUS SETUP](https://github.com/angelnu/homecloud).
 
-* Apps:
-  * [gitea](https://gitea.io) - Internal git server (keep backups of my GitHub projects)
-  * [drone](https://www.drone.io/) - CI with a native Kubernetes Runner
-  * [home-assistant](https://github.com/home-assistant/core) - Home Automation
-  * [RaspberryMatic](https://github.com/jens-maus/RaspberryMatic) - Homematic Home Automation platform
-  * [code-server](https://github.com/cdr/code-server) - ~~Visual Studio~~ Code Server
-* System:
-  * [flux2](https://github.com/fluxcd/flux2) - Keep cluster in sync with this repo
-    * [notifications](infrastructure/base/flux-system/notifications) - alerts to slack and GitHub
-  * [nginx-ingress](infrastructure/base/nginx) - Ingress controller
-  * [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
-  * [metallb](https://github.com/metallb/metallb) - Load-balancer for bare-metal
-* Persistance - see [Secret Management](##-Secret-Management):
-  * Secrets:
+* Applications
+  * [base/default](apps/base/default)
+  * [base/kube-system](apps/base/kube-system)
+  * [production global settings](clusters/production/apps.yaml)
+  * [production overlay](apps/production)
+  * [staging global settings](clusters/staging/apps.yaml)
+  * [staging overlay](apps/staging)
+* Infrastructure
+  * [base/flux-system](infrastructure/base/flux-system)
+  * [base/nginx](infrastructure/base/nginx)
+  * [base/sources](infrastructure/base/sources)
+  * [production global settings](clusters/production/infrastructure.yaml)
+  * [production overlay](infrastructure/production)
+  * [staging global settings](clusters/staging/infrastructure.yaml)
+  * [staging overlay](infrastructure/staging)
+* Clusters:
+  * [production](clusters/production)
+  * [staging](clusters/staging)
+* Persistance:
+  * Cluster configuration:
+    * [flux2](https://github.com/fluxcd/flux2) - Keep cluster in sync with this repo
+  * Secrets - see [Secret Management](##-Secret-Management)::
     - [Ansible Vault](ansible) - Ansible, Deployment
     - [SOPS](##-Secret-Management) - Flux, K8S GitOps
   * Files:
@@ -38,7 +46,7 @@ The cluster is designed to allow tearing it completely without any data lost.
 
 ## Installation
 
-### Install
+### Install / Update / Uninstall
 
 Installed via [Ansible](ansible/README.md).
 
