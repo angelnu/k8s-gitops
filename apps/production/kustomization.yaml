@@ -16,27 +16,6 @@ configMapGenerator:
   - external_IPs.env
 
 vars:
-- name: GLOBAL_DOMAIN
-  objref:
-    kind: ConfigMap
-    name: app-global-settings
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.DOMAIN
-- name: GLOBAL_DOMAIN_CERT
-  objref:
-    kind: ConfigMap
-    name: app-global-settings
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.DOMAIN_CERT
-- name: GLOBAL_EXTERNAL_SUBNET_PREFIX
-  objref:
-    kind: ConfigMap
-    name: app-global-settings
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.EXTERNAL_SUBNET_PREFIX
 - name: GLOBAL_EXTERNAL_IP_PLEX
   objref:
     kind: ConfigMap
