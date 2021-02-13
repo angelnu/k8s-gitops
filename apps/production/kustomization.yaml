@@ -13,7 +13,6 @@ patchesStrategicMerge:
 configMapGenerator:
 - name: app-global-settings
   envs:
-  - apps.env
   - external_IPs.env
 
 vars:
