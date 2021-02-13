@@ -6,14 +6,13 @@ spec:
   interval: 5m
   chart:
     spec:
-      chart: ./cert-manager-dnsmadeeasy
+      # renovate: registryUrl=https://angelnu.github.io/charts/
+      chart: cert-manager-dnsmadeeasy
+      version: v1.0.1
       sourceRef:
-        kind: GitRepository
-        name: flux-system
+        kind: HelmRepository
+        name: angelnu-charts
+        namespace: flux-system
       interval: 5m
-  values:
-
-
-
-    kind: GitRepository
-    name: flux-system
+  dependsOn:
+    - name: cert-manager
