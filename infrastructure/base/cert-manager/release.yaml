@@ -2,6 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: cert-manager
+  namespace: cert-manager
 spec:
   interval: 5m
   chart:
@@ -34,8 +35,8 @@ spec:
       tolerations:
       - key: "arm"
         operator: "Exists"
-    prometheus:
-      enabled: true
-      servicemonitor:
-        enabled: true
-        prometheusInstance: monitoring
+    # prometheus:
+    #   enabled: true
+    #   servicemonitor:
+    #     enabled: true
+    #     prometheusInstance: monitoring

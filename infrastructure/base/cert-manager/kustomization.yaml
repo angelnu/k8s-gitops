@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: cert-manager
 resources:
   - namespace.yaml
-  - https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.crds.yaml
+  #- https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.crds.yaml
   - release.yaml
   - cert-manager-dnsmadeeasy.yaml
 
