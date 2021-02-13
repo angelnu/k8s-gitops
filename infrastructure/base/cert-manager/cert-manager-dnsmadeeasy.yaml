@@ -7,6 +7,9 @@ spec:
   chart:
     spec:
       chart: ./cert-manager-dnsmadeeasy
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
       interval: 5m
   values:
 
