@@ -53,10 +53,10 @@ spec:
         accessMode: ReadWriteMany
         subPath: plex/data
       extraMounts:
-      - name: video
+      - name: videos
         claimName: nfs-video
         accessMode: ReadWriteMany
-        mountPath: video
+        mountPath: videos
       - name: downloads
         claimName: nfs-downloads
         accessMode: ReadWriteMany
