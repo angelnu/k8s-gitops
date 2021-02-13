@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://angelnu.github.io/charts/
       chart: cert-manager-dnsmadeeasy
-      version: v1.0.1
+      version: 1.0.2
       sourceRef:
         kind: HelmRepository
         name: angelnu-charts
