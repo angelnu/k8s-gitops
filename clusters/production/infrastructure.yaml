@@ -19,6 +19,6 @@ spec:
     substitute:
       CLUSTER_ENV: "prod"
       CLUSTER_DOMAIN: angelnu.com
-      CLUSTER_DOMAIN_CERT: prod-wildcard-angelnu-com-tls
+      CLUSTER_DOMAIN_CERT: kube-system/prod-wildcard-angelnu-com-tls
       CLUSTER_EXTERNAL_SUBNET_PREFIX: 192.168.1
       CLUSTER_LB_RANGE: 192.168.1.128-192.168.1.192
