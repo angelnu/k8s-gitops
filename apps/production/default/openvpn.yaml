@@ -91,10 +91,10 @@ kind: Ingress
 metadata:
   name: openvpn-server
   annotations:
-    ingress.kubernetes.io/whitelist-source-range: "$(EXTERNAL_SUBNET_PREFIX).0/16,10.0.0.0/8"
+    ingress.kubernetes.io/whitelist-source-range: "192.168.0.0/16,10.0.0.0/8"
 spec:
   rules:
-  - host: openvpn.home.$(GLOBAL_DOMAIN)
+  - host: openvpn.home.${CLUSTER_DOMAIN}
     http:
       paths:
       - path: /

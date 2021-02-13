@@ -5,7 +5,7 @@ metadata:
 provisioner: kubernetes.io/glusterfs
 parameters:
   #endpoint: "heketi-storage-endpoints"
-  resturl: "http://heketi-api.k8s.$(GLOBAL_DOMAIN)"
+  resturl: "http://heketi-api.k8s.${CLUSTER_DOMAIN}"
   restuser: "admin"
   secretNamespace: "kube-system"
   secretName: "heketi-admin-secret"

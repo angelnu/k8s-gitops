@@ -19,8 +19,8 @@ spec:
         kubernetes.io/arch: amd64
       containers:
       - args:
-        - "--cookie-domain=.$(GLOBAL_DOMAIN)"
-        - "--whitelist-domain=.$(GLOBAL_DOMAIN)"
+        - "--cookie-domain=.${CLUSTER_DOMAIN}"
+        - "--whitelist-domain=.${CLUSTER_DOMAIN}"
         - "--cookie-secure=true"
         - "--pass-access-token"
         - "--set-basic-auth=false"
@@ -41,8 +41,8 @@ spec:
         - --cookie-secure=false
         - "--proxy-prefix="
         - --http-address=0.0.0.0:4180
-        - "--redirect-url=https://ingress-auth.$(GLOBAL_DOMAIN)/callback"
-        - "--oidc-issuer-url=https://oidc.$(GLOBAL_DOMAIN)"
+        - "--redirect-url=https://ingress-auth.${CLUSTER_DOMAIN}/callback"
+        - "--oidc-issuer-url=https://oidc.${CLUSTER_DOMAIN}"
         env:
         - name: OAUTH2_PROXY_CLIENT_ID
           valueFrom:
@@ -94,11 +94,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - ingress-auth.$(GLOBAL_DOMAIN)
-    secretName: $(GLOBAL_DOMAIN_CERT)
+    - ingress-auth.${CLUSTER_DOMAIN}
   
   rules:
-  - host: ingress-auth.$(GLOBAL_DOMAIN)
+  - host: ingress-auth.${CLUSTER_DOMAIN}
     http:
       paths:
       - path: /

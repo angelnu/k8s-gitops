@@ -17,26 +17,25 @@ metadata:
   name: dashboard
   namespace: kube-system
   annotations:
-    nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.$(GLOBAL_DOMAIN)/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.$(GLOBAL_DOMAIN)/start?rd=$scheme://$host$request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
     ingress.kubernetes.io/ssl-redirect: "true"
     #nginx.ingress.kubernetes.io/auth-response-headers: "x-auth-request-user, x-auth-request-email, authorization"
     #nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   tls:
   - hosts:
-    - dashboard.$(GLOBAL_DOMAIN)
-    - dashboard.home.$(GLOBAL_DOMAIN)
-    secretName: $(GLOBAL_DOMAIN_CERT)
+    - dashboard.${CLUSTER_DOMAIN}
+    - dashboard.home.${CLUSTER_DOMAIN}
   rules:
-  - host: dashboard.$(GLOBAL_DOMAIN)
+  - host: dashboard.${CLUSTER_DOMAIN}
     http:
       paths:
       - path: /
         backend:
           serviceName: kubernetes-dashboard
           servicePort: 80
-  - host: dashboard.home.$(GLOBAL_DOMAIN)
+  - host: dashboard.home.${CLUSTER_DOMAIN}
     http:
       paths:
       - path: /

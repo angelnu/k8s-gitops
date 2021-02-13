@@ -215,10 +215,9 @@ metadata:
 spec:
   tls:
   - hosts:
-    - rss.$(GLOBAL_DOMAIN)
-    secretName: $(GLOBAL_DOMAIN_CERT)
+    - rss.${CLUSTER_DOMAIN}
   rules:
-  - host: rss.$(GLOBAL_DOMAIN)
+  - host: rss.${CLUSTER_DOMAIN}
     http:
       paths:
       - path: /scrapping/
@@ -236,10 +235,9 @@ metadata:
 spec:
   tls:
   - hosts:
-    - rnginx.home.$(GLOBAL_DOMAIN)
-    secretName: $(GLOBAL_DOMAIN_CERT)
+    - rnginx.home.${CLUSTER_DOMAIN}
   rules:
-  - host: nginx.home.$(GLOBAL_DOMAIN)
+  - host: nginx.home.${CLUSTER_DOMAIN}
     http:
       paths:
       - backend:

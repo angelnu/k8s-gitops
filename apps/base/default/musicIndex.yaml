@@ -82,19 +82,18 @@ metadata:
     ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16,10.0.0.0/8"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     # Require oauth2 for authentication
-    # - "traefik.frontend.auth.forward.address=https://ingress-auth.home.$(GLOBAL_DOMAIN)/auth"
+    # - "traefik.frontend.auth.forward.address=https://ingress-auth.home.${CLUSTER_DOMAIN}/auth"
     # - "traefik.frontend.auth.forward.trustForwardHeader=true"
     # - "traefik.frontend.auth.forward.authResponseHeaders=X-Auth-Request-User,X-Auth-Request-Email,Authorization,Set-Cookie"
     # - "traefik.frontend.errors.401.backend=oauth2"
     # - "traefik.frontend.errors.401.status=401"
-    # - "traefik.frontend.errors.401.query=https://ingress-auth.home.$(GLOBAL_DOMAIN)/start?rd=$scheme://$host$request_uri"
+    # - "traefik.frontend.errors.401.query=https://ingress-auth.home.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
 spec:
   tls:
   - hosts:
-    - nginx.$(GLOBAL_DOMAIN)
-    secretName: $(GLOBAL_DOMAIN_CERT)
+    - nginx.${CLUSTER_DOMAIN}
   rules:
-  - host: music.home.$(GLOBAL_DOMAIN)
+  - host: music.home.${CLUSTER_DOMAIN}
     http:
       paths:
       - path: /

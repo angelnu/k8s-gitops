@@ -70,10 +70,9 @@ metadata:
 spec:
   tls:
   - hosts:
-    - oidc.$(GLOBAL_DOMAIN)
-    secretName: $(GLOBAL_DOMAIN_CERT)
+    - oidc.${CLUSTER_DOMAIN}
   rules:
-  - host: oidc.$(GLOBAL_DOMAIN)
+  - host: oidc.${CLUSTER_DOMAIN}
     http:
       paths:
       - path: /
