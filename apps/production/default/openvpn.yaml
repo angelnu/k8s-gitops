@@ -80,7 +80,7 @@ spec:
   selector:
     app: openvpn-server
   type: LoadBalancer
-  loadBalancerIP: 192.168.1.134
+  loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.134"
   sessionAffinity: ClientIP
 ---
 
