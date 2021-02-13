@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-kubernetes-2
+spec:
+  capacity:
+    storage: 18T
+  accessModes:
+    - ReadWriteMany
+  mountOptions:
+    - local_lock=posix
+    - nfsvers=4.1
+  nfs:
+    server: nas.home.angelnu.com
+    path: "/volume1/kubernetes"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-kubernetes-2
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1T
