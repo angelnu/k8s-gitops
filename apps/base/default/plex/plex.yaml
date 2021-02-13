@@ -48,8 +48,8 @@ spec:
         accessMode: ReadWriteMany
         subPath: plex/transcode
       data:
-        enabled: false
-        claimName: nfs-kubernetes
+        enabled: true
+        claimName: nfs-kubernetes-2
         accessMode: ReadWriteMany
         subPath: plex/data
       extraMounts:
