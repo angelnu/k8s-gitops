@@ -43,8 +43,8 @@ spec:
         metallb.universe.tf/allow-shared-ip: plex
     persistence:
       transcode:
-        enabled: false
-        claimName: nfs-kubernetes
+        enabled: true
+        claimName: nfs-kubernetes-3
         accessMode: ReadWriteMany
         subPath: plex/transcode
       data:

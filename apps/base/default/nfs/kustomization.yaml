@@ -6,4 +6,4 @@ resources:
   - kubernetes-2.yaml
   - kubernetes-3.yaml
   - software.yaml
-  - videos.yaml
+  - video.yaml
