@@ -27,9 +27,12 @@ spec:
         hsts-max-age: "31449600"
         # global-auth-url: "http://oauth2-proxy.kube-system.svc.cluster.local/oauth2/auth"
         # global-auth-signin: "https://auth.$server_name/oauth2/start"
+      extraArgs:
+        default-ssl-certificate: "${CLUSTER_DOMAIN_CERT}"
       use-forwarded-headers: "true"
       service:
         type: LoadBalancer
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.128"
       #metrics:
       #  enabled: true
       #  serviceMonitor:

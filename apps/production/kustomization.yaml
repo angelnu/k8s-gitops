@@ -9,7 +9,6 @@ resources:
 
 patchesStrategicMerge:
   - podinfo/patch-values.yaml
-  - kube-system/patch-metallb.yaml
 
 configMapGenerator:
 - name: app-global-settings
