@@ -71,7 +71,8 @@ spec:
       requests:
         cpu: 35m
         memory: 1500Mi
-  # valuesFrom:
-  # - kind: Secret
-  #   name: "plex-helm-values"
-  #   optional: false
+  valuesFrom:
+  - kind: Secret
+    name: "plex-helm-values"
+    valuesKey: values
+    optional: false
