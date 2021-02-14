@@ -26,9 +26,14 @@ Media server
 
 [Settings](plex)
 
+## Tiny Tiny RSS
+
+[Tiny Tiny RSS](https://git.tt-rss.org) allows to admin feeds from the family in a single place. Then progress is tracked indepent from reader (web page, Android app).
+
+[Settings](tt-rss)
+
 ## Others (to be moved)
 
-  * [gitea](https://gitea.io) - Internal git server (keep backups of my GitHub projects)
   * [drone](https://www.drone.io/) - CI with a native Kubernetes Runner
   * [home-assistant](https://github.com/home-assistant/core) - Home Automation
   * [RaspberryMatic](https://github.com/jens-maus/RaspberryMatic) - Homematic Home Automation platform

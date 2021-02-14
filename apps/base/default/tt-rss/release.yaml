@@ -1,0 +1,75 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: tt-rss
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://angelnu.github.io/charts/
+      chart: tt-rss
+      version: 1.0.2
+      sourceRef:
+        kind: HelmRepository
+        name: angelnu-charts
+        namespace: flux-system
+      interval: 5m
+  dependsOn:
+    - name: tt-rss-db
+  # See https://github.com/angelnu/charts/blob/home/charts/tt-rss/values.yaml
+  values:
+    image:
+      tag: latest
+    
+    # TBD - fix in chart
+    service:
+      port:
+        port: 4443
+    
+    startup:
+      enabled: false
+    
+    ingress:
+      enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      hosts:
+      - host: rss.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix
+      tls:
+      - hosts:
+        - rss.${CLUSTER_DOMAIN}
+
+    env:
+      TTRSS_URL: rss.${CLUSTER_DOMAIN}
+      TTRSS_PORT: ""
+      DB_HOST: tt-rss-db-postgres-cluster-postgres
+      DB_PORT: "5432"
+      DB_NAME: tt-rss
+      DB_USER: postgres
+      #DB_PASS: set in secret
+      DB_ENV_USER: postgres
+      #DB_ENV_PASS: set in secret
+
+    initContainers:
+    - image: postgres:alpine
+      name: waitforpostgres
+      env:
+      - name: DB_HOST
+        value: tt-rss-db-postgres-cluster-postgres
+      command:
+      - "pg_isready"
+      - "-h"
+      - tt-rss-db-postgres-cluster-postgres
+      - "-p"
+      - "5432"
+
+  valuesFrom:
+  - kind: Secret
+    name: "tt-rss-helm-values"
+    valuesKey: tt-rss.yaml
+    optional: false
