@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - sources
   - cert-manager
-  - nginx
-  #- redis
   - flux-system
+  - nginx
+  - postgres
+  #- redis
