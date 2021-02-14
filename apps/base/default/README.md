@@ -1,5 +1,12 @@
 # Default namespace
 
+## Gitea
+
+**NOTE:** with version 1.16 the helm chart CDR still has a bug so need to apply lates:
+```
+apply -f https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator/crds/postgresqls.yaml
+```
+
 ## Music index
 
 Provides playlists for locally stored music. Can be used with Google Home assistant.

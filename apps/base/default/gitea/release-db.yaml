@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://angelnu.github.io/charts/
       chart: postgres-cluster
-      version: 1.0.2
+      version: 1.0.10
       sourceRef:
         kind: HelmRepository
         name: angelnu-charts
@@ -17,10 +17,9 @@ spec:
   #See https://github.com/angelnu/charts/blob/home/charts/postgres-cluster/values.yaml
   values:
     persistent: true
-    backup_schedule: "@daily"
-
     localPath: "/media/db/gitea"
 
+    backup_schedule: "@daily"
     backupPVC: nfs-kubernetes
     backupPVCSubpath: "backup/db/myDB"
 
@@ -32,6 +31,7 @@ spec:
     #If you change this after creating the DB then use psql to set the password manually
     superuser: postgres
     #superuser_password: set in secret
+
   valuesFrom:
   - kind: Secret
     name: "gitea-helm-values"

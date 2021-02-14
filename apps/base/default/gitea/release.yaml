@@ -81,7 +81,8 @@ spec:
           #SECRET_KEY: set in secret
         database:
           DB_TYPE: postgres
-          HOST: RELEASE-NAME-postgresql.default.svc.cluster.local:5432
+          HOST: gitea-db-postgres-cluster-postgres:5432
+          SSL_MODE: require
           NAME: gitea
           #PASSWD: set in secret
           USER: postgres

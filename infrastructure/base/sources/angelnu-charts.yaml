@@ -4,6 +4,6 @@ metadata:
   name: angelnu-charts
   namespace: flux-system
 spec:
-  interval: 10m
+  interval: 5m
   url: https://angelnu.github.io/charts/
   timeout: 3m
