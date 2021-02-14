@@ -28,7 +28,7 @@ spec:
         # global-auth-url: "http://oauth2-proxy.kube-system.svc.cluster.local/oauth2/auth"
         # global-auth-signin: "https://auth.$server_name/oauth2/start"
       extraArgs:
-        default-ssl-certificate: "${CLUSTER_DOMAIN_CERT}"
+        default-ssl-certificate: "cert-manager/${CLUSTER_DOMAIN_CERT}"
       use-forwarded-headers: "true"
       service:
         type: LoadBalancer

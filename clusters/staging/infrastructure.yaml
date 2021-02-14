@@ -19,6 +19,6 @@ spec:
     substitute:
       CLUSTER_ENV: "prod"
       CLUSTER_DOMAIN: nunez-gregoire.eu
-      CLUSTER_DOMAIN_CERT: kube-system/prod-wildcard-nunez-gregoire_eu-tls
+      CLUSTER_DOMAIN_CERT: prod-wildcard-nunez-gregoire_eu-tls
       CLUSTER_EXTERNAL_SUBNET_PREFIX: 192.168.3
       CLUSTER_LB_RANGE: 192.168.3.128-192.168.3.192
