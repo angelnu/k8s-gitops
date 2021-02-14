@@ -50,11 +50,9 @@ spec:
           }
       hosts:
       - nextcloud.${CLUSTER_DOMAIN}
-      - nextcloud.home.${CLUSTER_DOMAIN}
       tls:
       - hosts:
         - nextcloud.${CLUSTER_DOMAIN}
-        - nextcloud.home.${CLUSTER_DOMAIN}
     #username: admin
     #password: password
     #redis:
