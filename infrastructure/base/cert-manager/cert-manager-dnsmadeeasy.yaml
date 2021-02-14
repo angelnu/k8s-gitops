@@ -16,3 +16,6 @@ spec:
       interval: 5m
   dependsOn:
     - name: cert-manager
+  #See https://github.com/angelnu/charts/blob/home/charts/cert-manager-dnsmadeeasy/values.yaml
+  values:
+    groupName: "${CLUSTER_DOMAIN}"

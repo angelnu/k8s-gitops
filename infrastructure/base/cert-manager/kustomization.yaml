@@ -6,4 +6,6 @@ resources:
   - https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.crds.yaml
   - cert-manager.yaml
   - cert-manager-dnsmadeeasy.yaml
+  - secret-dnsmadeeasy.yaml
+  - certificate.yaml
 

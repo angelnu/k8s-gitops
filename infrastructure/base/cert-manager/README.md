@@ -2,8 +2,8 @@
 
 [cert-manager](https://github.com/jetstack/cert-manager) for natively automatically obtaining and renewing LetsEncrypt certificates
 
-* [cert-manager settings](cert-manager.yaml)
-* [cert-manager-dnsmadeeasy settings](cert-manager-dnsmadeeasy.yaml)
+[DNS webhook for Dnsmadeeasy](https://github.com/angelnu/cert-manager-webhook-dnsmadeeasy) is used.
 
-* [sync/cert-sync.yaml](sync/cert-sync.yaml)
-* [cloudflare/cert-manager-letsencrypt.txt](cloudflare/cert-manager-letsencrypt.txt)
+* [chart settings](cert-manager.yaml)
+* [dnsmadeeasy webhook chart settings](cert-manager-dnsmadeeasy.yaml)
+* [certificate settings](certificate.yaml)
