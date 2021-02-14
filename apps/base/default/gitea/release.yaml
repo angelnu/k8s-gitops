@@ -94,7 +94,7 @@ spec:
           ENABLE_OPENID_SIGNIN: false
         mailer:
           ENABLED: true
-          HOST: anchor_mailserver:25
+          HOST: mailserver.kube-system:25
           IS_TLS_ENABLED: false
           FROM: "gitea@${CLUSTER_DOMAIN}"
           USER: ""

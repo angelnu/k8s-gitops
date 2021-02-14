@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: gitea-db
+  name: nextcloud-db
 spec:
   interval: 5m
   chart:
@@ -17,11 +17,11 @@ spec:
   #See https://github.com/angelnu/charts/blob/home/charts/postgres-cluster/values.yaml
   values:
     persistent: true
-    localPath: "/media/db/gitea"
+    localPath: "/media/db/nextcloud"
 
     backup_schedule: "@daily"
     backupPVC: nfs-kubernetes
-    backupPVCSubpath: "backup/db/gitea"
+    backupPVCSubpath: "backup/db/nextcloud"
 
     replicaCount: 2
     replicaNodes:
@@ -34,6 +34,6 @@ spec:
 
   valuesFrom:
   - kind: Secret
-    name: "gitea-helm-values"
+    name: "nextcloud-helm-values"
     valuesKey: postgres.yaml
     optional: false

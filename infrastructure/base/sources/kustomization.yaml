@@ -8,6 +8,7 @@ resources:
   - ingress-nginx.yaml
   - jetstack-charts.yaml
   - k8s-at-home-charts.yaml
+  - nextcloud.yaml
   - podinfo.yaml
   - zalando-postgres-operator.yaml
   - zalando-postgres-ui.yaml
