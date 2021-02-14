@@ -11,7 +11,7 @@ Microk8s multi-arch highly available cluster installed via [Ansible](ansible/REA
 
 The cluster is designed to allow tearing it completely without any data lost.
 
-** WIP ** - STILL MOVING FROM [PREVIOUS SETUP](https://github.com/angelnu/homecloud).
+** WIP ** - STILL MOVING FROM [PREVIOUS SETUP](https://github.com/angelnu/k8s-gitops/issues/5).
 
 * Applications
   * [base/default](apps/base/default)
@@ -21,7 +21,7 @@ The cluster is designed to allow tearing it completely without any data lost.
   * [staging global settings](clusters/staging/apps.yaml)
   * [staging overlay](apps/staging)
 * Infrastructure
-  * [base/cert-manager](infrastructure/base/nginx)
+  * [base/cert-manager](infrastructure/base/cert-manager)
   * [base/flux-system](infrastructure/base/flux-system)
   * [base/nginx](infrastructure/base/nginx)
   * [base/postgres](infrastructure/base/postgres)
