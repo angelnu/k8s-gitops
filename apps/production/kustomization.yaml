@@ -9,24 +9,3 @@ resources:
 
 patchesStrategicMerge:
   - podinfo/patch-values.yaml
-
-configMapGenerator:
-- name: app-global-settings
-  envs:
-  - external_IPs.env
-
-vars:
-- name: GLOBAL_EXTERNAL_IP_PLEX
-  objref:
-    kind: ConfigMap
-    name: app-global-settings
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.lb_plex
-- name: GLOBAL_EXTERNAL_IP_OPENVPN
-  objref:
-    kind: ConfigMap
-    name: app-global-settings
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.lb_openvpn

@@ -17,8 +17,29 @@ spec:
       name: sops-gpg
   postBuild:
     substitute:
-      CLUSTER_ENV: "prod"
+      #VALUES DIFFERENT PROD - STAGING
+      CLUSTER_ENV: "stagging"
       CLUSTER_DOMAIN: nunez-gregoire.eu
       CLUSTER_DOMAIN_CERT: prod-wildcard-nunez-gregoire_eu-tls
       CLUSTER_EXTERNAL_SUBNET_PREFIX: 192.168.3
       CLUSTER_LB_RANGE: 192.168.3.128-192.168.3.192
+
+      #VALUES EQUAL PROD - STAGING
+      # mcvlan_static_range: &anchor_ip_mcvlan_static_range
+      # 192.168.1.0-192.168.1.63
+      CLUSTER_MACVLAN_HA: 1
+      CLUSTER_MACVLAN_PLEX: 2
+      CLUSTER_MACVLAN_CCU: 3
+
+      # lb_static_range: &anchor_ip_lb_static_range
+      # 192.168.1.128-192.168.1.192
+      CLUSTER_LB_INGRESS: 128
+      CLUSTER_LB_CCU: 129
+      CLUSTER_LB_HA: 130
+      CLUSTER_LB_IOBROKER: 131
+      CLUSTER_LB_GITEA: 132
+      CLUSTER_LB_PLEX: 133
+      CLUSTER_LB_OPENVPN: 134
+      CLUSTER_LB_LORAFWD: 135
+      CLUSTER_LB_MOSQUITTO: 136
+      CLUSTER_LB_UINIFI: 137

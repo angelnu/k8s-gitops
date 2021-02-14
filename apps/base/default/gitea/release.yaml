@@ -1,0 +1,105 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: gitea
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://dl.gitea.io/charts/
+      chart: gitea
+      version: 2.1.9
+      sourceRef:
+        kind: HelmRepository
+        name: gitea
+        namespace: flux-system
+      interval: 5m
+  dependsOn:
+    - name: gitea-db
+  # All values at https://gitea.com/gitea/helm-chart/
+  values:
+    service:
+      ssh:
+        type: LoadBalancer
+        port: 22
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_GITEA}"
+    ingress:
+      enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+      hosts:
+      - git.${CLUSTER_DOMAIN}
+      tls:
+      - hosts:
+        - git.${CLUSTER_DOMAIN}
+
+    persistence:
+      enabled: true
+      existingClaim: nfs-gitea
+
+    gitea:
+      admin:
+        username: gitea_admin
+        # password: set in secret
+        email: "gitea@${CLUSTER_DOMAIN}"
+      #metrics:
+      #  enabled: false
+      #  serviceMonitor:
+      #    enabled: false
+      ldap:
+        enabled: false
+        #name: 
+        #securityProtocol: 
+        #host: 
+        #port: 
+        #userSearchBase: 
+        #userFilter: 
+        #adminFilter: 
+        #emailAttribute: 
+        #bindDn: 
+        #bindPassword: 
+        #usernameAttribute: 
+        #sshPublicKeyAttribute:
+
+      database:
+        builtIn:
+          postgresql:
+            enabled: false
+          mysql:
+            enabled: false
+          mariadb:
+            enabled: false
+
+      # See https://docs.gitea.io/en-us/config-cheat-sheet/
+      config:
+        APP_NAME: "Gitea for ${CLUSTER_DOMAIN}: Git with a cup of tea"
+        #RUN_MODE: dev
+        server:
+          SSH_LISTEN_PORT : 2222      
+        security:
+          PASSWORD_COMPLEXITY: spec
+          #SECRET_KEY: set in secret
+        database:
+          DB_TYPE: postgres
+          HOST: RELEASE-NAME-postgresql.default.svc.cluster.local:5432
+          NAME: gitea
+          #PASSWD: set in secret
+          USER: postgres
+        service:
+          REQUIRE_SIGNIN_VIEW: true
+          DISABLE_REGISTRATION: true
+          ENABLE_NOTIFY_MAIL: true
+        openid:
+          ENABLE_OPENID_SIGNIN: false
+        mailer:
+          ENABLED: true
+          HOST: anchor_mailserver:25
+          IS_TLS_ENABLED: false
+          FROM: "gitea@${CLUSTER_DOMAIN}"
+          USER: ""
+          PASSWD: ""
+  valuesFrom:
+  - kind: Secret
+    name: "gitea-helm-values"
+    valuesKey: gitea.yaml
+    optional: false

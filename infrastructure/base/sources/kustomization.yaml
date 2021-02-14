@@ -4,6 +4,7 @@ namespace: flux-system
 resources:
   - angelnu-charts.yaml
   - bitnami.yaml
+  - gitea.yaml
   - ingress-nginx.yaml
   - jetstack-charts.yaml
   - k8s-at-home-charts.yaml
