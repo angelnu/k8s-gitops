@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: heimdall
-      version: 5.0.0
+      version: 4.3.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -28,8 +28,16 @@ spec:
         nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
       ingress.kubernetes.io/ssl-redirect: "true"
       hosts:
-      - home.pub.angelnu.com
-      - home.angelnu.com
+      - host: home.pub.angelnu.com
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix
+      - host: home.angelnu.com
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix
       tls:
       - hosts:
         - home.pub.angelnu.com
