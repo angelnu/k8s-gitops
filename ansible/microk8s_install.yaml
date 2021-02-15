@@ -122,6 +122,10 @@
       import_tasks: tasks/kubernetes_node_settle.yaml
 
 
+- name: Apply common settings
+  hosts: nodes
+  gather_facts: false #Already queried
+  tasks:
   - name: "Fetch kubectl config"
     shell: |
       rm -f ${HOME}/.kube/config
