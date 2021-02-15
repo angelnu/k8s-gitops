@@ -20,6 +20,11 @@ spec:
   values:
     image:
       tag: version-2.2.2
+    
+    persistence:
+      config:
+        enabled: true
+        existingClaim:  heimdall-fs-file-cluster
 
     ingress:
       enabled: true
