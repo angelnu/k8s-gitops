@@ -1,0 +1,68 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: unifi
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: unifi
+      version: 1.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  dependsOn:
+    - name: unifi-fs
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/unifi/values.yaml
+  values:
+    image:
+      tag: "6.0"
+
+    # podAnnotations:
+    #   k8s.v1.cni.cncf.io/networks: |
+    #     [{
+    #       "name":"macvlan-static",
+    #       "ips": ["${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_MACVLAN_UNIFI}"]
+    #     }]
+    
+    persistence:
+      enabled: true
+      existingClaim: unifi-fs-file-cluster
+    
+    timezone: "Europe/Berlin"
+
+    guiService:
+      type: LoadBalancer
+      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}"
+      annotations:
+        metallb.universe.tf/allow-shared-ip: unifi
+    controllerService:
+      type: LoadBalancer
+      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}"
+      annotations:
+        metallb.universe.tf/allow-shared-ip: unifi
+    stunService:
+      type: LoadBalancer
+      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}"
+      annotations:
+        metallb.universe.tf/allow-shared-ip: unifi
+    discoveryService:
+      type: LoadBalancer
+      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}"
+      annotations:
+        metallb.universe.tf/allow-shared-ip: unifi
+
+    ingress:
+      enabled: true
+      annotations:
+        #nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+        #nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+      hosts: [unifi.home.angelnu.com]
+      tls:
+      - hosts:
+        - unifi.home.angelnu.com

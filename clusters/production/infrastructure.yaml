@@ -30,6 +30,7 @@ spec:
       CLUSTER_MACVLAN_HA: "1"
       CLUSTER_MACVLAN_PLEX: "2"
       CLUSTER_MACVLAN_CCU: "3"
+      CLUSTER_MACVLAN_UNIFI: "4"
 
       # lb_static_range: &anchor_ip_lb_static_range
       # 192.168.1.128-192.168.1.192
@@ -42,4 +43,4 @@ spec:
       CLUSTER_LB_OPENVPN: "134"
       CLUSTER_LB_LORAFWD: "135"
       CLUSTER_LB_MOSQUITTO: "136"
-      CLUSTER_LB_UINIFI: "137"
+      CLUSTER_LB_UNIFI: "137"

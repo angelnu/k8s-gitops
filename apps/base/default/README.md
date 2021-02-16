@@ -57,6 +57,12 @@ Media server
 
 [Settings](tt-rss)
 
+## Unifi
+
+[Unifi](https://unifi-network.ui.com/) ubiquiti unifi controller for wireless access points. [This version](https://github.com/jacobalberty/unifi-docker) of the controller runs as container.
+
+[Settings](unifi)
+
 ## Others (to be moved)
 
   * [drone](https://www.drone.io/) - CI with a native Kubernetes Runner
