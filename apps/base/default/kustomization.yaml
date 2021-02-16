@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - gitea
   - heimdall
+  - home-assistant
   - nextcloud
   - musicIndex.yaml
   - nfs

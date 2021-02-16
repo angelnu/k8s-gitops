@@ -9,5 +9,5 @@
 
 **NOTE:** with version 1.16 the helm chart CDR still has a bug so need to apply lates:
 ```
-apply -f https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator/crds/postgresqls.yaml
+kubectl apply -f https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator/crds/postgresqls.yaml
 ```

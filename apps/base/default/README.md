@@ -11,6 +11,14 @@
 Home page with [Heimdall](https://heimdall.site/) with links to all my relevant parts.
 
 [Settings](heimdall)
+
+## Home Assistant with App Daemon
+
+[Home Assistant](https://www.home-assistant.io/) provides home automation for multiple domotic platforms.
+
+[App Daemon](https://appdaemon.readthedocs.io/en/latest/) allows script home automation in Python.
+
+[Settings](home-assistant)
 ## Music index
 
 Provides playlists for locally stored music. Can be used with Google Home assistant.

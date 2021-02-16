@@ -1,0 +1,57 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: appdaemon
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://jens-maus.github.io/RaspberryMatic
+      chart: appdaemon
+      version: 3.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  dependsOn:
+    - name: home-assistant
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/appdaemon/values.yaml
+  values:
+    image:
+      tag: v4.0.5
+    
+    persistence:
+      config:
+        enabled: true
+        mountPath: /ha-conf
+        existingClaim: home-assistant-fs-file-cluster
+    
+    additionalVolumeMounts:
+    - mountPath: "/config"
+      subPath: appdaemon
+      name: config
+  
+    nodeSelector:
+      kubernetes.io/arch: amd64
+
+    env:
+      TZ: "Europe/Berlin"
+    ingress:
+      enabled: true
+      annotations:
+          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+      hosts:
+        - host: ha-app.home.angelnu.com
+          paths:
+          - path: /
+            pathType: Prefix
+        - host: ha-app.pub.angelnu.com
+          paths:
+          - path: /
+            pathType: Prefix
+      tls:
+      - hosts:
+        - ha-app.home.angelnu.com
+        - ha-app.pub.angelnu.com

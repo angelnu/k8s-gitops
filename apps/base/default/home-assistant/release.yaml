@@ -1,0 +1,126 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: home-assistant
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: home-assistant
+      version: 6.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  dependsOn:
+    - name: home-assistant-fs
+    - name: raspberrymatic
+
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/home-assistant/values.yaml
+  values:
+    image:
+      tag: 2021.2.3
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: home-assistant-fs-file-cluster
+    
+    mariadb:
+      enabled: false
+    postgresql:
+      enabled: false
+    influxdb:
+      enabled: false  
+
+    nodeSelector:
+      kubernetes.io/arch: amd64
+
+    env:
+      TZ: "Europe/Berlin"
+    probes:
+      #Circumvention - avoid restart
+      liveness:
+        enabled: false
+      readiness:
+        enabled: false
+    #podAnnotations:
+      # k8s.v1.cni.cncf.io/networks: |
+      #   [{
+      #     "name":"macvlan-static",
+      #     "ips": ["192.168.1.1"]
+      #   }]
+
+    service:
+      type: LoadBalancer
+      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_HA}"
+      #Allows exposing the port for raspberrymatic to connect to
+      publishNotReadyAddresses: true
+      additionalPorts:
+      - name: homematicproxy
+        port: 2001
+        targetPort: 2001
+
+    ingress:
+      enabled: true
+      annotations:
+        nginx.org/websocket-services: home-assistant
+      hosts:
+      - host: ha.angelnu.com
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: ha.pub.angelnu.com
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: ha.home.angelnu.com
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - hosts:
+        - ha.angelnu.com
+        - ha.home.angelnu.com
+    
+    extraVolumeMounts:
+    - mountPath: "/root/.ssh/id_rsa"
+      subPath: id_rsa
+      name: git-ssh-key
+      readOnly: true
+    extraVolumes:
+    - name: git-ssh-key
+      secret:
+        secretName: git-ssh-keys
+        defaultMode: 256
+        items:
+          - key: id_rsa
+            path: id_rsa
+
+    addons:
+      codeserver:
+        enabled: true
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+            nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+            ingress.kubernetes.io/ssl-redirect: "true"
+          hosts:
+          - host: ha-editor.home.angelnu.com
+            paths:
+            - path: /
+              pathType: Prefix
+          - host: ha-editor.pub.angelnu.com
+            paths:
+            - path: /
+              pathType: Prefix
+          tls:
+          - hosts:
+            - ha-editor.home.angelnu.com
+            - ha-editor.pub.angelnu.com
