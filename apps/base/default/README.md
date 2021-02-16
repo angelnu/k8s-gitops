@@ -1,5 +1,11 @@
 # Default namespace
 
+## Esphome
+
+[Esphome](https://esphome.io/) is a system to control your ESP8266/ESP32 by simple yet powerful configuration files and control them remotely through Home Automation systems.
+
+[Settings](esphome)
+
 ## Gitea
 
 [Git repository](https://docs.gitea.io/) using NFS anddedicated postgres cluster.
