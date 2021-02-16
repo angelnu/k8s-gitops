@@ -10,5 +10,6 @@ resources:
   - k8s-at-home-charts.yaml
   - nextcloud.yaml
   - podinfo.yaml
+  - raspberrymatic.yaml
   - zalando-postgres-operator.yaml
   - zalando-postgres-ui.yaml

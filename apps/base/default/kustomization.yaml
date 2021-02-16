@@ -7,4 +7,5 @@ resources:
   - musicIndex.yaml
   - nfs
   - plex
+  - raspberrymatic
   - tt-rss

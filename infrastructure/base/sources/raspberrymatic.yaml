@@ -1,0 +1,16 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: raspberrymatic
+spec:
+  interval: 30m
+  url: https://jens-maus.github.io/RaspberryMatic
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: raspberrymatic-angelnu
+spec:
+  interval: 30m
+  url: https://angelnu.github.io/RaspberryMatic

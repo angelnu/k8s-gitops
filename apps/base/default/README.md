@@ -6,6 +6,11 @@
 
 [Settings](gitea)
 
+## Heimdall
+
+Home page with [Heimdall](https://heimdall.site/) with links to all my relevant parts.
+
+[Settings](heimdall)
 ## Music index
 
 Provides playlists for locally stored music. Can be used with Google Home assistant.
@@ -25,6 +30,12 @@ Media server
 ![](https://i.imgur.com/nDyS9OA.jpg)
 
 [Settings](plex)
+
+## RaspberryMatic
+
+[RaspberryMatic](https://github.com/jens-maus/RaspberryMatic) allows to control Homematic and Homematic IP devices. Is a custom CCU based on OCCU.
+
+[Settings](raspberrymatic)
 
 ## Tiny Tiny RSS
 

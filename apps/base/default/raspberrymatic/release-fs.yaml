@@ -1,0 +1,27 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: raspberrymatic-fs
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://angelnu.github.io/charts/
+      chart: file-cluster
+      version: 1.0.7
+      sourceRef:
+        kind: HelmRepository
+        name: angelnu-charts
+        namespace: flux-system
+      interval: 5m
+  #See https://github.com/angelnu/charts/blob/home/charts/file-cluster/values.yaml
+  values:
+
+    glusterfs:
+      path: ccu
+
+    pvAnnotations:
+      volume.beta.kubernetes.io/mount-options: enable-ino32
+
+    backup_schedule: "@daily"
+    backupPVC: nfs-kubernetes
