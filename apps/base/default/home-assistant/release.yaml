@@ -46,12 +46,13 @@ spec:
         enabled: false
       readiness:
         enabled: false
-    #podAnnotations:
-      # k8s.v1.cni.cncf.io/networks: |
-      #   [{
-      #     "name":"macvlan-static",
-      #     "ips": ["192.168.1.1"]
-      #   }]
+
+    podAnnotations:
+      k8s.v1.cni.cncf.io/networks: |
+        [{
+          "name":"macvlan-static",
+          "ips": ["${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_MACVLAN_HA}"]
+        }]
 
     service:
       type: LoadBalancer
