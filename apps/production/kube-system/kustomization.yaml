@@ -4,4 +4,3 @@ namespace: kube-system
 resources:
   - glusterfs/initial-config.yaml
   - glusterfs/additional-endpoints.yaml
-  - multus_network.yaml
