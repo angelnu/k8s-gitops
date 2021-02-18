@@ -1,0 +1,45 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: lorawan-server
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://angelnu.github.io/charts/
+      chart: lorawan-server
+      version: 0.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: angelnu-charts
+        namespace: flux-system
+      interval: 5m
+  dependsOn:
+    - name: lorawan-server-fs
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/lorawan-server/values.yaml
+  values:
+    image:
+      tag: latest
+
+    persistence:
+      enabled: true
+      existingClaim: lorawan-server-fs-file-cluster
+
+    clusterfs:
+      enabled: true
+      pvcName: lorawan-server
+      glusterfs:
+        path: lorawan-server
+
+    ingress:
+      enabled: true
+      annotations:
+          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
+          nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+      hosts:
+      #- lorawan.pub.angelnu.com
+      - lorawan.home.angelnu.com
+      tls:
+      - hosts:
+        #- lorawan.pub.angelnu.com
+        - lorawan.home.angelnu.com
