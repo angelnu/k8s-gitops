@@ -1,0 +1,37 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: chirpstack-packet-multiplexer
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://angelnu.github.io/charts/
+      chart: chirpstack-packet-multiplexer
+      version: 0.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: angelnu-charts
+        namespace: flux-system
+      interval: 5m
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/chirpstack-packet-multiplexer/values.yaml
+  values:
+    image:
+      tag: d8b5ed08c5fff375cd60d7a1af302d0a4237237c
+    
+    replicaCount: 1
+
+    log_level: 4
+
+    backend_hosts:
+    - "lorawan-server:1700"
+    - "router.eu.thethings.network:1700"
+
+    gateway_ids:
+    - "A840411DBD104150" #Casa96
+    - "a840411e9d604150" #Pueblo
+    - "a840411ecd404150" #Madrid
+
+    service:
+      type: LoadBalancer
+      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_LORAFWD}"
