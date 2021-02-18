@@ -1,0 +1,36 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: chirpstack
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://harbor.service.wobcom.de/chartrepo/public
+      chart: chirpstack
+      version: 0.11.0
+      sourceRef:
+        kind: HelmRepository
+        name: wobcom
+        namespace: flux-system
+      interval: 5m
+  dependsOn:
+    - name: chirpstack-db
+
+  values:
+    image:
+      tag: 3.12.2-8-g4fa5d0c
+
+    name: lorawan
+    appserver:
+      postgres:
+        existingSecret: chirpstack-helm-values
+        host: chirpstack-db-postgres
+    networkserver:
+      postgres:
+        existingSecret: postgres.chirpstack-wrapper-db-postgres.credentials
+        host: chirpstack-db-postgres
+      backend:
+        type: mqtt # only mqtt supported right now
+        mqtt:
+          server: "tcp://mosquitto:1883"

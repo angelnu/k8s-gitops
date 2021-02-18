@@ -1,0 +1,7 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: wobcom
+spec:
+  interval: 30m
+  url: https://harbor.service.wobcom.de/chartrepo/public

@@ -11,5 +11,6 @@ resources:
   - nextcloud.yaml
   - podinfo.yaml
   - raspberrymatic.yaml
+  - wobcom.yaml
   - zalando-postgres-operator.yaml
   - zalando-postgres-ui.yaml
