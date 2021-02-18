@@ -11,3 +11,4 @@
 ```
 kubectl apply -f https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator/crds/postgresqls.yaml
 ```
+Picked 1.6.1 - it should be fixed there already - keeping this until I test with a full K8S redeploy
