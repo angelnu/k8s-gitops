@@ -8,11 +8,11 @@ spec:
     spec:
       # renovate: registryUrl=https://jens-maus.github.io/RaspberryMatic
       chart: raspberrymatic
-      version: 3.55.10-4
+      version: "0.1"
       sourceRef:
         kind: HelmRepository
-        #name: raspberrymatic
-        name: angelnu-charts
+        name: raspberrymatic
+        #name: angelnu-charts
         namespace: flux-system
       interval: 5m
   dependsOn:
@@ -21,6 +21,7 @@ spec:
   values:
     image:
       pullPolicy: IfNotPresent
+      tag: 3.55.10.20210213
     
     persistence:
       enabled: true
