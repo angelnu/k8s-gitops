@@ -11,8 +11,6 @@ Microk8s multi-arch highly available cluster installed via [Ansible](ansible/REA
 
 The cluster is designed to allow tearing it completely without any data lost.
 
-** WIP ** - STILL MOVING FROM [PREVIOUS SETUP](https://github.com/angelnu/k8s-gitops/issues/5).
-
 * Applications
   * [base/default](apps/base/default)
   * [base/kube-system](apps/base/kube-system)
