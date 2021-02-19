@@ -1,0 +1,51 @@
+- name: "Create fix network IP"
+  copy:
+    dest: /etc/netplan/fixIP.yaml
+    content: |
+      # This file describes the network interfaces available on your system
+      # For more information, see netplan(5).
+      network:
+        version: 2
+        renderer: networkd
+        ethernets:
+          eno1:
+            match:
+              name: en*
+            dhcp4: yes
+            dhcp6: yes
+            addresses: [{{fix_ip_address}}]
+  register: result
+  when: fix_ip_address | default(False)
+
+# # Add Kubernetes internal DNS server to host -> needed for glusterfs client to resolve nodes
+# - name: Check if old resolv.conf is being used - /etc/resolvconf/resolv.conf.d/tail
+#   stat:
+#     path: "/etc/resolvconf/resolv.conf.d/tail"
+#   register: isOldResolv
+# #Handle legacy resolv.conf
+# - name: "Add Kubernetes internal DNS to host resolv"
+#   blockinfile:
+#     path: /etc/resolvconf/resolv.conf.d/head
+#     block: |
+#       options rotate
+#       options timeout:1
+#       nameserver 10.96.0.10
+#   register: result
+#   when: isOldResolv.stat.exists
+# - name: Restart resolvconf service
+#   systemd:
+#     name: resolvconf
+#     state: restarted
+#     enabled: yes
+#     daemon_reload: yes
+#   when: "isOldResolv.stat.exists and result | changed"
+# #Handle systemd handling DNS
+# - name: "Create fix resolv.conf"
+#   copy:
+#     dest: /etc/resolv.conf
+#     content: |
+#       # This file was created by ansible
+#       nameserver 10.96.0.10
+#       nameserver 127.0.0.53
+#       search fritz.box
+#   when: "isOldResolv.stat.exists == False"

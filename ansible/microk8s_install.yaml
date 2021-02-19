@@ -71,10 +71,10 @@
     #  - "'(no change)'  not in result.stdout|join('')"
     
     - name: Deploy dashboard
-      import_tasks: tasks/dashboard.yaml
+      import_tasks: tasks/k8s/dashboard.yaml
     
     - name: Settle first node
-      import_tasks: tasks/kubernetes_node_settle.yaml
+      import_tasks: tasks/k8s/kubernetes_node_settle.yaml
 
     
 
@@ -119,7 +119,7 @@
       throttle: 1
     
     - name: Settle remaining nodes
-      import_tasks: tasks/kubernetes_node_settle.yaml
+      import_tasks: tasks/k8s/kubernetes_node_settle.yaml
 
 
 - name: Apply common settings
@@ -147,6 +147,6 @@
     #when: ansible_architecture == "x86_64" #Some only allow dep in x86_64
     when: inventory_hostname == groups.workers[0]
 
-  - include_tasks: tasks/setLabels.yaml
+  - include_tasks: tasks/k8s/setLabels.yaml
 
-  - include_tasks: tasks/setTaints.yaml
+  - include_tasks: tasks/k8s/setTaints.yaml

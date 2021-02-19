@@ -404,10 +404,6 @@ BOOTSTRAP_PACKAGES:
   - apt-transport-https
   - aptitude
 PACKAGES:
-  - docker-ce=5:18.09.*
-  - kubeadm={{ K8S_VERSION }}
-  - kubelet={{ K8S_VERSION }}
-  - kubectl={{ K8S_VERSION }}
   - rsync
   - glusterfs-client
   - nfs-common
@@ -418,7 +414,6 @@ PACKAGES:
   - ansible #For ansible-vault
   - gpg # For SOPS
 PACKAGES2REMOVE:
-  - zram-config
   - sendmail-base
   - libnss-mdns #It uses multicast dns to resol .local -> conflicts with k8s dns names: https://askubuntu.com/questions/81797/nslookup-finds-ip-but-ping-doesnt
 
@@ -499,13 +494,10 @@ KUBELET_PRIMARY_MASTER_HOSTNAME: "{{ groups['masters'][0] }}"
 K8S_LOCAL_KUBELET_CFG_PATH: "{{ './kubeconfig' if production else './kubeconfig-test' }}"
 
 #K8S files in the server
-K8S_ETC_PATH: /etc/kubernetes
-K8S_KUBELET_CFG_PATH: /etc/kubernetes/kubelet.conf
 K8S_ADMIN_CFG_PATH: /etc/kubernetes/admin.conf
 
 #Environment varibles for kubectl
-KUBECTL_ENV:
-  KUBECONFIG: "{{K8S_ADMIN_CFG_PATH}}"
+KUBECTL_ENV: {}
 
 #Environment varibles for kubectl
 LOCAL_KUBECTL_ENV:

@@ -1,0 +1,118 @@
+# Logrotate
+- name: "Limit max log files to 1 MB each"
+  lineinfile:
+    path: /etc/logrotate.conf
+    insertbefore: BOF
+    line: maxsize 1M
+
+- name: "configure cron to run logrotate each 30 minutes"
+  copy:
+    dest: /etc/cron.d/extralogrotate
+    content: |
+      */30 * * * * root /etc/cron.daily/logrotate
+
+  register: result
+
+- name: Restart cron service
+  systemd:
+    name: cron
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: result is changed
+
+
+# Set hostname
+- name: Set hostname
+  hostname: name="{{ name }}"
+  register: set_hostname
+
+- name: Restart hostname
+  shell: "hostnamectl set-hostname {{ name }}"
+  when: set_hostname.changed
+
+
+# Set timezone
+- name: "Write timezone file with {{ timezone }}"
+  copy:
+    content: "{{ timezone }}"
+    dest: /etc/timezone
+  register: result
+
+- name: Enable new timezone
+  shell: "timedatectl set-timezone {{ timezone }}"
+  when: result is changed
+
+
+# Disable Swap
+# - name: swap - remove current swaps from fstab
+#   lineinfile:
+#     dest: /etc/fstab
+#     regexp: '^/[\S]+\s+none\s+swap '
+#     state: absent
+
+# - name: swap - disable swap
+#   shell: "cat /proc/swaps|tail -n +2 && swapoff --all"
+#   register: result
+#   changed_when: result.stdout_lines | length
+
+- name: Need reboot?
+  when: result is changed
+  set_fact: need_reboot=True
+
+# - name: Stop zram
+#   systemd:
+#     name: "{{ item }}"
+#     state: stopped
+#     enabled: no
+#   with_items:
+#   - armbian-ramlog
+#   - armbian-zram-config
+#   register: result
+#   failed_when: "(result is failed) and ('find' not in result.msg and 'found' not in result.msg)"
+
+- name: Need reboot?
+  when: result is changed
+  set_fact: need_reboot=True
+
+# - name: swap - disable swap on Raspberry Pi
+#   shell: "which dphys-swapfile && dphys-swapfile swapoff && dphys-swapfile uninstall && systemctl disable dphys-swapfile 2>&1"
+#   register: result
+#   when: result is changed
+#   failed_when: result.stderr_lines | length
+#   changed_when: result.stdout_lines | length
+
+
+- name: Check if /boot/cmdline.txt exists
+  stat:
+    path: /boot/cmdline.txt
+  register: cmline_file_check
+
+- name: Raspberry PIs - Add cgroup for Memory limits to bootparams
+  when: cmline_file_check.stat.exists
+  register: result
+  lineinfile:
+    dest: /boot/cmdline.txt
+    regexp: '^((?!.*cgroup_enable=memory).*)$'
+    line: '\1 cgroup_enable=memory'
+    backrefs: true
+    state: present
+
+- name: Need reboot?
+  when: result is changed
+  set_fact: need_reboot=True
+
+
+- name: Raspberry PIs - Add cgroup for Memory limits to bootparams
+  when: cmline_file_check.stat.exists
+  register: result
+  lineinfile:
+    dest: /boot/cmdline.txt
+    regexp: '^((?!.*cgroup_memory=1).*)$'
+    line: '\1 cgroup_memory=1'
+    backrefs: true
+    state: present
+
+- name: Need reboot?
+  when: result is changed
+  set_fact: need_reboot=True

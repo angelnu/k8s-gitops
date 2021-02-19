@@ -1,0 +1,51 @@
+- name: Install Bootstrap Packages
+  apt:
+    name: "{{BOOTSTRAP_PACKAGES}}"
+    force: yes
+    state: present
+
+
+- name: 'import Glusterfs signing key'
+  apt_key:
+    url: http://download.gluster.org/pub/gluster/glusterfs/7/rsa.pub
+
+- name: Add Glusterfs 7 PPA (Ubuntu)
+  apt_repository:
+    # Glusterfs 5 PPA (Ubuntu)
+    #repo: "deb http://ppa.launchpad.net/gluster/glusterfs-5/ubuntu focal main"
+
+    #Automatic detection not working on armbian with lsb_release as shell script
+    codename: "{{ ansible_distribution_release }}"
+    repo: ppa:gluster/glusterfs-7
+    state: present
+    update_cache: no
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Add Glusterfs 5 repo (Debian)
+  apt_repository:
+    repo: deb https://download.gluster.org/pub/gluster/glusterfs/LATEST/Debian/{{ansible_distribution_major_version}}/{{'arm64' if 'arm' in ansible_architecture else 'amd64'}}/apt {{ ansible_distribution_release }} stable
+    state: present
+  when: ansible_distribution == 'Debian NO'
+
+- name: Update system (after refreshing caches)
+  apt:
+    update_cache: yes
+    upgrade: safe
+
+- name: Install Packages
+  apt:
+    name: "{{PACKAGES}}"
+    force: yes
+    state: present
+
+- name: Prevent packages with versions from being upgraded
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  with_items: "{{ PACKAGES | map('regex_search','.*=.*') | select('string') | map('regex_replace','(.*)=.*','\\1') | list }}"
+
+- name: Remove Packages
+  apt:
+    name: "{{ PACKAGES2REMOVE }}"
+    force: yes
+    state: absent

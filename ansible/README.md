@@ -12,9 +12,13 @@ Secrets encrypted with [Ansible Vault](https://docs.ansible.com/ansible/latest/u
 
 ## Install
 
+0. Reset Host OS UUID (needed in some devices once after Host OS install)
+   ```
+   ansible-playbook -i hosts-production hw_reset.yaml
+   ```
 1. Prepare nodes
    ```
-   TBD - move from old repository
+   ansible-playbook -i hosts-production hw_setup.yaml
    ```
 2. Install MicroK8S cluster
    ```
@@ -25,6 +29,10 @@ Secrets encrypted with [Ansible Vault](https://docs.ansible.com/ansible/latest/u
    ansible-playbook -i hosts-production flux_install.yaml
    ```
 
+## Update Host OS
+   ```
+   ansible-playbook -i hosts-production hw_update.yaml
+   ```
 ## Update Flux
 
 1. Update staging

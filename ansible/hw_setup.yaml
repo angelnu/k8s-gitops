@@ -1,0 +1,44 @@
+#Install depencies before running this script
+#Expect that user anunez exists
+# - apt-get install openssh-server python vim
+# - ip add add 192.168.2.3
+# - allow ssh as root -> uncomment "PermitRootLogin prohibit-password" in "/etc/ssh/sshd_config"
+# - ssh-copy-id then "cp -a /home/anunez/.ssh /root;chown -R root:root /root/.ssh"
+- name: Setup HW to run Kubernetes
+  hosts: all
+
+  tasks:
+
+  - name: Add and update packages
+    import_tasks: tasks/hw/apt.yaml
+
+  - name: Setup system parameters (boot, hosts, timzone)
+    import_tasks: tasks/hw/system.yaml
+
+  - name: Setup network parameters
+    import_tasks: tasks/hw/network.yaml
+
+
+  # check if we need a reboot
+  - name: check if reboot needed
+    stat: path=/var/run/reboot-required
+    register: reboot_required_file
+
+  - name: Need reboot?
+    when: reboot_required_file.stat.exists
+    set_fact: need_reboot=True
+
+  #Reboot if needed at the end
+  - name: Reboot immediately if there was a change.
+    shell: "sleep 5 && reboot"
+    async: 1
+    poll: 0
+    when: need_reboot | default(False)
+
+  - name: Wait for the reboot to complete if there was a change.
+    wait_for_connection:
+      connect_timeout: 20
+      sleep: 5
+      delay: 5
+      timeout: 300
+    when: need_reboot | default(False)
