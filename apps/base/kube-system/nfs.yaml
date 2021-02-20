@@ -10,7 +10,7 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    server: nas.home.${CLUSTER_DOMAIN}
+    server: nas.home.angelnu.com
     path: "/volume1/kubernetes"
 ---
 apiVersion: v1

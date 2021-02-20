@@ -8,7 +8,7 @@ spec:
   accessModes:
     - ReadOnlyMany
   nfs:
-    server: nas.home.${CLUSTER_DOMAIN}
+    server: nas.home.angelnu.com
     path: "/volume1/video"
 ---
 apiVersion: v1
