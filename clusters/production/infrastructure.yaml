@@ -16,7 +16,7 @@ spec:
     secretRef:
       name: sops-gpg
   postBuild:
-    #substitute:
+    substitute: {}
     substituteFrom:
     - kind: ConfigMap
       name: global-settings
