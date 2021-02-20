@@ -35,6 +35,8 @@ Secrets encrypted with [Ansible Vault](https://docs.ansible.com/ansible/latest/u
    ```
 ## Update Flux
 
+This should not be needed since there is GitHub workflow to do this automatically via PR
+
 1. Update staging
    ```
    flux install --export>clusters/staging/flux-system/gotk-components.yaml
