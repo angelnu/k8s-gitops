@@ -1,0 +1,95 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: recipes
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: recipes
+      version: 3.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  dependsOn:
+    - name: recipes-db
+    - name: recipes-media-fs
+    - name: recipes-static-fs
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/recipes/values.yaml
+  values:
+    image:
+      repository: angelnu/recipes
+      tag: latest
+      #tag: 14.1
+    
+    persistence:
+      media:
+        enabled: true
+        existingClaim: recipes-media-fs-file-cluster
+      static:
+        enabled: true
+        existingClaim: recipes-static-fs-file-cluster
+
+    
+    env:
+      DEBUG: "0"
+      ALLOWED_HOSTS: "*.${CLUSTER_DOMAIN}"
+      #SECRET_KEY: set in secret
+      DB_ENGINE: django.db.backends.postgresql_psycopg2
+      DB_OPTIONS: '{"sslmode":"require"}'
+      POSTGRES_HOST: recipes-db-postgres-cluster-postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      #POSTGRES_PASSWORD: set in secret
+      TIMEZONE: Europe/Berlin
+
+    ingress:
+      enabled: true
+      #annotations:
+      #  nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+      #  nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+      ingress.kubernetes.io/ssl-redirect: "true"
+      hosts:
+      - host: recipes.pub.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix
+      - host: recipes.home.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix
+      tls:
+      - hosts:
+        - recipes.pub.${CLUSTER_DOMAIN}
+        - recipes.home.${CLUSTER_DOMAIN}
+    
+    additionalContainers:
+    - name: nginx
+      image: nginx:1.19.6
+      ports:
+        - containerPort: 80
+          name: http
+      volumeMounts:
+      #
+      # If persistent volumes are enabled ; please uncomment the following lines
+      #
+      - name: media
+        mountPath: '/media'
+      - name: static
+        mountPath: '/static'
+      - name: recipes-config
+        mountPath: /etc/nginx/nginx.conf
+        subPath: nginx-config
+        readOnly: true
+
+  valuesFrom:
+  - kind: Secret
+    name: "recipes-helm-values"
+    valuesKey: recipes.yaml
+    optional: false
