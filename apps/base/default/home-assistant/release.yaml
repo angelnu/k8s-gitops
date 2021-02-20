@@ -69,23 +69,23 @@ spec:
       annotations:
         nginx.org/websocket-services: home-assistant
       hosts:
-      - host: ha.angelnu.com
+      - host: ha.${CLUSTER_DOMAIN}
         paths:
         - path: /
           pathType: Prefix
-      - host: ha.pub.angelnu.com
+      - host: ha.pub.${CLUSTER_DOMAIN}
         paths:
         - path: /
           pathType: Prefix
-      - host: ha.home.angelnu.com
+      - host: ha.home.${CLUSTER_DOMAIN}
         paths:
         - path: /
           pathType: Prefix
       tls:
       - hosts:
-        - ha.angelnu.com
-        - ha.pub.angelnu.com
-        - ha.home.angelnu.com
+        - ha.${CLUSTER_DOMAIN}
+        - ha.pub.${CLUSTER_DOMAIN}
+        - ha.home.${CLUSTER_DOMAIN}
     
     extraVolumeMounts:
     - mountPath: "/root/.ssh/id_rsa"
@@ -114,15 +114,15 @@ spec:
             nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
             ingress.kubernetes.io/ssl-redirect: "true"
           hosts:
-          - host: ha-editor.home.angelnu.com
+          - host: ha-editor.home.${CLUSTER_DOMAIN}
             paths:
             - path: /
               pathType: Prefix
-          - host: ha-editor.pub.angelnu.com
+          - host: ha-editor.pub.${CLUSTER_DOMAIN}
             paths:
             - path: /
               pathType: Prefix
           tls:
           - hosts:
-            - ha-editor.home.angelnu.com
-            - ha-editor.pub.angelnu.com
+            - ha-editor.home.${CLUSTER_DOMAIN}
+            - ha-editor.pub.${CLUSTER_DOMAIN}

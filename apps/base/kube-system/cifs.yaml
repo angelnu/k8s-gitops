@@ -64,5 +64,5 @@ spec:
             secretRef:
               name: "cifs-secret"
             options:
-              source: "//nas.home.angelnu.com/video"
+              source: "//nas.home.${CLUSTER_DOMAIN}/video"
               mountOptions: "dir_mode=0755,file_mode=0644,noperm"

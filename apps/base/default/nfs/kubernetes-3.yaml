@@ -11,7 +11,7 @@ spec:
     - local_lock=posix
     - nfsvers=4.1
   nfs:
-    server: nas.home.angelnu.com
+    server: nas.home.${CLUSTER_DOMAIN}
     path: "/volume1/kubernetes"
 ---
 apiVersion: v1

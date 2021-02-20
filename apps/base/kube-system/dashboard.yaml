@@ -54,7 +54,7 @@ roleRef:
   name: cluster-admin
 subjects:
   - kind: User
-    name: angel@angelnu.com
+    name: angel@${CLUSTER_DOMAIN}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

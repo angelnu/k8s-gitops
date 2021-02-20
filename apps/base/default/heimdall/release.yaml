@@ -33,17 +33,17 @@ spec:
         nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
       ingress.kubernetes.io/ssl-redirect: "true"
       hosts:
-      - host: home.pub.angelnu.com
+      - host: home.pub.${CLUSTER_DOMAIN}
         paths:
         - path: /
           # Ignored if not kubeVersion >= 1.14-0
           pathType: Prefix
-      - host: home.angelnu.com
+      - host: home.${CLUSTER_DOMAIN}
         paths:
         - path: /
           # Ignored if not kubeVersion >= 1.14-0
           pathType: Prefix
       tls:
       - hosts:
-        - home.pub.angelnu.com
-        - home.angelnu.com
+        - home.pub.${CLUSTER_DOMAIN}
+        - home.${CLUSTER_DOMAIN}

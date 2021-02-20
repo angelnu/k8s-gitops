@@ -9,7 +9,7 @@ metadata:
     ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
 spec:
   rules:
-  - host: heketi-api.home.angelnu.com
+  - host: heketi-api.home.${CLUSTER_DOMAIN}
     http:
       paths:
       - path: /

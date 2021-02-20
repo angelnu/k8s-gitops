@@ -27,8 +27,8 @@ spec:
           nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
           ingress.kubernetes.io/ssl-redirect: "true"
         hosts:
-        - host: router.home.angelnu.com
-        - host: router.pub.angelnu.com
+        - host: router.home.${CLUSTER_DOMAIN}
+        - host: router.pub.${CLUSTER_DOMAIN}
     # - name: homematic
     #   ip: 192.168.2.124
     #   port: 443
@@ -40,8 +40,8 @@ spec:
     #      nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
     #      ingress.kubernetes.io/ssl-redirect: "true"
     #     hosts:
-    #     - host: homematic.home.angelnu.com
-    #     - host: homematic.angelnu.com
+    #     - host: homematic.home.${CLUSTER_DOMAIN}
+    #     - host: homematic.${CLUSTER_DOMAIN}
     - name: wifi
       externalName: ap-workroom.lan
       port: 80
@@ -50,7 +50,7 @@ spec:
         annotations:
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
-        - host: wifi.home.angelnu.com
+        - host: wifi.home.${CLUSTER_DOMAIN}
     - name: octoprint
       externalName: octopi-casa96-prusa.lan
       port: 80
@@ -59,8 +59,8 @@ spec:
         annotations:
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
-        - host: prusa.home.angelnu.com
-        - host: prusa.pub.angelnu.com
+        - host: prusa.home.${CLUSTER_DOMAIN}
+        - host: prusa.pub.${CLUSTER_DOMAIN}
     - name: octoprint-mini
       externalName: octopi-casa96-prusa-mini.lan
       port: 80
@@ -69,8 +69,8 @@ spec:
         annotations:
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
-        - host: prusa-mini.home.angelnu.com
-        - host: prusa-mini.pub.angelnu.com
+        - host: prusa-mini.home.${CLUSTER_DOMAIN}
+        - host: prusa-mini.pub.${CLUSTER_DOMAIN}
     - name: printer
       externalName: printer-canon.lan
       port: 80
@@ -79,7 +79,7 @@ spec:
         annotations:
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
-        - host: print.home.angelnu.com
+        - host: print.home.${CLUSTER_DOMAIN}
     - name: prusa-sla
       externalName: prusa64-sl1.lan
       port: 80
@@ -89,7 +89,7 @@ spec:
         annotations:
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
-        - host: prusa-sla.home.angelnu.com
+        - host: prusa-sla.home.${CLUSTER_DOMAIN}
     - name: relays
       externalName: n8.lan
       port: 80
@@ -101,8 +101,8 @@ spec:
           nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
           ingress.kubernetes.io/ssl-redirect: "true"
         hosts:
-        - host: relays.home.angelnu.com
-        - host: relays.pub.angelnu.com
+        - host: relays.home.${CLUSTER_DOMAIN}
+        - host: relays.pub.${CLUSTER_DOMAIN}
     - name: nas
       ip: 192.168.2.10
       port: 5001
@@ -112,5 +112,5 @@ spec:
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
-        - host: nas.angelnu.com
-        - host: nas.pub.angelnu.com
+        - host: nas.${CLUSTER_DOMAIN}
+        - host: nas.pub.${CLUSTER_DOMAIN}

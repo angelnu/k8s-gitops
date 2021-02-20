@@ -43,15 +43,15 @@ spec:
           nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
           nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
       hosts:
-        - host: ha-app.home.angelnu.com
+        - host: ha-app.home.${CLUSTER_DOMAIN}
           paths:
           - path: /
             pathType: Prefix
-        - host: ha-app.pub.angelnu.com
+        - host: ha-app.pub.${CLUSTER_DOMAIN}
           paths:
           - path: /
             pathType: Prefix
       tls:
       - hosts:
-        - ha-app.home.angelnu.com
-        - ha-app.pub.angelnu.com
+        - ha-app.home.${CLUSTER_DOMAIN}
+        - ha-app.pub.${CLUSTER_DOMAIN}

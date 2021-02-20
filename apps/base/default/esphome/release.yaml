@@ -33,20 +33,20 @@ spec:
         nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
       ingress.kubernetes.io/ssl-redirect: "true"
       hosts:
-      - host: esphome.pub.angelnu.com
+      - host: esphome.pub.${CLUSTER_DOMAIN}
         paths:
         - path: /
           # Ignored if not kubeVersion >= 1.14-0
           pathType: Prefix
-      - host: esphome.home.angelnu.com
+      - host: esphome.home.${CLUSTER_DOMAIN}
         paths:
         - path: /
           # Ignored if not kubeVersion >= 1.14-0
           pathType: Prefix
       tls:
       - hosts:
-        - esphome.pub.angelnu.com
-        - esphome.home.angelnu.com
+        - esphome.pub.${CLUSTER_DOMAIN}
+        - esphome.home.${CLUSTER_DOMAIN}
 
     addons:
       codeserver:
@@ -61,15 +61,15 @@ spec:
             nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
             ingress.kubernetes.io/ssl-redirect: "true"
           hosts:
-          - host: esphome-editor.home.angelnu.com
+          - host: esphome-editor.home.${CLUSTER_DOMAIN}
             paths:
             - path: /
               pathType: Prefix
-          - host: esphome-editor.pub.angelnu.com
+          - host: esphome-editor.pub.${CLUSTER_DOMAIN}
             paths:
             - path: /
               pathType: Prefix
           tls:
           - hosts:
-            - esphome-editor.home.angelnu.com
-            - esphome-editor.pub.angelnu.com
+            - esphome-editor.home.${CLUSTER_DOMAIN}
+            - esphome-editor.pub.${CLUSTER_DOMAIN}

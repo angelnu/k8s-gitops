@@ -25,8 +25,8 @@ spec:
 
     replicaCount: 2
     replicaNodes:
-    - server.angelnu.com
-    - server2.angelnu.com
+    - server.${CLUSTER_DOMAIN}
+    - server2.${CLUSTER_DOMAIN}
 
     #If you change this after creating the DB then use psql to set the password manually
     superuser: postgres

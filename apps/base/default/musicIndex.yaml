@@ -48,7 +48,7 @@ spec:
             secretRef:
               name: "cifs-secret"
             options:
-              source: "//nas.home.angelnu.com/music"
+              source: "//nas.home.${CLUSTER_DOMAIN}/music"
               mountOptions: "dir_mode=0555,file_mode=0444,noperm"
 ---
 # -------------------- Service ------------------- #
