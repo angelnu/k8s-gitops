@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: global_settings
+resources:
+- ../settings.yaml
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: flux-system
+  name: cluster-settings
+data:
+  #VALUES DIFFERENT PROD - STAGING
+  CLUSTER_ENV: "prod"
+  CLUSTER_DOMAIN: angelnu.com
+  CLUSTER_DOMAIN_CERT: prod-wildcard-angelnu-com-tls
+  CLUSTER_EXTERNAL_SUBNET_PREFIX: "192.168.1"
+  CLUSTER_LB_RANGE: "192.168.1.128-192.168.1.192"
