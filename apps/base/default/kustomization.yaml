@@ -11,6 +11,7 @@ resources:
   - nfs
   - plex
   - raspberrymatic
+  - recipes
   - reverse-proxy
   - tt-rss
   - unifi

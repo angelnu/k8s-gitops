@@ -41,7 +41,7 @@ Some [Persistant Volume Claims](https://kubernetes.io/docs/concepts/storage/pers
 
 Media server
 
-![](https://i.imgur.com/nDyS9OA.jpg)
+![screenshot](https://i.imgur.com/nDyS9OA.jpg)
 
 [Settings](plex)
 
@@ -50,6 +50,14 @@ Media server
 [RaspberryMatic](https://github.com/jens-maus/RaspberryMatic) allows to control Homematic and Homematic IP devices. Is a custom CCU based on OCCU.
 
 [Settings](raspberrymatic)
+
+## Recipes
+
+[Tandoor Recipes](https://github.com/vabene1111/recipes/) is the recipe manager that allows you to manage your ever growing collection of digital recipes.
+
+![screenshot](https://raw.githubusercontent.com/vabene1111/recipes/develop/docs/preview.png)
+
+[Settings](recipes)
 
 ## Tiny Tiny RSS
 
