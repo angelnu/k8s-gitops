@@ -20,4 +20,4 @@ spec:
       #namespace: '*'
     - kind: HelmRelease
       name: '*'
-      #namespace: '*'
+      namespace: '*'
