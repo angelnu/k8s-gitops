@@ -7,7 +7,3 @@ spec:
   chart:
     spec:
       version: ">=1.0.0"
-  values:
-    ingress:
-      hosts:
-        - podinfo.staging

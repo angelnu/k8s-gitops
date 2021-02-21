@@ -23,5 +23,14 @@ spec:
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: nginx
-      path: "/"
+        nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+          
+      hosts:
+        - podinfo.pub.${CLUSTER_DOMAIN}
+        - podinfo.home.${CLUSTER_DOMAIN}
+      tls:
+        - hosts:
+          - podinfo.pub.${CLUSTER_DOMAIN}
+        - hosts:
+          - podinfo.home.${CLUSTER_DOMAIN}
