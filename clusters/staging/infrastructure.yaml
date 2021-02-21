@@ -4,7 +4,8 @@ metadata:
   name: infrastructure
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 10m5s
+  dependsOn:
     - name: operators
   sourceRef:
     kind: GitRepository
