@@ -4,7 +4,10 @@
 > GitOps state for my cluster using flux v2
 
 [![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/DNCynrJ)
-
+[![test](https://github.com/angelnu/k8s-gitops/workflows/test/badge.svg)](https://github.com/angelnu/k8s-gitop/workflows/actions)
+[![e2e](https://github.com/angelnu/k8s-gitops/workflows/e2e/badge.svg)](https://github.com/angelnu/k8s-gitop/actions)
+[![renovate](https://github.com/angelnu/k8s-gitops/workflows/renovate/badge.svg)](https://github.com/angelnu/k8s-gitop/workflows/renovate/actions)
+[![update-flux](https://github.com/angelnu/k8s-gitops/workflows/update-flux/badge.svg)](https://github.com/angelnu/k8s-gitop/workflows/update-flux/actions)
 <br />
 
 Microk8s multi-arch highly available cluster installed via [Ansible](ansible/README.md).
@@ -73,3 +76,17 @@ To encrypt files with secrets use:
 sops -e -i my-secret.yaml # Initial encrypt
 sops my-secret.yaml # To edit it directly in you $EDITOR
 ```
+
+## Useful commands
+
+- Delete stuck objects (NSs, PVs, PVCs)
+  ```
+  kubectl patch <object type> <object name> -p '{"metadata":{"finalizers": []}}' --type=merge
+  ```
+
+
+## :handshake:&nbsp; Community
+
+This cluster in inspired by the work of others shared at [awesome-home-kubernetes](https://github.com/k8s-at-home/awesome-home-kubernetes), specially [billimek´s setup](https://github.com/billimek/k8s-gitops/).
+
+There is also an active [k8s@home Discord](https://discord.gg/7PbmHRK) for this community.
