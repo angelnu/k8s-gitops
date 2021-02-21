@@ -4,6 +4,7 @@ resources:
   - cert-manager
   - default
   - flux-system
+  - monitoring
   - nginx
   - postgres
   #- redis
