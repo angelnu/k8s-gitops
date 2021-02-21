@@ -25,7 +25,7 @@
 
   - name: Execute the flux2-installer.sh
     shell: /tmp/flux2-installer.sh
-    when: flux2_download.changed
+    #when: flux2_download.changed
   
   - name: Install SOPS
     apt:
