@@ -1,0 +1,116 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: homer
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: homer
+      version: 3.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/homer/values.yaml
+  values:
+    image:
+      tag: 20.09.1
+    
+    env:
+      TZ: "Europe/Berlin"
+    
+    persistence:
+      config:
+        enabled: true
+        existingClaim: homer-fs-file-cluster
+
+    additionalVolumes:
+    - name: config-volume
+      configMap:
+        # Provide the name of the ConfigMap containing the files you want
+        # to add to the container
+        name: homer-config
+
+    additionalVolumeMounts:
+    - name: config-volume
+      mountPath: /www/assets/config-git.yml
+      subPath: config.yml
+
+    ingress:
+      enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+      ingress.kubernetes.io/ssl-redirect: "true"
+      hosts:
+      - host: home.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix
+      - host: home.pub.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix
+      - host: home.home.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix
+      tls:
+      - hosts:
+        - home.${CLUSTER_DOMAIN}
+        - home.pub.${CLUSTER_DOMAIN}
+        - home.home${CLUSTER_DOMAIN}
+
+    addons:
+      codeserver:
+        enabled: true
+        image:
+          repository: codercom/code-server
+          tag: 3.9.0
+        workingDir: "/www/assets"
+        args:
+        - --user-data-dir
+        - "/www/assets/.vscode"
+        - --auth
+        - "none"
+        ingress:
+          enabled: true
+          annotations:
+            nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+            nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+          hosts:
+          - host: home-editor.pub.${CLUSTER_DOMAIN}
+            paths:
+            - path: /
+              # Ignored if not kubeVersion >= 1.14-0
+              pathType: Prefix
+          - host: home-editor.home.${CLUSTER_DOMAIN}
+            paths:
+            - path: /
+              # Ignored if not kubeVersion >= 1.14-0
+              pathType: Prefix
+          tls:
+          - hosts:
+            - home-editor.pub.${CLUSTER_DOMAIN}
+            - home-editor.home${CLUSTER_DOMAIN}
+        volumeMounts:
+        - name: config
+          mountPath: /www/assets
+
+        additionalVolumes:
+        - name: config-volume
+          configMap:
+            # Provide the name of the ConfigMap containing the files you want
+            # to add to the container
+            name: homer-config
+
+        additionalVolumeMounts:
+        - name: config-volume
+          mountPath: /www/assets/config-git.yml
+          subPath: config.yml

@@ -5,6 +5,7 @@ resources:
   - gitea
   - heimdall
   - home-assistant
+  - homer
   - lorawan
   - nextcloud
   - musicIndex.yaml

@@ -16,8 +16,13 @@ spec:
       interval: 5m
   dependsOn:
     - name: gitea-db
-  # All values at https://gitea.com/gitea/helm-chart/
+  # All values at https://gitea.com/gitea/helm-chart
   values:
+    image:
+      repository: gitea/gitea
+      tag: 1.13.2
+      pullPolicy: IfNotPresent
+  
     service:
       ssh:
         type: LoadBalancer

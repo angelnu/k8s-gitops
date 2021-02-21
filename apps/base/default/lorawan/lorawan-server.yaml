@@ -16,9 +16,10 @@ spec:
       interval: 5m
   dependsOn:
     - name: lorawan-server-fs
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/lorawan-server/values.yaml
+  # See https://github.com/angelnu/charts/blob/home/charts/lorawan-server/values.yaml
   values:
     image:
+      repository: gotthardp/lorawan-server
       tag: latest
 
     persistence:

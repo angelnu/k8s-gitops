@@ -19,6 +19,7 @@ spec:
   # See https://github.com/k8s-at-home/charts/blob/master/charts/esphome/values.yaml
   values:
     image:
+      repository: esphome/esphome
       tag: 1.15.3
     
     persistence:

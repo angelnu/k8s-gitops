@@ -16,9 +16,10 @@ spec:
       interval: 5m
   dependsOn:
     - name: nextcloud-db
-  # See https://github.com/nextcloud/helm/tree/master/charts/nextcloud
+  # See https://github.com/nextcloud/helm/blob/master/charts/nextcloud/values.yaml
   values:
     image:
+      repository: nextcloud
       tag: 20.0.7
     ingress:
       enabled: true

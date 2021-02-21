@@ -14,9 +14,10 @@ spec:
         name: angelnu-charts
         namespace: flux-system
       interval: 5m
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/chirpstack-packet-multiplexer/values.yaml
+  # See https://github.com/angelnu/charts/blob/home/charts/chirpstack-packet-multiplexer/values.yaml
   values:
     image:
+      repository: ghcr.io/angelnu/chirpstack-packet-multiplexer
       tag: d8b5ed08c5fff375cd60d7a1af302d0a4237237c
     
     replicaCount: 1

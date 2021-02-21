@@ -25,11 +25,21 @@ Home page with [Heimdall](https://heimdall.site/) with links to all my relevant 
 [App Daemon](https://appdaemon.readthedocs.io/en/latest/) allows script home automation in Python.
 
 [Settings](home-assistant)
+
+## Home Page (Homer)
+
+[Homer](https://github.com/bastienwirtz/homer) host the main page for the server thanks to it being setup via yaml.
+
+[Settings](homer)
 ## Music index
 
 Provides playlists for locally stored music. Can be used with Google Home assistant.
 
 [Settings](musicIndex.yaml)
+
+Considering to replace with:
+- https://github.com/sentriz/gonic
+- https://github.com/navidrome/navidrome
 
 ## NFS
 
