@@ -12,6 +12,9 @@ spec:
       name: flux-system
       namespace: flux-system
     - kind: Kustomization
+      name: operations
+      namespace: flux-system
+    - kind: Kustomization
       name: infrastructure
       namespace: flux-system
     - kind: Kustomization

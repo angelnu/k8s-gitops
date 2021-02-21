@@ -4,5 +4,6 @@ resources:
   - slack_secret.yaml
   - slack_provider.yaml
   - slack_alert.yaml
+  - github_secret.yaml
   - github_provider.yaml
   - github_alert.yaml
