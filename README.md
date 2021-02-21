@@ -18,15 +18,20 @@ The cluster is designed to allow tearing it completely without any data lost.
   * [production overlay](apps/production)
   * [staging global settings](clusters/staging/apps.yaml)
   * [staging overlay](apps/staging)
+* Substitutions
+  * [global settings](clusters/settings.yaml)
+  * [production global settings](clusters/production/settings.yaml)
+  * [staging global settings](clusters/staging/settings.yaml)
+* Operators
+  * [sources](operators/sources)
+  * [cert-manager](operators/cert-manager)
+  * [postgres](operators/postgres)
 * Infrastructure
   * [base/cert-manager](infrastructure/base/cert-manager)
   * [base/flux-system](infrastructure/base/flux-system)
   * [base/nginx](infrastructure/base/nginx)
   * [base/postgres](infrastructure/base/postgres)
-  * [base/sources](infrastructure/base/sources)
-  * [production global settings](clusters/production/infrastructure.yaml)
   * [production overlay](infrastructure/production)
-  * [staging global settings](clusters/staging/infrastructure.yaml)
   * [staging overlay](infrastructure/staging)
 * Clusters:
   * [production](clusters/production)

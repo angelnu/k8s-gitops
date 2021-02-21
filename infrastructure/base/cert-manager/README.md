@@ -4,6 +4,6 @@
 
 [DNS webhook for Dnsmadeeasy](https://github.com/angelnu/cert-manager-webhook-dnsmadeeasy) is used.
 
-* [chart settings](cert-manager.yaml)
+* [operator](../../../operators/cert-manager/cert-manager.yaml)
 * [dnsmadeeasy webhook chart settings](cert-manager-dnsmadeeasy.yaml)
 * [certificate settings](certificate.yaml)

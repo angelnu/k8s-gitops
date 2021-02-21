@@ -5,5 +5,5 @@ resources:
 - settings.yaml
 - flux-system
 - operators.yaml
-- infrastructure.yaml
-- apps.yaml
+#- infrastructure.yaml
+#- apps.yaml
