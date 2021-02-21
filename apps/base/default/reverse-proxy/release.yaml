@@ -31,6 +31,19 @@ spec:
         hosts:
         - host: router.home.${CLUSTER_DOMAIN}
         - host: router.pub.${CLUSTER_DOMAIN}
+    - name: fritz
+      externalName: fritz.box
+      port: 80
+      ingress:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+          ingress.kubernetes.io/ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
+        hosts:
+        - host: fritz.home.${CLUSTER_DOMAIN}
+        - host: fritz.pub.${CLUSTER_DOMAIN}
     # - name: homematic
     #   ip: 192.168.2.124
     #   port: 443
