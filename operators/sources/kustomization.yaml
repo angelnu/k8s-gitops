@@ -12,6 +12,7 @@ resources:
   - nextcloud.yaml
   - podinfo.yaml
   - raspberrymatic.yaml
+  - weaveworks-kured-charts.yaml
   - wobcom.yaml
   - zalando-postgres-operator.yaml
   - zalando-postgres-ui.yaml

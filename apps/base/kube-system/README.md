@@ -28,6 +28,12 @@ TBD: since Heketi is in maintenance mode I need to move to another solution.
 
 [Settings](glusterfs)
 
+## Kured
+
+[Kured](https://github.com/weaveworks/kured) (KUbernetes REboot Daemon) is a Kubernetes daemonset that performs safe automatic node reboots when the need to do so is indicated by the package management system of the underlying OS.
+
+[Settings](kured)
+
 ## Mail server - Exim
 
 Mail server with [Exim](https://www.exim.org/) for application in K8S and LAN to send mail without having to store any Google settings.

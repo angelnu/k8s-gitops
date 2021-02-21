@@ -18,6 +18,22 @@ spec:
     - kind: HelmChart
       name: '*'
       #namespace: '*'
+
     - kind: HelmRelease
       name: '*'
-      namespace: '*'
+      namespace: 'default'    
+    - kind: HelmRelease
+      name: '*'
+      namespace: 'kube-system' 
+    - kind: HelmRelease
+      name: '*'
+      namespace: 'nginx' 
+    - kind: HelmRelease
+      name: '*'
+      namespace: 'cert-manager'
+    - kind: HelmRelease
+      name: '*'
+      namespace: 'postgres'
+    - kind: HelmRelease
+      name: '*'
+      namespace: 'podinfo'

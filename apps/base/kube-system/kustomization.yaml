@@ -6,6 +6,7 @@ resources:
   - cifs.yaml
   - dashboard.yaml
   - glusterfs
+  - kured
   - mailserver.yaml
   - metallb.yaml
   - nfs.yaml
