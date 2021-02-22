@@ -3,7 +3,7 @@ apiVersion: extensions/v1beta1
 metadata:
   name: nextcloud-home
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: 8000m
+    nginx.ingress.kubernetes.io/proxy-body-size: 4G
     nginx.ingress.kubernetes.io/server-snippet: |-
       server_tokens off;
       proxy_hide_header X-Powered-By;

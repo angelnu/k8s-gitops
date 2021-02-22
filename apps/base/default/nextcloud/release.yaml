@@ -20,11 +20,11 @@ spec:
   values:
     image:
       repository: nextcloud
-      tag: 21.0.0
+      tag: 20.0.7
     ingress:
       enabled: true
       annotations:
-        nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+        nginx.ingress.kubernetes.io/proxy-body-size: 4G
         nginx.ingress.kubernetes.io/server-snippet: |-
           server_tokens off;
           proxy_hide_header X-Powered-By;
@@ -49,8 +49,6 @@ spec:
           location ~ ^/(?:autotest|occ|issue|indie|db_|console) {
             deny all;
           }
-      hosts:
-      - nextcloud.${CLUSTER_DOMAIN}
       tls:
       - hosts:
         - nextcloud.${CLUSTER_DOMAIN}
@@ -64,7 +62,8 @@ spec:
       enabled: true
       type: postgresql
       database: postgres
-      #secret: set in secret
+      #user: set in secret
+      #password: set in secret
       host: nextcloud-db-postgres-cluster-postgres
     cronjob:
       enabled: true
