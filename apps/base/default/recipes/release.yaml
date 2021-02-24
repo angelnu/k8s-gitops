@@ -21,9 +21,8 @@ spec:
   # See https://github.com/k8s-at-home/charts/blob/master/charts/recipes/values.yaml
   values:
     image:
-      repository: angelnu/recipes
-      tag: latest
-      #tag: 14.1
+      repository: vabene1111/recipes
+      tag: 0.14.4
     
     persistence:
       media:
