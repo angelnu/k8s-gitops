@@ -75,7 +75,7 @@
   - name: "Install flux in git repository"
     shell: > 
       export GITHUB_TOKEN={{ FLUX2_GITHUB_TOKEN }};
-      echo flux bootstrap github
+      flux bootstrap github
       --context={{ FLUX2_CONTEXT }}
       --owner={{FLUX_GIT_USER}}
       --repository={{FLUX_GIT_REPO}}
@@ -83,7 +83,7 @@
       --personal \
       --path={{ FLUX_GIT_PATH }}
       --namespace={{ FLUX_NAMESPACE }} 
-    when: flux_in_git.stat.exists
+    #when: flux_in_git.stat.exists
     register: result
     changed_when:
     - "'unchanged'  not in result.stdout| join('')"
@@ -97,5 +97,8 @@
 
   - name: "Deploy flux to cluster if crd fluxcd.io missing"
     shell: > 
-      {{ KUBECTL_BIN }} apply -k {{ FLUX_GIT_PATH }}/{{ FLUX_NAMESPACE }} 
+      {{ KUBECTL_BIN }} apply -k ../{{ FLUX_GIT_PATH }}/{{ FLUX_NAMESPACE }} 
     when: "'fluxcd.io' not in kube_crd.stdout| join('')"
+    delegate_to: localhost
+    retries: 60
+    delay: 5 #due to CRDs
