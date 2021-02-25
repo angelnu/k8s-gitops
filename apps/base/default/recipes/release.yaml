@@ -22,7 +22,7 @@ spec:
   values:
     image:
       repository: vabene1111/recipes
-      tag: 0.14.4
+      tag: 0.14.5
     
     persistence:
       media:
