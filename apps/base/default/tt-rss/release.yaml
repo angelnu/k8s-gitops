@@ -55,6 +55,14 @@ spec:
       DB_ENV_USER: postgres
       #DB_ENV_PASS: set in secret
 
+      TTRSS_SELF_URL_PATH: rss.${CLUSTER_DOMAIN}
+      TTRSS_DB_HOST: tt-rss-db-postgres-cluster-postgres
+      TTRSS_DB_PORT: "5432"
+      TTRSS_DB_USER: postgres
+      TTRSS_DB_NAME: tt-rss
+      #TTRSS_DB_PASS: set in secret
+      #TTRSS_SESSION_COOKIE_LIFETIME: 86400*30
+
     initContainers:
     - image: postgres:alpine
       name: waitforpostgres
