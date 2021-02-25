@@ -75,6 +75,7 @@
   - name: "Install flux in git repository"
     shell: > 
       export GITHUB_TOKEN={{ FLUX2_GITHUB_TOKEN }};
+      cd ..;
       flux bootstrap github
       --context={{ FLUX2_CONTEXT }}
       --owner={{FLUX_GIT_USER}}

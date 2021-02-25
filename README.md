@@ -79,9 +79,18 @@ sops my-secret.yaml # To edit it directly in you $EDITOR
 
 ## Useful commands
 
-- Delete stuck objects (NSs, PVs, PVCs)
+- Delete stuck objects (PVs, PVCs)
   ```
   kubectl patch <object type> <object name> -p '{"metadata":{"finalizers": []}}' --type=merge
+  ```
+
+- Delete stuck NSs
+  ```
+  NAMESPACE=your-rogue-namespace
+  kubectl proxy &
+  kubectl get namespace $NAMESPACE -o json |jq '.spec = {"finalizers":[]}' >/tmp/patch.json
+  curl -k -H "Content-Type: application/json" -X PUT --data-binary @/tmp/patch.json 127.0.0.1:8001/api/v1/namespaces/$NAMESPACE/finalize
+)
   ```
 
 
