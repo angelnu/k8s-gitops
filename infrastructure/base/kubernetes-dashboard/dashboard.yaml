@@ -1,21 +1,9 @@
-kind: Service
-apiVersion: v1
-metadata:
-  name: kubernetes-dashboard
-  namespace: kube-system
-spec:
-  type: ExternalName
-  externalName: kubernetes-dashboard.kubernetes-dashboard.svc.cluster.local
-  ports:
-  - port: 80
----
 # ------------------- Ingress ------------------- #
 
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: dashboard
-  namespace: kube-system
   annotations:
     nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
     nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"

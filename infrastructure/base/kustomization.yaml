@@ -6,5 +6,6 @@ resources:
   - flux-system
   - monitoring
   - nginx
+  - kubernetes-dashboard
   - postgres
   - redis

@@ -4,7 +4,6 @@ namespace: kube-system
 resources:
   - authentication
   - cifs.yaml
-  - dashboard.yaml
   - glusterfs
   - kured
   - mailserver.yaml
