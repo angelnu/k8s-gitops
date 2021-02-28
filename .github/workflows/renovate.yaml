@@ -14,12 +14,14 @@ jobs:
         token: ${{ secrets.CR_PAT }}
         fetch-depth: 1
 
-    - name: Install yq
-      run: |
-        sudo wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_amd64
-        sudo chmod +x /usr/local/bin/yq
-    - name: Create HelmRelease annotations
-      run: ./.github/create-helmrelease-annotations.sh
+    - name: Renovate Helm Releases
+      uses: k8s-at-home/renovate-helm-releases@v1
+      with:
+        cluster-path: "./apps"
+        # Turn on debug logging
+        debug: 'yes'
+        # Do not alter Helm Release files
+        dry-run: 'no'
 
     - name: Create pull request for HelmRelease annotations
       uses: peter-evans/create-pull-request@v3
