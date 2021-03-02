@@ -43,7 +43,7 @@ spec:
       TTRSS_DB_USER: postgres
       TTRSS_DB_NAME: tt-rss
       #TTRSS_DB_PASS: set in secret
-      #TTRSS_SESSION_COOKIE_LIFETIME: 86400*30
+      TTRSS_SESSION_COOKIE_LIFETIME: "2592000" # 30 days in seconds
     
     postgresql:
       enabled: false # use own chart
