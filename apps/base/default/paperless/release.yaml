@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: jonaswinkler/paperless-ng
-      tag: 1.2.0
+      tag: 1.2.1
     
     env:
       PAPERLESS_OCR_LANGUAGE: deu
