@@ -19,6 +19,7 @@ spec:
   accessModes:
     - ReadOnlyMany
   storageClassName: ""
+  volumeName: nfs-video
   resources:
     requests:
       storage: 10T

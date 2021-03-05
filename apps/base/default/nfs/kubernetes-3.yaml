@@ -22,6 +22,7 @@ spec:
   accessModes:
     - ReadWriteMany
   storageClassName: ""
+  volumeName: nfs-kubernetes-3
   resources:
     requests:
       storage: 1T
