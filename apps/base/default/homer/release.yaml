@@ -17,6 +17,7 @@ spec:
   # See https://github.com/k8s-at-home/charts/blob/master/charts/homer/values.yaml
   values:
     image:
+      repository: b4bz/homer
       tag: 20.09.1
     
     env:
