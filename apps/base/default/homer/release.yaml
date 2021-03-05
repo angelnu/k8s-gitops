@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: b4bz/homer
-      tag: 20.09.1
+      tag: 21.03.1
     
     env:
       TZ: "Europe/Berlin"
