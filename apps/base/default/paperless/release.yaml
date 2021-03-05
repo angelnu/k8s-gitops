@@ -38,13 +38,13 @@ spec:
       consume:
         enabled: true
         mountPath: /usr/src/paperless/consume
-        existingClaim: nfs-kubernetes-3
+        existingClaim: nfs-downloads
         subPath: paperless/consume
       export:
         enabled: true
         mountPath: /usr/src/paperless/export
-        existingClaim: nfs-kubernetes-4
-        subPath: paperless/export
+        existingClaim: nfs-kubernetes-3
+        subPath: downloads/scans
 
     ingress:
       enabled: true
