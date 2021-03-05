@@ -21,6 +21,7 @@ spec:
   # See https://github.com/k8s-at-home/charts/blob/master/charts/home-assistant/values.yaml
   values:
     image:
+      repository: homeassistant/home-assistant
       tag: 2021.2.3
 
     persistence:
