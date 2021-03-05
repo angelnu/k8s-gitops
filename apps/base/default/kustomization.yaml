@@ -10,6 +10,7 @@ resources:
   - nextcloud
   - musicIndex.yaml
   - nfs
+  - paperless
   - plex
   - raspberrymatic
   - recipes

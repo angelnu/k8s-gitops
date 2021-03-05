@@ -47,6 +47,12 @@ Some [Persistant Volume Claims](https://kubernetes.io/docs/concepts/storage/pers
 
 [Settings](nfs)
 
+## Paperless-ng
+
+[Paperless-ng](https://paperless-ng.readthedocs.io) allows scaning, OCRing and searching paper documents.
+
+[Settings](paperless)
+
 ## Plex
 
 Media server
