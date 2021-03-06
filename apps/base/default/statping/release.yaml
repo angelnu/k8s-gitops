@@ -1,0 +1,72 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: statping
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: statping
+      version: 2.0.0
+      sourceRef:
+        kind: HelmRepository
+        #name: k8s-at-home-charts
+        name: angelnu-charts
+        namespace: flux-system
+      interval: 5m
+  dependsOn:
+    - name: statping-db
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/statping/values.yaml
+  values:
+    image:
+      repository: statping/statping
+      tag: "v0.90.74"
+
+    
+    env:
+      NAME: Casa96
+      DESCRIPTION: Statpling status for casa96
+      VIRTUAL_HOST: "https://status.pub.${CLUSTER_DOMAIN}"
+      DB_CONN: postgres
+      DB_HOST: "statping-db-postgres-cluster-postgres"
+      POSTGRES_SSL: "true"
+      POSTGRES_SSLMODE: "require"
+      DB_USER: "postgres"
+      # DB_PASS: "" set in secret
+      DB_DATABASE: "postgres"
+      # ADMIN_USER: set in secret
+      # ADMIN_PASSWORD: set secret
+      # ADMIN_EMAIL: set secret
+
+    ingress:
+      enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+      #  nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+      #  nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+      ingress.kubernetes.io/ssl-redirect: "true"
+      hosts:
+      - host: status.pub.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix
+      - host: status.home.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix
+      tls:
+      - hosts:
+        - status.pub.${CLUSTER_DOMAIN}
+        - status.home.${CLUSTER_DOMAIN}
+    
+    postgresql:
+      enabled: false
+
+  valuesFrom:
+  - kind: Secret
+    name: "statping-helm-values"
+    valuesKey: statping.yaml
+    optional: false

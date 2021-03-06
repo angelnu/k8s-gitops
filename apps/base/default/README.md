@@ -80,6 +80,12 @@ Media server
 
 [Settings](recipes)
 
+## Statping
+
+[Statping](https://github.com/statping/statping) provides a status page for webpages by regularly pinging them
+
+[Settings](statping)
+
 ## Tiny Tiny RSS
 
 [Tiny Tiny RSS](https://git.tt-rss.org) allows to admin feeds from the family in a single place. Then progress is tracked indepent from reader (web page, Android app).

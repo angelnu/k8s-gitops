@@ -15,5 +15,6 @@ resources:
   - raspberrymatic
   - recipes
   - reverse-proxy
+  - statping
   - tt-rss
   - unifi
