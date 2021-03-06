@@ -21,7 +21,7 @@ spec:
   values:
     image:
       repository: statping/statping
-      tag: "v0.90.65"
+      tag: "v0.90.74"
 
     
     env:
