@@ -23,7 +23,9 @@ spec:
     env:
       PAPERLESS_OCR_LANGUAGE: deu
       PAPERLESS_TIME_ZONE: "Europe/Berlin"
-    
+      PAPERLESS_CONSUMER_POLLING: "60"
+      PAPERLESS_CONSUMER_RECURSIVE: "true"
+      PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
     persistence:
       data:
         enabled: true

@@ -51,6 +51,11 @@ Some [Persistant Volume Claims](https://kubernetes.io/docs/concepts/storage/pers
 
 [Paperless-ng](https://paperless-ng.readthedocs.io) allows scaning, OCRing and searching paper documents.
 
+First time a new instance is created a new superadmin must be manually created. This is done by loging into the container and executing
+```
+python3 manage.py createsuperuser
+```
+
 [Settings](paperless)
 
 ## Plex
