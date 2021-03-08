@@ -1,21 +1,26 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: cert-manager-dnsmadeeasy
+  name: dnsmadeeasy-webhook
 spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://angelnu.github.io/charts/
-      chart: cert-manager-dnsmadeeasy
-      version: 1.0.3
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: dnsmadeeasy-webhook
+      version: 2.0.0
       sourceRef:
         kind: HelmRepository
+        #name: k8s-at-home-charts
         name: angelnu-charts
         namespace: flux-system
       interval: 5m
   dependsOn:
     - name: cert-manager
-  #See https://github.com/angelnu/charts/blob/home/charts/cert-manager-dnsmadeeasy/values.yaml
+  #See https://github.com/k8s-at-home/charts/blob/master/charts/dnsmadeeasy-webhook/values.yaml
   values:
     groupName: "${CLUSTER_DOMAIN}"
+
+    image:
+      repository: ghcr.io/k8s-at-home/dnsmadeeasy-webhook
+      tag: v1.0.0
