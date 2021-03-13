@@ -12,6 +12,7 @@ resources:
   - nfs
   - paperless
   - plex
+  - photoprism
   - raspberrymatic
   - recipes
   - reverse-proxy

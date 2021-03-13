@@ -58,6 +58,12 @@ python3 manage.py createsuperuser
 
 [Settings](paperless)
 
+## Photoprism
+
+[Photoprism](https://docs.photoprism.org/) indexes photos and syncs them with Nextcloud.
+
+[Settings](photoprism)
+
 ## Plex
 
 Media server
