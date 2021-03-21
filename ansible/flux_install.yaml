@@ -2,9 +2,6 @@
   hosts: nodes
   tasks:
 
-  - name: "Check flux prerequisites"
-    shell: flux check --pre
-  
   - name: Create flux NS
     shell: |
       {{ KUBECTL_BIN }} create ns {{ FLUX_NAMESPACE }}
@@ -26,6 +23,9 @@
   - name: Execute the flux2-installer.sh
     shell: /tmp/flux2-installer.sh
     #when: flux2_download.changed
+  
+  - name: "Check flux prerequisites"
+    shell: flux check --pre
   
   - name: Install SOPS
     apt:

@@ -1,6 +1,6 @@
 - name: "Create fix network IP"
   copy:
-    dest: /etc/netplan/fixIP.yaml
+    dest: /etc/netplan/99fixIP.yaml
     content: |
       # This file describes the network interfaces available on your system
       # For more information, see netplan(5).
@@ -8,14 +8,25 @@
         version: 2
         renderer: networkd
         ethernets:
-          eno1:
+          eno0:
             match:
               name: en*
-            dhcp4: yes
-            dhcp6: yes
-            addresses: [{{fix_ip_address}}]
+            dhcp4: false
+            dhcp6: false
+        bridges:
+          br0:
+            dhcp4: true
+            dhcp6: true
+            interfaces:
+            - eno0
+            addresses:
+            - {{fix_ip_address}}
   register: result
   when: fix_ip_address | default(False)
+  
+- name: refresh netplan
+  shell: "netplan apply"
+  when: result.changed
 
 # # Add Kubernetes internal DNS server to host -> needed for glusterfs client to resolve nodes
 # - name: Check if old resolv.conf is being used - /etc/resolvconf/resolv.conf.d/tail

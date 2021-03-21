@@ -1,0 +1,10 @@
+- name: "Prepare nodes for development"
+  hosts: workers
+  tasks:
+  
+  # Delete old containers
+  - name: Delete old container
+    community.general.lxd_container:
+      name: "{{ item }}"
+      state: absent
+    with_items: "{{ LXD_CONTAINERS[inventory_hostname] }}"

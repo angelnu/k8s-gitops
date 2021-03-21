@@ -3,6 +3,17 @@
 #
 ---
 
+# Test environment
+LXD_CONTAINERS:
+  server.angelnu.com:
+  - test-master1
+  - test-master3
+  - test-worker1
+  server2.angelnu.com:
+  - test-master2
+  - test-worker2
+
+
 #If set to true it will reset the K8S cluster on each run
 K8S_RESET: false
 
@@ -58,7 +69,7 @@ ssh:
   pub_key_path: "~/.ssh/id_rsa.pub"
 BOOTSTRAP_PACKAGES:
   - apt-transport-https
-  - aptitude
+  #- aptitude
 PACKAGES:
   - rsync
   - glusterfs-client

@@ -1,0 +1,17 @@
+[masters]
+test-master1 k8s_labels="{'masterIndex':0, 'gluster': True }" k8s_taints="{'node-role.kubernetes.io/master':':NoSchedule'}"
+test-master2 k8s_labels="{'masterIndex':1, 'gluster': True }" k8s_taints="{'node-role.kubernetes.io/master':':NoSchedule'}"
+test-master3 k8s_labels="{'masterIndex':2, 'gluster': True }" k8s_taints="{'node-role.kubernetes.io/master':':NoSchedule'}"
+
+[workers]
+test-worker1 k8s_labels="{'workerIndex':0}"
+test-worker2 k8s_labels="{'workerIndex':1}"
+
+[nodes:children]
+masters
+workers
+
+[all:vars]
+ansible_user=root
+production=False
+ansible_python_interpreter=/usr/bin/python3

@@ -1,7 +1,7 @@
 - name: Set taints
   shell: "{{ KUBECTL_BIN }} taint nodes {{inventory_hostname}} {{ item.key }}={{ item.value }}"
-  delegate_to: localhost
-  environment: "{{ LOCAL_KUBECTL_ENV }}"
+  environment: "{{KUBECTL_ENV}}"
+  delegate_to: "{{KUBELET_PRIMARY_MASTER_HOSTNAME}}"
   register: result
   with_dict: "{{ k8s_taints if (k8s_taints is defined) else {} }}"
   changed_when:
