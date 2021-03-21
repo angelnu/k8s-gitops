@@ -43,22 +43,22 @@ spec:
         metallb.universe.tf/allow-shared-ip: plex
     persistence:
       transcode:
-        enabled: true
+        existingClaim: true
         claimName: nfs-kubernetes-3
         accessMode: ReadWriteMany
         subPath: plex/transcode
       data:
         enabled: true
-        claimName: nfs-kubernetes-2
+        existingClaim: nfs-kubernetes-2
         accessMode: ReadWriteMany
         subPath: plex/data
       extraMounts:
       - name: videos
-        claimName: nfs-video
+        existingClaim: nfs-video
         accessMode: ReadWriteMany
         mountPath: videos
       - name: downloads
-        claimName: nfs-downloads
+        existingClaim: nfs-downloads
         accessMode: ReadWriteMany
         mountPath: downloads
       - name: dri
@@ -67,7 +67,7 @@ spec:
           hostPath:
             path: /dev/dri
       config:
-        claimName: nfs-kubernetes
+        existingClaim: nfs-kubernetes
         subPath: plex/config
     resources:
       limits:
