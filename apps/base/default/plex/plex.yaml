@@ -9,7 +9,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: plex
-      version: 2.3.3
+      version: 3.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -22,53 +22,64 @@ spec:
       tag: v1.22.0.4163-d8c4875dd
     ingress:
       enabled: true
-      hosts: ["plex.${CLUSTER_DOMAIN}"]
+      hosts:
+      - host: plex.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          # Ignored if not kubeVersion >= 1.14-0
+          pathType: Prefix [""]
       tls:
       - hosts:
         - "plex.${CLUSTER_DOMAIN}"
-    timezone: "Europe/Berlin"
-    plexUid: 1001
-    plexGid: 1001
-    serviceTCP:
-      type: LoadBalancer
-      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_PLEX}"
-      externalTrafficPolicy: Local
-      annotations:
-        metallb.universe.tf/allow-shared-ip: plex
-    serviceUDP:
+    
+    env:
+      TZ: "Europe/Berlin"
+      ADVERTISE_IP: "https://plex.${CLUSTER_DOMAIN}:443/,http://${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_PLEX}:32400/"
+      #PLEX_CLAIM: set in secret:
+      # # NOTE: Plex preference options are camelCase and CASE SENSITIVE!
+      # # You can do horrible things to your Plex configuration if you are not careful
+      # # See a full list at https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/
+      # PLEX_PREFERENCE_1: "FriendlyName=plex-kubernetes"
+      # PLEX_PREFERENCE_2: "EnableIPv6=0"
+      # PLEX_PREFERENCE_3: "logDebug=0"
+      # PLEX_PREFERENCE_4: "DisableTLSv1_0=1"
+      # PLEX_PREFERENCE_5: "LanNetworksBandwidth=xxx.xxx.xxx.0/18\,xxx.xxx.xxx.0/24\,xxx.xxx.xxx.0/24"
+      # PLEX_PREFERENCE_6: "TranscoderQuality=2"
+      # PLEX_PREFERENCE_7: "TreatWanIpAsLocal=0"
+      # PLEX_PREFERENCE_8: "TranscoderH264BackgroundPreset=fast"
+
+    # -- Enable devices to be discoverable
+    hostNetwork: true
+
+    service:
       type: LoadBalancer
       loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_PLEX}"
       externalTrafficPolicy: Local
       annotations:
         metallb.universe.tf/allow-shared-ip: plex
     persistence:
-      transcode:
-        existingClaim: true
-        claimName: nfs-kubernetes-3
+      config:
+        enabled: true
+        existingClaim: nfs-kubernetes
         accessMode: ReadWriteMany
-        subPath: plex/transcode
-      data:
+        subPath: plex/config 
+      transcode:
         enabled: true
         existingClaim: nfs-kubernetes-2
         accessMode: ReadWriteMany
-        subPath: plex/data
-      extraMounts:
-      - name: videos
+        subPath: plex/transcodeny
+        subPath: plex/transcode 
+      videos:
+        enabled: true
+        mountPath: /videos
         existingClaim: nfs-video
         accessMode: ReadWriteMany
-        mountPath: videos
-      - name: downloads
+      downloads:
+        enabled: true
+        mountPath: /downloads
         existingClaim: nfs-downloads
         accessMode: ReadWriteMany
-        mountPath: downloads
-      - name: dri
-        mountPath: dev/dri
-        volume:
-          hostPath:
-            path: /dev/dri
-      config:
-        existingClaim: nfs-kubernetes
-        subPath: plex/config
+    
     resources:
       limits:
         #gpu.intel.com/i915: 1
