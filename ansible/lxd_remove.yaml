@@ -2,9 +2,10 @@
   hosts: workers
   tasks:
   
-  # Delete old containers
-  - name: Delete old container
+  # Delete LXC containers
+  - name: Delete containers
     community.general.lxd_container:
       name: "{{ item }}"
       state: absent
+      timeout: 600
     with_items: "{{ LXD_CONTAINERS[inventory_hostname] }}"
