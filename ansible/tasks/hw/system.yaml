@@ -24,7 +24,7 @@
 
 # Set hostname
 - name: Set hostname
-  hostname: name="{{ name }}"
+  hostname: name="{{ name | default (ansible_hostname)}}"
   register: set_hostname
 
 - name: Restart hostname
@@ -50,15 +50,13 @@
 #     dest: /etc/fstab
 #     regexp: '^/[\S]+\s+none\s+swap '
 #     state: absent
-
 # - name: swap - disable swap
 #   shell: "cat /proc/swaps|tail -n +2 && swapoff --all"
 #   register: result
 #   changed_when: result.stdout_lines | length
-
-- name: Need reboot?
-  when: result is changed
-  set_fact: need_reboot=True
+# - name: Need reboot?
+#   when: result is changed
+#   set_fact: need_reboot=True
 
 # - name: Stop zram
 #   systemd:
@@ -70,10 +68,9 @@
 #   - armbian-zram-config
 #   register: result
 #   failed_when: "(result is failed) and ('find' not in result.msg and 'found' not in result.msg)"
-
-- name: Need reboot?
-  when: result is changed
-  set_fact: need_reboot=True
+# - name: Need reboot?
+#   when: result is changed
+#   set_fact: need_reboot=True
 
 # - name: swap - disable swap on Raspberry Pi
 #   shell: "which dphys-swapfile && dphys-swapfile swapoff && dphys-swapfile uninstall && systemctl disable dphys-swapfile 2>&1"

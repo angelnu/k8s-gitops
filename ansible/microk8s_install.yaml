@@ -34,6 +34,12 @@
       name: microk8s
       classic: true
   
+  - name: Set symlink to kubectl
+    file:
+      src: "/snap/microk8s/current/kubectl"
+      dest: "/usr/local/bin/kubectl"
+      state: link
+  
   - name: Add the domain
     lineinfile:
       path: /var/snap/microk8s/current/certs/csr.conf.template

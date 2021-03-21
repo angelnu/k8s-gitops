@@ -5,27 +5,21 @@
     state: present
 
 
-- name: 'import Glusterfs signing key'
-  apt_key:
-    url: http://download.gluster.org/pub/gluster/glusterfs/7/rsa.pub
+#- name: 'import Glusterfs signing key'
+#  apt_key:
+#    url: http://download.gluster.org/pub/gluster/glusterfs/9/rsa.pub
 
-- name: Add Glusterfs 7 PPA (Ubuntu)
+- name: Add Glusterfs 9 PPA (Ubuntu)
   apt_repository:
     # Glusterfs 5 PPA (Ubuntu)
     #repo: "deb http://ppa.launchpad.net/gluster/glusterfs-5/ubuntu focal main"
 
     #Automatic detection not working on armbian with lsb_release as shell script
     codename: "{{ ansible_distribution_release }}"
-    repo: ppa:gluster/glusterfs-7
+    repo: ppa:gluster/glusterfs-9
     state: present
     update_cache: no
   when: ansible_distribution == 'Ubuntu'
-
-- name: Add Glusterfs 5 repo (Debian)
-  apt_repository:
-    repo: deb https://download.gluster.org/pub/gluster/glusterfs/LATEST/Debian/{{ansible_distribution_major_version}}/{{'arm64' if 'arm' in ansible_architecture else 'amd64'}}/apt {{ ansible_distribution_release }} stable
-    state: present
-  when: ansible_distribution == 'Debian NO'
 
 - name: Update system (after refreshing caches)
   apt:
