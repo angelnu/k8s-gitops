@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://jens-maus.github.io/RaspberryMatic
       chart: raspberrymatic
-      version: "0.1"
+      version: "3.57.4"
       sourceRef:
         kind: HelmRepository
         name: raspberrymatic
@@ -19,9 +19,9 @@ spec:
     - name: raspberrymatic-fs
   # See https://github.com/jens-maus/RaspberryMatic/blob/master/helm/raspberrymatic/values.yaml
   values:
-    image:
-      pullPolicy: IfNotPresent
-      tag: 3.55.10.20210213
+    #image:
+    #  pullPolicy: IfNotPresent
+    #  tag: 3.55.10.20210213
     
     persistence:
       enabled: true
