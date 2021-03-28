@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://charts.bitnami.com/bitnami
       chart: metallb
-      version: 2.3.2
+      version: 2.3.4
       sourceRef:
         kind: HelmRepository
         name: bitnami
@@ -24,12 +24,12 @@ spec:
       image:
         #bitnami version only has x86_64
         repository: metallb/controller
-        tag: v0.9.5
+        tag: v0.9.6
     speaker:
       image:
         #bitnami version only has x86_64
         repository: metallb/speaker
-        tag: v0.9.5
+        tag: v0.9.6
     configInline:
       address-pools:
       - name: default

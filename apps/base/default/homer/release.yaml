@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: homer
-      version: 3.2.1
+      version: 4.0.1
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -73,7 +73,7 @@ spec:
         enabled: true
         image:
           repository: codercom/code-server
-          tag: 3.9.1
+          tag: 3.9.2
         workingDir: "/www/assets"
         args:
         - --user-data-dir
