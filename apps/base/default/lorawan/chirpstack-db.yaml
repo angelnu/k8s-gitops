@@ -22,13 +22,10 @@ spec:
         postgres:
         - superuser
         - createdb
-
-      # -- databases to create and their user
       databases:
         postgres: postgres
       postgresql:
-        # -- Postgres version to deploy - see which versions are supported by the operator
-        version: ${CLUSTER_DB_VERSION}
+        version: "13"
 
     superuser: {}
       # password: set in secret
@@ -39,7 +36,6 @@ spec:
       - ${CLUSTER_DB_NODE_0}
       - ${CLUSTER_DB_NODE_1}
     
-
     dumpBackup:
       existingClaim: nfs-kubernetes
       schedule: "@daily"
