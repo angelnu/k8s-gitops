@@ -19,7 +19,7 @@ spec:
 
     postgresql:
       volume:
-        ´size: "10Gi"
+        size: "10Gi"
       users:
         postgres:
         - superuser
