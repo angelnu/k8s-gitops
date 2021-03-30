@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://angelnu.github.io/charts/
       chart: postgres-cluster
-      version: 1.0.16
+      version: 1.0.19
       sourceRef:
         kind: HelmRepository
         name: angelnu-charts
