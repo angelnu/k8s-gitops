@@ -1,6 +1,6 @@
 [masters]
 n9.angelnu.com    name=n9.angelnu.com k8s_labels="{'masterIndex':0, 'gluster': True }" k8s_taints="{'node-role.kubernetes.io/master':':NoSchedule'}"
-n10.angelnu.com  name=n10.angelnu.com k8s_labels="{'masterIndex':1, 'gluster': True }" k8s_taints="{'node-role.kubernetes.io/master':':NoSchedule'}"
+#n10.angelnu.com  name=n10.angelnu.com k8s_labels="{'masterIndex':1, 'gluster': True }" k8s_taints="{'node-role.kubernetes.io/master':':NoSchedule'}"
 n11.angelnu.com  name=n11.angelnu.com k8s_labels="{'masterIndex':2, 'gluster': True }" k8s_taints="{'node-role.kubernetes.io/master':':NoSchedule'}"
 
 [workers]
