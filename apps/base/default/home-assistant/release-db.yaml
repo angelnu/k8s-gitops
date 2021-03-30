@@ -18,6 +18,8 @@ spec:
   values:
 
     postgresql:
+      volume:
+        ´size: "10Gi"
       users:
         postgres:
         - superuser
