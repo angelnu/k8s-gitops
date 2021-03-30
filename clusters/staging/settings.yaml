@@ -10,3 +10,8 @@ data:
   CLUSTER_DOMAIN_CERT: prod-wildcard-nunez-gregoire_eu-tls
   CLUSTER_EXTERNAL_SUBNET_PREFIX: 192.168.3
   CLUSTER_LB_RANGE: 192.168.3.128-192.168.3.192
+
+  CLUSTER_DB_VERSION: "13"
+  CLUSTER_DB_NODE_0: test-node1
+  CLUSTER_DB_NODE_1: test-node2
+  CLUSTER_DB_BACKUP_PREFIX: "backup/staging_db"
