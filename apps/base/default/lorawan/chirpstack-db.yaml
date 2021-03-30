@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://angelnu.github.io/charts/
       chart: postgres-cluster
-      version: 1.0.10
+      version: 1.0.12
       sourceRef:
         kind: HelmRepository
         name: angelnu-charts
@@ -16,21 +16,36 @@ spec:
       interval: 5m
   #See https://github.com/angelnu/charts/blob/home/charts/postgres-cluster/values.yaml
   values:
-    persistent: true
-    localPath: "/media/db/chirpstack-db"
 
-    backup_schedule: "@daily"
-    backupPVC: nfs-kubernetes
-    backupPVCSubpath: "backup/db/chirpstack-db"
+postgresql:
+  users:
+    postgres:
+    - superuser
+    - createdb
 
-    replicaCount: 2
-    replicaNodes:
-    - server.${CLUSTER_DOMAIN}
-    - server2.${CLUSTER_DOMAIN}
+  # -- databases to create and their user
+  databases:
+    postgres: postgres
+  postgresql:
+    # -- Postgres version to deploy - see which versions are supported by the operator
+    version: "13"
 
-    #If you change this after creating the DB then use psql to set the password manually
-    superuser: postgres
-    #superuser_password: set in secret
+
+
+superuser:
+  #password: set in secret
+
+persistentVolumes:
+  hostPath: /media/db/chirpstack-db
+  replicaNodes:
+  - server.${CLUSTER_DOMAIN}
+  - server2.${CLUSTER_DOMAIN}
+    
+
+dumpBackup:
+  existingClaim: nfs-kubernetes
+  schedule: "@daily"
+  subpath: "backup/db/chirpstack-db"
 
   valuesFrom:
   - kind: Secret
