@@ -19,6 +19,9 @@ spec:
     configUsers:
       # postgres username used for replication between instances
       replication_username: postgres
+    configMajorVersionUpgrade:
+      # "off": no upgrade, "manual": manifest triggers action, "full": minimal version violation triggers too
+      major_version_upgrade_mode: "full"
     configKubernetes:
       #enable_pod_antiaffinity: true
       #pod_environment_configmap: "postgres-pod-config"
