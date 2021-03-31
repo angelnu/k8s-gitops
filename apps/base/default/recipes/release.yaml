@@ -71,7 +71,7 @@ spec:
     
     additionalContainers:
     - name: nginx
-      image: nginx:1.19.8
+      image: nginx:1.19.9
       ports:
         - containerPort: 80
           name: http
