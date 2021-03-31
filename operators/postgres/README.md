@@ -11,5 +11,6 @@
 - patroni manages the cluster
   - `patronictl list` - list member and status
   - `patronictl reinit <cluster> <member>` - reinit broken node
+- in-place upgrade: `su postgres -c "python3 /scripts/inplace_upgrade.py 2"`
 
 
