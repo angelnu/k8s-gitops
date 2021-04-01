@@ -6,15 +6,15 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://angelnu.github.io/charts/
-      chart: postgres-cluster
-      version: 1.0.19
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: zalando-postgres-cluster
+      version: 1.0.0
       sourceRef:
         kind: HelmRepository
-        name: angelnu-charts
+        name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
-  #See https://github.com/angelnu/charts/blob/home/charts/postgres-cluster/values.yaml
+  #See https://github.com/k8s-at-home/charts/blob/master/charts/stable/zalando-postgres-cluster/values.yaml
   values:
 
     postgresql:

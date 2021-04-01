@@ -28,7 +28,7 @@ spec:
       DESCRIPTION: Statpling status for casa96
       VIRTUAL_HOST: "https://status.pub.${CLUSTER_DOMAIN}"
       DB_CONN: postgres
-      DB_HOST: "statping-db-postgres-cluster-postgres"
+      DB_HOST: "statping-db-zalando-postgres-cluster-postgres"
       POSTGRES_SSL: "true"
       POSTGRES_SSLMODE: "require"
       DB_USER: "postgres"

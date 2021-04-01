@@ -24,12 +24,12 @@ spec:
     name: lorawan
     appserver:
       postgres:
-        existingSecret: chirpstack-helm-values
-        host: chirpstack-db-postgres
+        existingSecret: postgres.chirpstack-wrapper-db-zalando-postgres-cluster.credentials.postgresql.acid.zalan.do
+        host: chirpstack-wrapper-db-zalando-postgres-cluster
     networkserver:
       postgres:
-        existingSecret: postgres.chirpstack-wrapper-db-postgres.credentials
-        host: chirpstack-db-postgres
+        existingSecret: postgres.chirpstack-wrapper-db-zalando-postgres-cluster.credentials.postgresql.acid.zalan.do
+        host: chirpstack-wrapper-db-zalando-postgres-cluster
       backend:
         type: mqtt # only mqtt supported right now
         mqtt:

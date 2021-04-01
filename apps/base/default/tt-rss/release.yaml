@@ -38,7 +38,7 @@ spec:
 
     env:
       TTRSS_SELF_URL_PATH: https://rss.${CLUSTER_DOMAIN}/
-      TTRSS_DB_HOST: tt-rss-db-postgres-cluster-postgres
+      TTRSS_DB_HOST: tt-rss-db-zalando-postgres-cluster-postgres
       TTRSS_DB_PORT: "5432"
       TTRSS_DB_USER: postgres
       TTRSS_DB_NAME: tt-rss

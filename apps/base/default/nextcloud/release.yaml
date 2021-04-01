@@ -64,7 +64,7 @@ spec:
       database: postgres
       #user: set in secret
       #password: set in secret
-      host: nextcloud-db-postgres-cluster-postgres
+      host: nextcloud-db-zalando-postgres-cluster-postgres
     cronjob:
       enabled: true
 

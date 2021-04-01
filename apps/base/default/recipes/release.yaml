@@ -39,7 +39,7 @@ spec:
       #SECRET_KEY: set in secret
       DB_ENGINE: django.db.backends.postgresql_psycopg2
       DB_OPTIONS: '{"sslmode":"require"}'
-      POSTGRES_HOST: recipes-db-postgres-cluster-postgres
+      POSTGRES_HOST: recipes-db-zalando-postgres-cluster-postgres
       POSTGRES_PORT: "5432"
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
