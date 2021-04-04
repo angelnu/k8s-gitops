@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - release.yaml
   - release-javi.yaml
+  - release-mireille-work.yaml
