@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator/
       chart: postgres-operator
-      version: v1.6.1
+      version: 1.6.2
       sourceRef:
         kind: HelmRepository
         name: zalando-postgres-operator
