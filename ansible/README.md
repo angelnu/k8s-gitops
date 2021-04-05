@@ -12,6 +12,8 @@ See [groups_var](groups_var/all.yaml).
 
 Secrets encrypted with [Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html). Password stored at `~/.vault_pass.txt` as comfigured at [ansible.cfg](ansible.cfg). This is the only password that needs to be remembered. All other passwords are derived from this.
 
+If a password needs to be changed use the command `ansible-vault encrypt_string` from this folder - it will ask to enter the content to string and end with ctrd-d.
+
 ## Install
 
 0. Reset Host OS UUID (needed in some devices once after Host OS install)
