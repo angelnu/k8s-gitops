@@ -26,6 +26,7 @@ spec:
       PAPERLESS_CONSUMER_POLLING: "60"
       PAPERLESS_CONSUMER_RECURSIVE: "true"
       PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
+      PAPERLESS_IGNORE_DATES: “1978-09-19,1979-06-12,2010-2-8,2011-11-15”
     persistence:
       data:
         enabled: true
