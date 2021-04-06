@@ -63,12 +63,12 @@ spec:
         existingClaim: nfs-kubernetes
         accessMode: ReadWriteMany
         subPath: plex/config 
-      transcode:
-        enabled: true
-        existingClaim: nfs-kubernetes-2
-        accessMode: ReadWriteMany
-        subPath: plex/transcodeny
-        subPath: plex/transcode 
+      # transcode:
+      #   enabled: true
+      #   existingClaim: nfs-kubernetes-2
+      #   accessMode: ReadWriteMany
+      #   subPath: plex/transcodeny
+      #   subPath: plex/transcode 
       videos:
         enabled: true
         mountPath: /videos
