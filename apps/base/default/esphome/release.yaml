@@ -51,6 +51,9 @@ spec:
 
     addons:
       codeserver:
+        image:
+          repository: codercom/code-server
+          tag: 3.9.3
         enabled: true
         volumeMounts:
         - name: config
