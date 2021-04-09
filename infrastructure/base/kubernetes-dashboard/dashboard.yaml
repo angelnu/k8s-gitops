@@ -1,6 +1,6 @@
 # ------------------- Ingress ------------------- #
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: dashboard
@@ -20,16 +20,22 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: kubernetes-dashboard
-          servicePort: 80
+          service:
+            name: kubernetes-dashboard
+            port:
+              number: 80
   - host: dashboard.home.${CLUSTER_DOMAIN}
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: kubernetes-dashboard
-          servicePort: 80
+          service:
+            name: kubernetes-dashboard
+            port:
+              number: 80
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
