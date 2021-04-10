@@ -4,6 +4,7 @@ resources:
   - cert-manager
   - default
   - flux-system
+  - kube-system
   - monitoring
   - nginx
   - kubernetes-dashboard
