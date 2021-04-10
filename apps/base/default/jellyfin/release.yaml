@@ -1,0 +1,74 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: jellyfin
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: jellyfin
+      version: 7.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+  values:
+    image:
+      repository: jellyfin/jellyfin
+      tag: 10.7.1
+    env:
+      TZ: "Europe/Berlin"
+      JELLYFIN_CACHE_DIR: "/config/cache"
+    podSecurityContext:
+      supplementalGroups:
+      - 44
+      - 109
+      - 100
+    service:
+      enabled: true
+      type: LoadBalancer
+      externalIPs:
+      - 192.168.1.140
+      externalTrafficPolicy: Local
+      port:
+        port: 8096
+    ingress:
+      enabled: true
+      hosts:
+      - host: "jellyfin.home.${CLUSTER_DOMAIN}"
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - hosts:
+        - "jellyfin.home.${CLUSTER_DOMAIN}"
+    persistence:
+      config:
+        enabled: true
+        existingClaim: nfs-kubernetes-2
+        accessMode: ReadWriteMany
+        subPath: jellyfin/config
+      transcode:
+        enabled: true
+        emptyDir:
+          enabled: true
+          medium: "Memory"
+      videos:
+        enabled: true
+        mountPath: /videos
+        existingClaim: nfs-video
+        accessMode: ReadWriteMany
+      downloads:
+        enabled: true
+        mountPath: /downloads
+        existingClaim: nfs-downloads
+        accessMode: ReadWriteMany
+    resources:
+      requests:
+        gpu.intel.com/i915: 1
+        cpu: 500m
+        memory: 1000Mi
+      limits:
+        gpu.intel.com/i915: 1
+        memory: 8000Mi
