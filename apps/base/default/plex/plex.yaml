@@ -62,7 +62,12 @@ spec:
         enabled: true
         existingClaim: nfs-kubernetes-2
         accessMode: ReadWriteMany
-        subPath: plex/config 
+        subPath: plex/config
+      tmp:
+        enabled: true
+        emptyDir:
+          enabled: true
+          medium: "Memory" 
       # transcode:
       #   enabled: true
       #   existingClaim: nfs-kubernetes-3
@@ -82,9 +87,10 @@ spec:
     
     resources:
       limits:
-        #gpu.intel.com/i915: 1
+        gpu.intel.com/i915: 1
         memory: 4900Mi
       requests:
+        gpu.intel.com/i915: 1
         cpu: 35m
         memory: 1500Mi
   valuesFrom:
