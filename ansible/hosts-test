@@ -1,8 +1,9 @@
 [masters]
-test-node1 k8s_labels="{'masterIndex':0, 'gluster': True }"
-test-node2 k8s_labels="{'masterIndex':1, 'gluster': True }"
+n12        k8s_labels="{'masterIndex':0, 'gluster': True }"
 
 [workers]
+test-node1 k8s_labels="{'masterIndex':1, 'gluster': True }"
+test-node2 k8s_labels="{'masterIndex':2, 'gluster': True }"
 
 [nodes:children]
 masters

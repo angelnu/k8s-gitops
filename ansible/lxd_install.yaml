@@ -73,3 +73,4 @@
   - name: copy authorised keys
     shell: lxc file push /root/.ssh/authorized_keys {{ item }}/root/.ssh/authorized_keys
     with_items: "{{ LXD_CONTAINERS[inventory_hostname] }}"
+    retries: 5

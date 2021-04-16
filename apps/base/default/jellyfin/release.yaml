@@ -28,6 +28,8 @@ spec:
     service:
       enabled: true
       type: LoadBalancer
+      #loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_CCU}"
+      loadBalancerIP: "192.168.1.140"
       externalIPs:
       - 192.168.1.140
       externalTrafficPolicy: Local

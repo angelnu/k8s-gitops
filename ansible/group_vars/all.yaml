@@ -6,12 +6,9 @@
 # Test environment
 LXD_CONTAINERS:
   server.angelnu.com:
-  - test-master1
-  - test-master3
-  - test-worker1
-  server2.angelnu.com:
-  - test-master2
-  - test-worker2
+  - test-node1
+  - test-node2
+  server2.angelnu.com: []
 
 
 #If set to true it will reset the K8S cluster on each run

@@ -83,6 +83,7 @@
       --repository={{FLUX_GIT_REPO}}
       --branch={{ FLUX_GIT_BRANCH }}
       --personal \
+      --private=false \
       --path={{ FLUX_GIT_PATH }}
       --namespace={{ FLUX_NAMESPACE }} 
     #when: flux_in_git.stat.exists

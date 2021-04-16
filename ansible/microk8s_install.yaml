@@ -46,6 +46,7 @@
       #regexp: '^DNS.10'
       insertafter: '^\[ alt_names \]'
       line: DNS.10 = angelnu.com
+      line: DNS.11 = lan
   
   - name: "First node actions"
     run_once: True
