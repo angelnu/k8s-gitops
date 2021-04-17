@@ -25,7 +25,7 @@ spec:
       config:
         enabled: true
         mountPath: /ha-conf
-        existingClaim: home-assistant-fs-file-cluster
+        existingClaim: home-assistant-pvc
     
     additionalVolumeMounts:
     - mountPath: "/config"

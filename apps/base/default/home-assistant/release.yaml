@@ -15,7 +15,6 @@ spec:
         namespace: flux-system
       interval: 5m
   dependsOn:
-    - name: home-assistant-fs
     - name: raspberrymatic
 
   # See https://github.com/k8s-at-home/charts/blob/master/charts/home-assistant/values.yaml
@@ -27,7 +26,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: home-assistant-fs-file-cluster
+        existingClaim: home-assistant-pvc
     
     mariadb:
       enabled: false
