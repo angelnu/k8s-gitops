@@ -14,8 +14,6 @@ spec:
         name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
-  dependsOn:
-    - name: esphome-fs
   # See https://github.com/k8s-at-home/charts/blob/master/charts/esphome/values.yaml
   values:
     image:
@@ -25,7 +23,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: esphome-fs-file-cluster
+        existingClaim: esphome-pvc
 
     ingress:
       enabled: true
