@@ -3,6 +3,7 @@ kind: PersistentVolume
 metadata:
   name: nfs-gitea
 spec:
+  storageClassName: gitea-storageclass
   capacity:
     storage: 18T
   accessModes:
@@ -19,6 +20,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: nfs-gitea
 spec:
+  storageClassName: gitea-storageclass
   accessModes:
     - ReadWriteMany
   storageClassName: ""
