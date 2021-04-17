@@ -14,8 +14,6 @@ spec:
         name: angelnu-charts
         namespace: flux-system
       interval: 5m
-  dependsOn:
-    - name: lorawan-server-fs
   # See https://github.com/angelnu/charts/blob/home/charts/lorawan-server/values.yaml
   values:
     image:
@@ -24,7 +22,7 @@ spec:
 
     persistence:
       enabled: true
-      existingClaim: lorawan-server-fs-file-cluster
+      existingClaim: lorawan-server-pvc
 
     clusterfs:
       enabled: true

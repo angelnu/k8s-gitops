@@ -1,24 +1,37 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
-kind: HelmRelease
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: mosquitto-fs
+  name: mosquitto-pvc
 spec:
-  interval: 5m
-  chart:
-    spec:
-      # renovate: registryUrl=https://angelnu.github.io/charts/
-      chart: file-cluster
-      version: 1.0.7
-      sourceRef:
-        kind: HelmRepository
-        name: angelnu-charts
-        namespace: flux-system
-      interval: 5m
-  #See https://github.com/angelnu/charts/blob/home/charts/file-cluster/values.yaml
-  values:
-
-    glusterfs:
-      path: mosquitto
-
-    backup_schedule: "@daily"
-    backupPVC: nfs-kubernetes
+  resources:
+    requests:
+      storage: "1Gi"
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  storageClassName: mosquitto-storageclass
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mosquitto-pv
+spec:
+  storageClassName: mosquitto-storageclass
+  capacity:
+    storage: "1Gi"
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  cephfs:
+    monitors:
+    - 192.168.2.129:6789
+    - 192.168.2.170:6789
+    - 192.168.2.147:6789
+    # by default the path is /, but you can override and mount a specific path of the filesystem by using the path attribute
+    path: /k8s/production/mosquitto
+    user: admin
+    secretRef:
+      name: ceph-secret
+      #readOnly: true
+  #Since it is created directly this does not delete it from gluster
+  persistentVolumeReclaimPolicy: Delete
