@@ -26,7 +26,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: homer-fs-file-cluster
+        existingClaim: homer-pvc
 
     additionalVolumes:
     - name: config-volume
