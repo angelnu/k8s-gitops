@@ -47,7 +47,7 @@ The cluster is designed to allow tearing it completely without any data lost.
     - [SOPS](##-Secret-Management) - Flux, K8S GitOps
   * Files:
     * Fast but depending on Sinology NAS: nfs
-    * Slower but replicated: custom glusterfs containers + Hekiti + custom chart to generate PVs, PVCs and backup cronjobs to the NAS.
+    * Slower but replicated: Ceph in Promox
   * Databases:
     * postgres: 2 instances deployed via [Zalando´s Postgres Operator](https://github.com/zalando/postgres-operator)
 

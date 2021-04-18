@@ -20,14 +20,6 @@ Configures the [Kubernetes dashboard](https://kubernetes.io/docs/tasks/access-ap
 
 [Settings](dashboard.yaml)
 
-## Gluster
-
-Cluster file system using [gluster](https://www.gluster.org/) and [Heketi](https://github.com/heketi/heketi) to dynamically provide volumes.
-
-TBD: since Heketi is in maintenance mode I need to move to another solution.
-
-[Settings](glusterfs)
-
 ## Kured
 
 [Kured](https://github.com/weaveworks/kured) (KUbernetes REboot Daemon) is a Kubernetes daemonset that performs safe automatic node reboots when the need to do so is indicated by the package management system of the underlying OS.
