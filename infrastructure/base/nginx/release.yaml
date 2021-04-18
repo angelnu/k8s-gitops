@@ -20,8 +20,6 @@ spec:
   # Default values
   # https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/values.yaml
   values:
-    admissionWebhooks:
-      enabled: false
     controller:
       replicaCount: 2
       config:
