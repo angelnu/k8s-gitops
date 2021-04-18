@@ -6,5 +6,4 @@ resources:
   - cifs.yaml
   - kured
   - mailserver.yaml
-  - metallb.yaml
   - nfs.yaml

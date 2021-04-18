@@ -32,12 +32,6 @@ Mail server with [Exim](https://www.exim.org/) for application in K8S and LAN to
 
 [Settings](mailserver.yaml)
 
-## Metallb - Load Balancer
-
-[Load balancers](https://metallb.universe.tf/) for K8S services.
-
-[Settings](metallb.yaml)
-
 ## NFS
 
 Some [Persistant Volume Claims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) for the NAS.
