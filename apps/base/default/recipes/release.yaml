@@ -16,8 +16,6 @@ spec:
       interval: 5m
   dependsOn:
     - name: recipes-db
-    - name: recipes-media-fs
-    - name: recipes-static-fs
   # See https://github.com/k8s-at-home/charts/blob/master/charts/recipes/values.yaml
   values:
     image:
@@ -27,10 +25,10 @@ spec:
     persistence:
       media:
         enabled: true
-        existingClaim: recipes-media-fs-file-cluster
+        existingClaim: recipes-media-pvc
       static:
         enabled: true
-        existingClaim: recipes-static-fs-file-cluster
+        existingClaim: recipes-static-pvc
 
     
     env:
