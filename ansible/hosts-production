@@ -1,12 +1,11 @@
 [masters]
 server.angelnu.com  name=server.angelnu.com  k8s_labels="{}" fix_ip_address=192.168.2.3/19
 server2.angelnu.com name=server2.angelnu.com k8s_labels="{'HomematicHW': True}" fix_ip_address=192.168.2.4/19
-c1.lan name=c1.lan k8s_labels="{}"
+k8s1.lan name=k8s1.lan k8s_labels="{}"
+k8s2.lan name=k8s2.lan k8s_labels="{}"
+k8s3.lan name=k8s3.lan k8s_labels="{}"
 
 [workers]
-n9.angelnu.com    name=n9.angelnu.com k8s_labels="{'gluster': True }" k8s_taints="{'node-role.kubernetes.io/master':':NoSchedule'}"
-n10.angelnu.com  name=n10.angelnu.com k8s_labels="{'gluster': True }" k8s_taints="{'node-role.kubernetes.io/master':':NoSchedule'}"
-n11.angelnu.com  name=n11.angelnu.com k8s_labels="{'gluster': True }" k8s_taints="{'node-role.kubernetes.io/master':':NoSchedule'}"
 
 
 [nodes:children]

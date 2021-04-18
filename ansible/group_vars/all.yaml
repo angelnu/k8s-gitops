@@ -62,6 +62,8 @@ FLUX2_GITHUB_TOKEN: !vault |
           3938313035643864363661666639373136373961636465653164
 
 timezone: "Europe/Berlin"
+K8S_TLS_SECRETS_BACKUP: "./cert-manager-backup.yaml"
+CERT_MANAGER_NAMESPACE: cert-manager
 ssh:
   pub_key_path: "~/.ssh/id_rsa.pub"
 BOOTSTRAP_PACKAGES:
@@ -69,8 +71,8 @@ BOOTSTRAP_PACKAGES:
   #- aptitude
 PACKAGES:
   - rsync
-  - glusterfs-client
-  - nfs-common
+  - nfs-common # mount nfs
+  - ceph # mount ceph
   - attr
   - conntrack
   - vim

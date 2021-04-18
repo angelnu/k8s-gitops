@@ -24,11 +24,21 @@
         {%- for alias in ALIAS_2_INSTALL %}
         alias {{ alias }}="{{ ALIAS_2_INSTALL[alias] }}"
         {% endfor %}
+  ####################################################################
+  #                          PREPARE NODES                           #
+  ####################################################################
 
 - name: "Prepare nodes"
   hosts: nodes
   tasks:
 
+  - name: Install snapd
+    apt:
+      name:
+      - snapd
+      force: yes
+      state: present
+    
   - name: Install microk8s
     community.general.snap:
       name: microk8s
@@ -41,26 +51,31 @@
       state: link
   
   - name: Add the domain
-    lineinfile:
+    blockinfile:
       path: /var/snap/microk8s/current/certs/csr.conf.template
       #regexp: '^DNS.10'
       insertafter: '^\[ alt_names \]'
-      line: DNS.10 = angelnu.com
-      line: DNS.11 = lan
+      block: |
+        DNS.10 = angelnu.com
+        DNS.11 = lan
+  
+  ####################################################################
+  #                     FIRST NODE ACTIONS                           #
+  ####################################################################
   
   - name: "First node actions"
     run_once: True
     when: inventory_hostname == groups.nodes[0]
 
     block:
-
-    - name: Create K8S secret
+      
+    - name: Create docker login K8S secret
       shell: |
         {{ KUBECTL_BIN }} create secret docker-registry regcred \
         --docker-username={{ DOCKER_USER }} \
         --docker-password={{ DOCKER_PASSWORD }} \
-      # --docker-server=<your-registry-server> \
-      # --docker-email=<your-email>
+        --docker-server=https://index.docker.io/v2/ \
+        #--docker-email=docker@example.com
       register: result
       failed_when:
       - "'already exists' not in result.stderr"
@@ -70,20 +85,58 @@
       retries: 60
       delay: 5
 
-    #- name: "Define docker secret as default"
-    #  shell: |
-    #    {{ KUBECTL_BIN }} patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}'
-    #  register: result
-    #  changed_when:
-    #  - "'(no change)'  not in result.stdout|join('')"
+    # - name: "Define docker secret as default"
+    #   shell: |
+    #     {{ KUBECTL_BIN }} patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}'
+    #   register: result
+    #   changed_when:
+    #   - "'(no change)'  not in result.stdout|join('')"
     
     - name: Deploy dashboard
       import_tasks: tasks/k8s/dashboard.yaml
     
+    - name: Check if {{ K8S_TLS_SECRETS_BACKUP }} exists
+      stat:
+        path: "{{ K8S_TLS_SECRETS_BACKUP }}"
+      register: tls_secrets_stat
+    
+    - name: Create {{ CERT_MANAGER_NAMESPACE }} NS
+      shell: |
+        {{ KUBECTL_BIN }} create ns {{ CERT_MANAGER_NAMESPACE }}
+      run_once: True
+      register: result
+      failed_when:
+      - "'already exists' not in result.stderr"
+      - result.rc != 0
+      changed_when:
+      - "'already exists'  not in result.stderr|join('')"
+
+    - name: Install TLS secret backup
+      when: tls_secrets_stat.stat.exists and result.changed
+      shell: |
+        echo {{ KUBECTL_BIN }} apply -f {{ K8S_TLS_SECRETS_BACKUP }}
+    
+    - name: "Enable required microk8s addons"
+      shell: |
+        {{ MICROK8S_BIN }} enable {{ item }}
+      register: result
+      changed_when:
+      - "'already enabled' not in result.stdout"
+      - "'Nothing to do ' not in result.stderr|join('')"
+      failed_when:
+      - "'Nothing to do' not in result.stderr"
+      - result.rc != 0
+      with_items:
+      - "{{ MICROK8S_ADDONS }}"
+    
     - name: Settle first node
       import_tasks: tasks/k8s/kubernetes_node_settle.yaml
 
-    
+
+  
+####################################################################
+#                      JOIN NODE ACTIONS                           #
+####################################################################    
 
 - name: Join to the first node
   hosts: nodes[1:]
@@ -128,6 +181,9 @@
     - name: Settle remaining nodes
       import_tasks: tasks/k8s/kubernetes_node_settle.yaml
 
+####################################################################
+#                      ALL NODE SETTINGS                           #
+####################################################################    
 
 - name: Apply common settings
   hosts: nodes
@@ -139,20 +195,9 @@
       mkdir -p ${HOME}/.kube
       {{ MICROK8S_BIN }} config > ${HOME}/.kube/config
 
-  - name: "Enable required microk8s addons"
-    shell: |
-      {{ MICROK8S_BIN }} enable {{ item }}
-    register: result
-    changed_when:
-    - "'already enabled' not in result.stdout"
-    - "'Nothing to do ' not in result.stderr|join('')"
-    failed_when:
-    - "'Nothing to do' not in result.stderr"
-    - result.rc != 0
-    with_items:
-    - "{{ MICROK8S_ADDONS }}"
+
     #when: ansible_architecture == "x86_64" #Some only allow dep in x86_64
-    when: inventory_hostname == groups.workers[0]
+    when: inventory_hostname == groups.nodes[0]
 
   - include_tasks: tasks/k8s/setLabels.yaml
 

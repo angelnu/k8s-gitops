@@ -53,7 +53,7 @@
     - "'configured' not in result.stdout| join('')"
 
 - name: "Install (if needed) flux"
-  hosts: workers[0]
+  hosts: nodes[0]
   gather_facts: false #Already queried
   tasks:
   - name: Install GitHub secret
