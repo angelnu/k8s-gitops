@@ -3,6 +3,7 @@ kind: PersistentVolume
 metadata:
   name: nfs-kubernetes-3
 spec:
+  storageClassName: nfs-kubernetes-3
   capacity:
     storage: 18T
   accessModes:
@@ -21,7 +22,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: ""
+  storageClassName: nfs-kubernetes-3
   volumeName: nfs-kubernetes-3
   resources:
     requests:

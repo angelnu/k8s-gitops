@@ -3,6 +3,7 @@ kind: PersistentVolume
 metadata:
   name: nfs-downloads
 spec:
+  storageClassName: nfs-downloads
   capacity:
     storage: 18T
   accessModes:
@@ -18,7 +19,7 @@ metadata:
 spec:
   accessModes:
     - ReadOnlyMany
-  storageClassName: ""
+  storageClassName: nfs-downloads
   volumeName: nfs-downloads
   resources:
     requests:

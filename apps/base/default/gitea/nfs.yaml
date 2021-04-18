@@ -20,10 +20,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: nfs-gitea
 spec:
-  storageClassName: gitea-storageclass
   accessModes:
     - ReadWriteMany
-  storageClassName: ""
+  storageClassName: gitea-storageclass
   resources:
     requests:
       storage: 1T

@@ -3,6 +3,7 @@ kind: PersistentVolume
 metadata:
   name: nfs-video
 spec:
+  storageClassName: nfs-video
   capacity:
     storage: 18T
   accessModes:
@@ -18,7 +19,7 @@ metadata:
 spec:
   accessModes:
     - ReadOnlyMany
-  storageClassName: ""
+  storageClassName: nfs-video
   volumeName: nfs-video
   resources:
     requests:

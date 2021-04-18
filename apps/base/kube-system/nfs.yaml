@@ -21,7 +21,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: "nfs-kubernetes-kube-system"
+  storageClassName: nfs-kubernetes-kube-system
   resources:
     requests:
       storage: 10T

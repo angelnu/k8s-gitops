@@ -3,6 +3,7 @@ kind: PersistentVolume
 metadata:
   name: nfs-software
 spec:
+  storageClassName: nfs-software
   capacity:
     storage: 18T
   accessModes:
@@ -21,7 +22,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: ""
+  storageClassName: nfs-software
   volumeName: nfs-software
   resources:
     requests:
