@@ -14,8 +14,6 @@ spec:
         name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
-  dependsOn:
-    - name: unifi-fs
   # See https://github.com/k8s-at-home/charts/blob/master/charts/unifi/values.yaml
   values:
     image:
@@ -31,7 +29,7 @@ spec:
     
     persistence:
       enabled: true
-      existingClaim: unifi-fs-file-cluster
+      existingClaim: unifi-pvc
     
     timezone: "Europe/Berlin"
 
