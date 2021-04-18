@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
   - secrets
   - ../base
-  - kube-system
   - default
   - podinfo
 
