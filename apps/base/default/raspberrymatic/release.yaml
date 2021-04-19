@@ -25,9 +25,8 @@ spec:
       enabled: true
       existingClaim:  raspberrymatic-pvc
   
-    #TBD add antenta
-    #nodeSelector:
-    #  HomematicHW: "True"
+    nodeSelector:
+      HomematicHW: "True"
     
     service:
       type: LoadBalancer
