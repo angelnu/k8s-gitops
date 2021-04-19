@@ -20,16 +20,23 @@ spec:
     storage: "1Gi"
   accessModes:
   - ReadWriteOnce
-  rbd:
-    monitors:
-    - 192.168.2.129:6789
-    - 192.168.2.170:6789
-    - 192.168.2.147:6789
-    pool: rbd
-    image: raspberrymatic
+  csi:
+    driver: rbd.csi.ceph.com
     fsType: ext4
-    user: admin
-    secretRef:
+    nodeStageSecretRef:
+      # node stage secret name
       name: ceph-secret
-  #Since it is created directly this does not delete it from gluster
-  persistentVolumeReclaimPolicy: Delete
+      # node stage secret namespace where above secret is created
+      namespace: ceph
+    volumeAttributes:
+      # Required options from storageclass parameters need to be added in volumeAttributes
+      "clusterID": "2ec73f92-a0c8-11eb-b84d-eb70282a4edf"
+      "pool": "rbd"
+      "staticVolume": "true"
+      # If set to rbd-nbd, use rbd-nbd on nodes that have rbd-nbd and nbd kernel modules to map rbd images
+      mounter: rbd-nbd
+    # volumeHandle should be same as rbd image name
+    volumeHandle: static-image
+  persistentVolumeReclaimPolicy: Retain
+  # The volumeMode can be either `Filesystem` or `Block` if you are creating Filesystem PVC it should be `Filesystem`, if you are creating Block PV you need to change it to `Block`
+  volumeMode: Filesystem

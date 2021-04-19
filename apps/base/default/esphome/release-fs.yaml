@@ -22,16 +22,22 @@ spec:
   accessModes:
   - ReadWriteOnce
   - ReadOnlyMany
-  cephfs:
-    monitors:
-    - 192.168.2.129:6789
-    - 192.168.2.170:6789
-    - 192.168.2.147:6789
-    # by default the path is /, but you can override and mount a specific path of the filesystem by using the path attribute
-    path: /k8s/production/esphome
-    user: admin
-    secretRef:
+  csi:
+    driver: cephfs.csi.ceph.com
+    nodeStageSecretRef:
+      # node stage secret name
       name: ceph-secret
-      #readOnly: true
-  #Since it is created directly this does not delete it from gluster
-  persistentVolumeReclaimPolicy: Delete
+      # node stage secret namespace where above secret is created
+      namespace: ceph
+    volumeAttributes:
+      # Required options from storageclass parameters need to be added in volumeAttributes
+      "clusterID": "2ec73f92-a0c8-11eb-b84d-eb70282a4edf"
+      # (required) CephFS filesystem name into which the volume shall be created
+      "fsName": "cephfs"
+      "staticVolume": "true"
+      "rootPath": /k8s/production/esphome
+    # volumeHandle can be anything, need not to be same
+    # as PV name or volume name. keeping same for brevity
+    volumeHandle: cephfs-static-pv
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
