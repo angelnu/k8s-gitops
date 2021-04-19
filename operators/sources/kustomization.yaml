@@ -4,6 +4,7 @@ namespace: flux-system
 resources:
   - angelnu-charts.yaml
   - bitnami.yaml
+  - ceph-csi.yaml
   - gitea.yaml
   - infracloudio-charts.yaml
   - ingress-nginx.yaml
