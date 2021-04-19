@@ -34,7 +34,7 @@ spec:
       "pool": "rbd"
       "staticVolume": "true"
       # If set to rbd-nbd, use rbd-nbd on nodes that have rbd-nbd and nbd kernel modules to map rbd images
-      mounter: rbd-nbd
+      # mounter: rbd-nbd
     # volumeHandle should be same as rbd image name
     volumeHandle: static-image
   persistentVolumeReclaimPolicy: Retain
