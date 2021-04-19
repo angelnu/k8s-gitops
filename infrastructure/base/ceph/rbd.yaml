@@ -1,13 +1,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: ceph-csi-cephfs
+  name: ceph-csi-rbd
 spec:
   interval: 5m
   chart:
     spec:
       # renovate: registryUrl=https://ceph.github.io/csi-charts
-      chart: ceph-csi-cephfs
+      chart: ceph-csi-rbd
       version: 3.2.1
       sourceRef:
         kind: HelmRepository
@@ -17,10 +17,8 @@ spec:
   #See https://github.com/ceph/ceph-csi/blob/devel/charts/ceph-csi-cephfs/values.yaml
   values:
     csiConfig:
-    - clusterID: "2ec73f92-a0c8-11eb-b84d-eb70282a4edf" #just a UUID
+    - clusterID: "84675d40-a0d9-11eb-b978-dbc90369c7ea" #just a UUID
       monitors:
       - 192.168.2.129:6789
       - 192.168.2.170:6789
       - 192.168.4.13:6789
-      cephFS:
-        subvolumeGroup: ""

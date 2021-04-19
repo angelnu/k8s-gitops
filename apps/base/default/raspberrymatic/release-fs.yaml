@@ -30,7 +30,7 @@ spec:
       namespace: ceph
     volumeAttributes:
       # Required options from storageclass parameters need to be added in volumeAttributes
-      "clusterID": "2ec73f92-a0c8-11eb-b84d-eb70282a4edf"
+      "clusterID": "84675d40-a0d9-11eb-b978-dbc90369c7ea"
       "pool": "rbd"
       "staticVolume": "true"
       # If set to rbd-nbd, use rbd-nbd on nodes that have rbd-nbd and nbd kernel modules to map rbd images

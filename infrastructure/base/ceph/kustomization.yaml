@@ -4,4 +4,5 @@ namespace: ceph
 resources:
 - namespace.yaml
 - cephfs.yaml
+- rbd.yaml
 - secret.yaml
