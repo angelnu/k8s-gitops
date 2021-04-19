@@ -6,7 +6,7 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://ceph.github.io/csi-charts
+      # renovate: registryUrl=he
       chart: ceph-csi-rbd
       version: 3.2.1
       sourceRef:

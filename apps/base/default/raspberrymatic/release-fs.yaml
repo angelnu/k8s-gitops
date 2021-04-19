@@ -27,7 +27,7 @@ spec:
       # node stage secret name
       name: ceph-secret
       # node stage secret namespace where above secret is created
-      namespace: ceph
+      namespace: ceph-rbd
     volumeAttributes:
       # Required options from storageclass parameters need to be added in volumeAttributes
       "clusterID": "84675d40-a0d9-11eb-b978-dbc90369c7ea"
@@ -36,7 +36,7 @@ spec:
       # If set to rbd-nbd, use rbd-nbd on nodes that have rbd-nbd and nbd kernel modules to map rbd images
       # mounter: rbd-nbd
     # volumeHandle should be same as rbd image name
-    volumeHandle: static-image
+    volumeHandle: raspberrymatic
   persistentVolumeReclaimPolicy: Retain
   # The volumeMode can be either `Filesystem` or `Block` if you are creating Filesystem PVC it should be `Filesystem`, if you are creating Block PV you need to change it to `Block`
   volumeMode: Filesystem
