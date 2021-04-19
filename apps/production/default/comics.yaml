@@ -78,8 +78,6 @@ spec:
       labels:
         app: comics-scrapper-test
     spec:
-      nodeSelector: #Only schedule in the big server
-        kubernetes.io/hostname: server.angelnu.com
       containers:
       - name: comics-scrapper-test
         image: angelnu/comics:latest
