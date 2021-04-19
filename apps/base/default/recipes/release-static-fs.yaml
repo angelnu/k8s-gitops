@@ -38,6 +38,6 @@ spec:
       "rootPath": /k8s/production/recipes-static
     # volumeHandle can be anything, need not to be same
     # as PV name or volume name. keeping same for brevity
-    volumeHandle: cephfs-static-pv
+    volumeHandle: recipes-static-pv
   persistentVolumeReclaimPolicy: Retain
   volumeMode: Filesystem
