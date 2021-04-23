@@ -13,7 +13,7 @@ resources:
   - paperless
   - plex
   - photoprism
-  #- raspberrymatic
+  - raspberrymatic
   - recipes
   - reverse-proxy
   - statping
