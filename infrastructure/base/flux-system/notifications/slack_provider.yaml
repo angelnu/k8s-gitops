@@ -4,6 +4,6 @@ metadata:
   name: slack
 spec:
   type: slack
-  channel: k8s
+  channel: $ {{ FLUX_NOTIFICATIONS_CHANNEL}}
   secretRef:
     name: slack-url

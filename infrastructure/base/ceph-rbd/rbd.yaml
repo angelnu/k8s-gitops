@@ -19,6 +19,6 @@ spec:
     csiConfig:
     - clusterID: "84675d40-a0d9-11eb-b978-dbc90369c7ea" #just a UUID
       monitors:
-      - 192.168.2.129:6789
-      - 192.168.2.170:6789
-      - 192.168.4.13:6789
+      - ${CEPH_MONITOR_HOST_1}
+      - ${CEPH_MONITOR_HOST_2}
+      - ${CEPH_MONITOR_HOST_3}
