@@ -4,3 +4,5 @@ namespace: kube-system
 resources:
   - dex.yaml
   - oauth2-proxy.yaml
+  - secret-dex.yaml
+  - secret-oauth2-proxy.yaml
