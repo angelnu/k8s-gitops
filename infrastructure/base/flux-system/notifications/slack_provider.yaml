@@ -4,6 +4,5 @@ metadata:
   name: slack
 spec:
   type: slack
-  channel: $ {{ FLUX_NOTIFICATIONS_CHANNEL}}
-  secretRef:
-    name: slack-url
+  channel: ${FLUX_NOTIFICATIONS_CHANNEL}
+  address: ${FLUX_SLACK_URL}
