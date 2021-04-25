@@ -1,5 +1,11 @@
 # flux-system namespace
 
+## Authentication
+
+Proxy for the Kubenernetes nginx so I can authenticate users with Open ID.
+
+[Settings](authentication)
+
 ## intel-gpu-plugin
 
 Allow accessing the Interl GPU from containers such as plex.

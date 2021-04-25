@@ -1,11 +1,5 @@
 # kube-system namespace
 
-## Authentication
-
-Proxy for the Kubenernetes nginx so I can authenticate users with Open ID.
-
-[Settings](authentication)
-
 ## Common Internet File System - CIFS (smb / Samba)
 
 Install tools that allow mounting [CIFS](https://en.wikipedia.org/wiki/Server_Message_Block) volumes.
