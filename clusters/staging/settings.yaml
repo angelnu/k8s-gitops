@@ -17,3 +17,4 @@ data:
   CLUSTER_DB_BACKUP_PREFIX: "backup/staging_db"
 
   FLUX_NOTIFICATIONS_CHANNEL: k8s-staging
+  BOTKUBE_NOTIFICATIONS_CHANNEL: k8s-staging

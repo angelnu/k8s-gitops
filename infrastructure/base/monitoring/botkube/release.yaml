@@ -25,7 +25,7 @@ spec:
     communications:
       slack:
           enabled: true
-          channel: 'k8s'
+          channel: ${BOTKUBE_NOTIFICATIONS_CHANNEL}
           # token: defined in secret.yaml
           notiftype: short
 
