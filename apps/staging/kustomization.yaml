@@ -1,1 +1,10 @@
-../production/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - secrets
+  - ../base
+  - default
+  - podinfo
+
+patchesStrategicMerge:
+  - podinfo/patch-values.yaml
