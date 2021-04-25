@@ -1,0 +1,27 @@
+- name: "Prepare nodes for development"
+  hosts: nodes
+  gather_facts: false
+  tasks:
+  
+  - name: Delete VM
+    delegate_to: localhost
+    community.general.proxmox_kvm:
+      node: "{{ hoster }}"
+      api_host: "{{ proxmox.api.host }}"
+      api_user: "{{ proxmox.api.user }}"
+      api_password: "{{ proxmox.api.password }}"
+      proxmox_default_behavior: no_defaults
+      
+      name: "{{ inventory_hostname }}"
+      state: "{{ item }}"
+    register: result
+    failed_when:
+    - ("msg" in result)
+    - ('does not exist in cluster' not in result.msg)
+    - ('is already stopped' not in result.msg)
+    until: result is succeeded
+    retries: 60 # wait until stopped
+    delay: 1
+    loop:
+      - stopped
+      - absent

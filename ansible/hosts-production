@@ -1,9 +1,7 @@
 [masters]
-server.angelnu.com  name=server.angelnu.com  k8s_labels="{}" fix_ip_address=192.168.2.3/19
-server2.angelnu.com name=server2.angelnu.com k8s_labels="{'HomematicHW': True}" fix_ip_address=192.168.2.4/19
-k8s1.lan name=k8s1.lan k8s_labels="{}"
-k8s2.lan name=k8s2.lan k8s_labels="{}"
-k8s3.lan name=k8s3.lan k8s_labels="{}"
+k3s1 hoster=pve1 k8s_labels="{}" #k8s_untaints="{'node-role.kubernetes.io/master':''}"
+k3s2 hoster=pve2 k8s_labels="{}"
+k3s3 hoster=pve3 k8s_labels="{'HomematicHW': True}" 
 
 [workers]
 
@@ -13,6 +11,6 @@ masters
 workers
 
 [all:vars]
-ansible_user=root
 production=True
+ansible_user=root
 ansible_python_interpreter=/usr/bin/python3

@@ -78,7 +78,6 @@
       export GITHUB_TOKEN={{ FLUX2_GITHUB_TOKEN }};
       cd ..;
       flux bootstrap github
-      --context={{ FLUX2_CONTEXT }}
       --owner={{FLUX_GIT_USER}}
       --repository={{FLUX_GIT_REPO}}
       --branch={{ FLUX_GIT_BRANCH }}

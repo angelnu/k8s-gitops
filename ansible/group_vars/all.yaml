@@ -3,6 +3,8 @@
 #
 ---
 
+K8S_TYPE: k3s
+
 # Test environment
 LXD_CONTAINERS:
   server.angelnu.com:
@@ -10,13 +12,37 @@ LXD_CONTAINERS:
   - test-node2
   server2.angelnu.com: []
 
+proxmox:
+  api:
+    host: pve1
+    user: root@pam
+    password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          39336335643137643035373664396138633338353535353030336163666630653538343066333335
+          3139356635393563383631313665366361303934363462370a646333363939353862383432643866
+          35383665393965336532333534366130323966343233363463333163343835303435396362366563
+          6363663363663735620a616538316639663862316436643064353738653035366362613530633064
+          3136
+  template:
+    host: pve2
+    name: Ubuntu-20.04-template
+  vm:
+    disks:
+      ide2:
+        storage: local-lvm
+      scsi0:
+        resize: "{{ '20G' if production else '10G' }}"
+        storage: local-lvm
+  uri:
+    validate_certs: no
+
 
 #If set to true it will reset the K8S cluster on each run
 K8S_RESET: false
 
 # microk8s
 MICROK8S_BIN: /snap/bin/microk8s
-KUBECTL_BIN: /snap/bin/microk8s kubectl
+KUBECTL_BIN: "{{ '/snap/bin/microk8s kubectl' if K8S_TYPE=='k8s' else 'kubectl' }}"
 DOCKER_USER: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           39353438346635386437643834303766353339336230623766666333626562323231613538656162
@@ -85,13 +111,13 @@ PACKAGES2REMOVE:
   - libnss-mdns #It uses multicast dns to resol .local -> conflicts with k8s dns names: https://askubuntu.com/questions/81797/nslookup-finds-ip-but-ping-doesnt
 
 ALIAS_2_INSTALL:
-  kubectl: microk8s kubectl
-  helm: microk8s helm3
-  getpods: microk8s kubectl get pod -A
-  delpod: microk8s kubectl delete pod
-  descpod: microk8s kubectl describe pod
-  execpod: microk8s kubectl exec -ti
-  logpod: microk8s kubectl logs
+  kubectl: "{{ KUBECTL_BIN }}"
+  helm: "{{ '/snap/bin/microk8s helm3' if K8S_TYPE=='k8s' else 'helm' }}"
+  getpods: "{{ KUBECTL_BIN }} get pod -A"
+  delpod: "{{ KUBECTL_BIN }} delete pod"
+  descpod: "{{ KUBECTL_BIN }} describe pod"
+  execpod: "{{ KUBECTL_BIN }} exec -ti"
+  logpod: "{{ KUBECTL_BIN }} logs"
   vault-edit: "EDITOR='code --wait' ansible-vault edit"
 
 # Generated

@@ -1,15 +1,16 @@
 [masters]
-n12        k8s_labels="{'masterIndex':0, 'gluster': True }"
+test-k3s1 hoster=pve1 k8s_labels="{}" #k8s_untaints="{'node-role.kubernetes.io/master':''}"
+test-k3s2 hoster=pve2 k8s_labels="{}"
+test-k3s3 hoster=pve3 k8s_labels="['HomematicHW=True']" 
 
 [workers]
-test-node1 k8s_labels="{'masterIndex':1, 'gluster': True }"
-test-node2 k8s_labels="{'masterIndex':2, 'gluster': True }"
+
 
 [nodes:children]
 masters
 workers
 
 [all:vars]
-ansible_user=root
 production=False
+ansible_user=root
 ansible_python_interpreter=/usr/bin/python3

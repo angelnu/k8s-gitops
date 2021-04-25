@@ -1,0 +1,17 @@
+- delegate_to: localhost
+  block:
+  - name: set state to {{ target_state }}
+    delegate_to: localhost
+    community.general.proxmox_kvm:
+      node: "{{ hoster }}"
+      api_host: "{{ proxmox.api.host }}"
+      api_user: "{{ proxmox.api.user }}"
+      api_password: "{{ proxmox.api.password }}"
+      proxmox_default_behavior: no_defaults
+      
+      name: "{{ inventory_hostname }}"
+      state: "{{ target_state }}"
+    register: result
+    until: (result is succeeded) and (result is not changed)
+    retries: 60 # wait until stopped
+    delay: 1

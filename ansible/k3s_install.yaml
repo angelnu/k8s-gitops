@@ -1,3 +1,23 @@
+- hosts: nodes
+  vars:
+    #k3s_state: uninstalled
+    k3s_etcd_datastore: true
+    k3s_server:
+      cluster-cidr: 10.0.0.0/8
+      #flannel-backend: 'none'  # This needs to be in quotes
+      disable:
+        - traefik
+    k3s_agent:
+      #with-node-id: true
+      node-label: "{{k8s_labels}}"
+  pre_tasks:
+    - name: Set each node in masters group to be a control node
+      ansible.builtin.set_fact:
+        k3s_control_node: true
+      when: inventory_hostname in groups["masters"]
+  roles:
+    - role: xanmanning.k3s
+
 - name: "Prepare nodes for development"
   hosts: nodes
   tasks:
@@ -12,10 +32,10 @@
 
   - name: Copy ssh files
     copy:
-      dest: "{{ item[0] }}"
+      dest: ".ssh/{{ item.key }}"
       mode: 0600
-      content: "{{ item[1] }}"
-    with_items: '{{ SSH_FILES_2_INSTALL.items() }}'
+      content: "{{ item.value }}"
+    with_items: '{{ SSH_FILES_2_INSTALL | dict2items }}'
 
   - name: Insert/Update bash aliases
     blockinfile:
@@ -31,33 +51,11 @@
 - name: "Prepare nodes"
   hosts: nodes
   tasks:
-
-  - name: Install snapd
-    apt:
-      name:
-      - snapd
-      force: yes
-      state: present
     
-  - name: Install microk8s
+  - name: Install helm
     community.general.snap:
-      name: microk8s
+      name: helm
       classic: true
-  
-  - name: Set symlink to kubectl
-    file:
-      src: "/snap/microk8s/current/kubectl"
-      dest: "/usr/local/bin/kubectl"
-      state: link
-  
-  - name: Add the domain
-    blockinfile:
-      path: /var/snap/microk8s/current/certs/csr.conf.template
-      #regexp: '^DNS.10'
-      insertafter: '^\[ alt_names \]'
-      block: |
-        DNS.10 = angelnu.com
-        DNS.11 = lan
   
   ####################################################################
   #                     FIRST NODE ACTIONS                           #
@@ -116,19 +114,6 @@
       shell: |
         echo {{ KUBECTL_BIN }} apply -f {{ K8S_TLS_SECRETS_BACKUP }}
     
-    - name: "Enable required microk8s addons"
-      shell: |
-        {{ MICROK8S_BIN }} enable {{ item }}
-      register: result
-      changed_when:
-      - "'already enabled' not in result.stdout"
-      - "'Nothing to do ' not in result.stderr|join('')"
-      failed_when:
-      - "'Nothing to do' not in result.stderr"
-      - result.rc != 0
-      with_items:
-      - "{{ MICROK8S_ADDONS }}"
-    
     - name: Settle first node
       import_tasks: tasks/k8s/kubernetes_node_settle.yaml
 
@@ -153,33 +138,6 @@
   - debug:
       msg: "{{query_nodes_cmd.stdout_lines}}"
     run_once: True
-  
-  - name: has this node already joined the cluster?
-    set_fact:
-      node_in_cluster: "{{ 'node/'+inventory_hostname in query_nodes_cmd.stdout_lines }}"
-  
-  - debug:
-      msg: "[{{'node/'+inventory_hostname}}, {{node_in_cluster}}]"
-    run_once: True
-  
-  - when: node_in_cluster|bool == false
-    block:
-
-    - name: create random 32 characters token
-      set_fact:
-        random_microk8s_token: "{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=32') }}"
-
-    - name: set token on first master
-      shell: "{{ MICROK8S_BIN }} add-node --token {{ random_microk8s_token }} --token-ttl 600"
-      delegate_to: "{{ groups.nodes[0] }}"
-      throttle: 1
-
-    - name: joining cluster - this will take a while...
-      shell: "{{ MICROK8S_BIN }} join {{groups.nodes[0]}}:25000/{{ random_microk8s_token }}"
-      throttle: 1
-    
-    - name: Settle remaining nodes
-      import_tasks: tasks/k8s/kubernetes_node_settle.yaml
 
 ####################################################################
 #                      ALL NODE SETTINGS                           #
@@ -189,16 +147,31 @@
   hosts: nodes
   gather_facts: false #Already queried
   tasks:
-  - name: "Fetch kubectl config"
+
+  - name: "Put kubectl config in default place"
+    #TBD: this always result in changed
     shell: |
       rm -f ${HOME}/.kube/config
       mkdir -p ${HOME}/.kube
-      {{ MICROK8S_BIN }} config > ${HOME}/.kube/config
+      ln -s /etc/rancher/k3s/k3s.yaml  ${HOME}/.kube/config
+  
+  - name: Donwload kubectl config
+    run_once: true
+    ansible.builtin.fetch:
+      src: /etc/rancher/k3s/k3s.yaml
+      dest: /root/.kube/config
+      flat: yes
+  
+  - name: Ansible replace string example
+    #TBD: this always result in changed
+    replace:
+      path: /root/.kube/config
+      regexp: '127.0.0.1'
+      replace: "{{ inventory_hostname }}"
+    delegate_to: localhost
 
-
-    #when: ansible_architecture == "x86_64" #Some only allow dep in x86_64
-    when: inventory_hostname == groups.nodes[0]
-
-  - include_tasks: tasks/k8s/setLabels.yaml
+  #- include_tasks: tasks/k8s/setLabels.yaml
 
   - include_tasks: tasks/k8s/setTaints.yaml
+
+  - include_tasks: tasks/k8s/unsetTaints.yaml

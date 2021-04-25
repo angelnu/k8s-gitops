@@ -16,47 +16,28 @@ If a password needs to be changed use the command `ansible-vault encrypt_string`
 
 ## Install
 
-0. Reset Host OS UUID (needed in some devices once after Host OS install)
+0. Create nodes
    ```
-   ansible-playbook -i hosts-production hw_reset.yaml
+   ansible-playbook -i hosts-production proxmox_install.yaml
    ```
 1. Prepare nodes
    ```
    ansible-playbook -i hosts-production hw_setup.yaml
    ```
-2. Install MicroK8S cluster
+2. Install K3S cluster
    ```
-   ansible-playbook -i hosts-production microk8s_install.yaml
+   ansible-playbook -i hosts-production k3s_install.yaml
    ```
 3. Install flux2
    ```
    ansible-playbook -i hosts-production flux_install.yaml
-   ```
-## Install (test)
 
-1. Prepare nodes
-   ```
-   ansible-playbook -i hosts-production lxd_install.yaml
-   ANSIBLE_HOST_KEY_CHECKING=0 ansible-playbook -i hosts-test hw_setup.yaml
-   ```
-2. Install MicroK8S cluster
-   ```
-   ANSIBLE_HOST_KEY_CHECKING=0 ansible-playbook -i hosts-test microk8s_install.yaml
-   ```
-3. Install flux2
-   ```
-   ANSIBLE_HOST_KEY_CHECKING=0 ansible-playbook -i hosts-test flux_install.yaml
-   ```
-
-## Update Host OS (prod)
+## Update Host OS
    ```
    ansible-playbook -i hosts-production hw_update.yaml
    ```
-## Update Host OS (test)
-   ```
-   ANSIBLE_HOST_KEY_CHECKING=0 ansible-playbook -i hosts-test hw_update.yaml
-   ```
-## Update Flux (prod)
+
+## Update Flux
 
 This should not be needed since there is GitHub workflow to do this automatically via PR
 
@@ -71,17 +52,16 @@ This should not be needed since there is GitHub workflow to do this automaticall
    ```
    flux uninstall
    ```
-2. Uninstall microk8s
+2. Uninstall k3s (TBD)
    ```
-   ansible-playbook -i hosts-production microk8s_reset.yaml
+   ansible-playbook -i hosts-production k3s_remove.yaml
    ```
-## Uninstall (test)
+   ```
+2. Delete VMs
+   ```
+   ansible-playbook -i hosts-production proxmox_remove.yaml
+   ```
 
-1. Uninstall microk8s
-   ```
-   ANSIBLE_HOST_KEY_CHECKING=0 ansible-playbook -i hosts-test microk8s_reset.yaml
-   ```
-2. Uninstall LXD
-   ```
-   ansible-playbook -i hosts-production lxd_remove.yaml
-   ```
+## Deprecated
+- lxd
+- microk8s

@@ -1,0 +1,127 @@
+- name: "Prepare nodes for development"
+  hosts: nodes
+  gather_facts: false
+  tasks:
+    
+  - name: Create VMs
+    delegate_to: localhost
+    block:
+
+    - name: Create new VM using Cloud-Init with an ssh key
+      throttle: 1
+      register: create_vm_result
+      community.general.proxmox_kvm:
+        node: "{{ proxmox.template.host }}"
+        target: "{{ hoster }}"
+        api_host: "{{ proxmox.api.host }}"
+        api_user: "{{ proxmox.api.user }}"
+        api_password: "{{ proxmox.api.password }}"
+        proxmox_default_behavior: no_defaults
+        args: -serial unix:/var/run/qemu-server/<vmid>.serial,server,nowait
+        
+        clone: "{{ proxmox.template.name }}"
+        name: "{{ inventory_hostname }}"
+        ide:
+          ide2: 'local:cloudinit,format=qcow2'
+        sshkeys: |
+          ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAHRwJSmkSt/yataayHydu9qNUMfC07gP/p+kYOjvOxVIoXPboQAfWf8HDucD48FgPoNWv7NgPhl+5Z2f0jWKQpz2QEFEGs48ndsy9bTFQrgxhn8LVOhHTp1MXfhUuRmT1LoCiy2wEJJlCP8b5hMSk6eZipeKdYo+G3tFKArKAGJ5NVzAw== root@server
+          ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAjsC7lRkcXPBluRyhA0EWNgOFlc1dg4TxxwOIwCXW6k3KEAUBCV7q6HEHY7W4qmoGvCPREvBT9l1nY8mB9pWeCdExIiGfJKKEUfGpjglMNdFq3/ONGoHjJaTlrXDG9Pr4FSpGpyYhhkTEcusmIWTQgqCh+qV8r9zqaNj/ocHolf7BoeZJbQ7RfrDgKqUcP5cPvD5tLfsdYTS7sSkhRDuXksbrt7PHleZrrg3VqxRdRKf2JtHoeD6kDfsimJwRc+X/LLC60EytBrqiGtbreMklB4hGpl/iySuTx7d29UZDi9LKFurkO50+WBKLApGlwrLU8gpBxhT+NdBDoc5t9JwFyw== windowsPutty
+        net:
+          net0: 'virtio,bridge=vmbr1,tag=77'
+        ipconfig:
+          ipconfig0: 'ip=dhcp'
+
+    - name: get VM state
+      proxmox_kvm:
+        api_host: "{{ proxmox.api.host }}"
+        api_user: "{{ proxmox.api.user }}"
+        api_password: "{{ proxmox.api.password }}"
+        proxmox_default_behavior: no_defaults
+        node: "{{ hoster }}"
+        name: "{{ inventory_hostname }}"
+        state: current
+      register: result
+      until: result is succeeded
+      retries: 60 # race condition after create
+      delay: 1
+
+    - name: set fact VMID
+      set_fact:
+        vmid: "{{ result.msg | regex_replace('.*vmid = ([1-9][0-9]{0,3}).*', '\\1') }}"
+
+    - name: authentication
+      uri:
+        url: "https://{{ proxmox.api.host }}:8006/api2/json/access/ticket"
+        method: POST
+        body_format: form-urlencoded
+        validate_certs: "{{ proxmox.uri.validate_certs }}"
+        body:
+          username: "{{ proxmox.api.user }}"
+          password: "{{ proxmox.api.password }}"
+      register: auth
+
+    # Move disk
+    - name: Move disk
+      with_items: "{{ proxmox.vm.disks| dict2items }}"
+      when: create_vm_result.changed and 'storage' in item.value
+      uri:
+        url: "https://{{ proxmox.api.host }}:8006/api2/json/nodes/{{ hoster }}/qemu/{{ vmid }}/move_disk"
+        method: POST
+        headers: 
+          Cookie: "PVEAuthCookie={{ auth.json.data.ticket }}"
+          CSRFPreventionToken: "{{ auth.json.data.CSRFPreventionToken }}"
+        body_format: form-urlencoded
+        validate_certs: "{{ proxmox.uri.validate_certs }}"
+        body:
+          disk: "{{ item.key }}"
+          node: "{{ hoster }}"
+          vmid: "{{ vmid }}"
+          storage: "{{ item.value.storage }}"
+          delete: 1
+
+    # Resize disk
+    - name: Resize disk
+      when: create_vm_result.changed and 'resize' in item.value
+      loop: "{{ proxmox.vm.disks| dict2items }}"
+      register: result
+      until: result is succeeded
+      retries: 60 # Wait for move
+      delay: 1
+      uri:
+        url: "https://{{ proxmox.api.host }}:8006/api2/json/nodes/{{ hoster }}/qemu/{{ vmid }}/resize"
+        method: PUT
+        headers: 
+          Cookie: "PVEAuthCookie={{ auth.json.data.ticket }}"
+          CSRFPreventionToken: "{{ auth.json.data.CSRFPreventionToken }}"
+        body_format: form-urlencoded
+        validate_certs: "{{ proxmox.uri.validate_certs }}"
+        body:
+          disk: "{{ item.key }}"
+          size: "{{ item.value.resize }}"
+  
+    - name: Start VM
+      include: tasks/proxmox/state.yaml
+      vars:
+          target_state: "{{ item }}"
+      loop:
+      - "started"
+
+    - name: Retart VM
+      when: create_vm_result.changed
+      include: tasks/proxmox/state.yaml
+      vars:
+          target_state: "{{ item }}"
+      loop:
+      - "stopped"
+      - "started"
+
+    - name: Refech the ssh keys
+      shell: >
+        ssh-keygen -R {{ inventory_hostname }} ;
+        ssh-keygen -R $(dig +short {{ inventory_hostname }}) ;
+        ssh-keyscan -t rsa1 {{ inventory_hostname }} >> $HOME/.ssh/known_hosts &&
+        ssh-keyscan         {{ inventory_hostname }} >> $HOME/.ssh/known_hosts
+      register: result
+      until: result is succeeded
+      retries: 60 # wait until stopped
+      delay: 1

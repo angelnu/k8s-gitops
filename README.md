@@ -10,7 +10,7 @@
 [![update-flux](https://github.com/angelnu/k8s-gitops/workflows/update-flux/badge.svg)](https://github.com/angelnu/k8s-gitop/workflows/update-flux/actions)
 <br />
 
-Microk8s multi-arch highly available cluster installed via [Ansible](ansible/README.md).
+K3S multi-arch highly available cluster installed via [Ansible](ansible/README.md) on Proxmox VMs.
 
 The cluster is designed to allow tearing it completely without any data lost.
 
@@ -23,8 +23,11 @@ The cluster is designed to allow tearing it completely without any data lost.
   * [staging overlay](apps/staging)
 * Substitutions
   * [global settings](clusters/settings.yaml)
+  * [global secrets](clusters/secrets.yaml)
   * [production global settings](clusters/production/settings.yaml)
+  * [production global secrets](clusters/production/secrets.yaml)
   * [staging global settings](clusters/staging/settings.yaml)
+  * [staging global secrets](clusters/staging/secrets.yaml)
 * Operators
   * [sources](operators/sources)
   * [cert-manager](operators/cert-manager)
@@ -51,12 +54,22 @@ The cluster is designed to allow tearing it completely without any data lost.
   * Databases:
     * postgres: 2 instances deployed via [Zalando´s Postgres Operator](https://github.com/zalando/postgres-operator)
 
+## HW setup
 
+- 3x Intel NUC 11 vPro (NUC11TNHv5) with:
+  - 11th Gen Intel® Core™ i5-1145G7 @ 2.60GHz
+  - 32 GB DDR4 
+  - 250 GB Sata SSD for local disks - 2x Samsung SSD 850 EVO, 1x CT240BX500SSD1
+  - 500 GB NVME for Ceph - WDC WDS500G1B0C-00S6U0
+  - 2 Thunderbolt 4/3 connected as network mesh for ceph:
+    - Node 1, Port 1 <-> Node 2, Port 1
+    - Node 1, Port 2 <-> Node 3, Port 1
+    - Node 2, Port 2 <-> Node 2, Port 2
 ## Installation
 
 ### Install / Update / Uninstall
 
-Installed via [Ansible](ansible/README.md).
+Installed via [Ansible](ansible/README.md). It creates the VMs for the 3 nodes
 
 The cluster is designed to allow tearing the cluster completly without any data lost. 
 
