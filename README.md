@@ -14,6 +14,8 @@ K3S multi-arch highly available cluster installed via [Ansible](ansible/README.m
 
 The cluster is designed to allow tearing it completely without any data lost.
 
+Stack is ordered in multiple layers (Flux kustomizations) depending on the lower one (example apps depend on infrasteructure).
+
 * Applications
   * [base/default](apps/base/default)
   * [base/kube-system](apps/base/kube-system)
@@ -21,17 +23,6 @@ The cluster is designed to allow tearing it completely without any data lost.
   * [production overlay](apps/production)
   * [staging global settings](clusters/staging/apps.yaml)
   * [staging overlay](apps/staging)
-* Substitutions
-  * [global settings](clusters/settings.yaml)
-  * [global secrets](clusters/secrets.yaml)
-  * [production global settings](clusters/production/settings.yaml)
-  * [production global secrets](clusters/production/secrets.yaml)
-  * [staging global settings](clusters/staging/settings.yaml)
-  * [staging global secrets](clusters/staging/secrets.yaml)
-* Operators
-  * [sources](operators/sources)
-  * [cert-manager](operators/cert-manager)
-  * [postgres](operators/postgres)
 * Infrastructure
   * [base/cert-manager](infrastructure/base/cert-manager)
   * [base/flux-system](infrastructure/base/flux-system)
@@ -39,6 +30,17 @@ The cluster is designed to allow tearing it completely without any data lost.
   * [base/postgres](infrastructure/base/postgres)
   * [production overlay](infrastructure/production)
   * [staging overlay](infrastructure/staging)
+* Operators
+  * [sources](operators/sources)
+  * [cert-manager](operators/cert-manager)
+  * [postgres](operators/postgres)
+* Settings and Secrets
+  * [global settings](settings/settings.yaml)
+  * [global secrets](settings/secrets.yaml)
+  * [production global settings](settings/production/settings.yaml)
+  * [production global secrets](settings/production/secrets.yaml)
+  * [staging global settings](settings/staging/settings.yaml)
+  * [staging global secrets](settings/staging/secrets.yaml)
 * Clusters:
   * [production](clusters/production)
   * [staging](clusters/staging)
