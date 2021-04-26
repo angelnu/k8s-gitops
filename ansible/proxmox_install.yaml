@@ -116,10 +116,10 @@
       - "started"
 
     - name: Refech the ssh keys
-      shell: >
-        ssh-keygen -R {{ inventory_hostname }} ;
-        ssh-keygen -R $(dig +short {{ inventory_hostname }}) ;
-        ssh-keyscan -t rsa1 {{ inventory_hostname }} >> $HOME/.ssh/known_hosts &&
+      shell: |
+        ssh-keygen -R {{ inventory_hostname }}
+        ssh-keygen -R $(dig +short {{ inventory_hostname }})
+        ssh-keyscan -t rsa1 {{ inventory_hostname }} >> $HOME/.ssh/known_hosts
         ssh-keyscan         {{ inventory_hostname }} >> $HOME/.ssh/known_hosts
       register: result
       until: result is succeeded

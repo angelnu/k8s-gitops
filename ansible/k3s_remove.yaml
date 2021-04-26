@@ -1,0 +1,5 @@
+- hosts: nodes
+  vars:
+    k3s_state: uninstalled
+  roles:
+    - role: xanmanning.k3s

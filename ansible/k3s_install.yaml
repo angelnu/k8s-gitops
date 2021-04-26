@@ -7,6 +7,7 @@
       #flannel-backend: 'none'  # This needs to be in quotes
       disable:
         - traefik
+        - servicelb
     k3s_agent:
       #with-node-id: true
       node-label: "{{k8s_labels}}"
