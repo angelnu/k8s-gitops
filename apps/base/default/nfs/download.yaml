@@ -10,7 +10,7 @@ spec:
     - ReadOnlyMany
   nfs:
     server: nas.home.angelnu.com
-    path: "/volume1/downloads"
+    path: "${NFS_DOWNLOADS}"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

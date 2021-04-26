@@ -10,7 +10,7 @@ spec:
     - ReadOnlyMany
   nfs:
     server: nas.home.angelnu.com
-    path: "/volume1/video"
+    path: "${NFS_VIDEO}"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

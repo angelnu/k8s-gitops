@@ -13,7 +13,7 @@ spec:
     - nfsvers=4.1
   nfs:
     server: nas.home.${CLUSTER_DOMAIN}
-    path: "/volume1/kubernetes/gitea/data"
+    path: "${NFS_KUBERNETES}/gitea/data"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

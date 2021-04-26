@@ -5,7 +5,7 @@ metadata:
   name: cluster-settings
 data:
   #VALUES DIFFERENT PROD - STAGING
-  CLUSTER_ENV: "prod"
+  CLUSTER_ENV: "production"
   CLUSTER_DOMAIN: angelnu.com
   CLUSTER_DOMAIN_CERT: prod-wildcard-angelnu-com-tls
   CLUSTER_EXTERNAL_SUBNET_PREFIX: "192.168.1"
@@ -18,3 +18,8 @@ data:
 
   FLUX_NOTIFICATIONS_CHANNEL: k8s
   BOTKUBE_NOTIFICATIONS_CHANNEL: k8s
+
+  NFS_KUBERNETES: /volume1/kubernetes
+  NFS_DOWNLOADS: /volume1/downloads
+  NFS_SOFTWARE: /volume1/software
+  NFS_VIDEO: /volume1/video

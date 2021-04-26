@@ -13,7 +13,7 @@ spec:
     - nfsvers=4.1
   nfs:
     server: nas.home.angelnu.com
-    path: "/volume1/software"
+    path: "${NFS_SOFTWARE}"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

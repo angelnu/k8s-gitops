@@ -5,7 +5,7 @@ metadata:
   name: cluster-settings
 data:
   #VALUES DIFFERENT PROD - STAGING
-  CLUSTER_ENV: "stagging"
+  CLUSTER_ENV: "staging"
   CLUSTER_DOMAIN: nunez-gregoire.eu
   CLUSTER_DOMAIN_CERT: prod-wildcard-nunez-gregoire-eu-tls
   CLUSTER_EXTERNAL_SUBNET_PREFIX: 192.168.11
@@ -18,3 +18,8 @@ data:
 
   FLUX_NOTIFICATIONS_CHANNEL: k8s-staging
   BOTKUBE_NOTIFICATIONS_CHANNEL: k8s-staging
+
+  NFS_KUBERNETES: /volume1/kubernetes-test
+  NFS_DOWNLOADS: /volume1/downloads
+  NFS_SOFTWARE: /volume1/software
+  NFS_VIDEO: /volume1/video

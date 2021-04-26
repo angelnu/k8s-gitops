@@ -35,7 +35,7 @@ spec:
       # (required) CephFS filesystem name into which the volume shall be created
       "fsName": "cephfs"
       "staticVolume": "true"
-      "rootPath": /k8s/production/mosquitto
+      "rootPath": /k8s/${CLUSTER_ENV}/mosquitto
     # volumeHandle can be anything, need not to be same
     # as PV name or volume name. keeping same for brevity
     volumeHandle: mosquitto-pv

@@ -4,7 +4,3 @@ resources:
   - secrets
   - ../base
   - default
-  - podinfo
-
-patchesStrategicMerge:
-  - podinfo/patch-values.yaml

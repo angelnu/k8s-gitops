@@ -5,4 +5,4 @@ resources:
 - settings.yaml
 - operators.yaml
 - infrastructure.yaml
-#- apps.yaml
+- apps.yaml
