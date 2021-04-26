@@ -1,20 +1,17 @@
-apiVersion: v1
-kind: ConfigMap
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
 metadata:
+  name: settings
   namespace: flux-system
-  name: cluster-settings
-data:
-  #VALUES DIFFERENT PROD - STAGING
-  CLUSTER_ENV: "prod"
-  CLUSTER_DOMAIN: angelnu.com
-  CLUSTER_DOMAIN_CERT: prod-wildcard-angelnu-com-tls
-  CLUSTER_EXTERNAL_SUBNET_PREFIX: "192.168.1"
-  CLUSTER_LB_RANGE: "192.168.1.128-192.168.1.192"
-
-  CLUSTER_DB_VERSION: "13"
-  CLUSTER_DB_NODE_0: k3s1
-  CLUSTER_DB_NODE_1: k3s2
-  CLUSTER_DB_BACKUP_PREFIX: "backup/db"
-
-  FLUX_NOTIFICATIONS_CHANNEL: k8s
-  BOTKUBE_NOTIFICATIONS_CHANNEL: k8s
+spec:
+  interval: 10m5s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./settings/production
+  prune: true
+  validation: client
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-gpg
