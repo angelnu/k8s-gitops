@@ -73,6 +73,7 @@ spec:
         enabled: true
         annotations:
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
+          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
         - host: prusa.home.${CLUSTER_DOMAIN}
         - host: prusa.pub.${CLUSTER_DOMAIN}
@@ -93,6 +94,7 @@ spec:
         enabled: true
         annotations:
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
+          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
         - host: print.home.${CLUSTER_DOMAIN}
     - name: prusa-sla
@@ -103,6 +105,7 @@ spec:
         enabled: true
         annotations:
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
+          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
         - host: prusa-sla.home.${CLUSTER_DOMAIN}
     - name: relays
