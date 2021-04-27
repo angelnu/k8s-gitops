@@ -1,3 +1,37 @@
+- hosts:
+  tasks:
+  - name: export TLS certs secrets
+    shell: |
+      {{ KUBECTL_BIN }} get -o yaml \
+        --all-namespaces \
+        secrets --field-selector type==kubernetes.io/tls > {{ K8S_TLS_SECRETS_BACKUP }}-new && \
+      mv {{ K8S_TLS_SECRETS_BACKUP }}-new {{ K8S_TLS_SECRETS_BACKUP }}
+    failed_when: False #Ignore errors
+
+  # - name: export TLS certs
+  #   shell: |
+  #     {{ KUBECTL_BIN }} get -o yaml \
+  #       --all-namespaces \
+  #       issuer,clusterissuer,certificates,certificaterequests >> cert-manager-backup.yaml
+  #   failed_when: False #Ignore errors
+  
+- hosts: nodes
+  tasks:
+  - name: export TLS certs secrets
+    shell: |
+      {{ KUBECTL_BIN }} get -o yaml \
+        --all-namespaces \
+        secrets --field-selector type==kubernetes.io/tls > {{ K8S_TLS_SECRETS_BACKUP }}-new && \
+      mv {{ K8S_TLS_SECRETS_BACKUP }}-new {{ K8S_TLS_SECRETS_BACKUP }}
+    failed_when: False #Ignore errors
+
+  # - name: export TLS certs
+  #   shell: |
+  #     {{ KUBECTL_BIN }} get -o yaml \
+  #       --all-namespaces \
+  #       issuer,clusterissuer,certificates,certificaterequests >> cert-manager-backup.yaml
+  #   failed_when: False #Ignore errors
+
 - hosts: nodes
   vars:
     k3s_state: uninstalled

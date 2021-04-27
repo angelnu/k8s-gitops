@@ -14,8 +14,6 @@ spec:
         name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
-  dependsOn:
-    - name: raspberrymatic
 
   # See https://github.com/k8s-at-home/charts/blob/master/charts/home-assistant/values.yaml
   values:
