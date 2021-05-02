@@ -31,8 +31,22 @@ proxmox:
       ide2:
         storage: local-lvm
       scsi0:
-        resize: "{{ '20G' if production else '20G' }}"
+        resize: 30G
         storage: local-lvm
+      scsi1:
+        lvm:
+          lvg: pve
+          thinpool: data
+          name: "k3s-data-{{ 'production' if production else 'staging' }}"
+          size: "{{ '30G' if production else '10G' }}"
+          opts: "discard=on,ssd=1"
+        mount:
+          # See https://docs.ansible.com/ansible/latest/collections/ansible/posix/mount_module.html
+          path: /media/db
+          src: /dev/sdb
+          boot: true
+          fstype: ext4
+          state: mounted
   uri:
     validate_certs: no
 

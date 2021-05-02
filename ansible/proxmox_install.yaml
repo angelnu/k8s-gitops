@@ -2,9 +2,20 @@
   hosts: nodes
   gather_facts: false
   tasks:
-    
-  - name: Create VMs
-    delegate_to: localhost
+
+  # Create LVMs
+  - name: Create LV for disk
+    delegate_to: "{{ hoster }}"
+    with_items: "{{ proxmox.vm.disks| dict2items }}"
+    when: "'lvm' in item.value"
+    community.general.lvol:
+      vg: "{{ item.value.lvm.lvg }}"
+      lv: "{{ item.value.lvm.name }}"
+      size: "{{ item.value.lvm.size }}"
+      thinpool: "{{ item.value.lvm.thinpool | default('') }}"
+
+  # Create and start VMs
+  - delegate_to: localhost
     block:
 
     - name: Create new VM using Cloud-Init with an ssh key
@@ -59,6 +70,26 @@
           username: "{{ proxmox.api.user }}"
           password: "{{ proxmox.api.password }}"
       register: auth
+
+    # attach disk
+    - name: Attach passthrough disks
+      with_items: "{{ proxmox.vm.disks | dict2items }}"
+      #when: create_vm_result.changed and 'passthrough' in item.value
+      when: "'lvm' in item.value"
+      uri:
+        url: "https://{{ proxmox.api.host }}:8006/api2/json/nodes/{{ hoster }}/qemu/{{ vmid }}/config"
+        method: PUT
+        headers: 
+          Cookie: "PVEAuthCookie={{ auth.json.data.ticket }}"
+          CSRFPreventionToken: "{{ auth.json.data.CSRFPreventionToken }}"
+        body_format: form-urlencoded
+        validate_certs: "{{ proxmox.uri.validate_certs }}"
+        body: >
+          {
+            "node": "{{ hoster }}",
+            "vmid": "{{ vmid }}",
+            "{{ item.key }}": "/dev/{{ item.value.lvm.lvg }}/{{ item.value.lvm.name }},size={{ item.value.lvm.size }}{{ ',' if item.value.lvm.opts }}{{ item.value.lvm.opts | default('') }}"
+          }
 
     # Move disk
     - name: Move disk
@@ -125,3 +156,20 @@
       until: result is succeeded
       retries: 60 # wait until stopped
       delay: 1
+
+  # Mount disks
+  - when: "'mount' in item.value"
+    block:
+    - name: Mkfs for disks
+      with_items: "{{ proxmox.vm.disks| dict2items }}"
+      register: result
+      until: result is succeeded
+      retries: 60 # wait until stopped
+      delay: 1
+      community.general.filesystem:
+        dev: "{{ item.value.mount.src }}"
+        fstype: "{{ item.value.mount.fstype }}"
+        resizefs: true
+    - name: Mount disks
+      with_items: "{{ proxmox.vm.disks| dict2items }}"
+      ansible.posix.mount: "{{ item.value.mount }}"
