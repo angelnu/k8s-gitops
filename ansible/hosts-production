@@ -1,7 +1,7 @@
 [masters]
-k3s1 hoster=pve1 k8s_labels="{}" #k8s_untaints="{'node-role.kubernetes.io/master':''}"
-k3s2 hoster=pve2 k8s_labels="{}"
-k3s3 hoster=pve3 k8s_labels="{'HomematicHW': True}" 
+k3s1 hoster=pve1 k8s_labels="[]" #k8s_untaints="{'node-role.kubernetes.io/master':''}"
+k3s2 hoster=pve2 k8s_labels="[]"
+k3s3 hoster=pve3 k8s_labels="['HomematicHW=True']" 
 
 [workers]
 

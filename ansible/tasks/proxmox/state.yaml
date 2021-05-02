@@ -11,6 +11,7 @@
       
       name: "{{ inventory_hostname }}"
       state: "{{ target_state }}"
+      force: "{{ force | default('no') }}"
     register: result
     until: (result is succeeded) and (result is not changed)
     retries: 60 # wait until stopped

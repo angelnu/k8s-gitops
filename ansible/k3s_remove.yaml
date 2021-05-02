@@ -1,4 +1,4 @@
-- hosts:
+- hosts: nodes
   tasks:
   - name: export TLS certs secrets
     shell: |

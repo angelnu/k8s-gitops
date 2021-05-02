@@ -23,7 +23,7 @@ spec:
         - superuser
         - createdb
       databases:
-        postgres: postgres
+        tt-rss: postgres
       postgresql:
         version: "13"
 
