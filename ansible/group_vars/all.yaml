@@ -5,13 +5,6 @@
 
 K8S_TYPE: k3s
 
-# Test environment
-LXD_CONTAINERS:
-  server.angelnu.com:
-  - test-node1
-  - test-node2
-  server2.angelnu.com: []
-
 proxmox:
   api:
     host: pve1
@@ -55,7 +48,6 @@ proxmox:
 K8S_RESET: false
 
 # microk8s
-MICROK8S_BIN: /snap/bin/microk8s
 KUBECTL_BIN: "{{ '/snap/bin/microk8s kubectl' if K8S_TYPE=='k8s' else 'kubectl' }}"
 DOCKER_USER: !vault |
           $ANSIBLE_VAULT;1.1;AES256
@@ -71,20 +63,6 @@ DOCKER_PASSWORD: !vault |
           31353065303634303262393366616536376336663964393566636661353164313261396634356634
           3337356332393566360a393661346432333539633830353432626263643531386165646134383330
           6463
-# example.com
-MICROK8S_DOMAIN: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
-          61343737376634383366643238383335373363346263363432316166333839323838633638613763
-          3137636135663966363163353430346538363064376237370a366535663061626464666432656165
-          34376238653836363165313765383838656164383034663636306539386261386466306539656230
-          3737646430303365350a326137376333373235323761343065373230343039373963666335316636
-          6533
-MICROK8S_ADDONS:
-- dns:192.168.2.1
-#- metallb:192.168.1.128-192.168.1.191
-- multus
-- helm3
-- metrics-server
 
 FLUX_GIT_USER: angelnu
 FLUX_GIT_REPO: k8s-gitops
@@ -104,8 +82,6 @@ FLUX2_GITHUB_TOKEN: !vault |
 timezone: "Europe/Berlin"
 K8S_TLS_SECRETS_BACKUP: "./cert-manager-backup.yaml"
 CERT_MANAGER_NAMESPACE: cert-manager
-ssh:
-  pub_key_path: "~/.ssh/id_rsa.pub"
 BOOTSTRAP_PACKAGES:
   - apt-transport-https
   #- aptitude
@@ -137,18 +113,8 @@ ALIAS_2_INSTALL:
 # Generated
 KUBELET_PRIMARY_MASTER_HOSTNAME: "{{ groups['masters'][0] }}"
 
-#Local K8S files
-K8S_LOCAL_KUBELET_CFG_PATH: "{{ './kubeconfig' if production else './kubeconfig-test' }}"
-
-#K8S files in the server
-K8S_ADMIN_CFG_PATH: /etc/kubernetes/admin.conf
-
 #Environment varibles for kubectl
 KUBECTL_ENV: {}
-
-#Environment varibles for kubectl
-LOCAL_KUBECTL_ENV:
-  KUBECONFIG: "{{ K8S_LOCAL_KUBELET_CFG_PATH }}/admin.conf"
 
 SSH_PUB_KEYS_2_INSTALL:
 - description: Windows key
