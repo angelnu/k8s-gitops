@@ -104,7 +104,7 @@ spec:
         enabled: true
         image:
           repository: codercom/code-server
-          tag: 3.9.3
+          tag: 3.10.0
         volumeMounts:
         - name: config
           mountPath: /config
