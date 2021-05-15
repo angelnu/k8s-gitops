@@ -4,7 +4,6 @@ resources:
   - cert-manager
   - ceph
   - ceph-rbd
-  - default
   - flux-system
   - kube-system
   - monitoring

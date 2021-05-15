@@ -5,4 +5,5 @@ resources:
   - authentication
   - intel-gpu-plugin
   - metallb.yaml
+  - multus_network.yaml
   - node-feature-discovery
