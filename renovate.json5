@@ -42,7 +42,6 @@
         "datasources": ["docker"],
         "commitMessageTopic": "Docker image {{depName}}",
         "commitMessageExtra": "to {{#if isSingleVersion}}v{{{toVersion}}}{{else}}{{{newValue}}}{{/if}}",
-        "updateTypes": ["major", "minor", "patch"],
         "enabled": true,
         "separateMinorPatch": true
       },
@@ -80,16 +79,6 @@
       // Custom versions
       {
         "datasources": ["docker"],
-        "versionScheme": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$",
-        "packageNames": ["blakeblackshear/frigate"]
-      },
-      {
-        "datasources": ["docker"],
-        "versionScheme": "regex:^nightly-0\\.(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
-        "packageNames": ["hotio/readarr"]
-      },
-      {
-        "datasources": ["docker"],
         "versioning": "loose",
         "packageNames": ["plexinc/pms-docker", "ghcr.io/k8s-at-home/plex"]
       },
@@ -102,12 +91,8 @@
         "updateTypes": ["minor", "patch"],
         "packageNames": [
           "homeassistant/home-assistant",
-          "ghcr.io/k8s-at-home/radarr",
-          "ghcr.io/k8s-at-home/sonarr",
-          "ghcr.io/k8s-at-home/nzbget",
           "plexinc/pms-docker",
-          "hotio/readarr",
-          "ghcr.io/k8s-at-home/tt-rss",
+          "ghcr.io/k8s-at-home/tt-rss"
         ]
       },
 
@@ -117,14 +102,10 @@
         "requiredStatusChecks": null,
         "schedule": "after 1am and before 5am",
         "updateTypes": ["minor", "patch"],
-        // "packageNames": [
-        //   "homeassistant/home-assistant",
-        //   "ghcr.io/k8s-at-home/radarr",
-        //   "ghcr.io/k8s-at-home/sonarr",
-        //   "ghcr.io/k8s-at-home/nzbget",
-        //   "plexinc/pms-docker",
-        //   "hotio/readarr"
-        // ]
+        "packageNames": [
+          "homeassistant/home-assistant",
+          "plexinc/pms-docker"
+        ]
       }
     ]
   }
