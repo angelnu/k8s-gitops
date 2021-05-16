@@ -63,9 +63,9 @@ spec:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
       hosts:
-      - "unifi.${CLUSTER_DOMAIN}"
+      - "unifi.pub.${CLUSTER_DOMAIN}"
       - "unifi.home.${CLUSTER_DOMAIN}"
       tls:
       - hosts:
-        - unifi.${CLUSTER_DOMAIN}
+        - unifi.pub.${CLUSTER_DOMAIN}
         - unifi.home.${CLUSTER_DOMAIN}
