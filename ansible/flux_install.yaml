@@ -11,7 +11,7 @@
     - "'already exists' not in result.stderr"
     - result.rc != 0
     changed_when:
-    - "'already exists'  not in result.stderr|join('')"
+    - "result.stderr is not search('already exists')"
 
   - name: Download flux2 installer
     get_url:
@@ -38,6 +38,9 @@
       echo "{{ SOPS_GPG }}"| gpg --batch
       --pinentry-mode loopback
       --import /dev/stdin
+    register: result
+    changed_when:
+    - "result.stderr is not search('not changed')"
   
   - name: Create secret with SOPS GPG key
     shell: >
@@ -49,58 +52,20 @@
     run_once: True
     register: result
     changed_when:
-    - "'unchanged'  not in result.stdout| join('')"
-    - "'configured' not in result.stdout| join('')"
+    - "result.stdout is search('created')"
 
 - name: "Install (if needed) flux"
   hosts: nodes[0]
   gather_facts: false #Already queried
   tasks:
-  - name: Install GitHub secret
-    shell: >
-      {{ KUBECTL_BIN }} create -n {{ FLUX_NAMESPACE }} secret generic github
-      --save-config --dry-run=client
-      --from-literal=token="{{ FLUX2_GITHUB_TOKEN }}"
-      -o yaml
-      | {{ KUBECTL_BIN }} apply -f -
-    register: result
-    changed_when:
-    - "'unchanged'  not in result.stdout| join('')"
-    - "'configured' not in result.stdout| join('')"
-
-  - name: Check if ./{{ FLUX_GIT_PATH }} exists
-    stat:
-      path: ./{{ FLUX_GIT_PATH }} 
-    register: flux_in_git
-  
-  - name: "Install flux in git repository"
-    shell: > 
-      export GITHUB_TOKEN={{ FLUX2_GITHUB_TOKEN }};
-      cd ..;
-      flux bootstrap github
-      --owner={{FLUX_GIT_USER}}
-      --repository={{FLUX_GIT_REPO}}
-      --branch={{ FLUX_GIT_BRANCH }}
-      --personal \
-      --private=false \
-      --path={{ FLUX_GIT_PATH }}
-      --namespace={{ FLUX_NAMESPACE }} 
-    #when: flux_in_git.stat.exists
-    register: result
-    changed_when:
-    - "'unchanged'  not in result.stdout| join('')"
-    - "'configured' not in result.stdout| join('')"
-
-  - name: Query CRD
-    shell: >
-      {{ KUBECTL_BIN }} get crd
-    register: kube_crd
-    changed_when: false
 
   - name: "Deploy flux to cluster if crd fluxcd.io missing"
     shell: > 
       {{ KUBECTL_BIN }} apply -k ../{{ FLUX_GIT_PATH }}/{{ FLUX_NAMESPACE }} 
-    when: "'fluxcd.io' not in kube_crd.stdout| join('')"
     delegate_to: localhost
+    register: result
+    changed_when:
+    - "result.stdout is search('created')"
+    until: result is succeeded
     retries: 60
     delay: 5 #due to CRDs

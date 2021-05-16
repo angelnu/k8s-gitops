@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
   - sources
   - cert-manager
+  - kube-system
   - postgres

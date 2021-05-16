@@ -7,7 +7,7 @@ spec:
       "cniVersion": "0.3.1",
       "name": "macvlan-static",
       "type": "macvlan",
-      "master": "eno2",
+      "master": "eth0",
       "capabilities": { "ips": true },
       "ipam": {
         "type": "host-local",
