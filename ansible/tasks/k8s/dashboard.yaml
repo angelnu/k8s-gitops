@@ -62,5 +62,5 @@
   - "'patched' not in result.stderr"
   - result.rc != 0
   changed_when:
-  - "'no change'  not in result.stdout|join('')"
+  - "result.stdout is search('created')"
   run_once: true
