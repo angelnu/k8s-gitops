@@ -8,11 +8,15 @@ spec:
     name: flux-system
   eventSeverity: info
   eventSources:
+    # Adds status to git commit
+    - kind: Kustomization
+      name: settings
+      namespace: flux-system
     - kind: Kustomization
       name: flux-system
       namespace: flux-system
     - kind: Kustomization
-      name: operations
+      name: operators
       namespace: flux-system
     - kind: Kustomization
       name: infrastructure
