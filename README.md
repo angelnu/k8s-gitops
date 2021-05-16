@@ -5,7 +5,6 @@
 
 [![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/DNCynrJ)
 [![test](https://github.com/angelnu/k8s-gitops/workflows/test/badge.svg)](https://github.com/angelnu/k8s-gitop/workflows/actions)
-[![e2e](https://github.com/angelnu/k8s-gitops/workflows/e2e/badge.svg)](https://github.com/angelnu/k8s-gitop/actions)
 [![renovate](https://github.com/angelnu/k8s-gitops/workflows/renovate/badge.svg)](https://github.com/angelnu/k8s-gitop/workflows/renovate/actions)
 [![update-flux](https://github.com/angelnu/k8s-gitops/workflows/update-flux/badge.svg)](https://github.com/angelnu/k8s-gitop/workflows/update-flux/actions)
 <br />

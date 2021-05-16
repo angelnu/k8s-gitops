@@ -2,6 +2,7 @@
   vars:
     #k3s_state: uninstalled
     k3s_etcd_datastore: true
+    #k3s_release_version: v1.19
     k3s_server:
       cluster-cidr: 10.0.0.0/8
       #flannel-backend: 'none'  # This needs to be in quotes
