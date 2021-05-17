@@ -2832,3 +2832,4 @@ spec:
       app: notification-controller
   policyTypes:
   - Ingress
+---
