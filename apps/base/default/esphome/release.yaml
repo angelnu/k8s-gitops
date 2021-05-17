@@ -51,7 +51,7 @@ spec:
       codeserver:
         image:
           repository: codercom/code-server
-          tag: 3.10.0
+          tag: 3.10.1
         enabled: true
         volumeMounts:
         - name: config
