@@ -11,17 +11,31 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        token: ${{ secrets.CR_PAT }}
         fetch-depth: 1
 
-    - name: Renovate Helm Releases
+    - name: Renovate Helm Releases - clusters
       uses: k8s-at-home/renovate-helm-releases@v1
       with:
-        cluster-path: "./apps"
+        cluster-path: "./clusters"
         # Turn on debug logging
         debug: 'yes'
         # Do not alter Helm Release files
         dry-run: 'no'
+
+    - name: Renovate Helm Releases - operators
+      uses: k8s-at-home/renovate-helm-releases@v1
+      with:
+        cluster-path: "./operators"
+
+    - name: Renovate Helm Releases - infrastructure
+      uses: k8s-at-home/renovate-helm-releases@v1
+      with:
+        cluster-path: "./infrastructure"
+
+    - name: Renovate Helm Releases - Apps
+      uses: k8s-at-home/renovate-helm-releases@v1
+      with:
+        cluster-path: "./apps"
 
     - name: Create pull request for HelmRelease annotations
       uses: peter-evans/create-pull-request@v3
