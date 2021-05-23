@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: esphome/esphome
-      tag: 1.17.2
+      tag: 1.18.0
     
     persistence:
       config:
@@ -51,7 +51,7 @@ spec:
       codeserver:
         image:
           repository: codercom/code-server
-          tag: 3.10.0
+          tag: 3.10.1
         enabled: true
         volumeMounts:
         - name: config

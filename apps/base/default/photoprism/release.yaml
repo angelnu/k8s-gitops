@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: photoprism/photoprism
-      tag: "20210505"
+      tag: "20210520"
     
     env:
       PHOTOPRISM_STORAGE_PATH: /photoprism/storage

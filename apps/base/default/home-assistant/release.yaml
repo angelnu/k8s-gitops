@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: home-assistant
-      version: 8.2.0
+      version: 8.3.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: ghcr.io/home-assistant/home-assistant
-      tag: 2021.5.4
+      tag: 2021.5.5
 
     persistence:
       config:
@@ -105,7 +105,7 @@ spec:
         enabled: true
         image:
           repository: codercom/code-server
-          tag: 3.10.0
+          tag: 3.10.1
         volumeMounts:
         - name: config
           mountPath: /config
