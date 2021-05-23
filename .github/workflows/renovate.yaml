@@ -26,16 +26,22 @@ jobs:
       uses: k8s-at-home/renovate-helm-releases@v1
       with:
         cluster-path: "./operators"
+        debug: 'yes'
+        dry-run: 'no'
 
     - name: Renovate Helm Releases - infrastructure
       uses: k8s-at-home/renovate-helm-releases@v1
       with:
         cluster-path: "./infrastructure"
+        debug: 'yes'
+        dry-run: 'no'
 
     - name: Renovate Helm Releases - Apps
       uses: k8s-at-home/renovate-helm-releases@v1
       with:
         cluster-path: "./apps"
+        debug: 'yes'
+        dry-run: 'no'
 
     - name: Create pull request for HelmRelease annotations
       uses: peter-evans/create-pull-request@v3
