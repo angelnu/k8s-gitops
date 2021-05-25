@@ -18,14 +18,13 @@ jobs:
       with:
         cluster-path: "."
         # Folders to exclude such as those use includes (Example: Ansible Vault)
-        #exclude-folders:
-        #- './ansible'
+        exclude-folders: './ansible'
         # Turn on debug logging
         debug: 'yes'
         # Do not alter Helm Release files
         dry-run: 'no'
         # Tolerate yaml files with errors instead of aborting on errors
-        tolerate-yaml-errors: 'yes'
+        tolerate-yaml-errors: 'no'
 
     - name: Create pull request for HelmRelease annotations
       uses: peter-evans/create-pull-request@v3
