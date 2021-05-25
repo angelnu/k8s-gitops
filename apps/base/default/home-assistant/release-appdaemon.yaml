@@ -6,7 +6,7 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://jens-maus.github.io/RaspberryMatic
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: appdaemon
       version: 3.0.1
       sourceRef:
