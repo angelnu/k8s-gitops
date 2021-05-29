@@ -57,7 +57,7 @@ spec:
     #     hosts:
     #     - host: homematic.home.${CLUSTER_DOMAIN}
     #     - host: homematic.${CLUSTER_DOMAIN}
-    - name: wifi
+    - name: ap-workroom
       externalName: ap-workroom.lan
       port: 80
       ingress:
@@ -65,7 +65,25 @@ spec:
         annotations:
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
-        - host: wifi.home.${CLUSTER_DOMAIN}
+        - host: ap-workroom.home.${CLUSTER_DOMAIN}
+    - name: ap-kitchen
+      externalName: repeater-kitchen.lan
+      port: 80
+      ingress:
+        enabled: true
+        annotations:
+          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
+        hosts:
+        - host: ap-kitchen.home.${CLUSTER_DOMAIN}
+    - name: ap-guestroom
+      externalName: repeater-guestroom.lan
+      port: 80
+      ingress:
+        enabled: true
+        annotations:
+          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
+        hosts:
+        - host: ap-guestroom.home.${CLUSTER_DOMAIN}
     - name: octoprint
       externalName: octopi-casa96-prusa.lan
       port: 80
