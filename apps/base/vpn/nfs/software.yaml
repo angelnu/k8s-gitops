@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-software-vpn
+spec:
+  storageClassName: nfs-software-vpn
+  capacity:
+    storage: 18T
+  accessModes:
+    - ReadWriteMany
+  mountOptions:
+    - local_lock=posix
+    - nfsvers=4.1
+  nfs:
+    server: nas.home.angelnu.com
+    path: "${NFS_SOFTWARE}"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-software
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-software-vpn
+  volumeName: nfs-software-vpn
+  resources:
+    requests:
+      storage: 1T

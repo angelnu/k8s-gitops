@@ -2,7 +2,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: qbittorrent
-  namespace: media
 spec:
   interval: 5m
   chart:
@@ -19,6 +18,7 @@ spec:
     image:
       repository: ghcr.io/k8s-at-home/qbittorrent
       tag: v4.3.5
+    hostname: torrent # needed for an static IP
     env:
       TZ: "Europe/Berlin"
     service:
@@ -26,10 +26,10 @@ spec:
       - enabled: true
         nameSuffix: bittorrent
         port:
-          port: 50413
+          port: 18289
           name: bittorrent
           protocol: TCP
-          targetPort: 50413
+          targetPort: 18289
     ingress:
       enabled: true
       annotations:
