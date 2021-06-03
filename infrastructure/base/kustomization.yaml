@@ -11,3 +11,5 @@ resources:
   - kubernetes-dashboard
   - postgres
   - redis
+  - vpn
+  - vpn-gateway

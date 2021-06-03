@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terminal
+  labels:
+    app: terminal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: terminal
+  template:
+    metadata:
+      labels:
+        app: terminal
+    spec:
+      containers:
+      - name: alpine
+        image: alpine
+        command:
+        - /bin/sh
+        - -c
+        - while true; do
+          sleep 600 &
+          wait $!;
+          done
