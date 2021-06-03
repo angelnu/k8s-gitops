@@ -1,0 +1,68 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: qbittorrent
+  namespace: media
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: qbittorrent
+      version: 10.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: ghcr.io/k8s-at-home/qbittorrent
+      tag: v4.3.5
+    env:
+      TZ: "Europe/Berlin"
+    service:
+      additionalServices:
+      - enabled: true
+        nameSuffix: bittorrent
+        port:
+          port: 50413
+          name: bittorrent
+          protocol: TCP
+          targetPort: 50413
+    ingress:
+      enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+      hosts:
+      - host: "torrent.pub.${CLUSTER_DOMAIN}"
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - hosts:
+        - "torrent.pub.${CLUSTER_DOMAIN}"
+    persistence:
+      config:
+        enabled: true
+        existingClaim: qbitorrent-pvc
+      videos:
+        enabled: true
+        mountPath: /videos
+        existingClaim: nfs-video
+        accessMode: ReadWriteMany
+      downloads:
+        enabled: true
+        mountPath: /downloads
+        existingClaim: nfs-downloads
+        accessMode: ReadWriteMany
+    podSecurityContext:
+      supplementalGroups:
+      - 100
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 500m
+      limits:
+        memory: 6000Mi
