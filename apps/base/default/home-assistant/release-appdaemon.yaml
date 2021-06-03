@@ -19,7 +19,8 @@ spec:
   # See https://github.com/k8s-at-home/charts/blob/master/charts/appdaemon/values.yaml
   values:
     image:
-      tag: v4.0.5
+      repository: acockburn/appdaemon
+      tag: 4.0.8
     
     persistence:
       config:
@@ -28,12 +29,9 @@ spec:
         existingClaim: home-assistant-pvc
     
     additionalVolumeMounts:
-    - mountPath: "/config"
+    - mountPath: "/conf"
       subPath: appdaemon
       name: config
-  
-    nodeSelector:
-      kubernetes.io/arch: amd64
 
     env:
       TZ: "Europe/Berlin"
