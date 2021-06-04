@@ -59,7 +59,7 @@ spec:
         accessMode: ReadWriteMany
     podSecurityContext:
       supplementalGroups:
-      - 100
+      - 65536
     resources:
       requests:
         memory: 250Mi

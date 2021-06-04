@@ -1,14 +1,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: sonarr
+  name: radarr
   namespace: media
 spec:
   interval: 5m
   chart:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: sonarr
+      chart: radarr
       version: 11.1.0
       sourceRef:
         kind: HelmRepository
@@ -17,8 +17,8 @@ spec:
       interval: 5m
   values:
     image:
-      repository: ghcr.io/k8s-at-home/sonarr
-      tag: v3.0.6.1196
+      repository: ghcr.io/k8s-at-home/radarr
+      tag: v3.2.1.5070
     env:
       TZ: "Europe/Berlin"
     ingress:
@@ -27,32 +27,31 @@ spec:
         nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
         nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
       hosts:
-      - host: "sonarr.pub.${CLUSTER_DOMAIN}"
+      - host: "radarr.pub.${CLUSTER_DOMAIN}"
         paths:
         - path: /
           pathType: Prefix
       tls:
       - hosts:
-        - "sonarr.pub.${CLUSTER_DOMAIN}"
+        - "radarr.pub.${CLUSTER_DOMAIN}"
       additionalIngresses:
       - enabled: true
         nameSuffix: "api"
-        ingressClassName: "traefik"
         annotations:
-          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+        nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
         hosts:
-        - host: "sonarr.pub.${CLUSTER_DOMAIN}"
+        - host: "radarr.pub.${CLUSTER_DOMAIN}"
           paths:
           - path: /api
             pathType: Prefix
         tls:
         - hosts:
-          - "sonarr.pub.${CLUSTER_DOMAIN}"
+          - "radarr.pub.${CLUSTER_DOMAIN}"
     persistence:
       config:
         enabled: true
-        existingClaim: sonarr-pvc
+        existingClaim: radarr-pvc
       videos:
         enabled: true
         mountPath: /videos
