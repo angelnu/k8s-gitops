@@ -22,3 +22,4 @@ data:
   NFS_DOWNLOADS: /volume1/downloads
   NFS_SOFTWARE: /volume1/software
   NFS_VIDEO: /volume1/video
+  NFS_MUSIC: /volume1/music
