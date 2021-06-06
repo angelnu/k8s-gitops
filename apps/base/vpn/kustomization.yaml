@@ -5,5 +5,6 @@ resources:
   - nfs
   - qbittorrent
   - lidarr
+  - prowlarr
   - radarr
   - sonarr
