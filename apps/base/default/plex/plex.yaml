@@ -53,22 +53,24 @@ spec:
     hostNetwork: true
 
     service:
-      type: LoadBalancer
-      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_PLEX}"
-      externalTrafficPolicy: Local
-      annotations:
-        metallb.universe.tf/allow-shared-ip: plex
+      main:
+        type: LoadBalancer
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_PLEX}"
+        externalTrafficPolicy: Local
+        annotations:
+          metallb.universe.tf/allow-shared-ip: plex
     persistence:
       config:
         enabled: true
         existingClaim: nfs-kubernetes-2
         accessMode: ReadWriteMany
         subPath: plex/config
-      tmp:
-        enabled: true
-        emptyDir:
-          enabled: true
-          medium: "Memory" 
+      # tmp:
+      #   enabled: true
+      #   accessMode: ReadWriteOnce
+      #   emptyDir:
+      #     enabled: true
+      #     medium: "Memory" 
       # transcode:
       #   enabled: true
       #   existingClaim: nfs-kubernetes-3

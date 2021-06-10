@@ -25,5 +25,6 @@ spec:
         enabled: true
         existingClaim: mosquitto-pvc
     service:
-      type: LoadBalancer
-      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_MOSQUITTO}"
+      main:
+        type: LoadBalancer
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_MOSQUITTO}"
