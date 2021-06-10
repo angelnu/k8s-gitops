@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: readarr
-      version: 4.1.0
+      version: 5.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -21,21 +21,21 @@ spec:
     env:
       TZ: "Europe/Berlin"
     ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-      hosts:
-      - host: "readarr.pub.${CLUSTER_DOMAIN}"
-        paths:
-        - path: /
-          pathType: Prefix
-      tls:
-      - hosts:
-        - "readarr.pub.${CLUSTER_DOMAIN}"
-      additionalIngresses:
-      - enabled: true
-        nameSuffix: "api"
+      main:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+        hosts:
+        - host: "readarr.pub.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - "readarr.pub.${CLUSTER_DOMAIN}"
+      api:
+        enabled: true
         ingressClassName: "traefik"
         annotations:
           nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
