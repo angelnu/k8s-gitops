@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: qbittorrent
-      version: 10.1.0
+      version: 11.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -22,27 +22,29 @@ spec:
     env:
       TZ: "Europe/Berlin"
     service:
-      additionalServices:
-      - enabled: true
-        nameSuffix: bittorrent
-        port:
-          port: 18289
-          name: bittorrent
-          protocol: TCP
-          targetPort: 18289
+      bittorrent:
+        enabled: true
+        type: ClusterIP
+        ports:
+          bittorrent:
+            enabled: true
+            port: 18289
+            protocol: TCP
+            targetPort: 18289
     ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-      hosts:
-      - host: "torrent.pub.${CLUSTER_DOMAIN}"
-        paths:
-        - path: /
-          pathType: Prefix
-      tls:
-      - hosts:
-        - "torrent.pub.${CLUSTER_DOMAIN}"
+      main:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+        hosts:
+        - host: "torrent.pub.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - "torrent.pub.${CLUSTER_DOMAIN}"
     persistence:
       config:
         enabled: true
