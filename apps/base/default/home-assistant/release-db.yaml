@@ -37,6 +37,7 @@ spec:
       replicaNodes:
       - ${CLUSTER_DB_NODE_0}
       - ${CLUSTER_DB_NODE_1}
+      - ${CLUSTER_DB_NODE_2}
     
     dumpBackup:
       existingClaim: nfs-kubernetes

@@ -13,6 +13,7 @@ data:
   CLUSTER_DB_VERSION: "13"
   CLUSTER_DB_NODE_0: test-k3s1
   CLUSTER_DB_NODE_1: test-k3s2
+  CLUSTER_DB_NODE_2: test-k3s3
   CLUSTER_DB_BACKUP_PREFIX: "backup/staging_db"
 
   FLUX_NOTIFICATIONS_CHANNEL: k8s-staging
