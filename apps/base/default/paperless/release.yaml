@@ -24,8 +24,8 @@ spec:
       PAPERLESS_OCR_LANGUAGE: deu
       PAPERLESS_TIME_ZONE: "Europe/Berlin"
       PAPERLESS_CONSUMER_POLLING: "60"
-      PAPERLESS_CONSUMER_RECURSIVE: "true"
-      PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
+      #PAPERLESS_CONSUMER_RECURSIVE: "true"
+      #PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
       PAPERLESS_IGNORE_DATES: “1978-09-19,1979-06-12,2010-2-8,2011-11-15”
     persistence:
       data:
@@ -38,11 +38,11 @@ spec:
         mountPath: /usr/src/paperless/media
         existingClaim: nfs-kubernetes-2
         subPath: paperless/media
-      consume:
-        enabled: true
-        mountPath: /usr/src/paperless/consume
-        existingClaim: nfs-downloads
-        subPath: scans
+      # consume:
+      #   enabled: true
+      #   mountPath: /usr/src/paperless/consume
+      #   existingClaim: nfs-downloads
+      #   subPath: scans
       export:
         enabled: true
         mountPath: /usr/src/paperless/export
