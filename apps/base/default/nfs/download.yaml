@@ -7,7 +7,7 @@ spec:
   capacity:
     storage: 18T
   accessModes:
-    - ReadOnlyMany
+    - ReadWriteMany
   nfs:
     server: nas.home.angelnu.com
     path: "${NFS_DOWNLOADS}"
@@ -18,7 +18,7 @@ metadata:
   name: nfs-downloads
 spec:
   accessModes:
-    - ReadOnlyMany
+    - ReadWriteMany
   storageClassName: nfs-downloads
   volumeName: nfs-downloads
   resources:
