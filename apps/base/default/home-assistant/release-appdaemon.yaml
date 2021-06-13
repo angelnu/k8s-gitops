@@ -39,7 +39,7 @@ spec:
       LONGITUDE: 0
       ELEVATION: 0
       # HA_URL:
-      # DASH_URL:
+      DASH_URL: "http://$HOSTNAME:5050"
       # TOKEN:
     ingress:
       enabled: true
