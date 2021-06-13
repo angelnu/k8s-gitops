@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: esphome
-      version: 6.5.0
+      version: 7.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -26,26 +26,27 @@ spec:
         existingClaim: esphome-pvc
 
     ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-      ingress.kubernetes.io/ssl-redirect: "true"
-      hosts:
-      - host: esphome.pub.${CLUSTER_DOMAIN}
-        paths:
-        - path: /
-          # Ignored if not kubeVersion >= 1.14-0
-          pathType: Prefix
-      - host: esphome.home.${CLUSTER_DOMAIN}
-        paths:
-        - path: /
-          # Ignored if not kubeVersion >= 1.14-0
-          pathType: Prefix
-      tls:
-      - hosts:
-        - esphome.pub.${CLUSTER_DOMAIN}
-        - esphome.home.${CLUSTER_DOMAIN}
+      main:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+        ingress.kubernetes.io/ssl-redirect: "true"
+        hosts:
+        - host: esphome.pub.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            # Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+        - host: esphome.home.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            # Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+        tls:
+        - hosts:
+          - esphome.pub.${CLUSTER_DOMAIN}
+          - esphome.home.${CLUSTER_DOMAIN}
 
     addons:
       codeserver:

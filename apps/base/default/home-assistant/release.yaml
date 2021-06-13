@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: home-assistant
-      version: 8.3.0
+      version: 9.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -25,6 +25,18 @@ spec:
       config:
         enabled: true
         existingClaim: home-assistant-pvc
+      gitkey:
+        enabled: true
+        readOnly: true
+        accessMode: ReadWriteMany
+        type: custom
+        subPath: id_rsa
+        secret:
+          secretName: git-ssh-keys
+          defaultMode: 256
+          items:
+            - key: id_rsa
+              path: id_rsa
     
     mariadb:
       enabled: false
@@ -54,51 +66,41 @@ spec:
         }]
 
     service:
-      type: LoadBalancer
-      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_HA}"
-      #Allows exposing the port for raspberrymatic to connect to
-      publishNotReadyAddresses: true
-      additionalPorts:
-      - name: homematicproxy
-        port: 2001
-        targetPort: 2001
+      main:
+        type: LoadBalancer
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_HA}"
+        #Allows exposing the port for raspberrymatic to connect to
+        publishNotReadyAddresses: true
+        ports:
+          http:
+            port: 8123
+          homematicproxy:
+            port: 2001
+            targetPort: 2001
 
     ingress:
-      enabled: true
-      annotations:
-        nginx.org/websocket-services: home-assistant
-      hosts:
-      - host: ha.${CLUSTER_DOMAIN}
-        paths:
-        - path: /
-          pathType: Prefix
-      - host: ha.pub.${CLUSTER_DOMAIN}
-        paths:
-        - path: /
-          pathType: Prefix
-      - host: ha.home.${CLUSTER_DOMAIN}
-        paths:
-        - path: /
-          pathType: Prefix
-      tls:
-      - hosts:
-        - ha.${CLUSTER_DOMAIN}
-        - ha.pub.${CLUSTER_DOMAIN}
-        - ha.home.${CLUSTER_DOMAIN}
-    
-    extraVolumeMounts:
-    - mountPath: "/root/.ssh/id_rsa"
-      subPath: id_rsa
-      name: git-ssh-key
-      readOnly: true
-    extraVolumes:
-    - name: git-ssh-key
-      secret:
-        secretName: git-ssh-keys
-        defaultMode: 256
-        items:
-          - key: id_rsa
-            path: id_rsa
+      main:
+        enabled: true
+        annotations:
+          nginx.org/websocket-services: home-assistant
+        hosts:
+        - host: ha.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            pathType: Prefix
+        - host: ha.pub.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            pathType: Prefix
+        - host: ha.home.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - ha.${CLUSTER_DOMAIN}
+          - ha.pub.${CLUSTER_DOMAIN}
+          - ha.home.${CLUSTER_DOMAIN}
 
     addons:
       codeserver:
