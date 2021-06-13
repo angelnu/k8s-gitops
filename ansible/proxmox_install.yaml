@@ -156,6 +156,43 @@
       until: result is succeeded
       retries: 60 # wait until stopped
       delay: 1
+    
+    - name: Install qemu-guest-agent
+      register: apt_result
+      until: apt_result is succeeded
+      retries: 60 # wait until stopped
+      delay: 5
+      apt:
+        update_cache: yes
+        name: qemu-guest-agent
+        force: yes
+        state: present
+    
+    # enable qemu agent
+    - name: Enable qemu agent
+      uri:
+        url: "https://{{ proxmox.api.host }}:8006/api2/json/nodes/{{ hoster }}/qemu/{{ vmid }}/config"
+        method: PUT
+        headers: 
+          Cookie: "PVEAuthCookie={{ auth.json.data.ticket }}"
+          CSRFPreventionToken: "{{ auth.json.data.CSRFPreventionToken }}"
+        body_format: form-urlencoded
+        validate_certs: "{{ proxmox.uri.validate_certs }}"
+        body: >
+          {
+            "node": "{{ hoster }}",
+            "vmid": "{{ vmid }}",
+            "agent": "enabled=1,type=virtio,fstrim_cloned_disks=1"
+          }
+
+    - name: Retart VM
+      when: apt_result.changed
+      include: tasks/proxmox/state.yaml
+      vars:
+          target_state: "{{ item }}"
+      loop:
+      - "stopped"
+      - "started"
 
   # Mount disks
   - when: "'mount' in item.value"
