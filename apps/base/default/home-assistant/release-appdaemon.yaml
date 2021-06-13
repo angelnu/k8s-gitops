@@ -35,6 +35,12 @@ spec:
 
     env:
       TZ: "Europe/Berlin"
+      LATITUDE: 0
+      LONGITUDE: 0
+      ELEVATION: 0
+      # HA_URL:
+      # DASH_URL:
+      # TOKEN:
     ingress:
       enabled: true
       annotations:
