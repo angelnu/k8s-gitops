@@ -19,8 +19,8 @@ data:
   FLUX_NOTIFICATIONS_CHANNEL: k8s-staging
   BOTKUBE_NOTIFICATIONS_CHANNEL: k8s-staging
 
-  NFS_KUBERNETES: /volume1/kubernetes-test
-  NFS_DOWNLOADS: /volume1/downloads
-  NFS_SOFTWARE: /volume1/software
-  NFS_VIDEO: /volume1/video
-  NFS_MUSIC: /volume1/music
+  NFS_KUBERNETES: /volume1/test/kubernetes
+  NFS_DOWNLOADS: /volume1/test/downloads
+  NFS_SOFTWARE: /volume1/test/software
+  NFS_VIDEO: /volume1/test/video
+  NFS_MUSIC: /volume1/test/music
