@@ -31,12 +31,13 @@ spec:
         accessMode: ReadWriteMany
         type: custom
         subPath: id_rsa
-        secret:
-          secretName: git-ssh-keys
-          defaultMode: 256
-          items:
-            - key: id_rsa
-              path: id_rsa
+        volumeSpec:
+          secret:
+            secretName: git-ssh-keys
+            defaultMode: 256
+            items:
+              - key: id_rsa
+                path: id_rsa
     
     mariadb:
       enabled: false
