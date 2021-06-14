@@ -25,19 +25,6 @@ spec:
       config:
         enabled: true
         existingClaim: home-assistant-pvc
-      gitkey:
-        enabled: true
-        readOnly: true
-        accessMode: ReadWriteMany
-        type: custom
-        subPath: id_rsa
-        volumeSpec:
-          secret:
-            secretName: git-ssh-keys
-            defaultMode: 256
-            items:
-              - key: id_rsa
-                path: id_rsa
     
     mariadb:
       enabled: false
@@ -113,6 +100,10 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+        git:
+          # -- Existing secret containing SSH private key
+          # The chart expects it to be present under the `id_rsa` key.
+          deployKeySecret: git-ssh-keys
         ingress:
           enabled: true
           annotations:
@@ -120,15 +111,15 @@ spec:
             nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
             ingress.kubernetes.io/ssl-redirect: "true"
           hosts:
-          - host: ha-editor.home.${CLUSTER_DOMAIN}
+          - host: ha-editor.pub.${CLUSTER_DOMAIN}
             paths:
             - path: /
               pathType: Prefix
-          - host: ha-editor.pub.${CLUSTER_DOMAIN}
+          - host: ha-editor.home.${CLUSTER_DOMAIN}
             paths:
             - path: /
               pathType: Prefix
           tls:
           - hosts:
-            - ha-editor.home.${CLUSTER_DOMAIN}
             - ha-editor.pub.${CLUSTER_DOMAIN}
+            - ha-editor.home.${CLUSTER_DOMAIN}
