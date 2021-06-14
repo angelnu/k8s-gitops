@@ -28,6 +28,8 @@ spec:
       #create: true
       name: dnsmadeeasy-webhook
     
+    args: '["--tls-cert-file=/tls/tls.crt","--tls-private-key-file=/tls/tls.key","--secure-port=4443"]'
+
     service:
       main:
         ports:
