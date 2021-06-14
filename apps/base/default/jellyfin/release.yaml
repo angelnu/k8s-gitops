@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: jellyfin
-      version: 7.4.0
+      version: 8.1.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -26,25 +26,27 @@ spec:
       - 109
       - 100
     service:
-      enabled: true
-      type: LoadBalancer
-      #loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_CCU}"
-      loadBalancerIP: "192.168.1.140"
-      externalIPs:
-      - 192.168.1.140
-      externalTrafficPolicy: Local
-      port:
-        port: 8096
+      main:
+        enabled: true
+        type: LoadBalancer
+        #loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_CCU}"
+        loadBalancerIP: "192.168.1.140"
+        externalIPs:
+        - 192.168.1.140
+        externalTrafficPolicy: Local
+        port:
+          port: 8096
     ingress:
-      enabled: true
-      hosts:
-      - host: "jellyfin.home.${CLUSTER_DOMAIN}"
-        paths:
-        - path: /
-          pathType: Prefix
-      tls:
-      - hosts:
-        - "jellyfin.home.${CLUSTER_DOMAIN}"
+      main:
+        enabled: true
+        hosts:
+        - host: "jellyfin.home.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - "jellyfin.home.${CLUSTER_DOMAIN}"
     persistence:
       config:
         enabled: true
@@ -53,9 +55,12 @@ spec:
         subPath: jellyfin/config
       transcode:
         enabled: true
+        type: emptyDir
+        accessMode: ReadWriteOnce
         emptyDir:
           enabled: true
-          medium: "Memory"
+          #medium: "Memory"
+          sizeLimit: 10Gi
       videos:
         enabled: true
         mountPath: /videos

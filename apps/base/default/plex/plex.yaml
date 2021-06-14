@@ -67,16 +67,20 @@ spec:
         subPath: plex/config
       # tmp:
       #   enabled: true
+      #   type: emptyDir
       #   accessMode: ReadWriteOnce
       #   emptyDir:
       #     enabled: true
-      #     medium: "Memory" 
-      # transcode:
-      #   enabled: true
-      #   existingClaim: nfs-kubernetes-3
-      #   accessMode: ReadWriteMany
-      #   subPath: plex/transcodeny
-      #   subPath: plex/transcode 
+      #     medium: "Memory"
+      #     sizeLimit: 1Gi
+      transcode:
+        enabled: true
+        type: emptyDir
+        accessMode: ReadWriteOnce
+        emptyDir:
+          enabled: true
+          #medium: "Memory"
+          sizeLimit: 10Gi
       videos:
         enabled: true
         mountPath: /videos
