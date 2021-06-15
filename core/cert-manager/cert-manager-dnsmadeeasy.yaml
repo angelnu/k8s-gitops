@@ -25,14 +25,5 @@ spec:
       tag: v1.1.0
     
     serviceAccount:
-      #create: true
+      create: true
       name: dnsmadeeasy-webhook
-    
-    args: '["--tls-cert-file=/tls/tls.crt","--tls-private-key-file=/tls/tls.key","--secure-port=4443"]'
-
-    service:
-      main:
-        ports:
-          http:
-            targetPort: 4443
-            port: 443
