@@ -98,7 +98,7 @@ spec:
           tls:
           - hosts:
             - home-editor.pub.${CLUSTER_DOMAIN}
-            - home-editor.home${CLUSTER_DOMAIN}
+            - home-editor.home.${CLUSTER_DOMAIN}
         volumeMounts:
         - name: config
           mountPath: /www/assets
