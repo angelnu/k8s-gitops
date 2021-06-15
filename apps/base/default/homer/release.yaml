@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: homer
-      version: 5.0.0
+      version: 5.0.1
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -99,3 +99,10 @@ spec:
           - hosts:
             - home-editor.pub.${CLUSTER_DOMAIN}
             - home-editor.home${CLUSTER_DOMAIN}
+        volumeMounts:
+        - name: config
+          mountPath: /www/assets
+        - name: config-volume
+          mountPath: /www/assets/config-git.yml
+          subPath: config.yml
+
