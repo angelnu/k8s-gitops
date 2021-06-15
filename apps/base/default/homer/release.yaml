@@ -27,16 +27,6 @@ spec:
       config:
         enabled: true
         existingClaim: homer-pvc
-      config-volume:
-        enabled: true
-        mountPath: /www/assets/config-git.yml
-        subPath: config.yml
-        type: custom
-        configMap:
-          # Provide the name of the ConfigMap containing the files you want
-          # to add to the container
-          name: homer-config
-
 
     ingress:
       main:
@@ -69,7 +59,7 @@ spec:
 
     addons:
       codeserver:
-        enabled: false
+        enabled: true
         image:
           repository: codercom/code-server
           tag: 3.10.2
@@ -102,7 +92,3 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /www/assets
-        - name: config-volume
-          mountPath: /www/assets/config-git.yml
-          subPath: config.yml
-
