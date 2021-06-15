@@ -69,7 +69,7 @@ spec:
 
     addons:
       codeserver:
-        enabled: true
+        enabled: false
         image:
           repository: codercom/code-server
           tag: 3.10.2
