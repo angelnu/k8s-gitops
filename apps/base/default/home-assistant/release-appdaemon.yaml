@@ -35,12 +35,12 @@ spec:
 
     env:
       TZ: "Europe/Berlin"
-      LATITUDE: 0
-      LONGITUDE: 0
-      ELEVATION: 0
-      # HA_URL:
+      #LATITUDE: secret
+      #LONGITUDE: secret
+      #ELEVATION: secret
+      HA_URL: "http://home-assistant:8123"
       DASH_URL: "http://$HOSTNAME:5050"
-      # TOKEN:
+      # TOKEN: secret
     ingress:
       enabled: true
       annotations:
@@ -59,3 +59,9 @@ spec:
       - hosts:
         - ha-app.home.${CLUSTER_DOMAIN}
         - ha-app.pub.${CLUSTER_DOMAIN}
+  
+  valuesFrom:
+  - kind: Secret
+    name: "appdaemon-helm-values"
+    valuesKey: appdaemon.yaml
+    optional: false
