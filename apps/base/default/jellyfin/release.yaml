@@ -50,9 +50,11 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: nfs-kubernetes-2
-        accessMode: ReadWriteMany
-        subPath: jellyfin/config
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/jellyfin/config"
       transcode:
         enabled: true
         type: emptyDir
@@ -64,13 +66,19 @@ spec:
       videos:
         enabled: true
         mountPath: /videos
-        existingClaim: nfs-video
-        accessMode: ReadWriteMany
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_VIDEO}"
       downloads:
         enabled: true
         mountPath: /downloads
-        existingClaim: nfs-downloads
-        accessMode: ReadWriteMany
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
     resources:
       requests:
         #gpu.intel.com/i915: 1

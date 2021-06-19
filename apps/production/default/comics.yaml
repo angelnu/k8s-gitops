@@ -52,13 +52,13 @@ spec:
                   #cpu: "500m"
               volumeMounts:
                 - mountPath: /feeds
-                  name: nfs-kubernetes
-                  subPath: ttrss/feeds
+                  name: feeds
           restartPolicy: OnFailure
           volumes:
-            - name: nfs-kubernetes
-              persistentVolumeClaim:
-                claimName: nfs-kubernetes
+            - name: feeds
+              nfs:
+                server: "${NFS_SERVER}"
+                path: "${NFS_KUBERNETES}/ttrss/feeds"
 ---
 # ------------------- Test Job ------------------- #
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
@@ -126,14 +126,14 @@ spec:
           done
         volumeMounts:
         - mountPath: /feeds
-          name: nfs-kubernetes
-          subPath: ttrss/feeds
+          name: feeds
       restartPolicy: Always
       terminationGracePeriodSeconds: 1
       volumes:
-      - name: nfs-kubernetes
-        persistentVolumeClaim:
-          claimName: nfs-kubernetes
+      - name: feeds
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_KUBERNETES}/ttrss/feeds"
 ---
 # ------------------- NGINX Deployment ------------------- #
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
@@ -176,12 +176,13 @@ spec:
           failureThreshold: 12 # 2 minutes
         volumeMounts:
           - mountPath: /usr/share/nginx/html/scrapping
-            name: nfs-kubernetes
+            name: feeds
             subPath: ttrss/feeds
       volumes:
-      - name: nfs-kubernetes
-        persistentVolumeClaim:
-          claimName: nfs-kubernetes
+      - name: feeds
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_KUBERNETES}/ttrss/feeds"
 
 ---
 # -------------------- Service ------------------- #
@@ -203,7 +204,7 @@ spec:
 
 # ------------------- Ingress ------------------- #
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: comics-nginx
@@ -219,13 +220,16 @@ spec:
     http:
       paths:
       - path: /scrapping/
+        pathType: Prefix
         backend:
-          serviceName: comics-nginx
-          servicePort: http
+          service:
+            name: comics-nginx
+            port:
+              name: http
 ---
 # ------------------- Ingress ------------------- #
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: comics-nginx-backup
@@ -233,11 +237,15 @@ metadata:
 spec:
   tls:
   - hosts:
-    - rnginx.home.${CLUSTER_DOMAIN}
+    - rss.home.${CLUSTER_DOMAIN}
   rules:
-  - host: nginx.home.${CLUSTER_DOMAIN}
+  - host: rss.home.${CLUSTER_DOMAIN}
     http:
       paths:
-      - backend:
-          serviceName: comics-nginx
-          servicePort: http
+      - path: /scrapping/
+        pathType: Prefix
+        backend:
+          service:
+            name: comics-nginx
+            port:
+              name: http

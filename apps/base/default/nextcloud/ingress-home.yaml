@@ -1,5 +1,5 @@
 kind: Ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 metadata:
   name: nextcloud-home
   annotations:
@@ -33,10 +33,13 @@ spec:
     - hosts:
         - nextcloud.home.${CLUSTER_DOMAIN}
   rules:
-    - host: nextcloud.home.${CLUSTER_DOMAIN}
-      http:
-        paths:
-          - pathType: ImplementationSpecific
-            backend:
-              serviceName: nextcloud
-              servicePort: 8080
+  - host: nextcloud.home.${CLUSTER_DOMAIN}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nextcloud
+            port:
+              number: 8080

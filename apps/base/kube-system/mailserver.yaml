@@ -29,7 +29,6 @@ spec:
         # - "-ec"
         # - |
         #   while [ 1 ]; do sleep 2;done
-        imagePullPolicy: Always
         ports:
         - containerPort: 25
         env:

@@ -12,7 +12,7 @@ spec:
     - local_lock=posix
     - nfsvers=4.1
   nfs:
-    server: nas.home.${CLUSTER_DOMAIN}
+    server: "${NFS_SERVER}"
     path: "${NFS_KUBERNETES}/gitea/data"
 ---
 apiVersion: v1

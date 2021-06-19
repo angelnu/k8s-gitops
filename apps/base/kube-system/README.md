@@ -1,11 +1,5 @@
 # kube-system namespace
 
-## Common Internet File System - CIFS (smb / Samba)
-
-Install tools that allow mounting [CIFS](https://en.wikipedia.org/wiki/Server_Message_Block) volumes.
-
-[Settings](cifs.yaml)
-
 ## Kubernetes dashboard settings
 
 Configures the [Kubernetes dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/).

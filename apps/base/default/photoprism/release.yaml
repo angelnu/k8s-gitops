@@ -43,16 +43,20 @@ spec:
       config:
         enabled: true
         mountPath: /photoprism/storage
-        existingClaim: nfs-kubernetes
-        subPath: photoprism/storage
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/photoprism/storage"
 
       originals:
         enabled: true
         mountPath: "/photoprism/originals"
-        accessMode: ReadWriteMany
-        # readOnly: true
-        existingClaim: nfs-kubernetes-2
-        subPath: photoprism/originals
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/photoprism/originals"
 
     ingress:
       main:

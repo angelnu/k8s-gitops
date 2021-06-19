@@ -57,18 +57,27 @@ spec:
       videos:
         enabled: true
         mountPath: /videos
-        existingClaim: nfs-video
-        accessMode: ReadWriteMany
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_VIDEO}"
       music:
         enabled: true
         mountPath: /music
-        existingClaim: nfs-music
-        accessMode: ReadWriteMany
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_MUSIC}"
       downloads:
         enabled: true
         mountPath: /downloads
-        existingClaim: nfs-downloads
-        accessMode: ReadWriteMany
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
     podSecurityContext:
       supplementalGroups:
       - 65536

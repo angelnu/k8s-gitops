@@ -8,6 +8,7 @@ spec:
   chart:
     spec:
       chart: podinfo
+      version: 6.0.0
       sourceRef:
         kind: HelmRepository
         name: podinfo
@@ -26,11 +27,18 @@ spec:
         nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
         nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
           
+      
       hosts:
-        - podinfo.pub.${CLUSTER_DOMAIN}
-        - podinfo.home.${CLUSTER_DOMAIN}
+      - host: podinfo.pub.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          pathType: ImplementationSpecific
+      - host: podinfo.home.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+          pathType: ImplementationSpecific
       tls:
-        - hosts:
-          - podinfo.pub.${CLUSTER_DOMAIN}
-        - hosts:
-          - podinfo.home.${CLUSTER_DOMAIN}
+      - hosts:
+        - podinfo.pub.${CLUSTER_DOMAIN}
+      - hosts:
+        - podinfo.home.${CLUSTER_DOMAIN}

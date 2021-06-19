@@ -55,8 +55,11 @@ spec:
       downloads:
         enabled: true
         mountPath: /downloads
-        existingClaim: nfs-downloads
-        accessMode: ReadWriteMany
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
     podSecurityContext:
       supplementalGroups:
       - 65536

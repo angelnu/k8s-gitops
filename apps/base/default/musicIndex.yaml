@@ -37,19 +37,15 @@ spec:
           name: music
         - mountPath: /cache
           name: cache
-          subPath: music-index/cache
       volumes:
         - name: cache
-          persistentVolumeClaim:
-            claimName: nfs-kubernetes
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/music-index/cache"
         - name: music
-          flexVolume:
-            driver: "angelnu/cifs"
-            secretRef:
-              name: "cifs-secret"
-            options:
-              source: "//nas.home.${CLUSTER_DOMAIN}/music"
-              mountOptions: "dir_mode=0555,file_mode=0444,noperm"
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_MUSIC}"
 ---
 # -------------------- Service ------------------- #
 
@@ -74,7 +70,7 @@ spec:
 
 # ------------------- Ingress ------------------- #
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: music-index
@@ -91,12 +87,15 @@ metadata:
 spec:
   tls:
   - hosts:
-    - nginx.${CLUSTER_DOMAIN}
+    - music.home.${CLUSTER_DOMAIN}
   rules:
   - host: music.home.${CLUSTER_DOMAIN}
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: music-index
-          servicePort: https
+          service:
+            name: music-index
+            port:
+              name: https
