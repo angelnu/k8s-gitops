@@ -6,6 +6,10 @@
 
 * [Operator settings](operator.yaml)
 
+## Status of all clusters
+
+`kubectl get pods -o name | grep postgres-0 | xargs -I{} kubectl exec {} -- patronictl list`
+
 ## Repair HowTo
 
 - patroni manages the cluster
