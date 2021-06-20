@@ -71,7 +71,7 @@ spec:
     nextcloud:
       host: nextcloud.${CLUSTER_DOMAIN}
       persistence:
-        subPath: nextcloud/nextcloud
+        subPath: nextcloud
       phpConfigs:
         uploadLimit.ini: |
           upload_max_filesize = 16G
@@ -97,7 +97,7 @@ spec:
     persistence:
       enabled: true
       size: 14T
-      existingClaim: nfs-kubernetes
+      existingClaim: nfs-nextcloud
 
   valuesFrom:
   - kind: Secret
