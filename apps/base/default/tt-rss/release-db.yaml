@@ -32,7 +32,6 @@ spec:
 
     persistentVolumes:
       hostPath: /media/db/tt-rss
-      reclaimPolicy: Recycle
       replicaNodes:
       - ${CLUSTER_DB_NODE_0}
       - ${CLUSTER_DB_NODE_1}

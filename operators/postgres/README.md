@@ -19,7 +19,7 @@
 - cannot re-create DB cluster: `kubectl delete poddisruptionbudgets postgres-<chart name>-zalando-postgres-cluster-postgres-pdb`
 - apply backup:
   1. get into postgres node
-  2. `apt update && apt install openssh-client`
+  2. `apt update && apt install -y openssh-client`
   3. `rsync anunez@nas:/volume1/kubernetes/backup/db/tt-rss/backup .`
   4. `psql -U postgres -f backup`
 
