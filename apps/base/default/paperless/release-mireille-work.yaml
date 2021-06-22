@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: paperless
-      version: 5.4.0
+      version: 6.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -31,43 +31,56 @@ spec:
       data:
         enabled: true
         mountPath: /usr/src/paperless/data
-        existingClaim: nfs-kubernetes
-        subPath: paperless/mireille-work/data
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/paperless/mireille-work/data"
       media:
         enabled: true
         mountPath: /usr/src/paperless/media
-        existingClaim: nfs-kubernetes-2
-        subPath: paperless/mireille-work/media
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/paperless/mireille-work/media"
       consume:
         enabled: true
         mountPath: /usr/src/paperless/consume
-        existingClaim: nfs-downloads
-        subPath: scans-mireille-work
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}/scans-mireille-work"
       export:
         enabled: true
-        mountPath: /usr/src/paperless/export
-        existingClaim: nfs-kubernetes-3
-        subPath: paperless/mireille-work/export
+        mountPath: /usr/src/paperless/mireille-work/export
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/paperless/mireille-work/export"
 
     ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/proxy-body-size: 4G
-        #nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-        #nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-      ingress.kubernetes.io/ssl-redirect: "true"
-      hosts:
-      - host: paperless-mireille-work.pub.${CLUSTER_DOMAIN}
-        paths:
-        - path: /
-          # Ignored if not kubeVersion >= 1.14-0
-          pathType: Prefix
-      - host: paperless-mireille-work.home.${CLUSTER_DOMAIN}
-        paths:
-        - path: /
-          # Ignored if not kubeVersion >= 1.14-0
-          pathType: Prefix
-      tls:
-      - hosts:
-        - paperless-mireille-work.pub.${CLUSTER_DOMAIN}
-        - paperless-mireille-work.home${CLUSTER_DOMAIN}
+      main:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: 4G
+          #nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
+          #nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
+        ingress.kubernetes.io/ssl-redirect: "true"
+        hosts:
+        - host: paperless-mireille-work.pub.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            # Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+        - host: paperless-mireille-work.home.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            # Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+        tls:
+        - hosts:
+          - paperless-mireille-work.pub.${CLUSTER_DOMAIN}
+          - paperless-mireille-work.home${CLUSTER_DOMAIN}

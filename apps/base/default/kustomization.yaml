@@ -9,7 +9,6 @@ resources:
   - lorawan
   - nextcloud
   - musicIndex.yaml
-  - nfs
   - paperless
   - plex
   - photoprism
