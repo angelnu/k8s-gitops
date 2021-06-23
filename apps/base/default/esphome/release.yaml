@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: esphome/esphome
-      tag: 1.19.2
+      tag: 1.19.3
     
     persistence:
       config:
