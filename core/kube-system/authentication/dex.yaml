@@ -16,14 +16,23 @@ spec:
       interval: 5m
   #See https://github.com/dexidp/helm-charts/blob/master/charts/dex/values.yaml
   values:
+
     image:
       repository: ghcr.io/dexidp/dex
       tag: v2.28.1
+
+    config:
+      issuer: https://oidc.${CLUSTER_DOMAIN}
+      storage:
+        type: kubernetes
+        config:
+          inCluster: true
     env:
+      #circumvention: https://github.com/dexidp/dex/issues/2082#issuecomment-818124478
       KUBERNETES_POD_NAMESPACE: kube-system
+
     ingress:
       enabled: true
-
       hosts:
       - host: oidc.${CLUSTER_DOMAIN}
         paths:

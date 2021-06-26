@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: flux-system
 resources:
   - angelnu-charts.yaml
+  - authentik.yaml
   - bitnami.yaml
   - ceph-csi.yaml
   - dex.yaml
