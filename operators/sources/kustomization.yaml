@@ -5,6 +5,7 @@ resources:
   - angelnu-charts.yaml
   - bitnami.yaml
   - ceph-csi.yaml
+  - dex.yaml
   - gitea.yaml
   - infracloudio-charts.yaml
   - ingress-nginx.yaml
