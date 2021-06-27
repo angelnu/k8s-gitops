@@ -23,3 +23,8 @@ spec:
     image:
       repository: ghcr.io/k8s-at-home/dnsmadeeasy-webhook
       tag: v1.2.0
+    
+    cert-manager:
+      # -- Install cert-manager chart as dependency.
+      # Usually this is already installed in the cluster and not needed.
+      enabled: false
