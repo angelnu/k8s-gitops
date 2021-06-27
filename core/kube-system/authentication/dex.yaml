@@ -33,6 +33,8 @@ spec:
 
     ingress:
       enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/enable-global-auth: "false"
       hosts:
       - host: oidc.${CLUSTER_DOMAIN}
         paths:

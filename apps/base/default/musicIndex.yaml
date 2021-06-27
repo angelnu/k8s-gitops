@@ -75,6 +75,7 @@ kind: Ingress
 metadata:
   name: music-index
   annotations:
+    nginx.ingress.kubernetes.io/enable-global-auth: "false"
     ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16,10.0.0.0/8"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     # Require oauth2 for authentication

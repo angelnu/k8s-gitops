@@ -38,6 +38,8 @@ spec:
     ingress:
       main:
         enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
         - host: "jellyfin.home.${CLUSTER_DOMAIN}"
           paths:

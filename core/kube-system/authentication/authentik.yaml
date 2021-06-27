@@ -18,11 +18,16 @@ spec:
   values:
     image:
       name: ghcr.io/goauthentik/server
-      tag: 2021.5.2
+      tag: 2021.6.2
       pullPolicy: IfNotPresent
 
     ingress:
       enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+        nginx.org/websocket-services: authentik
+        nginx.ingress.kubernetes.io/enable-global-auth: "false"
 
       hosts:
       - host: authentik.pub.${CLUSTER_DOMAIN}
@@ -30,13 +35,18 @@ spec:
         - path: /
 
       tls:
-      - secretName: tls.authentik
-        hosts:
+      - hosts:
         - authentik.pub.${CLUSTER_DOMAIN}
 
     authentik:
       #secret_key: #in cret
       log_level: debug
+
+      email:
+        host: mailserver.kube-system
+        port: 25
+        #host: smtp.gmail.com
+        #use_tls: true
 
       outposts:
         docker_image_base: ghcr.io/goauthentik/%(type)s:%(version)s

@@ -208,8 +208,7 @@ kind: Ingress
 metadata:
   name: comics-nginx
   annotations:
-    traefik.frontend.priority: "2"
-    traefik.frontend.rule.type: PathPrefixStrip
+    nginx.ingress.kubernetes.io/enable-global-auth: "false"
 spec:
   tls:
   - hosts:
@@ -233,6 +232,7 @@ kind: Ingress
 metadata:
   name: comics-nginx-backup
   annotations:
+    nginx.ingress.kubernetes.io/enable-global-auth: "false"
 spec:
   tls:
   - hosts:

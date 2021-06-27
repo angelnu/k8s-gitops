@@ -72,6 +72,7 @@ spec:
         enabled: true
         annotations:
           nginx.org/websocket-services: home-assistant
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
         - host: ha.${CLUSTER_DOMAIN}
           paths:
@@ -106,10 +107,6 @@ spec:
           deployKeySecret: git-ssh-keys
         ingress:
           enabled: true
-          annotations:
-            nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-            nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-            ingress.kubernetes.io/ssl-redirect: "true"
           hosts:
           - host: ha-editor.pub.${CLUSTER_DOMAIN}
             paths:

@@ -24,9 +24,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
         hosts:
         - host: "prowlarr.pub.${CLUSTER_DOMAIN}"
           paths:
@@ -39,9 +36,6 @@ spec:
         enabled: true
         nameSuffix: "api"
         ingressClassName: "traefik"
-        annotations:
-          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
         hosts:
         - host: "prowlarr.pub.${CLUSTER_DOMAIN}"
           paths:

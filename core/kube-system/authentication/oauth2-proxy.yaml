@@ -91,6 +91,8 @@ kind: Ingress
 metadata:
   name: oauth2-proxy
   namespace: kube-system
+  annotations:
+    nginx.ingress.kubernetes.io/enable-global-auth: "false"
 spec:
   tls:
   - hosts:

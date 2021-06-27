@@ -23,9 +23,6 @@ spec:
       ingress:
         enabled: true
         annotations:
-          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-          ingress.kubernetes.io/ssl-redirect: "true"
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
@@ -37,41 +34,24 @@ spec:
       ingress:
         enabled: true
         annotations:
-          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-          ingress.kubernetes.io/ssl-redirect: "true"
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
         - host: fritz.home.${CLUSTER_DOMAIN}
         - host: fritz.pub.${CLUSTER_DOMAIN}
-    # - name: homematic
-    #   ip: 192.168.2.124
-    #   port: 443
-    #   ingress:
-    #   enabled: true
-    #   ingress:
-    #    annotations:
-    #      nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-    #      nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-    #      ingress.kubernetes.io/ssl-redirect: "true"
-    #     hosts:
-    #     - host: homematic.home.${CLUSTER_DOMAIN}
-    #     - host: homematic.${CLUSTER_DOMAIN}
     - name: ap-workroom
       externalName: ap-workroom.lan
       port: 80
       ingress:
         enabled: true
-        annotations:
-          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
         - host: ap-workroom.home.${CLUSTER_DOMAIN}
     - name: ap-kitchen
       externalName: repeater-kitchen.lan
       port: 80
       ingress:
-        enabled: true
+        enabled: true 
         annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
         - host: ap-kitchen.home.${CLUSTER_DOMAIN}
@@ -81,6 +61,7 @@ spec:
       ingress:
         enabled: true
         annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
         - host: ap-guestroom.home.${CLUSTER_DOMAIN}
@@ -90,6 +71,7 @@ spec:
       ingress:
         enabled: true
         annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
@@ -101,6 +83,7 @@ spec:
       ingress:
         enabled: true
         annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
@@ -112,6 +95,7 @@ spec:
       ingress:
         enabled: true
         annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
@@ -123,29 +107,18 @@ spec:
       ingress:
         enabled: true
         annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
         - host: prusa-sla.home.${CLUSTER_DOMAIN}
-    - name: relays
-      externalName: n8.lan
-      port: 80
-      test: false
-      ingress:
-        enabled: true
-        annotations:
-          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-          ingress.kubernetes.io/ssl-redirect: "true"
-        hosts:
-        - host: relays.home.${CLUSTER_DOMAIN}
-        - host: relays.pub.${CLUSTER_DOMAIN}
     - name: nas
       ip: 192.168.2.10
       port: 5001
       ingress:
         enabled: true
         annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:

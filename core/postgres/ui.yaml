@@ -18,10 +18,6 @@ spec:
   values:
     ingress:
       enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-      ingress.kubernetes.io/ssl-redirect: "true"
       hosts:
       - host: "postgres-operator.home.${CLUSTER_DOMAIN}"
         paths: [""]

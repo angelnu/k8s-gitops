@@ -32,6 +32,7 @@ spec:
       enabled: true
       annotations:
         nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+        nginx.ingress.kubernetes.io/enable-global-auth: "false"
       hosts:
       - git.${CLUSTER_DOMAIN}
       tls:

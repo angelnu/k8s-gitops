@@ -49,6 +49,7 @@ spec:
           location ~ ^/(?:autotest|occ|issue|indie|db_|console) {
             deny all;
           }
+        nginx.ingress.kubernetes.io/enable-global-auth: "false"
       tls:
       - hosts:
         - nextcloud.${CLUSTER_DOMAIN}

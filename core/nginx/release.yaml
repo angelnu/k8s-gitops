@@ -25,8 +25,12 @@ spec:
       config:
         custom-http-errors: 404,401,403,500,503
         hsts-max-age: "31449600"
-        # global-auth-url: "http://oauth2-proxy.kube-system.svc.cluster.local/oauth2/auth"
-        # global-auth-signin: "https://auth.$server_name/oauth2/start"
+        global-auth-url: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/auth?nginx"
+        global-auth-signin: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/start?rd=$scheme://$host$request_uri"
+        global-auth-response-headers: X-Auth-Username,X-Forwarded-Email,X-Forwarded-Preferred-Username,X-Forwarded-User
+        global-auth-snippet: |
+          proxy_set_header X-Forwarded-Host $http_host;
+        proxy-buffer-size: "16k" # Needed for authentik proxy
       extraArgs:
         default-ssl-certificate: "cert-manager/${CLUSTER_DOMAIN_CERT}"
       use-forwarded-headers: "true"

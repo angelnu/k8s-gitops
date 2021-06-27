@@ -35,6 +35,7 @@ spec:
       annotations:
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
       hosts:
       #- lorawan.pub.${CLUSTER_DOMAIN}
       - lorawan.home.${CLUSTER_DOMAIN}

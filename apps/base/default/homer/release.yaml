@@ -31,10 +31,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-          nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
-        ingress.kubernetes.io/ssl-redirect: "true"
         hosts:
         - host: home.${CLUSTER_DOMAIN}
           paths:
@@ -71,9 +67,6 @@ spec:
         - "none"
         ingress:
           enabled: true
-          annotations:
-            nginx.ingress.kubernetes.io/auth-url: "https://ingress-auth.${CLUSTER_DOMAIN}/auth"
-            nginx.ingress.kubernetes.io/auth-signin: "https://ingress-auth.${CLUSTER_DOMAIN}/start?rd=$scheme://$host$request_uri"
           hosts:
           - host: home-editor.pub.${CLUSTER_DOMAIN}
             paths:

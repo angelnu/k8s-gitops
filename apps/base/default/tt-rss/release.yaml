@@ -26,6 +26,7 @@ spec:
       main:
         enabled: true
         annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
         hosts:
         - host: rss.${CLUSTER_DOMAIN}
