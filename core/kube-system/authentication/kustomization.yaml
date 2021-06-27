@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: kube-system
 resources:
   - authentik-secret.yaml
+  - authentik-db.yaml
   - authentik.yaml
   - dex.yaml
   - oauth2-proxy.yaml

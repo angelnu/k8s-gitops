@@ -42,23 +42,16 @@ spec:
         docker_image_base: ghcr.io/goauthentik/%(type)s:%(version)s
 
       postgresql:
-        host: '{{ .Release.Name }}-postgresql'
-        name: authentik
-        user: authentik
+        host: '{{ .Release.Name }}-db-zalando-postgres-cluster-postgres'
+        name: postgres
+        user: postgres
         # password: #in cret
       redis:
         host: '{{ .Release.Name }}-redis-master'
         # password: #in cret
 
     postgresql:
-      enabled: true
-      #persistence:
-      #  enabled: true
-      #  existingClaim: authentik-postgresql
-
-      postgresqlUsername: authentik
-      postgresqlDatabase: authentik
-      # postgresqlPassword: #in cret
+      enabled: false
 
     redis:
       enabled: true
