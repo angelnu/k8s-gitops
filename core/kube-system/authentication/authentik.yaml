@@ -18,7 +18,7 @@ spec:
   values:
     image:
       name: ghcr.io/goauthentik/server
-      tag: 2021.6.2
+      tag: 2021.6.3
       pullPolicy: IfNotPresent
 
     ingress:
