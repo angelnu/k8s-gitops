@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: appdaemon
-      version: 6.0.0
+      version: 7.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -25,13 +25,13 @@ spec:
     persistence:
       config:
         enabled: true
-        mountPath: /ha-conf
         existingClaim: home-assistant-pvc
-    
-    additionalVolumeMounts:
-    - mountPath: "/conf"
-      subPath: appdaemon
-      name: config
+        mountPath: ""
+        subPath:
+          - path: .
+            mountPath: /ha-conf
+          - path: appdaemon
+            mountPath: /conf
 
     env:
       TZ: "Europe/Berlin"
@@ -42,20 +42,21 @@ spec:
       DASH_URL: "http://$HOSTNAME:5050"
       # TOKEN: secret
     ingress:
-      enabled: true
-      hosts:
-        - host: ha-app.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
-        - host: ha-app.pub.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
-      tls:
-      - hosts:
-        - ha-app.home.${CLUSTER_DOMAIN}
-        - ha-app.pub.${CLUSTER_DOMAIN}
+      main:
+        enabled: true
+        hosts:
+          - host: ha-app.home.${CLUSTER_DOMAIN}
+            paths:
+            - path: /
+              pathType: Prefix
+          - host: ha-app.pub.${CLUSTER_DOMAIN}
+            paths:
+            - path: /
+              pathType: Prefix
+        tls:
+        - hosts:
+          - ha-app.home.${CLUSTER_DOMAIN}
+          - ha-app.pub.${CLUSTER_DOMAIN}
   
   valuesFrom:
   - kind: Secret

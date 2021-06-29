@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: recipes
-      version: 4.4.0
+      version: 5.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -45,24 +45,25 @@ spec:
       TIMEZONE: Europe/Berlin
 
     ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
-      hosts:
-      - host: recipes.pub.${CLUSTER_DOMAIN}
-        paths:
-        - path: /
-          # Ignored if not kubeVersion >= 1.14-0
-          pathType: Prefix
-      - host: recipes.home.${CLUSTER_DOMAIN}
-        paths:
-        - path: /
-          # Ignored if not kubeVersion >= 1.14-0
-          pathType: Prefix
-      tls:
-      - hosts:
-        - recipes.pub.${CLUSTER_DOMAIN}
-        - recipes.home.${CLUSTER_DOMAIN}
+      main:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+        hosts:
+        - host: recipes.pub.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            # Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+        - host: recipes.home.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            # Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+        tls:
+        - hosts:
+          - recipes.pub.${CLUSTER_DOMAIN}
+          - recipes.home.${CLUSTER_DOMAIN}
     
     additionalContainers:
     - name: nginx
