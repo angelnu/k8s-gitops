@@ -12,6 +12,7 @@ resources:
   - ingress-nginx.yaml
   - jetstack-charts.yaml
   - k8s-at-home-charts.yaml
+  - mail.yaml
   - mailu.yaml
   - nextcloud.yaml
   - node-feature-discovery-charts.yaml
