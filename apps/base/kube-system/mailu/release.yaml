@@ -6,7 +6,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://weaveworks.github.io/kured
       chart: mailu
       version: 0.1.2
       sourceRef:
