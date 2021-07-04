@@ -34,27 +34,6 @@ spec:
     
     timezone: "Europe/Berlin"
 
-    guiService:
-      type: LoadBalancer
-      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}"
-      annotations:
-        metallb.universe.tf/allow-shared-ip: unifi
-    controllerService:
-      type: LoadBalancer
-      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}"
-      annotations:
-        metallb.universe.tf/allow-shared-ip: unifi
-    stunService:
-      type: LoadBalancer
-      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}"
-      annotations:
-        metallb.universe.tf/allow-shared-ip: unifi
-    discoveryService:
-      type: LoadBalancer
-      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}"
-      annotations:
-        metallb.universe.tf/allow-shared-ip: unifi
-
     ingress:
       enabled: true
       annotations:
