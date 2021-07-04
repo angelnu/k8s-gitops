@@ -4,6 +4,7 @@ namespace: kube-system
 resources:
   - authentication
   - intel-gpu-plugin
+  - kubernetes-dashboard
   - metallb.yaml
   - multus_network.yaml
   - node-feature-discovery

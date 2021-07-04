@@ -92,9 +92,6 @@
     #   changed_when:
     #   - "'(no change)'  not in result.stdout|join('')"
     
-    - name: Deploy dashboard
-      import_tasks: tasks/k8s/dashboard.yaml
-    
     - name: Check if {{ K8S_TLS_SECRETS_BACKUP }} exists
       stat:
         path: "{{ K8S_TLS_SECRETS_BACKUP }}"

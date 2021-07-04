@@ -8,7 +8,6 @@ resources:
   - kube-system
   - monitoring
   - nginx
-  - kubernetes-dashboard
   - postgres
   - redis
   - vpn
