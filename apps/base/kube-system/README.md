@@ -14,11 +14,11 @@ Configures the [Kubernetes dashboard](https://kubernetes.io/docs/tasks/access-ap
 
 [Settings](kured)
 
-## Mail server - Exim
+## Mail server
 
-Mail server with [Exim](https://www.exim.org/) for application in K8S and LAN to send mail without having to store any Google settings.
+Mail server for application in K8S and LAN to send mail without having to store any Google settings.
 
-[Settings](mailserver.yaml)
+[Settings](mail/release.yaml)
 
 ## NFS
 

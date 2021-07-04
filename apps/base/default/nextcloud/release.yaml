@@ -88,9 +88,9 @@ spec:
         fromAddress: nextcloud@${CLUSTER_DOMAIN}
         domain: ${CLUSTER_DOMAIN}
         smtp:
-          host: mailserver.kube-system
+          host: ${CLUSTER_MAIL_SERVER}
           secure: ''
-          port: 25
+          port: ${CLUSTER_MAIL_SERVER_PORT}
           authtype: LOGIN
           name: ''
           password: ''

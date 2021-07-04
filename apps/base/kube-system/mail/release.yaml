@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: mailserver
+  name: mail
 spec:
   interval: 5m
   chart:
@@ -16,10 +16,13 @@ spec:
   values:
     image:
       repository: boky/postfix
-      tag: v2.0.1 # Override version from Chart's AppVersion
+      tag: v3.3.0 # Override version from Chart's AppVersion
     
     service:
       port: 25
+      type: LoadBalancer
+      spec:
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_MAIL}"
 
     persistence:
       enabled: false

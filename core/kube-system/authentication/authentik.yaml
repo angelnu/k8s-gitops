@@ -43,8 +43,8 @@ spec:
       log_level: debug
 
       email:
-        host: mailserver.kube-system
-        port: 25
+        host: ${CLUSTER_MAIL_SERVER}
+        port: ${CLUSTER_MAIL_SERVER_PORT}
         #host: smtp.gmail.com
         #use_tls: true
 

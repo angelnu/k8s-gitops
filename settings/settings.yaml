@@ -4,6 +4,8 @@ metadata:
   namespace: flux-system
   name: global-settings
 data:
+  CLUSTER_MAIL_SERVER: mail.kube-system
+  CLUSTER_MAIL_SERVER_PORT: "25"
   # mcvlan_static_range: &anchor_ip_mcvlan_static_range
   # 192.168.1.0-192.168.1.63
   CLUSTER_MACVLAN_HA: "1"
@@ -23,6 +25,7 @@ data:
   CLUSTER_LB_LORAFWD: "135"
   CLUSTER_LB_MOSQUITTO: "136"
   CLUSTER_LB_UNIFI: "137"
+  CLUSTER_LB_MAIL: "138"
   CLUSTER_LB_JELLYFIN: "140"
 
   CEPH_MONITOR_HOST_1: 192.168.4.11:6789
