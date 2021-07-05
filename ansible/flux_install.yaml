@@ -61,7 +61,7 @@
 
   - name: "Deploy flux to cluster if crd fluxcd.io missing"
     shell: > 
-      {{ KUBECTL_BIN }} apply -k ../{{ FLUX_GIT_PATH }}/{{ FLUX_NAMESPACE }} 
+      {{ KUBECTL_BIN }} apply -k ../{{ FLUX_GIT_PATH }}
     delegate_to: localhost
     register: result
     changed_when:
