@@ -72,6 +72,14 @@ spec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_VIDEO}"
+      music:  
+        enabled: true
+        mountPath: /music
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_MUSIC}"
       downloads:
         enabled: true
         mountPath: /downloads
