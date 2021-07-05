@@ -158,13 +158,13 @@
     run_once: true
     ansible.builtin.fetch:
       src: /etc/rancher/k3s/k3s.yaml
-      dest: /root/.kube/config
+      dest: "{{ KUBECTL_CONFIG }}"
       flat: yes
   
   - name: Ansible replace string example
     #TBD: this always result in changed
     replace:
-      path: /root/.kube/config
+      path: "{{ KUBECTL_CONFIG }}"
       regexp: '127.0.0.1'
       replace: "{{ inventory_hostname }}"
     delegate_to: localhost

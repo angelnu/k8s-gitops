@@ -49,6 +49,7 @@ K8S_RESET: false
 
 # microk8s
 KUBECTL_BIN: "{{ '/snap/bin/microk8s kubectl' if K8S_TYPE=='k8s' else 'kubectl' }}"
+KUBECTL_CONFIG: "/root/.kube/config-{{ 'production' if production else 'staging' }}"
 DOCKER_USER: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           39353438346635386437643834303766353339336230623766666333626562323231613538656162

@@ -4,6 +4,5 @@ namespace: cert-manager
 #crds:
 #  - https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.crds.yaml
 resources:
-  - namespace.yaml
   - cert-manager.yaml
 

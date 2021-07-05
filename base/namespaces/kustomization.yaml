@@ -1,3 +1,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources: []
+resources:
+- ceph.yaml
+- ceph-rbd.yaml
+- cert-manager.yaml
+- monitoring.yaml
+- nginx.yaml
+- podinfo.yaml
+- postgres.yaml
+- redis.yaml
+- vpn-gateway.yaml
+- vpn.yaml
