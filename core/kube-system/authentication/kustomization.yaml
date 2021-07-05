@@ -5,7 +5,3 @@ resources:
   - authentik-secret.yaml
   - authentik-db.yaml
   - authentik.yaml
-  - dex.yaml
-  - oauth2-proxy.yaml
-  - secret-dex.yaml
-  - secret-oauth2-proxy.yaml
