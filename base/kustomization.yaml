@@ -4,6 +4,6 @@ resources:
 - flux-system
 - sources
 - namespaces
-- operators.yaml
-- core.yaml
-- apps.yaml
+- 1_crds.yaml
+- 2_core.yaml
+- 3_apps.yaml

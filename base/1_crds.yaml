@@ -10,7 +10,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./operators
+  path: ./crds
   prune: true
   validation: client
   decryption:
