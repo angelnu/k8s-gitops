@@ -16,23 +16,26 @@ The cluster is designed to allow tearing it completely without any data lost.
 Stack is ordered in multiple layers (Flux kustomizations) depending on the lower one (example apps depend on infrasteructure).
 
 * Applications
-  * [base/default](apps/base/default)
-  * [base/kube-system](apps/base/kube-system)
-  * [production global settings](clusters/production/apps.yaml)
-  * [production overlay](apps/production)
-  * [staging global settings](clusters/staging/apps.yaml)
-  * [staging overlay](apps/staging)
-* Infrastructure
-  * [base/cert-manager](infrastructure/base/cert-manager)
-  * [base/flux-system](infrastructure/base/flux-system)
-  * [base/nginx](infrastructure/base/nginx)
-  * [base/postgres](infrastructure/base/postgres)
-  * [production overlay](infrastructure/production)
-  * [staging overlay](infrastructure/staging)
-* Operators
-  * [sources](operators/sources)
-  * [cert-manager](operators/cert-manager)
-  * [postgres](operators/postgres)
+  * [default](apps/default)
+  * [kube-system](apps/kube-system)
+  * [podinfo](apps/podinfo)
+  * [vpn](apps/vpn)
+* Core
+  * [ceph](core/ceph)
+  * [ceph-rbd](core/ceph-rbd)
+  * [cert-manager](core/cert-manager)
+  * [flux-system](core/flux-system)
+  * [kube-system](core/kube-system)
+  * [monitoring](core/monitoring)
+  * [nginx](core/nginx)
+  * [postgres](core/postgres)
+  * [redis](core/redis)
+  * [vpn](core/vpn)
+  * [vpn-gateway](core/vpn-gateway)
+* Custom Resource Definitions
+  * [cert-manager](crds/cert-manager)
+  * [multus](crds/multus)
+  * [postgres](crds/postgres)
 * Settings and Secrets
   * [global settings](settings/settings.yaml)
   * [global secrets](settings/secrets.yaml)
@@ -40,6 +43,10 @@ Stack is ordered in multiple layers (Flux kustomizations) depending on the lower
   * [production global secrets](settings/production/secrets.yaml)
   * [staging global settings](settings/staging/settings.yaml)
   * [staging global secrets](settings/staging/secrets.yaml)
+* Base
+  * [sources](base/sources)
+  * [namespaces](base/namespaces)
+  * [flux-system](base/flux-system)
 * Clusters:
   * [production](clusters/production)
   * [staging](clusters/staging)
@@ -53,7 +60,7 @@ Stack is ordered in multiple layers (Flux kustomizations) depending on the lower
     * Fast but depending on Sinology NAS: nfs
     * Slower but replicated: Ceph in Promox
   * Databases:
-    * postgres: 2 instances deployed via [Zalando´s Postgres Operator](https://github.com/zalando/postgres-operator)
+    * postgres: 3 instances deployed via [Zalando´s Postgres Operator](https://github.com/zalando/postgres-operator)
 
 ## HW setup
 
