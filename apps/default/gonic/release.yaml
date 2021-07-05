@@ -1,0 +1,65 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: gonic
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: gonic
+      version: 5.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: sentriz/gonic
+      tag: v0.13.1
+    env:
+      TZ: "Europe/Berlin"
+      GONIC_MUSIC_PATH: "/music"
+      #GONIC_PODCAST_PATH: "/media/podcasts"
+      GONIC_CACHE_PATH: "/cache"
+      GONIC_SCAN_INTERVAL: "120"
+    ingress:
+      main:
+        enabled: true
+        hosts:
+        - host: gonic.pub.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            pathType: Prefix
+        - host: gonic.home.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - gonic.home.${CLUSTER_DOMAIN}
+    persistence:
+      data:
+        enabled: true
+        existingClaim: gonic-pvc
+        mountPath: ""
+        subPath:
+          - path: data
+            mountPath: /data
+          - path: cache
+            mountPath: /cache
+      music:  
+        enabled: true
+        mountPath: /music
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_MUSIC}"
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 500m
+      limits:
+        memory: 1500Mi

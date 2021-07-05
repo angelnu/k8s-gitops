@@ -5,6 +5,7 @@ resources:
   - esphome
   - forecastle
   - gitea
+  - gonic
   - home-assistant
   - homer
   - jellyfin
