@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: HelmRepository
 metadata:
-  name: dex
+  name: forecastle
 spec:
   interval: 30m
-  url: https://charts.dexidp.io
+  url: https://stakater.github.io/stakater-charts
