@@ -1,0 +1,55 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: apache-musicindex
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: apache-musicindex
+      version: 1.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/apache-musicindex/values.yaml
+  values:
+    image:
+      repository: ghcr.io/k8s-at-home/apache-musicindex
+      tag: v1.4.1-1
+    
+    persistence:
+      music:  
+        enabled: true
+        mountPath: /music
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_MUSIC}"
+      cache: 
+        enabled: true
+        mountPath: /cache
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/music-index/cache"
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16,10.0.0.0/8"
+        hosts:
+        - host: music.home.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            # Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+        tls:
+        - hosts:
+          - music.home.${CLUSTER_DOMAIN}
