@@ -15,9 +15,10 @@ spec:
         spec:
           containers:
             - name: comics-scrapper
-              image: "angelnu/comics:latest"
-              imagePullPolicy: Always
+              image: ghcr.io/angelnu/comics-rss-feed:v1.0.0
               env:
+                - name: VERBOSE
+                  value: "True"
                 - name: RSS_URL
                   valueFrom:
                     secretKeyRef:
@@ -80,9 +81,11 @@ spec:
     spec:
       containers:
       - name: comics-scrapper-test
-        image: angelnu/comics:latest
+        image: ghcr.io/angelnu/comics-rss-feed:dev
         imagePullPolicy: Always
         env:
+          - name: VERBOSE
+            value: "True"
           - name: RSS_URL
             valueFrom:
               secretKeyRef:
@@ -154,8 +157,7 @@ spec:
     spec:
       containers:
       - name: comics-nginx
-        image: nginx
-        imagePullPolicy: Always
+        image: nginx:1.21.0
         resources:
           requests:
             memory: "3Mi"
