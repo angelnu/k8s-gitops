@@ -1,0 +1,19 @@
+{{- $fullName := include "reverse-proxy.fullname" . -}}
+{{- $labels := include "reverse-proxy.labels" . -}}
+{{- range .Values.instances }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-{{ .name }}
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  {{- if .externalName }}
+  type: ExternalName
+  externalName: {{ .externalName }}
+  {{- end }}
+  ports:
+    - protocol: TCP
+      port: {{ .port }}
+---
+{{- end }}

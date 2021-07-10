@@ -1,0 +1,22 @@
+# Default values for reverse-proxy.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+instances: []
+# - name: test
+#   externalName: test.example.com
+#   port: 80
+#   test: false #Should we add a test for this host?
+#
+#   ingress:
+#     enabled: true
+#     annotations: {}
+#       # kubernetes.io/ingress.class: nginx
+#       # kubernetes.io/tls-acme: "true"
+#     secretName: chart-example-tls
+#     hosts:
+#       - host: chart-example.local
+#         paths: []

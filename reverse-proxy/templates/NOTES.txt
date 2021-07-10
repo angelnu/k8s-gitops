@@ -1,0 +1,17 @@
+URLs:
+{{- range $instance := .Values.instances }}
+{{- $reference := printf "%s:%.0f" (default .ip .externalName) .port -}}
+{{- if $instance.ingress.enabled }}
+{{- range $host := $instance.ingress.hosts }}
+  {{- if .paths }}
+  {{- range .paths }}
+- http{{ if $instance.ingress.secretName }}s{{ end }}://{{ $host.host }}{{ . }} -> {{ $reference }}
+  {{- end }}
+  {{- else }}
+- http{{ if $instance.ingress.secretName }}s{{ end }}://{{ $host.host }} -> {{ $reference }}
+  {{- end }}
+{{- end }}
+{{- else  }}
+- {{ $instance.serviceName }}:{{ $instance.port }} -> {{ $reference }}
+{{- end }}
+{{- end }}
