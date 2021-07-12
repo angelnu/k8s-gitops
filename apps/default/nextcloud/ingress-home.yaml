@@ -28,6 +28,7 @@ metadata:
       location ~ ^/(?:autotest|occ|issue|indie|db_|console) {
         deny all;
       }
+    nginx.ingress.kubernetes.io/enable-global-auth: "false"
 spec:
   tls:
     - hosts:
