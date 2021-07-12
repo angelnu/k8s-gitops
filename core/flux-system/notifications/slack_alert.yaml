@@ -37,3 +37,6 @@ spec:
     - kind: HelmRelease
       name: '*'
       namespace: 'podinfo'
+  exclusionList:
+    - "error.*lookup github\\.com"
+    - "waiting.*socket"
