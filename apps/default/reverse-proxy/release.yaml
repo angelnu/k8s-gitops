@@ -6,12 +6,12 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://angelnu.github.io/charts/
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: reverse-proxy
-      version: 0.1.0
+      version: 1.0.0
       sourceRef:
         kind: HelmRepository
-        name: angelnu-charts
+        name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
   # See https://github.com/angelnu/charts/blob/home/charts/reverse-proxy/values.yaml
@@ -21,7 +21,6 @@ spec:
       externalName: casa96.lan
       port: 443
       ingress:
-        enabled: true
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -32,7 +31,6 @@ spec:
       externalName: fritz.box
       port: 80
       ingress:
-        enabled: true
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
@@ -42,14 +40,12 @@ spec:
       externalName: ap-workroom.lan
       port: 80
       ingress:
-        enabled: true
         hosts:
         - host: ap-workroom.home.${CLUSTER_DOMAIN}
     - name: ap-kitchen
       externalName: repeater-kitchen.lan
       port: 80
       ingress:
-        enabled: true 
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
@@ -59,7 +55,6 @@ spec:
       externalName: repeater-guestroom.lan
       port: 80
       ingress:
-        enabled: true
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
@@ -69,7 +64,6 @@ spec:
       externalName: octopi-casa96-prusa.lan
       port: 80
       ingress:
-        enabled: true
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
@@ -80,8 +74,8 @@ spec:
     - name: octoprint-mini
       externalName: octopi-casa96-prusa-mini.lan
       port: 80
+      test: false
       ingress:
-        enabled: true
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
@@ -93,7 +87,6 @@ spec:
       externalName: printer-canon.lan
       port: 80
       ingress:
-        enabled: true
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
@@ -105,7 +98,6 @@ spec:
       port: 80
       test: false
       ingress:
-        enabled: true
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
@@ -116,7 +108,6 @@ spec:
       ip: 192.168.2.10
       port: 5001
       ingress:
-        enabled: true
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/proxy-body-size: 8000m
