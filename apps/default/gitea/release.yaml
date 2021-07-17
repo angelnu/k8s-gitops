@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://dl.gitea.io/charts/
       chart: gitea
-      version: 3.1.4
+      version: 4.0.0
       sourceRef:
         kind: HelmRepository
         name: gitea
@@ -34,7 +34,10 @@ spec:
         nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
         nginx.ingress.kubernetes.io/enable-global-auth: "false"
       hosts:
-      - git.${CLUSTER_DOMAIN}
+      - host: git.${CLUSTER_DOMAIN}
+        paths:
+          - path: /
+            pathType: Prefix
       tls:
       - hosts:
         - git.${CLUSTER_DOMAIN}
