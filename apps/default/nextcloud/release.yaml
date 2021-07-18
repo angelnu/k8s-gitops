@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: nextcloud
-      tag: 21.0.3
+      tag: 22.0.0
     ingress:
       enabled: true
       annotations:
