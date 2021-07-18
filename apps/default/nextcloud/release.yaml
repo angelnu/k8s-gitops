@@ -21,6 +21,10 @@ spec:
     image:
       repository: nextcloud
       tag: 21.0.3
+
+    env:
+      PHP_MEMORY_LIMIT: 256M
+
     ingress:
       enabled: true
       annotations:
@@ -55,8 +59,8 @@ spec:
         - nextcloud.${CLUSTER_DOMAIN}
     #username: admin
     #password: password
-    #redis:
-    #  enabled: true
+    redis:
+      enabled: true
     internalDatabase:
       enabled: false
     externalDatabase:
@@ -79,6 +83,12 @@ spec:
           post_max_size = 16G
           max_input_time = 3600
           max_execution_time = 3600
+      configs:
+        proxy.config.php: |-
+          <?php
+          $CONFIG = array (
+            'trusted_proxies' => array('${NETWORK_K8S_CLUSTER_CIDR}')
+          );
     livenessProbe:
       enabled: false
     readinessProbe:
@@ -97,7 +107,6 @@ spec:
 
     persistence:
       enabled: true
-      size: 14T
       existingClaim: nfs-nextcloud
 
   valuesFrom:
