@@ -22,7 +22,6 @@ spec:
       port: 443
       ingress:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
         - host: router.home.${CLUSTER_DOMAIN}
@@ -31,8 +30,6 @@ spec:
       externalName: fritz.box
       port: 80
       ingress:
-        annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
         - host: fritz.home.${CLUSTER_DOMAIN}
         - host: fritz.pub.${CLUSTER_DOMAIN}
@@ -41,24 +38,21 @@ spec:
       port: 80
       ingress:
         hosts:
+        - host: ap-workroom.pub.${CLUSTER_DOMAIN}
         - host: ap-workroom.home.${CLUSTER_DOMAIN}
     - name: ap-kitchen
       externalName: repeater-kitchen.lan
       port: 80
       ingress:
-        annotations:
-          nginx.ingress.kubernetes.io/enable-global-auth: "false"
-          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
+        - host: ap-kitchen.pub.${CLUSTER_DOMAIN}
         - host: ap-kitchen.home.${CLUSTER_DOMAIN}
     - name: ap-guestroom
       externalName: repeater-guestroom.lan
       port: 80
       ingress:
-        annotations:
-          nginx.ingress.kubernetes.io/enable-global-auth: "false"
-          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
+        - host: ap-guestroom.pub.${CLUSTER_DOMAIN}
         - host: ap-guestroom.home.${CLUSTER_DOMAIN}
     - name: octoprint
       externalName: octopi-casa96-prusa.lan
@@ -67,7 +61,6 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
-          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
         - host: prusa.home.${CLUSTER_DOMAIN}
         - host: prusa.pub.${CLUSTER_DOMAIN}
@@ -79,7 +72,6 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
-          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
         - host: prusa-mini.home.${CLUSTER_DOMAIN}
         - host: prusa-mini.pub.${CLUSTER_DOMAIN}
@@ -87,11 +79,8 @@ spec:
       externalName: printer-canon.lan
       port: 80
       ingress:
-        annotations:
-          nginx.ingress.kubernetes.io/enable-global-auth: "false"
-          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
-          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
+        - host: print.pub.${CLUSTER_DOMAIN}
         - host: print.home.${CLUSTER_DOMAIN}
     - name: prusa-sla
       externalName: prusa64-sl1.lan
@@ -101,8 +90,8 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
-          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
         hosts:
+        - host: prusa-sla.pub.${CLUSTER_DOMAIN}
         - host: prusa-sla.home.${CLUSTER_DOMAIN}
     - name: nas
       ip: 192.168.2.10
@@ -110,7 +99,6 @@ spec:
       ingress:
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
-          nginx.ingress.kubernetes.io/proxy-body-size: 8000m
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
         - host: nas.${CLUSTER_DOMAIN}

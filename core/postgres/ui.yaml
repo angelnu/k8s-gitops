@@ -19,8 +19,11 @@ spec:
     ingress:
       enabled: true
       hosts:
+      - host: "postgres-operator.pub.${CLUSTER_DOMAIN}"
+        paths: [""]
       - host: "postgres-operator.home.${CLUSTER_DOMAIN}"
         paths: [""]
       tls:
       - hosts:
+        - "postgres-operator.pub.${CLUSTER_DOMAIN}"
         - "postgres-operator.home.${CLUSTER_DOMAIN}"

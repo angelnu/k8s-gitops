@@ -31,6 +31,7 @@ spec:
         global-auth-snippet: |
           proxy_set_header X-Forwarded-Host $http_host;
         proxy-buffer-size: "16k" # Needed for authentik proxy
+        proxy-body-size: "4000m"
       extraArgs:
         default-ssl-certificate: "cert-manager/${CLUSTER_DOMAIN_CERT}"
       use-forwarded-headers: "true"
