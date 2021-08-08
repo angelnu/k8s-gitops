@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: unifi
-      version: 2.0.4
+      version: 3.1.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: jacobalberty/unifi
-      tag: "6.2"
+      tag: v6.2.26
 
     podAnnotations:
       k8s.v1.cni.cncf.io/networks: |
@@ -29,20 +29,29 @@ spec:
         }]
     
     persistence:
-      enabled: true
-      existingClaim: unifi-pvc
+      data:
+        enabled: true
+        existingClaim: unifi-pvc
     
-    timezone: "Europe/Berlin"
+    env:
+      TZ: "Europe/Berlin"
 
     ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
-      hosts:
-      - "unifi.pub.${CLUSTER_DOMAIN}"
-      - "unifi.home.${CLUSTER_DOMAIN}"
-      tls:
-      - hosts:
-        - unifi.pub.${CLUSTER_DOMAIN}
-        - unifi.home.${CLUSTER_DOMAIN}
+      main:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+        hosts:
+        - host: unifi.pub.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            pathType: Prefix
+        - host: unifi.home.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - unifi.pub.${CLUSTER_DOMAIN}
+          - unifi.home.${CLUSTER_DOMAIN}
