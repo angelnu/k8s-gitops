@@ -9,7 +9,7 @@ spec:
     spec:
       # renovate: registryUrl=https://charts.goauthentik.io
       chart: authentik
-      version: 2.0.0
+      version: 2.1.0
       sourceRef:
         kind: HelmRepository
         name: authentik
@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/goauthentik/server
-      tag: 2021.6.4
+      tag: 2021.7.3
       pullPolicy: IfNotPresent
 
     ingress:
