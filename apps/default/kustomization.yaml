@@ -21,3 +21,4 @@ resources:
   - statping
   - tt-rss
   - unifi
+  - vnc
