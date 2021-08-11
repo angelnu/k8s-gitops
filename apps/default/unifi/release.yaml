@@ -6,7 +6,7 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/helm history datadog --kube-context -n datadog 
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: unifi
       version: 3.1.0
       sourceRef:
