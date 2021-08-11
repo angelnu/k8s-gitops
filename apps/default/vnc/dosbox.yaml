@@ -1,5 +1,5 @@
 #### POD config (run one time)
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: headless-vnc
@@ -8,15 +8,22 @@ metadata:
 spec:
   # 1 Pods should exist at all times.
   replicas: 1
+  selector:
+    matchLabels:
+      application: headless-vnc
   template:
     metadata:
       labels:
         application: headless-vnc
     spec:
       terminationGracePeriodSeconds: 5
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
       containers:
       - name: headless-vnc
-        image: consol/centos-xfce-vnc
+        image: consol/ubuntu-xfce-vnc
         imagePullPolicy: Always
         args:
           ### make normal UI startup to connect via: oc rsh <pod-name> bash
@@ -77,6 +84,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: http-port-tcp
+            name: headless-vnc
             port:
-              name: http
+              name: http-port-tcp
