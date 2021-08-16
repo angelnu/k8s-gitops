@@ -9,6 +9,6 @@ resources:
   - monitoring
   - nginx
   - postgres
-  - redis
+  # - redis
   - vpn
   - vpn-gateway

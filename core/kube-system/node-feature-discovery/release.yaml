@@ -16,7 +16,7 @@ spec:
       interval: 5m
   values:
     image:
-      repository: raspbernetes/node-feature-discovery
+      repository: gcr.io/k8s-staging-nfd/node-feature-discovery
       tag: v0.8.1
     master:
       tolerations:

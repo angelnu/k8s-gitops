@@ -17,7 +17,7 @@ spec:
   # See https://github.com/k8s-at-home/charts/blob/master/charts/esphome/values.yaml
   values:
     image:
-      repository: esphome/esphome
+      repository: ghcr.io/esphome/esphome
       tag: 1.20.4
     
     persistence:
@@ -47,7 +47,7 @@ spec:
     addons:
       codeserver:
         image:
-          repository: codercom/code-server
+          repository: ghcr.io/k8s-at-home/code-server
           tag: 3.11.1
         enabled: true
         volumeMounts:

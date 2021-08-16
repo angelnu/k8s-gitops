@@ -16,7 +16,7 @@ spec:
       interval: 5m
   values:
     image:
-      repository: raspbernetes/kured
+      repository: ghcr.io/k8s-at-home/kured
       tag: 1.7.0
     configuration:
       startTime: "0:00"
