@@ -7,6 +7,7 @@ resources:
   - forecastle
   - gitea
   # - gonic
+  - gow
   - home-assistant
   - homer
   - jellyfin

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pulse-audio-config
+data:
+  default.pa: |-
+    .fail
+        load-module module-null-sink sink_name=sunshine
+        set-default-sink sunshine
+        load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulse/pulse-socket
+  client.conf: |-  
+    default-sink = sink-sunshine-stereo
+    autospawn = no
+    daemon-binary = /bin/true 
+  daemon.conf: |-
+    exit-idle-time = -1
+    flat-volumes = yes
