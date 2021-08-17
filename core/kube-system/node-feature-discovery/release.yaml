@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: gcr.io/k8s-staging-nfd/node-feature-discovery
-      tag: v0.8.1
+      tag: v0.8.2
     master:
       tolerations:
       - key: "node-role.kubernetes.io/master"
