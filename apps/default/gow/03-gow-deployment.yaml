@@ -37,7 +37,7 @@ spec:
           path: /tmp/pulse
       - name: home-retro
         persistentVolumeClaim:
-          claimName: retroarch
+          claimName: gow-pvc
       - name: software
         persistentVolumeClaim:
           claimName: nfs-nextcloud-gow
@@ -226,4 +226,3 @@ spec:
           subPath: rootHome
         - name: software
           mountPath: /root/software
-          readOnly: true

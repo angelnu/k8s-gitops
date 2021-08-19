@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gow-pvc
+spec:
+  resources:
+    requests:
+      storage: "1Gi"
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  storageClassName: gow-storageclass
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gow-pv
+spec:
+  storageClassName: gow-storageclass
+  capacity:
+    storage: "1Gi"
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  csi:
+    driver: cephfs.csi.ceph.com
+    nodeStageSecretRef:
+      # node stage secret name
+      name: ceph-secret
+      # node stage secret namespace where above secret is created
+      namespace: ceph
+    volumeAttributes:
+      # Required options from storageclass parameters need to be added in volumeAttributes
+      "clusterID": "2ec73f92-a0c8-11eb-b84d-eb70282a4edf"
+      # (required) CephFS filesystem name into which the volume shall be created
+      "fsName": "cephfs"
+      "staticVolume": "true"
+      "rootPath": /k8s/${CLUSTER_ENV}/gow
+    # volumeHandle can be anything, need not to be same
+    # as PV name or volume name. keeping same for brevity
+    volumeHandle: gow-pv
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
