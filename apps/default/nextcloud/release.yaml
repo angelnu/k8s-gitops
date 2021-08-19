@@ -61,6 +61,13 @@ spec:
     #password: password
     redis:
       enabled: true
+      # password: set in secret
+      master:
+        persistence:
+          enabled: false
+      slave:
+        persistence:
+          enabled: false
     internalDatabase:
       enabled: false
     externalDatabase:
