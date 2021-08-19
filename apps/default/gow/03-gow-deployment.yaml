@@ -38,6 +38,9 @@ spec:
       - name: home-retro
         persistentVolumeClaim:
           claimName: retroarch
+      - name: software
+        persistentVolumeClaim:
+          claimName: nfs-nextcloud-gow
       - name: pulse-conf
         configMap:
           name: pulse-audio-config
@@ -183,3 +186,44 @@ spec:
         - name: home-retro
           mountPath: /home/retro/
           subPath: retroarch
+        - name: software
+          mountPath: /home/retro/software
+          readOnly: true
+
+      - name: ubuntu
+        securityContext:
+          privileged: true
+        command:
+        - "/bin/sh"
+        - "-c"
+        - |
+          trap 'exit' INT TERM
+          while [ 1 ]; do
+            sleep 600 &
+            wait $!
+          done
+        env:
+        - name: DISPLAY
+          value: :99
+        - name: LOG_LEVEL
+          value: debug
+        - name: PULSE_SERVER
+          value: "/tmp/pulse/pulse-socket"
+        image: ubuntu:latest
+        volumeMounts:
+        - name: audio-socket
+          mountPath: /tmp/pulse
+        - name: dev-input
+          mountPath: /dev/input
+          readOnly: true
+        - name: udev
+          mountPath: /run/udev
+          readOnly: true
+        - name: xorg
+          mountPath: /tmp/.X11-unix
+        - name: home-retro
+          mountPath: /root
+          subPath: rootHome
+        - name: software
+          mountPath: /root/software
+          readOnly: true
