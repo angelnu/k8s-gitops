@@ -19,6 +19,9 @@ spec:
       repository: intel/intel-gpu-plugin
       tag: 0.21.0
       pullPolicy: IfNotPresent
+    args:
+    - -shared-dev-num
+    - "5"
     securityContext:
       readOnlyRootFilesystem: true
     affinity:

@@ -51,10 +51,10 @@ spec:
             path: client.conf
           - key: daemon.conf
             path: daemon.conf
-#       nodeSelector:
-#         nvidia.com/gtx970_gpu: "true"
-#         gpu.intel.com/i915: "true"
-      hostNetwork: true
+      # nodeSelector:
+      #   nvidia.com/gtx970_gpu: "true"
+      #   gpu.intel.com/i915: "true"
+      #hostNetwork: true
       initContainers:
       - command:
         - sh
@@ -72,6 +72,13 @@ spec:
         image: gameonwhales/xorg:latest
         securityContext:
           privileged: true
+        #stdin: true 
+        #tty: true
+        resources:
+          requests:
+            gpu.intel.com/i915: 1
+          limits:
+            gpu.intel.com/i915: 1
         env:
         - name: DISPLAY
           value: :99
@@ -102,8 +109,13 @@ spec:
 
       - name: sunshine
         image: gameonwhales/sunshine:latest
-        securityContext:
-          privileged: true
+        #securityContext:
+        #  privileged: true
+        resources:
+          requests:
+            gpu.intel.com/i915: 1
+          limits:
+            gpu.intel.com/i915: 1
         ports:
         - containerPort: 48010
           protocol: TCP
