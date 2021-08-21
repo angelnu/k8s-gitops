@@ -60,7 +60,7 @@ spec:
         - sh
         - -c
         - mkdir -p /home-retro/sunshine && chown 1000:1000 /home-retro/sunshine && mkdir -p /home-retro/retroarch && chown 1000:1000 /home-retro/retroarch
-        image: busybox:1.33.1
+        image: busybox:1.34.0
         imagePullPolicy: IfNotPresent
         name: mk-home-retro-dirs
         volumeMounts:
