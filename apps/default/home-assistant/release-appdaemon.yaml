@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: acockburn/appdaemon
-      tag: 4.0.8
+      tag: 4.1.0
     
     persistence:
       config:
