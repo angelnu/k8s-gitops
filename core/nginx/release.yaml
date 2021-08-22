@@ -37,6 +37,7 @@ spec:
       use-forwarded-headers: "true"
       service:
         type: LoadBalancer
+        externalTrafficPolicy: Local
         loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.128"
       #metrics:
       #  enabled: true
