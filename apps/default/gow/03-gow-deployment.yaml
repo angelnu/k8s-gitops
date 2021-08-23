@@ -54,7 +54,7 @@ spec:
       # nodeSelector:
       #   nvidia.com/gtx970_gpu: "true"
       #   gpu.intel.com/i915: "true"
-      #hostNetwork: true
+      hostNetwork: true # Needed for mouse to work
       initContainers:
       - command:
         - sh
@@ -109,8 +109,8 @@ spec:
 
       - name: sunshine
         image: gameonwhales/sunshine:latest
-        #securityContext:
-        #  privileged: true
+        securityContext:
+          privileged: true
         resources:
           requests:
             gpu.intel.com/i915: 1
@@ -174,8 +174,8 @@ spec:
           subPath: sunshine
 
       - name: retroarch
-        securityContext:
-          privileged: true
+        # securityContext:
+        #  privileged: true
         env:
         - name: DISPLAY
           value: :99
@@ -202,7 +202,7 @@ spec:
           mountPath: /home/retro/software
           readOnly: true
 
-      - name: ubuntu
+      - name: debug
         securityContext:
           privileged: true
         command:
@@ -221,7 +221,7 @@ spec:
           value: debug
         - name: PULSE_SERVER
           value: "/tmp/pulse/pulse-socket"
-        image: ubuntu:latest
+        image: gameonwhales/xorg:latest
         volumeMounts:
         - name: audio-socket
           mountPath: /tmp/pulse
