@@ -22,6 +22,8 @@ spec:
     
     ingress:
       enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: "100m"
       hosts:
         - dashboard.${CLUSTER_DOMAIN}
         - dashboard.home.${CLUSTER_DOMAIN}
