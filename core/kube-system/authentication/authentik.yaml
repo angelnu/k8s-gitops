@@ -65,6 +65,8 @@ spec:
 
     redis:
       enabled: true
+      persistence:
+        enabled: false
       auth:
         enabled: true
         # password: #in cret
