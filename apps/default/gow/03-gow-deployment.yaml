@@ -39,8 +39,9 @@ spec:
         persistentVolumeClaim:
           claimName: gow-pvc
       - name: software
-        persistentVolumeClaim:
-          claimName: nfs-nextcloud-gow
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_SOFTWARE}"
       - name: pulse-conf
         configMap:
           name: pulse-audio-config
@@ -200,7 +201,7 @@ spec:
           subPath: retroarch
         - name: software
           mountPath: /home/retro/software
-          readOnly: true
+          #readOnly: true
 
       - name: debug
         securityContext:

@@ -3,6 +3,6 @@ kind: Kustomization
 resources:
 - nfs.yaml
 - release-fs.yaml
-- 01-pulse-audio-configmap.yaml
-- 03-gow-deployment.yaml
-- 04-gow-service.yaml
+# - 01-pulse-audio-configmap.yaml
+# - 03-gow-deployment.yaml
+# - 04-gow-service.yaml

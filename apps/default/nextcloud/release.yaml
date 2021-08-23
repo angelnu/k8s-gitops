@@ -84,6 +84,32 @@ spec:
       host: nextcloud.${CLUSTER_DOMAIN}
       persistence:
         subPath: nextcloud
+      extraVolumes:
+      - name: nfs-video
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_VIDEO}"
+      - name: nfs-software
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_SOFTWARE}"
+      - name: nfs-music
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_MUSIC}"
+      - name: nfs-downloads
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_DOWNLOADS}"
+      extraVolumeMounts:
+      - name: nfs-video
+        mountPath: "/video"
+      - name: nfs-software
+        mountPath: "/software"
+      - name: nfs-music
+        mountPath: "/music"
+      - name: nfs-downloads
+        mountPath: "/downloads"
       phpConfigs:
         uploadLimit.ini: |
           upload_max_filesize = 16G
