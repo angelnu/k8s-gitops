@@ -96,14 +96,14 @@ spec:
           mountPath: /home/retro/software
           #readOnly: true
     steam:
-      enabled: true
+      enabled: false
       image:
         repository: gameonwhales/steam
         tag: latest
         pullPolicy: IfNotPresent
       protonLog: 1
     firefox:
-      enabled: true
+      enabled: false
       image:
         repository: andrewmackrodt/firefox-x11
         tag: latest
@@ -115,22 +115,22 @@ spec:
         tag: 1.34.0
         pullPolicy: IfNotPresent
 
-    additionalContainers:
-      gnome:
-        image: x11docker/gnome:latest
-        imagePullPolicy: IfNotPresent
-        securityContext:
-          privileged: true
-        env:
-        - name: DISPLAY
-          value: ":99"
-        - name: PULSE_SERVER
-          value: "/tmp/pulse/pulse-socket"
-        volumeMounts:
-        - name: audio-socket
-          mountPath: /tmp/pulse
-        - name: xorg
-          mountPath: /tmp/.X11-unix
+    # additionalContainers:
+    #   gnome:
+    #     image: x11docker/gnome:latest
+    #     imagePullPolicy: IfNotPresent
+    #     securityContext:
+    #       privileged: true
+    #     env:
+    #     - name: DISPLAY
+    #       value: ":99"
+    #     - name: PULSE_SERVER
+    #       value: "/tmp/pulse/pulse-socket"
+    #     volumeMounts:
+    #     - name: audio-socket
+    #       mountPath: /tmp/pulse
+    #     - name: xorg
+    #       mountPath: /tmp/.X11-unix
   valuesFrom:
   - kind: Secret
     name: "games-on-whales"
