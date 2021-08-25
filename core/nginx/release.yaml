@@ -21,6 +21,7 @@ spec:
   # https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/values.yaml
   values:
     controller:
+      watchIngressWithoutClass: true
       replicaCount: 3
       config:
         custom-http-errors: 404,401,403,500,503
