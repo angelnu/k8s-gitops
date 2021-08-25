@@ -53,16 +53,6 @@ spec:
           cpu: 25m
         limits:
           memory: 600Mi
-      enabled: true
-      image:
-        repository: billimek/custom-error-pages
-        tag: 0.4.4
-      resources:
-        requests:
-          memory: 250Mi
-          cpu: 25m
-        limits:
-          memory: 350Mi
       affinity:
         # An example of required pod anti-affinity
         podAntiAffinity:
@@ -83,3 +73,13 @@ spec:
                 - controller
             topologyKey: "kubernetes.io/hostname"
     defaultBackend:
+      enabled: true
+      image:
+        repository: billimek/custom-error-pages
+        tag: 0.4.4
+      resources:
+        requests:
+          memory: 250Mi
+          cpu: 25m
+        limits:
+          memory: 350Mi
