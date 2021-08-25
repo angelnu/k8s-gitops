@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://kubernetes.github.io/ingress-nginx
       chart: ingress-nginx
-      version: 3.36.0
+      version: 4.0.1
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx
@@ -21,6 +21,7 @@ spec:
   # https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/values.yaml
   values:
     controller:
+      watchIngressWithoutClass: true
       replicaCount: 3
       config:
         custom-http-errors: 404,401,403,500,503
@@ -52,6 +53,25 @@ spec:
           cpu: 25m
         limits:
           memory: 600Mi
+      affinity:
+        # An example of required pod anti-affinity
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                - ingress-nginx
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                - ingress-nginx
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - controller
+            topologyKey: "kubernetes.io/hostname"
     defaultBackend:
       enabled: true
       image:
