@@ -8,3 +8,4 @@ resources:
   - radarr
   - readarr
   - sonarr
+  - vnc

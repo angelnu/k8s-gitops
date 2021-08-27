@@ -23,6 +23,7 @@ spec:
         fsGroup: 0
       containers:
       - name: ubuntu-vnc
+        # https://github.com/fcwu/docker-ubuntu-vnc-desktop
         image: dorowu/ubuntu-desktop-lxde-vnc
         imagePullPolicy: Always
         args:
@@ -69,7 +70,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dosbox
+  name: ubuntu-vnc
 spec:
   tls:
   - hosts:
