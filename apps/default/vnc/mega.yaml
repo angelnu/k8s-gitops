@@ -1,0 +1,96 @@
+#### POD config (run one time)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mega-vnc
+  labels:
+    application: mega-vnc
+spec:
+  # 1 Pods should exist at all times.
+  replicas: 1
+  selector:
+    matchLabels:
+      application: mega-vnc
+  template:
+    metadata:
+      labels:
+        application: mega-vnc
+    spec:
+      terminationGracePeriodSeconds: 5
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      containers:
+      - name: mega-vnc
+        image: johnshine/mega.syno:latest
+        imagePullPolicy: IfNotPresent
+        ### checks that vnc server is up and running
+        livenessProbe:
+          tcpSocket:
+            port: 5901
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+        ### checks if http-vnc connection is working
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 6080
+            scheme: HTTP
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+        volumeMounts:
+        - mountPath: /home/mega
+          name: mega
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 1
+      volumes:
+      - name: mega
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_DOWNLOADS}/downloaders/mega"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    application: mega-vnc
+  name: mega-vnc
+spec:
+  externalName: mega-vnc
+  ports:
+  - name: http-port-tcp
+    protocol: TCP
+    port: 6080
+    targetPort: 6080
+  - name: vnc-port-tcp
+    protocol: TCP
+    port: 5901
+    targetPort: 5901
+  selector:
+    application: mega-vnc
+  type: NodePort
+# Use type loadbalancer if needed
+#  type: LoadBalancer
+---
+# ------------------- Ingress ------------------- #
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dosbox
+spec:
+  tls:
+  - hosts:
+    - mega.pub.${CLUSTER_DOMAIN}
+  rules:
+  - host: dosbox.pub.${CLUSTER_DOMAIN}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mega-vnc
+            port:
+              name: http-port-tcp
