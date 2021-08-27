@@ -56,7 +56,6 @@ This should not be needed since there is GitHub workflow to do this automaticall
    ```
    ansible-playbook -i hosts-production k3s_remove.yaml
    ```
-   ```
 2. Delete VMs
    ```
    ansible-playbook -i hosts-production proxmox_remove.yaml

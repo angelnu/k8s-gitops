@@ -166,10 +166,19 @@
       name: qemu-guest-agent
       state: fixed
         
-  - name: Make sure a service unit is running
-    ansible.builtin.systemd:
-      state: started
-      name: qemu-guest-agent
+  # - name: Make sure a service unit is running
+  #   ansible.builtin.systemd:
+  #     state: started
+  #     name: qemu-guest-agent
+
+  - name: Stop VM to enable qemu-agent
+    when: apt_result.changed
+    include: tasks/proxmox/state.yaml
+    vars:
+        target_state: "{{ item }}"
+        force: yes
+    loop:
+    - "stopped"
   
   # enable qemu agent
   - name: Enable qemu agent
@@ -188,14 +197,13 @@
           "agent": "enabled=1,type=virtio,fstrim_cloned_disks=1"
         }
 
-  - name: Restart VM
+  - name: Start VM
     when: apt_result.changed
     include: tasks/proxmox/state.yaml
     vars:
         target_state: "{{ item }}"
         force: yes
     loop:
-    - "stopped"
     - "started"
 
   # Mount disks

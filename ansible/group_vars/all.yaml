@@ -24,7 +24,7 @@ proxmox:
       ide2:
         storage: local-lvm
       scsi0:
-        resize: 40G
+        resize: "{{ '60G' if production else '40G' }}"
         storage: local-lvm
       scsi1:
         lvm:
