@@ -1,5 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - dosbox.yaml
   - mega.yaml
+  - ubuntu.yaml
