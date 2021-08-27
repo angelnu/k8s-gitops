@@ -21,13 +21,15 @@ spec:
       replication_username: postgres
     configMajorVersionUpgrade:
       # "off": no upgrade, "manual": manifest triggers action, "full": minimal version violation triggers too
-      major_version_upgrade_mode: "full"
+      major_version_upgrade_mode: full
     configKubernetes:
       #enable_pod_antiaffinity: true
       #pod_environment_configmap: "postgres-pod-config"
       watched_namespace: "*"
       #list of labels that can be inherited from the cluster manifest
-      inherited_labels: application, environment
+      inherited_labels:
+      - application
+      - environment
       # Disable PDB since they prevent the drain
       # https://github.com/zalando/postgres-operator/issues/547
-      enable_pod_disruption_budget: "false"
+      enable_pod_disruption_budget: false
