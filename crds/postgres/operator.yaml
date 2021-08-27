@@ -28,3 +28,6 @@ spec:
       watched_namespace: "*"
       #list of labels that can be inherited from the cluster manifest
       inherited_labels: application, environment
+      # Disable PDB since they prevent the drain
+      # https://github.com/zalando/postgres-operator/pull/384
+      enable_pod_disruption_budget: "false"
