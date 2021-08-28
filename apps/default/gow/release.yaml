@@ -67,27 +67,27 @@ spec:
   
     sunshine:
       image:
-        repository: gameonwhales/sunshine
+        repository: angelnu/sunshine
         tag: latest
         pullPolicy: IfNotPresent
       user: admin
       password: admin
     xorg:
       image:
-        repository: gameonwhales/xorg
+        repository: angelnu/xorg
         tag: latest
         pullPolicy: IfNotPresent
       refreshrate: 60
       resolution: 1920x1080
     pulseaudio:
       image:
-        repository: gameonwhales/pulseaudio
+        repository: angelnu/pulseaudio
         tag: latest
         pullPolicy: IfNotPresent
     retroarch:
       enabled: true
       image:
-        repository: gameonwhales/retroarch
+        repository: angelnu/retroarch
         tag: latest
         pullPolicy: IfNotPresent
       logLevel: info
@@ -98,7 +98,7 @@ spec:
     steam:
       enabled: false
       image:
-        repository: gameonwhales/steam
+        repository: angelnu/steam
         tag: latest
         pullPolicy: IfNotPresent
       protonLog: 1
