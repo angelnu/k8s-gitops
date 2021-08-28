@@ -92,6 +92,8 @@ spec:
         pullPolicy: IfNotPresent
       logLevel: info
       volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
         - name: software
           mountPath: /home/retro/software
           #readOnly: true
@@ -115,17 +117,18 @@ spec:
         tag: 1.34.0
         pullPolicy: IfNotPresent
 
-    additionalContainers:
-      retroarch:
-        securityContext:
-          runAsUser: 0
-        command:
-        - /bin/sh
-        - -c
-        - while true; do
-          sleep 600 &
-          wait $!;
-          done
+    # additionalContainers:
+    #   retroarch:
+    #     # Enable the following to debug retro arch
+    #     securityContext:
+    #       runAsUser: 0
+    #     command:
+    #     - /bin/sh
+    #     - -c
+    #     - while true; do
+    #       sleep 600 &
+    #       wait $!;
+    #       done
     #   gnome:
     #     image: x11docker/gnome:latest
     #     imagePullPolicy: IfNotPresent
