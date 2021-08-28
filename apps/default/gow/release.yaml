@@ -115,7 +115,17 @@ spec:
         tag: 1.34.0
         pullPolicy: IfNotPresent
 
-    # additionalContainers:
+    additionalContainers:
+      retroarch:
+        securityContext:
+          runAsUser: 0
+        command:
+        - /bin/sh
+        - -c
+        - while true; do
+          sleep 600 &
+          wait $!;
+          done
     #   gnome:
     #     image: x11docker/gnome:latest
     #     imagePullPolicy: IfNotPresent
