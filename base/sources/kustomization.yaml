@@ -8,6 +8,7 @@ resources:
   - ceph-csi.yaml
   - forecastle.yaml
   - gitea.yaml
+  - hajimari
   - infracloudio-charts.yaml
   - ingress-nginx.yaml
   - jetstack-charts.yaml
