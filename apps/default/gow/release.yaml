@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: games-on-whales
-      version: 1.1.0
+      version: 1.1.1
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -67,48 +67,46 @@ spec:
   
     sunshine:
       image:
-        repository: angelnu/sunshine
-        tag: latest
+        repository: ghcr.io/games-on-whales/sunshine
+        tag: 1.0.0
         pullPolicy: IfNotPresent
       user: admin
       password: admin
     xorg:
       image:
-        repository: angelnu/xorg
-        tag: latest
+        repository: ghcr.io/games-on-whales/xorg
+        tag: 1.0.0
         pullPolicy: IfNotPresent
       refreshrate: 60
       resolution: 1920x1080
     pulseaudio:
       image:
-        repository: angelnu/pulseaudio
-        tag: latest
+        repository: ghcr.io/games-on-whales/pulseaudio
+        tag: 1.0.0
         pullPolicy: IfNotPresent
     retroarch:
       enabled: true
       image:
-        repository: angelnu/retroarch
-        tag: latest
+        repository: ghcr.io/games-on-whales/retroarch
+        tag: 1.0.0
         pullPolicy: IfNotPresent
       logLevel: info
       volumeMounts:
-        - name: dshm
-          mountPath: /dev/shm
         - name: software
           mountPath: /home/retro/software
           #readOnly: true
     steam:
       enabled: false
       image:
-        repository: angelnu/steam
-        tag: latest
+        repository: ghcr.io/games-on-whales/steam
+        tag: 1.0.0
         pullPolicy: IfNotPresent
       protonLog: 1
     firefox:
       enabled: false
       image:
         repository: andrewmackrodt/firefox-x11
-        tag: latest
+        tag: 1.0.0
         pullPolicy: IfNotPresent
       volumeMounts: []
     mkhomeretrodirs:
