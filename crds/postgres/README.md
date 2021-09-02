@@ -18,7 +18,11 @@
 - in-place upgrade: `su postgres -c "python3 /scripts/inplace_upgrade.py 2"`
 - cannot re-create DB cluster: `kubectl delete poddisruptionbudgets postgres-<chart name>-zalando-postgres-cluster-postgres-pdb`
 - apply backup:
-  1. get into postgres node
+  1. get into LEADER postgres node
+  2. delete old DB: 
+     ```
+     psql -U postgres -c 'drop database "tt-rss"'
+     ```
   2. `apt update && apt install -y openssh-client`
   3. `rsync anunez@nas:/volume1/kubernetes/backup/db/tt-rss/backup .`
   4. `psql -U postgres -f backup`
