@@ -27,8 +27,9 @@ spec:
         custom-http-errors: 404,401,403,500,503
         hsts-max-age: "31449600"
         global-auth-url: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/auth?nginx"
+        #global-auth-signin: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/start?rd=$escaped_request_uri"
         global-auth-signin: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/start?rd=$scheme://$host$request_uri"
-        global-auth-response-headers: X-Auth-Username,X-Forwarded-Email,X-Forwarded-Preferred-Username,X-Forwarded-User
+        global-auth-response-headers: X-Auth-Username,X-Forwarded-Email,X-Forwarded-Preferred-Username,X-Forwarded-User,X-Auth-Groups
         global-auth-snippet: |
           proxy_set_header X-Forwarded-Host $http_host;
         proxy-buffer-size: "16k" # Needed for authentik proxy
