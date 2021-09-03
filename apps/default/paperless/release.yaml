@@ -66,6 +66,7 @@ spec:
         enabled: true
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: 4G
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
         - host: paperless.pub.${CLUSTER_DOMAIN}
           paths:
