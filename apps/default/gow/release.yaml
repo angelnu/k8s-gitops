@@ -17,7 +17,7 @@ spec:
   # See https://github.com/k8s-at-home/charts/blob/master/charts/games-on-whales/values.yaml
   values:
     nodeSelector:
-      feature.node.kubernetes.io/custom-intel-gpu: "true"
+      feature.node.kubernetes.io/custom-nvidia-gpu: "true"
 
     service:
       main:
@@ -114,6 +114,23 @@ spec:
         repository: busybox
         tag: 1.34.0
         pullPolicy: IfNotPresent
+    
+    env:
+      NVIDIA_DRIVER_CAPABILITIES: all
+      NVIDIA_VISIBLE_DEVICES: all
+    additionalContainers:
+      xorg:
+        env:
+        - name: NVIDIA_DRIVER_CAPABILITIES
+          value: all
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: all
+      retroarch:
+        env:
+        - name: NVIDIA_DRIVER_CAPABILITIES
+          value: all
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: all
 
     # additionalContainers:
     #   retroarch:
