@@ -31,7 +31,7 @@ proxmox:
           lvg: pve
           thinpool: data
           name: "k3s-data-{{ 'production' if production else 'staging' }}"
-          size: "{{ '30G' if production else '10G' }}"
+          size: "{{ '50G' if production else '10G' }}"
           opts: "discard=on,ssd=1"
         mount:
           # See https://docs.ansible.com/ansible/latest/collections/ansible/posix/mount_module.html

@@ -41,6 +41,22 @@
           net0: 'virtio,bridge=vmbr1,tag=77'
         ipconfig:
           ipconfig0: 'ip=dhcp'
+        
+        hostpci: "{{ hostpci }}"
+    
+    - name: Update VM (add GPU)
+      when: create_vm_result.changed
+      throttle: 1
+      community.general.proxmox_kvm:
+        node: "{{ hoster }}"
+        api_host: "{{ proxmox.api.host }}"
+        api_user: "{{ proxmox.api.user }}"
+        api_password: "{{ proxmox.api.password }}"
+        proxmox_default_behavior: no_defaults
+
+        name: "{{ inventory_hostname }}"
+        update: yes
+        hostpci: "{{ hostpci }}"
 
     - name: get VM state
       proxmox_kvm:
@@ -182,6 +198,7 @@
   
   # enable qemu agent
   - name: Enable qemu agent
+    delegate_to: localhost
     uri:
       url: "https://{{ proxmox.api.host }}:8006/api2/json/nodes/{{ hoster }}/qemu/{{ vmid }}/config"
       method: PUT

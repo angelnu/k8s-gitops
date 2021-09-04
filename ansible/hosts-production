@@ -1,7 +1,8 @@
 [masters]
-k3s1 hoster=pve1 k8s_labels="[]" #k8s_untaints="{'node-role.kubernetes.io/master':''}"
-k3s2 hoster=pve2 k8s_labels="[]"
-k3s3 hoster=pve3 k8s_labels="['HomematicHW=True']" 
+k3s1 hoster=pve1 hostpci="{'hostpci0': 'host=0000:00:02'}" k8s_labels="[]" #k8s_untaints="{'node-role.kubernetes.io/master':''}"
+k3s2 hoster=pve2 hostpci="{'hostpci0': 'host=0000:00:02'}" k8s_labels="[]"
+k3s3 hoster=pve3 hostpci="{'hostpci0': 'host=0000:00:02'}" k8s_labels="['HomematicHW=True']" 
+k3s4 hoster=pve4 hostpci="{'hostpci0': 'host=0000:01:00.1,rombar=0'}" k8s_labels="[]"
 
 [workers]
 
