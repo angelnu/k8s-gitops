@@ -20,32 +20,6 @@
   roles:
     - role: xanmanning.k3s
 
-- name: "Prepare nodes for development"
-  hosts: nodes
-  tasks:
-  - name: Insert/update ssh authorised_keys
-    blockinfile:
-      path: .ssh/authorized_keys
-      block: |
-        {%- for key in SSH_PUB_KEYS_2_INSTALL %}
-        #{{ key.description }}
-        {{ key.value }}"
-        {% endfor %}
-
-  - name: Copy ssh files
-    copy:
-      dest: ".ssh/{{ item.key }}"
-      mode: 0600
-      content: "{{ item.value }}"
-    with_items: '{{ SSH_FILES_2_INSTALL | dict2items }}'
-
-  - name: Insert/Update bash aliases
-    blockinfile:
-      path: .bashrc
-      block: |
-        {%- for alias in ALIAS_2_INSTALL %}
-        alias {{ alias }}="{{ ALIAS_2_INSTALL[alias] }}"
-        {% endfor %}
   ####################################################################
   #                          PREPARE NODES                           #
   ####################################################################
@@ -156,12 +130,15 @@
   
   - name: Donwload kubectl config
     run_once: true
+    when: inventory_hostname in groups["masters"]
     ansible.builtin.fetch:
       src: /etc/rancher/k3s/k3s.yaml
       dest: "{{ KUBECTL_CONFIG }}"
       flat: yes
   
   - name: Ansible replace string example
+    run_once: true
+    when: inventory_hostname in groups["masters"]
     #TBD: this always result in changed
     replace:
       path: "{{ KUBECTL_CONFIG }}"

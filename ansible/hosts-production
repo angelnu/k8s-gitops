@@ -4,7 +4,7 @@ k3s2 hoster=pve2 hostpci="{'hostpci0': 'host=0000:00:02'}" k8s_labels="[]"
 k3s3 hoster=pve3 hostpci="{'hostpci0': 'host=0000:00:02'}" k8s_labels="['HomematicHW=True']" 
 
 [workers]
-k3s4 hoster=pve4 hostpci="{'hostpci0': 'host=0000:01:00.1,rombar=0'}" k8s_labels="[]"
+k3s4 hoster=pve4 hostpci="{'hostpci0': 'host=0000:01:00,rombar=0'}" k8s_labels="[]"
 
 [nodes:children]
 masters

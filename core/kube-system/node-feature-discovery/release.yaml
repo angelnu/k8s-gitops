@@ -65,6 +65,11 @@ spec:
             - pciId:
                 class: ["0300"]
                 vendor: ["8086"]
+          - name: "nvidia-gpu"
+            matchOn:
+            - pciId:
+                class: ["0300"]
+                vendor: ["10de"]
           - name: "coral-tpu"
             matchOn:
             - usbId:
