@@ -1,0 +1,311 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "3"
+    meta.helm.sh/release-name: games-on-whales
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2021-09-04T11:56:06Z"
+  generation: 3
+  labels:
+    app.kubernetes.io/instance: games-on-whales
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: games-on-whales
+    app.kubernetes.io/version: 1.0.0
+    helm.sh/chart: games-on-whales-1.3.0
+    helm.toolkit.fluxcd.io/name: games-on-whales
+    helm.toolkit.fluxcd.io/namespace: default
+  name: games-on-whales
+  namespace: default
+  resourceVersion: "188200"
+  uid: f357c099-7f7f-4a51-923e-2a6a5fd3f8b5
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: games-on-whales
+      app.kubernetes.io/name: games-on-whales
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: games-on-whales
+        app.kubernetes.io/name: games-on-whales
+    spec:
+      containers:
+      - env:
+        - name: DISPLAY
+          value: :99
+        - name: GOW_REQUIRED_DEVICES
+          value: /dev/uinput /dev/input/event* /dev/dri/*
+        - name: LOG_LEVEL
+          value: info
+        - name: NVIDIA_DRIVER_CAPABILITIES
+          value: all
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: all
+        - name: PULSE_SERVER
+          value: /tmp/pulse/pulse-socket
+        - name: SUNSHINE_PASS
+          value: admin
+        - name: SUNSHINE_USER
+          value: admin
+        - name: XDG_RUNTIME_DIR
+          value: /tmp/.X11-unix
+        image: ghcr.io/games-on-whales/sunshine:1.0.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 47990
+          timeoutSeconds: 1
+        name: games-on-whales
+        ports:
+        - containerPort: 48010
+          hostPort: 48010
+          name: sunshine
+          protocol: TCP
+        - containerPort: 47984
+          hostPort: 47984
+          name: sunshine-tcp1
+          protocol: TCP
+        - containerPort: 47985
+          hostPort: 47985
+          name: sunshine-tcp2
+          protocol: TCP
+        - containerPort: 47986
+          hostPort: 47986
+          name: sunshine-tcp3
+          protocol: TCP
+        - containerPort: 47987
+          hostPort: 47987
+          name: sunshine-tcp4
+          protocol: TCP
+        - containerPort: 47988
+          hostPort: 47988
+          name: sunshine-tcp5
+          protocol: TCP
+        - containerPort: 47989
+          hostPort: 47989
+          name: sunshine-tcp6
+          protocol: TCP
+        - containerPort: 47990
+          hostPort: 47990
+          name: sunshine-tcp7
+          protocol: TCP
+        - containerPort: 47998
+          hostPort: 47998
+          name: sunshine-udp1
+          protocol: UDP
+        - containerPort: 47999
+          hostPort: 47999
+          name: sunshine-udp2
+          protocol: UDP
+        - containerPort: 48000
+          hostPort: 48000
+          name: sunshine-udp3
+          protocol: UDP
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 47990
+          timeoutSeconds: 1
+        resources: {}
+        securityContext:
+          privileged: true
+        startupProbe:
+          failureThreshold: 30
+          periodSeconds: 5
+          successThreshold: 1
+          tcpSocket:
+            port: 47990
+          timeoutSeconds: 1
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /tmp/pulse
+          name: audio-socket
+        - mountPath: /dev/input
+          name: dev-input
+        - mountPath: /dshm
+          name: dshm
+        - mountPath: /home/retro
+          name: home
+        - mountPath: /pulse-conf
+          name: pulse-conf
+        - mountPath: /software
+          name: software
+        - mountPath: /run/udev
+          name: udev
+        - mountPath: /var/log
+          name: var-log
+        - mountPath: /tmp/.X11-unix
+          name: xorg
+      - image: ghcr.io/games-on-whales/pulseaudio:1.0.0
+        imagePullPolicy: IfNotPresent
+        name: pulseaudio
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /tmp/pulse
+          name: audio-socket
+        - mountPath: /etc/pulse
+          name: pulse-conf
+      - env:
+        - name: DISPLAY
+          value: :99
+        - name: LOG_LEVEL
+          value: info
+        - name: PULSE_SERVER
+          value: /tmp/pulse/pulse-socket
+        - name: GOW_REQUIRED_DEVICES
+          value: /dev/uinput /dev/input/event* /dev/dri/* /dev/snd/*
+        image: ghcr.io/games-on-whales/retroarch:1.0.0
+        imagePullPolicy: IfNotPresent
+        name: retroarch
+        resources: {}
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /tmp/pulse
+          name: audio-socket
+        - mountPath: /dev/input
+          name: dev-input
+          readOnly: true
+        - mountPath: /run/udev
+          name: udev
+          readOnly: true
+        - mountPath: /tmp/.X11-unix
+          name: xorg
+        - mountPath: /dev/shm
+          name: dshm
+        - mountPath: /home/retro
+          name: home
+        - mountPath: /home/retro/software
+          name: software
+      - env:
+        - name: DISPLAY
+          value: :99
+        - name: NVIDIA_DRIVER_CAPABILITIES
+          value: all
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: all
+        - name: REFRESH_RATE
+          value: "60"
+        - name: RESOLUTION
+          value: 1920x1080
+        image: ghcr.io/games-on-whales/xorg:1.0.0
+        imagePullPolicy: IfNotPresent
+        name: xorg
+        resources: {}
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /dev/input
+          name: dev-input
+          readOnly: true
+        - mountPath: /run/udev
+          name: udev
+          readOnly: true
+        - mountPath: /tmp/.X11-unix
+          name: xorg
+        - mountPath: /var/log
+          name: var-log
+      dnsPolicy: ClusterFirstWithHostNet
+      enableServiceLinks: true
+      hostNetwork: true
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown -R 1000:1000 /home/retro
+        image: busybox:1.34.0
+        imagePullPolicy: IfNotPresent
+        name: mkhomeretrodirs
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /home/retro
+          name: home
+      nodeSelector:
+        feature.node.kubernetes.io/custom-nvidia-gpu: "true"
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: default
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /tmp/pulse
+          type: ""
+        name: audio-socket
+      - hostPath:
+          path: /dev/input
+          type: ""
+        name: dev-input
+      - emptyDir:
+          medium: Memory
+        name: dshm
+      - name: home
+        persistentVolumeClaim:
+          claimName: gow-pvc
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: default.pa
+            path: default.pa
+          - key: client.conf
+            path: client.conf
+          - key: daemon.conf
+            path: daemon.conf
+          name: games-on-whales-pulse
+        name: pulse-conf
+      - name: software
+        nfs:
+          path: /volume1/software
+          server: nas.home.angelnu.com
+      - hostPath:
+          path: /run/udev
+          type: ""
+        name: udev
+      - hostPath:
+          path: /var/log
+          type: ""
+        name: var-log
+      - hostPath:
+          path: /tmp/.X11-unix
+          type: ""
+        name: xorg
+status:
+  conditions:
+  - lastTransitionTime: "2021-09-04T11:56:06Z"
+    lastUpdateTime: "2021-09-04T11:56:06Z"
+    message: Deployment does not have minimum availability.
+    reason: MinimumReplicasUnavailable
+    status: "False"
+    type: Available
+  - lastTransitionTime: "2021-09-04T16:10:08Z"
+    lastUpdateTime: "2021-09-04T16:10:08Z"
+    message: ReplicaSet "games-on-whales-69569cd4fd" has timed out progressing.
+    reason: ProgressDeadlineExceeded
+    status: "False"
+    type: Progressing
+  observedGeneration: 3
+  replicas: 1
+  unavailableReplicas: 1
+  updatedReplicas: 1

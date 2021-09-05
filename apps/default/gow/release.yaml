@@ -68,8 +68,8 @@ spec:
     sunshine:
       image:
         repository: ghcr.io/games-on-whales/sunshine
-        tag: 1.0.0
-        pullPolicy: IfNotPresent
+        tag: edge
+        pullPolicy: Always
       user: admin
       password: admin
     xorg:
@@ -85,7 +85,7 @@ spec:
         tag: 1.0.0
         pullPolicy: IfNotPresent
     retroarch:
-      enabled: true
+      enabled: false
       image:
         repository: ghcr.io/games-on-whales/retroarch
         tag: 1.0.0
@@ -96,7 +96,7 @@ spec:
           mountPath: /home/retro/software
           #readOnly: true
     steam:
-      enabled: false
+      enabled: true
       image:
         repository: ghcr.io/games-on-whales/steam
         tag: 1.0.0
@@ -118,19 +118,6 @@ spec:
     env:
       NVIDIA_DRIVER_CAPABILITIES: all
       NVIDIA_VISIBLE_DEVICES: all
-    additionalContainers:
-      xorg:
-        env:
-        - name: NVIDIA_DRIVER_CAPABILITIES
-          value: all
-        - name: NVIDIA_VISIBLE_DEVICES
-          value: all
-      retroarch:
-        env:
-        - name: NVIDIA_DRIVER_CAPABILITIES
-          value: all
-        - name: NVIDIA_VISIBLE_DEVICES
-          value: all
 
     # additionalContainers:
     #   retroarch:
