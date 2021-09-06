@@ -115,18 +115,27 @@ spec:
         tag: 1.34.0
         pullPolicy: IfNotPresent
 
-    additionalContainers:
-      steam:
-        # Enable the following to debug retro arch
-        securityContext:
-          runAsUser: 0
-        command:
-        - /bin/sh
-        - -c
-        - while true; do
-          sleep 600 &
-          wait $!;
-          done
+    # securityContext:
+    #   runAsUser: 0
+    # command:
+    # - /bin/sh
+    # - -c
+    # - while true; do
+    #   sleep 600 &
+    #   wait $!;
+    #   done
+    # additionalContainers:
+    #   steam:
+    #     # Enable the following to debug retro arch
+    #     securityContext:
+    #       runAsUser: 0
+    #     command:
+    #     - /bin/sh
+    #     - -c
+    #     - while true; do
+    #       sleep 600 &
+    #       wait $!;
+    #       done
     #   gnome:
     #     image: x11docker/gnome:latest
     #     imagePullPolicy: IfNotPresent
