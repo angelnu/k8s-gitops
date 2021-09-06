@@ -85,7 +85,7 @@ spec:
         tag: 1.0.0
         pullPolicy: IfNotPresent
     retroarch:
-      enabled: false
+      enabled: true
       image:
         repository: ghcr.io/games-on-whales/retroarch
         tag: 1.0.0
@@ -115,18 +115,18 @@ spec:
         tag: 1.34.0
         pullPolicy: IfNotPresent
 
-    # additionalContainers:
-    #   retroarch:
-    #     # Enable the following to debug retro arch
-    #     securityContext:
-    #       runAsUser: 0
-    #     command:
-    #     - /bin/sh
-    #     - -c
-    #     - while true; do
-    #       sleep 600 &
-    #       wait $!;
-    #       done
+    additionalContainers:
+      steam:
+        # Enable the following to debug retro arch
+        securityContext:
+          runAsUser: 0
+        command:
+        - /bin/sh
+        - -c
+        - while true; do
+          sleep 600 &
+          wait $!;
+          done
     #   gnome:
     #     image: x11docker/gnome:latest
     #     imagePullPolicy: IfNotPresent
