@@ -98,8 +98,8 @@ spec:
     steam:
       enabled: true
       image:
-        repository: ghcr.io/games-on-whales/steam
-        tag: 1.0.0
+        repository: ghcr.io/angelnu/steam
+        tag: sha-c387cd3
         pullPolicy: IfNotPresent
       protonLog: 1
     firefox:
