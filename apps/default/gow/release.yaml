@@ -87,8 +87,8 @@ spec:
     retroarch:
       enabled: true
       image:
-        repository: ghcr.io/games-on-whales/retroarch
-        tag: 1.0.0
+        repository: ghcr.io/angelnu/retroarch
+        tag: sha-fc9d5ae
         pullPolicy: IfNotPresent
       logLevel: info
       volumeMounts:
