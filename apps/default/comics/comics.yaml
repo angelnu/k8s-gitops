@@ -157,7 +157,7 @@ spec:
     spec:
       containers:
       - name: comics-nginx
-        image: nginx:1.21.1
+        image: nginx:1.21.3
         resources:
           requests:
             memory: "3Mi"
