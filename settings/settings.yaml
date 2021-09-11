@@ -12,6 +12,7 @@ data:
   #CLUSTER_MACVLAN_PLEX: "2"
   #CLUSTER_MACVLAN_CCU: "3"
   CLUSTER_MACVLAN_UNIFI: "4"
+  CLUSTER_MACVLAN_ESPHOME: "5"
 
   # lb_static_range: &anchor_ip_lb_static_range
   # 192.168.1.128-192.168.1.192
