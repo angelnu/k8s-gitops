@@ -25,13 +25,8 @@ spec:
         enabled: true
         existingClaim: esphome-pvc
 
-    podAnnotations:
-      k8s.v1.cni.cncf.io/networks: |
-        [{
-          "name":"macvlan-static",
-          "namespace": "kube-system",
-          "ips": ["${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_MACVLAN_ESPHOME}"]
-        }]
+    env:
+      ESPHOME_DASHBOARD_USE_PING: "true"
 
     ingress:
       main:
