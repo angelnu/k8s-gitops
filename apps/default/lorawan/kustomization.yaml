@@ -7,6 +7,6 @@ resources:
   - lorawan-server-fs.yaml
   - lorawan-server.yaml
   - chirpstack-secret.yaml
-  - chirpstack-db.yaml
+  #- chirpstack-db.yaml
   #- chirpstack.yaml
   
