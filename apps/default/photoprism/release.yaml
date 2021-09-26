@@ -29,7 +29,7 @@ spec:
       PHOTOPRISM_PUBLIC: "true"                     # No authentication required (disables password protection)
       # PHOTOPRISM_READONLY: "false"                   # Don't modify originals directory (reduced functionality)
       # PHOTOPRISM_EXPERIMENTAL: "false"               # Enable experimental features
-      PHOTOPRISM_SITE_URL: "photos.pub.${CLUSTER_DOMAIN}/"  # Canonical / public site URL
+      PHOTOPRISM_SITE_URL: "https://photos.pub.${CLUSTER_DOMAIN}/"  # Canonical / public site URL
       PHOTOPRISM_SITE_TITLE: "Nunez Gregoire"
       PHOTOPRISM_SITE_CAPTION: "Casa"
       PHOTOPRISM_SITE_DESCRIPTION: "una descripcion"
