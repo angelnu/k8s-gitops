@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: sentriz/gonic
-      tag: v0.13.1
+      tag: v0.14.0
     env:
       TZ: "Europe/Berlin"
       GONIC_MUSIC_PATH: "/music"
