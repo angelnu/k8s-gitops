@@ -26,7 +26,7 @@ spec:
       image:
         #bitnami version only has x86_64
         repository: metallb/controller
-        tag: v0.10.2
+        tag: v0.10.3
     speaker:
       image:
         #bitnami version only has x86_64
