@@ -27,6 +27,7 @@ spec:
     backend_hosts:
     - "lorawan-server:1700"
     - "router.eu.thethings.network:1700"
+    - "eu1.cloud.thethings.network:1700"
 
     gateway_ids:
     - "A840411DBD104150" #Casa96
