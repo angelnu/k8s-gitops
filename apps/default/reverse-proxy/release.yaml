@@ -33,6 +33,13 @@ spec:
         hosts:
         - host: fritz.home.${CLUSTER_DOMAIN}
         - host: fritz.pub.${CLUSTER_DOMAIN}
+    - name: mobile
+      externalName: mobile.box
+      port: 80
+      ingress:
+        hosts:
+        - host: mobile.home.${CLUSTER_DOMAIN}
+        - host: mobile.pub.${CLUSTER_DOMAIN}
     - name: ap-workroom
       externalName: ap-workroom.lan
       port: 80
