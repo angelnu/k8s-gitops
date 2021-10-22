@@ -26,5 +26,6 @@
   2. `apt update && apt install -y openssh-client`
   3. `rsync anunez@nas:/volume1/kubernetes/backup/db/tt-rss/backup .`
   4. `psql -U postgres -f backup`
-
+- list status of all clusters:
+  - `kubectl get pods -o name | grep postgres-0 | xargs -I{} kubectl exec {} -- patronictl list`
 
