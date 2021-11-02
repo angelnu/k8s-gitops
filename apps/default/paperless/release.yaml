@@ -27,6 +27,7 @@ spec:
       #PAPERLESS_CONSUMER_RECURSIVE: "true"
       #PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
       PAPERLESS_IGNORE_DATES: “1978-09-19,1979-06-12,2010-2-8,2011-11-15”
+      PAPERLESS_REDIS: redis://localhost:6379
     persistence:
       data:
         enabled: true
@@ -81,3 +82,9 @@ spec:
         - hosts:
           - paperless.pub.${CLUSTER_DOMAIN}
           - paperless.home${CLUSTER_DOMAIN}
+    # -- Deploy local redis instance.
+    # @default -- See values.yaml
+    additionalContainers:
+      - name: broker
+        image: redis:6.0
+        imagePullPolicy: IfNotPresent

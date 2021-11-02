@@ -27,5 +27,7 @@
   3. `rsync anunez@nas:/volume1/kubernetes/backup/db/tt-rss/backup .`
   4. `psql -U postgres -f backup`
 - list status of all clusters:
-  - `kubectl get pods -o name | grep postgres-0 | xargs -I{} kubectl exec {} -- patronictl list`
+  - `kubectl get pods -A -o name | grep postgres-0 | xargs -I{} kubectl exec {} -- patronictl list`
+- reinit member of cluster:
+  - kubectl exec -ti recipes-db-zalando-postgres-cluster-postgres-2 -- patronictl reinit <cluster name> <cluster member>
 

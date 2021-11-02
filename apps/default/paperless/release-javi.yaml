@@ -26,6 +26,7 @@ spec:
       PAPERLESS_CONSUMER_POLLING: "60"
       PAPERLESS_CONSUMER_RECURSIVE: "true"
       PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
+      PAPERLESS_REDIS: redis://localhost:6379
     
     persistence:
       data:
@@ -81,3 +82,9 @@ spec:
         - hosts:
           - paperless-javi.pub.${CLUSTER_DOMAIN}
           - paperless-javi.home${CLUSTER_DOMAIN}
+    # -- Deploy local redis instance.
+    # @default -- See values.yaml
+    additionalContainers:
+      - name: broker
+        image: redis:6.0
+        imagePullPolicy: IfNotPresent
