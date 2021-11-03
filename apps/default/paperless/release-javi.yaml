@@ -86,5 +86,5 @@ spec:
     # @default -- See values.yaml
     additionalContainers:
       - name: broker
-        image: redis:6.0
+        image: redis:6.2
         imagePullPolicy: IfNotPresent
