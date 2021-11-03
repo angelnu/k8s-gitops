@@ -42,7 +42,7 @@
         ipconfig:
           ipconfig0: 'ip=dhcp'
         
-        hostpci: "{{ hostpci }}"
+        hostpci: "{{ hostpci if hostpci is defined else {} }}"
     
     - name: Update VM (add GPU)
       when: create_vm_result.changed
@@ -56,7 +56,7 @@
 
         name: "{{ inventory_hostname }}"
         update: yes
-        hostpci: "{{ hostpci }}"
+        hostpci: "{{ hostpci if hostpci is defined else {} }}"
 
     - name: get VM state
       proxmox_kvm:
