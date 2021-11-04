@@ -64,6 +64,20 @@ spec:
           nfs: 
             server: ${NFS_SERVER}
             path: "${NFS_SOFTWARE}"
+      nvidia-drv:
+        enabled: true
+        type: hostPath
+        hostPathType: File
+        readOnly: true
+        mountPath: /nvidia/xorg/nvidia_drv.so
+        hostPath: /usr/lib/x86_64-linux-gnu/nvidia/xorg/nvidia_drv.so
+      libglxserver-nvidia:
+        enabled: true
+        type: hostPath
+        hostPathType: File
+        readOnly: true
+        mountPath: /nvidia/xorg/libglxserver_nvidia.so
+        hostPath: /usr/lib/x86_64-linux-gnu/nvidia/xorg/libglxserver_nvidia.so.470.63.01
   
     sunshine:
       image:
@@ -79,13 +93,20 @@ spec:
         pullPolicy: IfNotPresent
       refreshrate: 60
       resolution: 1920x1080
+      volumeMounts:
+        - name: nvidia-drv
+          mountPath: /nvidia/xorg/nvidia_drv.so
+          readOnly: true
+        - name: libglxserver-nvidia
+          mountPath: /nvidia/xorg/libglxserver_nvidia.so
+          readOnly: true
     pulseaudio:
       image:
         repository: ghcr.io/games-on-whales/pulseaudio
         tag: 1.0.0
         pullPolicy: IfNotPresent
     retroarch:
-      enabled: true
+      enabled: false
       image:
         repository: ghcr.io/angelnu/retroarch
         tag: sha-fc9d5ae
