@@ -47,20 +47,6 @@ spec:
         hosts:
         - host: ap-workroom.pub.${CLUSTER_DOMAIN}
         - host: ap-workroom.home.${CLUSTER_DOMAIN}
-    - name: ap-kitchen
-      externalName: repeater-kitchen.lan
-      port: 80
-      ingress:
-        hosts:
-        - host: ap-kitchen.pub.${CLUSTER_DOMAIN}
-        - host: ap-kitchen.home.${CLUSTER_DOMAIN}
-    - name: ap-guestroom
-      externalName: repeater-guestroom.lan
-      port: 80
-      ingress:
-        hosts:
-        - host: ap-guestroom.pub.${CLUSTER_DOMAIN}
-        - host: ap-guestroom.home.${CLUSTER_DOMAIN}
     - name: octoprint
       externalName: octopi-casa96-prusa.lan
       port: 80
