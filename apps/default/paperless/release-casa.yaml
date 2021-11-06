@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: paperless
+  name: paperless-casa
 spec:
   interval: 5m
   chart:
@@ -36,7 +36,7 @@ spec:
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_KUBERNETES}/paperless/data"
+            path: "${NFS_KUBERNETES}/paperless/casa/data"
       media:
         enabled: true
         mountPath: /usr/src/paperless/media
@@ -44,7 +44,7 @@ spec:
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_KUBERNETES}/paperless/media"
+            path: "${NFS_KUBERNETES}/paperless/casa/media"
       consume:
         enabled: true
         mountPath: /usr/src/paperless/consume
@@ -52,7 +52,7 @@ spec:
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_DOWNLOADS}/scans"
+            path: "${NFS_DOWNLOADS}/scanner/casa"
       export:
         enabled: true
         mountPath: /usr/src/paperless/export
@@ -60,7 +60,7 @@ spec:
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_KUBERNETES}/paperless/export"
+            path: "${NFS_KUBERNETES}/paperless/casa/export"
 
     ingress:
       main:
