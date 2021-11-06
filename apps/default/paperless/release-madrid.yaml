@@ -52,7 +52,7 @@ spec:
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_DOWNLOADS}/scanner/javi"
+            path: "${NFS_DOWNLOADS}/scanner/madrid"
       export:
         enabled: true
         mountPath: /usr/src/paperless/export
