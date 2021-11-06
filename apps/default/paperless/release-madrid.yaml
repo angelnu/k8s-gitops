@@ -1,0 +1,86 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: paperless-madrid
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: paperless
+      version: 8.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/paperless/values.yaml
+  values:
+    image:
+      repository: jonaswinkler/paperless-ng
+      tag: 1.5.0
+    
+    env:
+      PAPERLESS_OCR_LANGUAGE: deu
+      PAPERLESS_TIME_ZONE: "Europe/Berlin"
+      PAPERLESS_CONSUMER_POLLING: "60"
+      PAPERLESS_CONSUMER_RECURSIVE: "true"
+      PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
+      PAPERLESS_REDIS: redis://localhost:6379
+    
+    persistence:
+      data:
+        enabled: true
+        mountPath: /usr/src/paperless/data
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/paperless/madrid/data"
+      media:
+        enabled: true
+        mountPath: /usr/src/paperless/media
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/paperless/madrid/media"
+      consume:
+        enabled: true
+        mountPath: /usr/src/paperless/consume
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}/scanner/javi"
+      export:
+        enabled: true
+        mountPath: /usr/src/paperless/export
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/paperless/madrid/export"
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
+          nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+        hosts:
+        - host: paperless-madrid.home.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            # Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+        tls:
+        - hosts:
+          - paperless-madrid.home${CLUSTER_DOMAIN}
+    # -- Deploy local redis instance.
+    # @default -- See values.yaml
+    additionalContainers:
+      - name: broker
+        image: redis:6.2
+        imagePullPolicy: IfNotPresent
