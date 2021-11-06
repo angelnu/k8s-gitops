@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: paperless-javi
+  name: paperless-edu
 spec:
   interval: 5m
   chart:
@@ -36,7 +36,7 @@ spec:
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_KUBERNETES}/paperless/javi/data"
+            path: "${NFS_KUBERNETES}/paperless/edu/data"
       media:
         enabled: true
         mountPath: /usr/src/paperless/media
@@ -44,7 +44,7 @@ spec:
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_KUBERNETES}/paperless/javi/media"
+            path: "${NFS_KUBERNETES}/paperless/edu/media"
       consume:
         enabled: true
         mountPath: /usr/src/paperless/consume
@@ -52,7 +52,7 @@ spec:
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_DOWNLOADS}/scanner/javi"
+            path: "${NFS_DOWNLOADS}/scanner/edu"
       export:
         enabled: true
         mountPath: /usr/src/paperless/export
@@ -60,28 +60,30 @@ spec:
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_KUBERNETES}/paperless/javi/export"
+            path: "${NFS_KUBERNETES}/paperless/edu/export"
 
     ingress:
       main:
         enabled: true
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: 4G
+          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
+          nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
-        - host: paperless-javi.pub.${CLUSTER_DOMAIN}
+        - host: paperless-edu.pub.${CLUSTER_DOMAIN}
           paths:
           - path: /
             # Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
-        - host: paperless-javi.home.${CLUSTER_DOMAIN}
+        - host: paperless-edu.home.${CLUSTER_DOMAIN}
           paths:
           - path: /
             # Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
         tls:
         - hosts:
-          - paperless-javi.pub.${CLUSTER_DOMAIN}
-          - paperless-javi.home${CLUSTER_DOMAIN}
+          - paperless-edu.pub.${CLUSTER_DOMAIN}
+          - paperless-edu.home${CLUSTER_DOMAIN}
     # -- Deploy local redis instance.
     # @default -- See values.yaml
     additionalContainers:
