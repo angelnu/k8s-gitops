@@ -6,6 +6,7 @@ resources:
   - authentik.yaml
   - bitnami.yaml
   - ceph-csi.yaml
+  - ceph-rook.yaml
   - forecastle.yaml
   - gitea.yaml
   - hajimari.yaml
