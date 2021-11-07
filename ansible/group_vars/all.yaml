@@ -20,11 +20,14 @@ proxmox:
     host: pve2
     name: Ubuntu-20.04-template
   vm:
+    memory:
+      min: "{{ '16000' if production else '8000' }}" #0 dissables ballooning
+      max:  "{{ '16000' if production else '8000' }}"
     disks:
       ide2:
         storage: local-lvm
       scsi0:
-        resize: "{{ '60G' if production else '40G' }}"
+        resize: "{{ '70G' if production else '50G' }}"
         storage: local-lvm
       scsi1:
         lvm:

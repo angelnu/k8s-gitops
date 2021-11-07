@@ -23,6 +23,8 @@
       register: create_vm_result
       community.general.proxmox_kvm:
         node: "{{ proxmox.template.host }}"
+        memory: "{{ proxmox.vm.memory.max }}"
+        balloon : "{{ proxmox.vm.memory.min }}"
         target: "{{ hoster }}"
         api_host: "{{ proxmox.api.host }}"
         api_user: "{{ proxmox.api.user }}"
@@ -49,6 +51,8 @@
       throttle: 1
       community.general.proxmox_kvm:
         node: "{{ hoster }}"
+        memory: "{{ proxmox.vm.memory.max }}"
+        balloon : "{{ proxmox.vm.memory.min }}"
         api_host: "{{ proxmox.api.host }}"
         api_user: "{{ proxmox.api.user }}"
         api_password: "{{ proxmox.api.password }}"
