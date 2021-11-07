@@ -9,6 +9,7 @@ spec:
   concurrencyPolicy: Replace
   jobTemplate:
     spec:
+      parallelism: ${ONE_PROD_REPLICA}
       template:
         metadata:
           name: comics-scrapper:latest
