@@ -23,7 +23,7 @@ spec:
         - superuser
         - createdb
       databases:
-        postgres: postgres
+        gitea: postgres
       postgresql:
         version: "13"
 
