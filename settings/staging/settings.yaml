@@ -24,3 +24,6 @@ data:
   NFS_SOFTWARE: /volume1/test/software
   NFS_VIDEO: /volume1/test/video
   NFS_MUSIC: /volume1/test/music
+
+  ONE_PROD_REPLICA: "0"
+  ONE_STAGING_REPLICA: "1"
