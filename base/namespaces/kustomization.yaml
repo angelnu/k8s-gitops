@@ -9,5 +9,6 @@ resources:
 - podinfo.yaml
 - postgres.yaml
 - redis.yaml
+- rook-ceph.yaml
 - vpn-gateway.yaml
 - vpn.yaml

@@ -6,7 +6,6 @@ resources:
   - authentik.yaml
   - bitnami.yaml
   - ceph-csi.yaml
-  - ceph-rook.yaml
   - forecastle.yaml
   - gitea.yaml
   - hajimari.yaml
@@ -21,6 +20,7 @@ resources:
   - node-feature-discovery-charts.yaml
   - podinfo.yaml
   - raspberrymatic.yaml
+  - rook-ceph.yaml
   - weaveworks-kured-charts.yaml
   - wobcom.yaml
   - zalando-postgres-operator.yaml
