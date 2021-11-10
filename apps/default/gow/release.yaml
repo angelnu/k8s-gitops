@@ -81,7 +81,7 @@ spec:
         hostPathType: File
         readOnly: true
         mountPath: /nvidia/xorg/libglxserver_nvidia.so
-        hostPath: /usr/lib/x86_64-linux-gnu/nvidia/xorg/libglxserver_nvidia.so.470.63.01
+        hostPath: /usr/lib/x86_64-linux-gnu/nvidia/xorg/libglxserver_nvidia.so
   
     sunshine:
       image:
