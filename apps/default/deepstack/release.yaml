@@ -8,10 +8,11 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: deepstack
-      version: 1.0.0
+      version: 1.1.0
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        #name: k8s-at-home-charts
+        name: angelnu-charts
         namespace: flux-system
       interval: 5m
   # See https://github.com/k8s-at-home/charts/blob/master/charts/deepstack/values.yaml
@@ -38,28 +39,33 @@ spec:
       # -- Enable scene recognition
       # VISION-SCENE: True
       # -- Enable face detection
-      VISION-FACE: True
+      VISION-FACE: "True"
       # -- Enable object detection
-      VISION-DETECTION: True
+      VISION-DETECTION: "True"
 
-    ingress:
-      main:
-        enabled: true
-        hosts:
-        - host: deepstack.pub.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        - host: deepstack.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        tls:
-        - hosts:
-          - deepstack.pub.${CLUSTER_DOMAIN}
-          - deepstack.home.${CLUSTER_DOMAIN}
+    ui:
+      ingress:
+        ui:
+          enabled: true
+          hosts:
+          - host: deepstack.pub.${CLUSTER_DOMAIN}
+            paths:
+            - path: /
+              # Ignored if not kubeVersion >= 1.14-0
+              pathType: Prefix
+              service:
+                port: 8501
+          - host: deepstack.home.${CLUSTER_DOMAIN}
+            paths:
+            - path: /
+              # Ignored if not kubeVersion >= 1.14-0
+              pathType: Prefix
+              service:
+                port: 8501
+          tls:
+          - hosts:
+            - deepstack.pub.${CLUSTER_DOMAIN}
+            - deepstack.home.${CLUSTER_DOMAIN}
   valuesFrom:
   - kind: Secret
     name: "deepstack-helm-values"
