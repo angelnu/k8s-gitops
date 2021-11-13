@@ -60,3 +60,8 @@ spec:
         - hosts:
           - deepstack.pub.${CLUSTER_DOMAIN}
           - deepstack.home.${CLUSTER_DOMAIN}
+  valuesFrom:
+  - kind: Secret
+    name: "deepstack-helm-values"
+    valuesKey: values.yaml
+    optional: false
