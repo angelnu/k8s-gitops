@@ -4,8 +4,9 @@ namespace: default
 resources:
   - apache-musicindex
   - comics
+  - deepstack
   - esphome
-  - forecastle
+  # - forecastle
   - gitea
   # - gonic
   - gow
