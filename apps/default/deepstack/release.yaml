@@ -17,10 +17,8 @@ spec:
   # See https://github.com/k8s-at-home/charts/blob/master/charts/deepstack/values.yaml
   values:
     image:
-      # -- image repository
       repository: deepquestai/deepstack
-      # -- image tag
-      tag: cpu
+      tag: cpu-2021.09.1
 
     # -- security context. May be necessary when using GPU image
     # @default -- See values.yaml
