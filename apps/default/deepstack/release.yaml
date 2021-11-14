@@ -6,7 +6,7 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://angelnu.github.io/charts/
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: deepstack
       version: 1.1.0
       sourceRef:
