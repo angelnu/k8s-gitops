@@ -22,7 +22,7 @@ spec:
       # -- image pull policy
       pullPolicy: IfNotPresent
       # -- image tag
-      tag: v0.1.0
+      tag: v0.2.0
     
     env:
       TZ: "Europe/Berlin"
