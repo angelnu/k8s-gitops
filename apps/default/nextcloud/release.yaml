@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://nextcloud.github.io/helm/
       chart: nextcloud
-      version: 2.9.1
+      version: 2.9.2
       sourceRef:
         kind: HelmRepository
         name: nextcloud
@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: nextcloud
-      tag: 22.2.1
+      tag: 22.2.3
 
     env:
       PHP_MEMORY_LIMIT: 256M
@@ -82,8 +82,6 @@ spec:
 
     nextcloud:
       host: nextcloud.${CLUSTER_DOMAIN}
-      persistence:
-        subPath: nextcloud
       extraVolumes:
       - name: nfs-video
         nfs:
