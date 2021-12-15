@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: boky/postfix
-      tag: v3.3.1 # Override version from Chart's AppVersion
+      tag: v3.4.0 # Override version from Chart's AppVersion
     
     service:
       port: 25
