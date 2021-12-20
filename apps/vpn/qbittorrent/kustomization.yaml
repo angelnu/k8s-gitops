@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - release-fs.yaml
   - helmrelease.yaml
+  - ingress-home.yaml

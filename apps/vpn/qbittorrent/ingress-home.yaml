@@ -1,0 +1,22 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: qbittorrent-home
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 4M
+    nginx.ingress.kubernetes.io/enable-global-auth: "false"
+spec:
+  tls:
+    - hosts:
+        - torrent.home.${CLUSTER_DOMAIN}
+  rules:
+  - host: torrent.home.${CLUSTER_DOMAIN}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: qbittorrent
+            port:
+              number: 8080
