@@ -68,9 +68,6 @@ spec:
       replica:
         persistence:
           enabled: false
-      slave:
-        persistence:
-          enabled: false
     internalDatabase:
       enabled: false
     externalDatabase:
