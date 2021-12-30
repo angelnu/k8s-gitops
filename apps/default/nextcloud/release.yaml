@@ -121,11 +121,16 @@ spec:
           <?php
           $CONFIG = array (
             'trusted_proxies' => array('${NETWORK_K8S_CLUSTER_CIDR}')
+            'forwarded_for_headers' => 
+            array (
+              0 => 'HTTP_X_FORWARDED_FOR',
+            ),
           );
-    livenessProbe:
-      enabled: false
-    readinessProbe:
-      enabled: false
+        gitops.config.php: |-
+          <?php
+          $CONFIG = array (
+            'appstoreenabled' => true,
+          );
       mail:
         enabled: true
         fromAddress: nextcloud@${CLUSTER_DOMAIN}
@@ -137,6 +142,10 @@ spec:
           authtype: LOGIN
           name: ''
           password: ''
+    livenessProbe:
+      enabled: false
+    readinessProbe:
+      enabled: false
 
     persistence:
       enabled: true
