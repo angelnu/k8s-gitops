@@ -4,9 +4,9 @@ resources:
   - chirpstack-packet-multiplexer.yaml
   - mosquitto-fs.yaml
   - mosquitto.yaml
-  - lorawan-server-fs.yaml
-  - lorawan-server.yaml
-  - chirpstack-secret.yaml
+  #- lorawan-server-fs.yaml
+  #- lorawan-server.yaml
+  #- chirpstack-secret.yaml
   #- chirpstack-db.yaml
   #- chirpstack.yaml
   
