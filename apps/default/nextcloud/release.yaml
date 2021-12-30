@@ -79,6 +79,8 @@ spec:
       host: nextcloud-db-zalando-postgres-cluster-postgres
     cronjob:
       enabled: true
+      failedJobsHistoryLimit: 1
+      successfulJobsHistoryLimit: 1
 
     nextcloud:
       host: nextcloud.${CLUSTER_DOMAIN}
