@@ -133,6 +133,7 @@ spec:
           <?php
           $CONFIG = array (
             'appstoreenabled' => true,
+            'appstoreurl' => 'https://apps.nextcloud.com/api/v0',
             'mail_domain' => 'angelnu.com',
           );
       mail:
@@ -141,9 +142,9 @@ spec:
         domain: ${CLUSTER_DOMAIN}
         smtp:
           host: ${CLUSTER_MAIL_SERVER}
-          secure: ''
+          secure:
           port: ${CLUSTER_MAIL_SERVER_PORT}
-          authtype: ''
+          authtype:
           name:
           password:
     livenessProbe:

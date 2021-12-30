@@ -1,0 +1,90 @@
+---
+# -------------------- Deployment ------------------- #
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-push-service
+  labels:
+    app: nextcloud-push-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextcloud-push-service
+  template:
+    metadata:
+      labels:
+        app: nextcloud-push-service
+    spec:
+      containers:
+      - name: nextcloud-push-service
+        image: nextcloud:23.0.0
+        command:
+        - /nextcloud/custom_apps/notify_push/bin/x86_64/notify_push
+        - /nextcloud/config/config.php
+        env:
+        - name: NEXTCLOUD_URL 
+          value: http://nextcloud:8080
+        ports:
+        - containerPort: 7867
+        volumeMounts:
+          - mountPath: /nextcloud
+            name: nextcloud
+      volumes:
+      - name: nextcloud
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_KUBERNETES}/nextcloud"
+---
+# -------------------- Service ------------------- #
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: nextcloud-push-service
+  name: nextcloud-push-service
+spec:
+  ports:
+  - name: push-service
+    port: 7867
+    targetPort: 7867
+  selector:
+    app: nextcloud-push-service
+---
+
+# ------------------- Ingress ------------------- #
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nextcloud-push-service
+  annotations:
+    nginx.ingress.kubernetes.io/enable-global-auth: "false"
+spec:
+  tls:
+  - hosts:
+    - nextcloud.${CLUSTER_DOMAIN}
+    - nextcloud.home.${CLUSTER_DOMAIN}
+  rules:
+  - host: nextcloud.${CLUSTER_DOMAIN}
+    http:
+      paths:
+      - path: /push/
+        pathType: Prefix
+        backend:
+          service:
+            name: nextcloud-push-service
+            port:
+              name: push-service
+  - host: nextcloud.home.${CLUSTER_DOMAIN}
+    http:
+      paths:
+      - path: /push/
+        pathType: Prefix
+        backend:
+          service:
+            name: nextcloud-push-service
+            port:
+              name: push-service
