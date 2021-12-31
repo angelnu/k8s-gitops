@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: gitea/gitea
-      tag: 1.15.8
+      tag: 1.15.9
       pullPolicy: IfNotPresent
   
     service:
@@ -46,37 +46,19 @@ spec:
       enabled: true
       existingClaim: nfs-gitea
 
+    # databases
+    postgresql:
+      enabled: false
+    mysql:
+      enabled: false
+    mariadb:
+      enabled: false
+
     gitea:
       admin:
         username: gitea_admin
         # password: set in secret
         email: "gitea@${CLUSTER_DOMAIN}"
-      #metrics:
-      #  enabled: false
-      #  serviceMonitor:
-      #    enabled: false
-      ldap:
-        enabled: false
-        #name: 
-        #securityProtocol: 
-        #host: 
-        #port: 
-        #userSearchBase: 
-        #userFilter: 
-        #adminFilter: 
-        #emailAttribute: 
-        #bindDn: 
-        #bindPassword: 
-        #usernameAttribute: 
-        #sshPublicKeyAttribute:
-
-      # databases
-      postgresql:
-        enabled: false
-      mysql:
-        enabled: false
-      mariadb:
-        enabled: false
 
       # See https://docs.gitea.io/en-us/config-cheat-sheet/
       config:
@@ -107,6 +89,7 @@ spec:
           FROM: "gitea@${CLUSTER_DOMAIN}"
           USER: ""
           PASSWD: ""
+
   valuesFrom:
   - kind: Secret
     name: "gitea-helm-values"

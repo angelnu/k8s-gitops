@@ -232,7 +232,7 @@ spec:
         - sh
         - -c
         - chown -R 1000:1000 /home/retro
-        image: busybox:1.34.1
+        image: busybox:1.35.0
         imagePullPolicy: IfNotPresent
         name: mkhomeretrodirs
         resources: {}
