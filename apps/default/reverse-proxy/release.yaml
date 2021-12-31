@@ -96,3 +96,13 @@ spec:
         hosts:
         - host: nas.${CLUSTER_DOMAIN}
         - host: nas.pub.${CLUSTER_DOMAIN}
+    - name: nas-backup
+      ip: 192.168.103.24
+      port: 5001
+      ingress:
+        annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        hosts:
+        - host: nas-backup.home.${CLUSTER_DOMAIN}
+        - host: nas-backup.pub.${CLUSTER_DOMAIN}
