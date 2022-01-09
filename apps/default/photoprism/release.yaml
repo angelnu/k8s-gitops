@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: photoprism
-      version: 6.2.0
+      version: 6.3.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: photoprism/photoprism
-      tag: "20211215"
+      tag: "20220107"
     
     env:
       PHOTOPRISM_STORAGE_PATH: /photoprism/storage

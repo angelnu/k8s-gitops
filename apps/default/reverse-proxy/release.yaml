@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: reverse-proxy
-      version: 2.1.1
+      version: 2.2.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -81,7 +81,6 @@ spec:
       test: false
       ingress:
         annotations:
-          nginx.ingress.kubernetes.io/rewrite-target: /
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
         hosts:
