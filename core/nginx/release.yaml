@@ -27,12 +27,21 @@ spec:
         custom-http-errors: 404,401,403,500,503
         hsts-max-age: "31449600"
         # See instructions at https://goauthentik.io/docs/providers/proxy/forward_auth
-        global-auth-url: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/auth?nginx"
-        global-auth-signin: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/start?rd=$escaped_request_uri"
+        global-auth-url: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/auth/nginx"
         #global-auth-signin: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/start?rd=$scheme://$host$request_uri"
-        global-auth-response-headers: X-Auth-Username,X-Forwarded-Email,X-Forwarded-Preferred-Username,X-Forwarded-User,X-Auth-Groups
+        global-auth-signin: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/start?rd=$escaped_request_uri"
+        #global-auth-response-headers: X-Auth-Username,X-Forwarded-Email,X-Forwarded-Preferred-Username,X-Forwarded-User,X-Auth-Groups
+        global-auth-response-headers: Set-Cookie,X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid
         global-auth-snippet: |
           proxy_set_header X-Forwarded-Host $http_host;
+
+    nginx.ingress.kubernetes.io/auth-url: |
+      https://outpost.company/akprox/auth/nginx
+    nginx.ingress.kubernetes.io/auth-signin: |
+      https://outpost.company/akprox/start?rd=$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-response-headers: |
+      Set-Cookie,X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid
+
         proxy-buffer-size: "16k" # Needed for authentik proxy
         proxy-body-size: "4000m"
       extraArgs:
