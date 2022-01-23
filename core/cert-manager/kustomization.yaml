@@ -7,4 +7,5 @@ resources:
   - cert-manager-dnsmadeeasy.yaml
   - secret-dnsmadeeasy.yaml
   - certificate.yaml
+  - maddy #To be moved after certificate is copied to other namespaces
 
