@@ -4,4 +4,4 @@ resources:
   - secret.yaml
   - release-fs.yaml
   - release-db.yaml
-  #- release.yaml
+  - release.yaml

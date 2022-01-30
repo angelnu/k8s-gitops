@@ -1,0 +1,244 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: maddy
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: maddy
+      version: 1.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/maddy/values.yaml
+  values:
+    image:
+      # -- image repository
+      repository: angelnu/maddy
+      tag: dev
+      #pullPolicy: Always
+
+    maddy:
+      hostname: mx.${CLUSTER_DOMAIN}
+      primary_domain: ${CLUSTER_DOMAIN}
+      #secondary_domains: <set in secret>
+      tls_secret_name: ${CLUSTER_DOMAIN_CERT}
+      # alias: |
+      #   <set in secret>
+      sql:
+        type: postgres
+        postgres_dsn:
+          host: maddy-db-zalando-postgres-cluster-postgres
+          # -- The name of the DB
+          # @default -- DB name set in embedded postgres chart
+          dbname: postgres
+          # -- The DB user
+          # @default -- user set in embedded postgres chart
+          user: postgres
+          # -- The DB user password
+          # @default -- user set in embedded postgres chart
+          # password: < set in secret>
+          # -- SSL model for the DB
+          # disable - No SSL
+          # require - Always SSL (skip verification)
+          # verify-ca - Always SSL (verify that the certificate presented by the
+          #             server was signed by a trusted CA)
+          # verify-full - Always SSL (verify that the certification presented by
+          #               the server was signed by a trusted CA and the server host name
+          #               matches the one in the certificate)
+          sslmode: require
+      smtp_rules:
+        default:
+          enabled: false
+        rewrites:
+          enabled: true
+          custom: |
+            table.chain local_rewrites {
+                optional_step regexp "(.+)\+(.+)@(.+)" "$1@$3"
+                optional_step static {
+                    entry postmaster postmaster@$(primary_domain)
+                }
+                optional_step file $(alias_file)
+            }
+
+            table.chain local_rewrites_catchall {
+                optional_step regexp ".*@(.+)" "catchall@$1"
+                optional_step &local_rewrites
+            }
+
+            table.chain local_rewrites_catchall_auth {
+                optional_step regexp "(.*)@(.+)" "@1@$2" "catchall@$2"
+                optional_step &local_rewrites
+            }
+        local_routing:
+          enabled: true
+          custom: |
+            msgpipeline local_routing {
+                modify {
+                    # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).
+                    replace_rcpt &local_rewrites
+                }
+
+                # If there exists an explicitly created mailbox with that name - send it there.
+                destination &local_mailboxes {
+                    deliver_to &local_mailboxes
+                }
+                # If that's a disabled address - reject the message.
+                destination_in file /config/disabled-aliases { 
+                    reject
+                }
+                #Apply catchall rules
+                destination $(local_domains) {
+                    modify {
+                        replace_rcpt &local_rewrites_catchall
+                    }
+                    reroute {
+                        destination_in &local_mailboxes {
+                            deliver_to &local_mailboxes
+                        }
+                        default_destination {
+                            reject 550 5.1.1 "User doesn't exist"
+                        }
+                    }
+                }
+
+                # This allows aliases to be remote
+                default_destination {
+                    modify {
+                        dkim $(primary_domain) $(local_domains) default
+                    }
+                    deliver_to &remote_queue
+                }
+            }
+        incoming_email:
+          enabled: true
+          custom: |
+            # Incoming email
+            
+            smtp tcp://0.0.0.0:25 {
+                limits {
+                    # Up to 20 msgs/sec across max. 10 SMTP connections.
+                    all rate 20 1s
+                    all concurrency 10
+                }
+
+                dmarc yes
+                check {
+                    require_mx_record
+                    dkim
+                    spf
+                }
+
+                source $(local_domains) {
+                    reject 501 5.1.8 "Use Submission for outgoing SMTP"
+                }
+                default_source {
+                    destination postmaster $(local_domains) {
+                        deliver_to &local_routing
+                    }
+                    default_destination {
+                        reject 550 5.1.1 "User doesn't exist. Not a public relay!"
+                    }
+                }
+            }
+        outgoing_email:
+          enabled: true
+          custom: |
+            submission tls://0.0.0.0:465 tcp://0.0.0.0:587 {
+                #modified
+                debug yes
+                
+                limits {
+                    # Up to 50 msgs/sec across any amount of SMTP connections.
+                    all rate 50 1s
+                }
+
+                auth &local_authdb
+
+                source $(local_domains) {
+                    check {
+                        authorize_sender {
+                            prepare_email &local_rewrites_catchall_auth
+                            user_to_email identity
+                        }
+                    }
+
+                    destination postmaster $(local_domains) {
+                        deliver_to &local_routing
+                    }
+                    default_destination {
+                        # changed - let sendgrid to sign
+                        modify {
+                            dkim $(primary_domain) $(local_domains) default
+                        }
+                        deliver_to &remote_queue
+                    }
+                }
+                default_source {
+                    reject 501 5.1.8 "Non-local sender domain"
+                }
+            }
+
+            # changed
+            # target.remote outbound_delivery {
+            #     limits {
+            #         # Up to 20 msgs/sec across max. 10 SMTP connections
+            #         # for each recipient domain.
+            #         destination rate 20 1s
+            #         destination concurrency 10
+            #     }
+            #     mx_auth {
+            #         dane
+            #         mtasts {
+            #             cache fs
+            #             fs_dir mtasts_cache/
+            #         }
+            #         local_policy {
+            #             min_tls_level encrypted
+            #             min_mx_level none
+            #         }
+            #     }
+            # }
+        outbound_delivery:
+          enabled: true
+          # custom: |
+          #   target.smtp outbound_delivery {
+          #     debug no
+          #     require_tls yes
+          #     auth plain apikey <sendgrid key>
+          #     targets tcp://smtp.sendgrid.net:587
+          #   }
+        remote_queue:
+          enabled: true
+          custom: |
+            target.queue remote_queue {
+                target &outbound_delivery
+
+                autogenerated_msg_domain $(primary_domain)
+                bounce {
+                    destination postmaster $(local_domains) {
+                        deliver_to &local_routing
+                    }
+                    default_destination {
+                        reject 550 5.0.0 "Refusing to send DSNs to non-local addresses"
+                    }
+                }
+            }
+
+    persistence:
+      data:
+        enabled: true
+        mountPath: /data
+        type: pvc
+        existingClaim: maddy-pvc
+
+    # sieve:
+    #   - http://sieve.info/clients
+    #   - managesieve lib: https://github.com/miracle2k/pysieved
+    #   - desktop: https://github.com/thsmi/sieve/releases
+    #   - library: https://www.freshports.org/mail/libsieve/
