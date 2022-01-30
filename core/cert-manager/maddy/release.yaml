@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: maddy
-      version: 1.0.0
+      version: 2.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -21,15 +21,18 @@ spec:
       # -- image repository
       repository: angelnu/maddy
       tag: dev
-      #pullPolicy: Always
+      pullPolicy: Always
 
     maddy:
       hostname: "mx.${CLUSTER_DOMAIN}"
       primary_domain: "${CLUSTER_DOMAIN}"
       #secondary_domains: <set in secret>
       tls_secret_name: "${CLUSTER_DOMAIN_CERT}"
-      # alias: |
-      #   <set in secret>
+      # config_files:
+      #   aliases: |
+      #     <set in secret>
+      #   disabled-aliases: |
+      #     <set in secret>
       sql:
         type: postgres
         postgres_dsn:
@@ -229,6 +232,18 @@ spec:
                     }
                 }
             }
+      extra_settings:
+        local_mailboxes:
+            imap_filter: |
+                {
+                    command /data/filters/entry.sh --source_ip={source_ip} --source_host={source_host} --source_rdns={source_rdns} --msg_id={msg_id} --auth_user={auth_user} --account_name={account_name} --sender={sender}
+                }  
+
+    service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_MADDY}"
+        externalTrafficPolicy: Local
 
     persistence:
       data:
