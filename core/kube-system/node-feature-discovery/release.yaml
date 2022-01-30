@@ -34,12 +34,7 @@ spec:
                 operator: In
                 values: [""]
     worker:
-      config: |-
-        core:
-          sources:
-          - custom
-          - pci
-          - usb
+      config:
         sources:
           usb:
             deviceClassWhitelist:
@@ -55,37 +50,42 @@ spec:
             - "device"
           custom:
           - name: "zwave"
-            matchOn:
-            - usbId:
-                class: ["02"]
-                vendor: ["0658"]
-                device: ["0200"]
+            matchFeatures:
+            - feature: usb.device
+              matchExpressions:
+                class: {op: In, value: ["02"]}
+                vendor: {op: In, value: ["0658"]}
+                device: {op: In, value: ["0200"]}
           - name: "intel-gpu"
-            matchOn:
-            - pciId:
-                class: ["0300"]
-                vendor: ["8086"]
+            matchFeatures:
+            - feature: usb.device
+              matchExpressions:
+                class: {op: In, value: ["0300"]}
+                vendor: {op: In, value: ["8086"]}
           - name: "nvidia-gpu"
-            matchOn:
-            - pciId:
-                class: ["0300"]
-                vendor: ["10de"]
+            matchFeatures:
+            - feature: pci.device
+              matchExpressions:
+                class: {op: In, value: ["0300"]}
+                vendor: {op: In, value: ["10de"]}
           - name: "coral-tpu"
-            matchOn:
-            - usbId:
-                vendor: ["1a6e", "18d1"]
+            matchFeatures:
+            - feature: usb.device
+              matchExpressions:
+                vendor: {op: In, value: ["1a6e", "18d1"]}
           - name: "flight-aware"
-            matchOn:
-            - usbId:
-                class: ["ff"]
-                vendor: ["0bda"]
-                device: ["2832"]
+            matchFeatures:
+              matchExpressions:
+                class: {op: In, value: ["ff"]}
+                vendor: {op: In, value: ["0bda"]}
+                device: {op: In, value: ["2832"]}
           - name: "zigbee"
-            matchOn:
-            - usbId:
-                class: ["ff"]
-                vendor: ["1a86"]
-                device: ["7523"]
+            matchFeatures:
+            - feature: usb.device
+              matchExpressions:
+                class: {op: In, value: ["ff"]}
+                vendor: {op: In, value: ["1a86"]}
+                device: {op: In, value: ["7523"]}
       tolerations:
       - effect: "NoExecute"
         operator: "Exists"
