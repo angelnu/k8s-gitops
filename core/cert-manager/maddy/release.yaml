@@ -237,6 +237,33 @@ spec:
         type: pvc
         existingClaim: maddy-pvc
 
+    addons:
+      codeserver:
+        enabled: true
+        image:
+          repository: ghcr.io/k8s-at-home/code-server
+          tag: v4.0.2
+        volumeMounts:
+        - name: data
+          mountPath: /data
+          subPath: filters
+        ingress:
+          enabled: true
+          hosts:
+          - host: maddy-editor.pub.${CLUSTER_DOMAIN}
+            paths:
+            - path: /
+              pathType: Prefix
+          - host: maddy-editor.home.${CLUSTER_DOMAIN}
+            paths:
+            - path: /
+              pathType: Prefix
+          tls:
+          - hosts:
+            - maddy-editor.pub.${CLUSTER_DOMAIN}
+            - maddy-editor.home.${CLUSTER_DOMAIN}
+
+
   valuesFrom:
   - kind: Secret
     name: "maddy-helm-values"
