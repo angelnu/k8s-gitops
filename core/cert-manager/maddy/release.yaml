@@ -24,10 +24,10 @@ spec:
       #pullPolicy: Always
 
     maddy:
-      hostname: mx.${CLUSTER_DOMAIN}
-      primary_domain: ${CLUSTER_DOMAIN}
+      hostname: "mx.${CLUSTER_DOMAIN}"
+      primary_domain: "${CLUSTER_DOMAIN}"
       #secondary_domains: <set in secret>
-      tls_secret_name: ${CLUSTER_DOMAIN_CERT}
+      tls_secret_name: "${CLUSTER_DOMAIN_CERT}"
       # alias: |
       #   <set in secret>
       sql:
@@ -236,6 +236,12 @@ spec:
         mountPath: /data
         type: pvc
         existingClaim: maddy-pvc
+
+  valuesFrom:
+  - kind: Secret
+    name: "maddy-helm-values"
+    valuesKey: maddy.yaml
+    optional: false
 
     # sieve:
     #   - http://sieve.info/clients
