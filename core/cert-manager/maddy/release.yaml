@@ -130,7 +130,7 @@ spec:
                     all concurrency 10
                 }
 
-                #dmarc yes
+                dmarc yes
                 check {
                     require_mx_record
                     dkim
