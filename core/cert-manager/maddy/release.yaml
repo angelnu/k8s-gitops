@@ -88,7 +88,7 @@ spec:
                 }
 
                 # If there exists an explicitly created mailbox with that name - send it there.
-                destination &local_mailboxes {
+                destination_in &local_mailboxes {
                     deliver_to &local_mailboxes
                 }
                 # If that's a disabled address - reject the message.
