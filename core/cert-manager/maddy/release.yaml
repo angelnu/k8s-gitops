@@ -75,7 +75,7 @@ spec:
             }
 
             table.chain local_rewrites_catchall_auth {
-                optional_step regexp "(.*)@(.+)" "@1@$2" "catchall@$2"
+                optional_step regexp "(.*)@(.+)" "$1@$2" "catchall@$2"
                 optional_step &local_rewrites
             }
         local_routing:
