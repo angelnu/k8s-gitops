@@ -160,7 +160,7 @@ spec:
           );
       mail:
         enabled: true
-        fromAddress: nextcloud@${CLUSTER_DOMAIN}
+        fromAddress: nextcloud
         domain: ${CLUSTER_DOMAIN}
         smtp:
           host: ${CLUSTER_MAIL_SERVER}
