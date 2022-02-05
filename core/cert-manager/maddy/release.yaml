@@ -232,11 +232,48 @@ spec:
                     }
                 }
             }
+        internal_outgoing_email:
+          enabled: true
+          custom: |
+            stmp tcp://0.0.0.0:2525 {
+                #modified
+                debug yes
+                
+                limits {
+                    # Up to 50 msgs/sec across any amount of SMTP connections.
+                    all rate 50 1s
+                }
+
+                source $(local_domains) {
+                    deliver_to: &internal_outgoing_email_routing
+                }
+                default_source {
+                    modify {
+                        # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).
+                        replace_rcpt &local_rewrites
+                    }
+                    deliver_to: &internal_outgoing_email_routing
+                }
+
+            }
+            msgpipeline internal_outgoing_email_routing {
+                modify {
+                    # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).
+                    replace_rcpt &local_rewrites
+                }
+
+                destination $(local_domains) {
+                    deliver_to &local_routing
+                }
+                default_destination {
+                   reject 550 5.0.0 "Refusing to send to non-local addresses"
+                }
+            }
       extra_settings:
         local_mailboxes:
             imap_filter: |
                 {
-                    command /data/filters/entry.sh --source_ip={source_ip} --source_host={source_host} --source_rdns={source_rdns} --msg_id={msg_id} --auth_user={auth_user} --account_name={account_name} --sender={sender} --rcpt_to={rcpt_to} --original_rcpts={original_rcpts} --original_rcpt_to={original_rcpt_to}
+                    command /data/filters/entry.sh --source_ip={source_ip} --source_host={source_host} --source_rdns={source_rdns} --msg_id={msg_id} --auth_user={auth_user} --account_name={account_name} --sender={sender} --rcpt_to={rcpt_to} --original_rcpts="{original_rcpts}" --original_rcpt_to={original_rcpt_to}
                 }  
 
     service:
@@ -244,6 +281,10 @@ spec:
         type: LoadBalancer
         loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_MADDY}"
         externalTrafficPolicy: Local
+        ports:
+          smtp-intern:
+            enabled: false
+            port: 2525
 
     persistence:
       data:
