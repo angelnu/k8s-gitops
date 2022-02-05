@@ -123,7 +123,7 @@ spec:
           custom: |
             # Incoming email
             
-            smtp tcp://0.0.0.0:25 {
+            smtp tcp://0.0.0.0:2525 {
                 limits {
                     # Up to 20 msgs/sec across max. 10 SMTP connections.
                     all rate 20 1s
@@ -235,7 +235,7 @@ spec:
         internal_outgoing_email:
           enabled: true
           custom: |
-            stmp tcp://0.0.0.0:2525 {
+            smtp tcp://0.0.0.0:25 {
                 #modified
                 debug yes
                 
@@ -245,28 +245,24 @@ spec:
                 }
 
                 source $(local_domains) {
-                    deliver_to: &internal_outgoing_email_routing
+                    destination $(local_domains) {
+                        deliver_to &local_routing
+                    }
+                    default_destination {
+                        reject 550 5.1.1 "Refusing to send to non-local addresses"
+                    }
                 }
                 default_source {
                     modify {
                         # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).
-                        replace_rcpt &local_rewrites
+                        replace_sender regexp "(.?)" "device@$(primary_domain)"
                     }
-                    deliver_to: &internal_outgoing_email_routing
-                }
-
-            }
-            msgpipeline internal_outgoing_email_routing {
-                modify {
-                    # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).
-                    replace_rcpt &local_rewrites
-                }
-
-                destination $(local_domains) {
-                    deliver_to &local_routing
-                }
-                default_destination {
-                   reject 550 5.0.0 "Refusing to send to non-local addresses"
+                    destination $(local_domains) {
+                        deliver_to &local_routing
+                    }
+                    default_destination {
+                        reject 550 5.1.1 "Refusing to send to non-local addresses"
+                    }
                 }
             }
       extra_settings:
@@ -283,7 +279,7 @@ spec:
         externalTrafficPolicy: Local
         ports:
           smtp-intern:
-            enabled: false
+            enabled: true
             port: 2525
 
     persistence:
