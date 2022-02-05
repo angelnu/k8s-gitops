@@ -249,7 +249,11 @@ spec:
                         deliver_to &local_routing
                     }
                     default_destination {
-                        reject 550 5.1.1 "Refusing to send to non-local addresses"
+                        #reject 550 5.1.1 "Refusing to send to non-local addresses"
+                        modify {
+                            dkim $(primary_domain) $(local_domains) default
+                        }
+                        deliver_to &remote_queue
                     }
                 }
                 default_source {
