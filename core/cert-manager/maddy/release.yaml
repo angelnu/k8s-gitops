@@ -273,7 +273,7 @@ spec:
         local_mailboxes:
             imap_filter: |
                 {
-                    command /data/filters/entry.sh --source_ip={source_ip} --source_host={source_host} --source_rdns={source_rdns} --msg_id={msg_id} --auth_user={auth_user} --account_name={account_name} --sender={sender} --rcpt_to={rcpt_to} --original_rcpts="{original_rcpts}" --original_rcpt_to={original_rcpt_to}
+                    command /data/filters/entry.sh --source_ip={source_ip} --source_host={source_host} --source_rdns={source_rdns} --msg_id={msg_id} --auth_user={auth_user} --account_name={account_name} --sender={sender} --rcpt_to={rcpt_to} --original_rcpt_to={original_rcpt_to}
                 }  
 
     service:
