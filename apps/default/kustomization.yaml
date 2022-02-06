@@ -9,7 +9,7 @@ resources:
   # - forecastle
   - gitea
   # - gonic
-  - gow
+  #- gow
   - hajimari
   - home-assistant
   - homer
