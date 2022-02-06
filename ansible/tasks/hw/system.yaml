@@ -21,6 +21,15 @@
     daemon_reload: yes
   when: result is changed
 
+# Increase limits for inotify
+- ansible.posix.sysctl:
+    name: fs.inotify.max_user_instances
+    value: '4096'
+    state: present
+- ansible.posix.sysctl:
+    name: fs.inotify.max_user_watches
+    value: '524288'
+    state: present
 
 # Set hostname
 - name: Set hostname
