@@ -6,3 +6,4 @@ resources:
   - release-javi.yaml
   - release-edu.yaml
   - release-madrid.yaml
+  - release-recipes.yaml
