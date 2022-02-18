@@ -26,12 +26,12 @@ spec:
       image:
         #bitnami version only has x86_64
         repository: metallb/controller
-        tag: v0.11.0
+        tag: v0.12.1
     speaker:
       image:
         #bitnami version only has x86_64
         repository: metallb/speaker
-        tag: v0.11.0
+        tag: v0.12.1
     configInline:
       address-pools:
       - name: default
