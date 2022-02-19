@@ -48,9 +48,6 @@ spec:
         #host: smtp.gmail.com
         #use_tls: true
 
-      outposts:
-        docker_image_base: ghcr.io/goauthentik/%(type)s:%(version)s
-
       postgresql:
         host: '{{ .Release.Name }}-db-zalando-postgres-cluster-postgres'
         name: postgres
