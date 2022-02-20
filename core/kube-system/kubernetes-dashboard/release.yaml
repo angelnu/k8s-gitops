@@ -24,8 +24,8 @@ spec:
       enabled: true
       annotations:
         nginx.ingress.kubernetes.io/proxy-body-size: "100m"
-        nginx.ingress.kubernetes.io/auth-url: https://dashboard.${CLUSTER_DOMAIN}/outpost.goauthentik.io/auth/nginx
-        nginx.ingress.kubernetes.io/auth-signin: https://dashboard.${CLUSTER_DOMAIN}/outpost.goauthentik.io/start?rd=$escaped_request_uri
+        # nginx.ingress.kubernetes.io/auth-url: https://dashboard.${CLUSTER_DOMAIN}/outpost.goauthentik.io/auth/nginx
+        # nginx.ingress.kubernetes.io/auth-signin: https://dashboard.${CLUSTER_DOMAIN}/outpost.goauthentik.io/start?rd=$escaped_request_uri
       hosts:
         - dashboard.${CLUSTER_DOMAIN}
         - dashboard.home.${CLUSTER_DOMAIN}

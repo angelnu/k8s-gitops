@@ -18,9 +18,9 @@ spec:
   values:
     ingress:
       enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/auth-url: https://casa-editor.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/auth/nginx
-        nginx.ingress.kubernetes.io/auth-signin: https://casa-editor.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/start?rd=$escaped_request_uri
+      # annotations:
+      #   nginx.ingress.kubernetes.io/auth-url: https://casa-editor.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/auth/nginx
+      #   nginx.ingress.kubernetes.io/auth-signin: https://casa-editor.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/start?rd=$escaped_request_uri
       hosts:
       - host: "postgres-operator.pub.${CLUSTER_DOMAIN}"
         paths: [""]
