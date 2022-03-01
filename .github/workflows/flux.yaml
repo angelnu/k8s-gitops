@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Flux CLI
         uses: billimek/flux2/action@isolate_flux_binary
       - name: Update Flux components
