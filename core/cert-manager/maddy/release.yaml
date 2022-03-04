@@ -298,7 +298,7 @@ spec:
         enabled: true
         image:
           repository: ghcr.io/k8s-at-home/code-server
-          tag: v4.0.2
+          tag: v4.1.0
         volumeMounts:
         - name: data
           mountPath: /data
