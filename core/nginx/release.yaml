@@ -27,9 +27,9 @@ spec:
         custom-http-errors: 404,401,403,500,503
         hsts-max-age: "31449600"
         # See instructions at https://goauthentik.io/docs/providers/proxy/forward_auth
-        global-auth-url: "https://authentik.pub.angelnu.com/outpost.goauthentik.io/auth/nginx"
+        global-auth-url: "https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/auth/nginx"
         #global-auth-signin: "https://authentik.pub.${CLUSTER_DOMAIN}/akprox/start?rd=$scheme://$host$request_uri"
-        global-auth-signin: "https://authentik.pub.angelnu.com/outpost.goauthentik.io/start?rd=$escaped_request_uri"
+        global-auth-signin: "https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/start?rd=$escaped_request_uri"
         #global-auth-response-headers: X-Auth-Username,X-Forwarded-Email,X-Forwarded-Preferred-Username,X-Forwarded-User,X-Auth-Groups
         global-auth-response-headers: Set-Cookie,X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid
         global-auth-snippet: |

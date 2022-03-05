@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: paperless-helm-values
 data:
-  common.yaml: |
+  commmon.yaml: |
     image:
       repository: ghcr.io/paperless-ngx/paperless-ngx
       tag: 1.5.0
@@ -14,8 +14,10 @@ data:
       PAPERLESS_CONSUMER_POLLING: "60"
       #PAPERLESS_CONSUMER_RECURSIVE: "true"
       #PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
-      PAPERLESS_IGNORE_DATES: “1978-09-19,1979-06-12,2010-2-8,2011-11-15”
       PAPERLESS_REDIS: redis://localhost:6379
+      PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+      PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_X_AUTHENTIK_USERNAME
+      PAPERLESS_LOGOUT_REDIRECT_URL: https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/sign_out
     persistence:
       data:
         enabled: true
@@ -55,7 +57,7 @@ data:
         enabled: true
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: 4G
-          
+
     # -- Deploy local redis instance.
     # @default -- See values.yaml
     additionalContainers:
