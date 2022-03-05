@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: vabene1111/recipes
-      tag: 1.1.1
+      tag: 1.1.2
     
     persistence:
       media:
