@@ -16,57 +16,29 @@ spec:
       interval: 5m
   # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/paperless/values.yaml
   values:
-    image:
-      repository: ghcr.io/paperless-ngx/paperless-ngx
-      tag: 1.5.0
-    
     env:
       PAPERLESS_OCR_LANGUAGE: eng
-      PAPERLESS_TIME_ZONE: "Europe/Berlin"
-      PAPERLESS_CONSUMER_POLLING: "60"
-      PAPERLESS_CONSUMER_RECURSIVE: "true"
-      PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
-      PAPERLESS_REDIS: redis://localhost:6379
-    
+
     persistence:
       data:
-        enabled: true
-        mountPath: /usr/src/paperless/data
-        type: custom
         volumeSpec:
           nfs:
-            server: "${NFS_SERVER}"
             path: "${NFS_KUBERNETES}/paperless/mireille-work/data"
       media:
-        enabled: true
-        mountPath: /usr/src/paperless/media
-        type: custom
         volumeSpec:
           nfs:
-            server: "${NFS_SERVER}"
             path: "${NFS_KUBERNETES}/paperless/mireille-work/media"
       consume:
-        enabled: true
-        mountPath: /usr/src/paperless/consume
-        type: custom
         volumeSpec:
           nfs:
-            server: "${NFS_SERVER}"
             path: "${NFS_DOWNLOADS}/scanner/mireille-work"
       export:
-        enabled: true
-        mountPath: /usr/src/paperless/mireille-work/export
-        type: custom
         volumeSpec:
           nfs:
-            server: "${NFS_SERVER}"
             path: "${NFS_KUBERNETES}/paperless/mireille-work/export"
 
     ingress:
       main:
-        enabled: true
-        annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: 4G
         hosts:
         - host: paperless-mireille-work.pub.${CLUSTER_DOMAIN}
           paths:
@@ -82,9 +54,9 @@ spec:
         - hosts:
           - paperless-mireille-work.pub.${CLUSTER_DOMAIN}
           - paperless-mireille-work.home${CLUSTER_DOMAIN}
-    # -- Deploy local redis instance.
-    # @default -- See values.yaml
-    additionalContainers:
-      - name: broker
-        image: redis:6.2
-        imagePullPolicy: IfNotPresent
+
+  valuesFrom:
+  - kind: ConfigMap
+    name: "paperless-helm-values"
+    valuesKey: common.yaml
+    optional: false

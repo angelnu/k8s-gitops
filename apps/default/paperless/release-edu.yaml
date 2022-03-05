@@ -16,50 +16,27 @@ spec:
       interval: 5m
   # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/paperless/values.yaml
   values:
-    image:
-      repository: ghcr.io/paperless-ngx/paperless-ngx
-      tag: 1.5.0
-    
+
     env:
-      PAPERLESS_OCR_LANGUAGE: deu
-      PAPERLESS_TIME_ZONE: "Europe/Berlin"
-      PAPERLESS_CONSUMER_POLLING: "60"
-      PAPERLESS_CONSUMER_RECURSIVE: "true"
-      PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
-      PAPERLESS_REDIS: redis://localhost:6379
-    
+      PAPERLESS_OCR_LANGUAGE: spa
+      PAPERLESS_IGNORE_DATES: “1984-09-09”
+
     persistence:
       data:
-        enabled: true
-        mountPath: /usr/src/paperless/data
-        type: custom
         volumeSpec:
           nfs:
-            server: "${NFS_SERVER}"
             path: "${NFS_KUBERNETES}/paperless/edu/data"
       media:
-        enabled: true
-        mountPath: /usr/src/paperless/media
-        type: custom
         volumeSpec:
           nfs:
-            server: "${NFS_SERVER}"
             path: "${NFS_KUBERNETES}/paperless/edu/media"
       consume:
-        enabled: true
-        mountPath: /usr/src/paperless/consume
-        type: custom
         volumeSpec:
           nfs:
-            server: "${NFS_SERVER}"
             path: "${NFS_DOWNLOADS}/scanner/edu"
       export:
-        enabled: true
-        mountPath: /usr/src/paperless/export
-        type: custom
         volumeSpec:
           nfs:
-            server: "${NFS_SERVER}"
             path: "${NFS_KUBERNETES}/paperless/edu/export"
 
     ingress:
@@ -84,9 +61,9 @@ spec:
         - hosts:
           - paperless-edu.pub.${CLUSTER_DOMAIN}
           - paperless-edu.home${CLUSTER_DOMAIN}
-    # -- Deploy local redis instance.
-    # @default -- See values.yaml
-    additionalContainers:
-      - name: broker
-        image: redis:6.2
-        imagePullPolicy: IfNotPresent
+
+  valuesFrom:
+  - kind: ConfigMap
+    name: "paperless-helm-values"
+    valuesKey: common.yaml
+    optional: false
