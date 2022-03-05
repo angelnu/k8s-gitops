@@ -20,7 +20,7 @@ spec:
       enabled: true
       annotations:
         nginx.ingress.kubernetes.io/configuration-snippet: |
-          auth_request_set $required_groups 'admins';
+          auth_request_set $required_groups 'admin';
       hosts:
       - host: "postgres-operator.pub.${CLUSTER_DOMAIN}"
         paths: [""]

@@ -155,8 +155,8 @@ spec:
           <?php
           $CONFIG = array (
             'appstoreenabled' => true,
-            'appstoreurl' => 'https://apps.nextcloud.com/api/v0',
-            'mail_domain' => 'angelnu.com',
+            #'appstoreurl' => 'https://apps.nextcloud.com/api/v0',
+            'mail_domain' => '${CLUSTER_DOMAIN}',
           );
       mail:
         enabled: true

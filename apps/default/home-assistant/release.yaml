@@ -72,7 +72,7 @@ spec:
         enabled: true
         annotations:
           nginx.org/websocket-services: home-assistant
-          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          #nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
         - host: ha.${CLUSTER_DOMAIN}
           paths:
@@ -109,7 +109,7 @@ spec:
           enabled: true
           annotations:
             nginx.ingress.kubernetes.io/configuration-snippet: |
-              auth_request_set $required_groups 'casa-editors';
+              auth_request_set $required_groups 'casa_editors';
           hosts:
           - host: ha-editor.pub.${CLUSTER_DOMAIN}
             paths:

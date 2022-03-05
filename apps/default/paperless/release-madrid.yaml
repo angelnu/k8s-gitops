@@ -43,7 +43,7 @@ spec:
       main:
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
-            auth_request_set $required_usernames 'javier|eduardo';
+            auth_request_set $required_groups 'madrid';
         hosts:
         - host: paperless-madrid.home.${CLUSTER_DOMAIN}
           paths:

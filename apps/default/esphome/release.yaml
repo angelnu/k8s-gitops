@@ -33,7 +33,7 @@ spec:
         enabled: true
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
-            auth_request_set $required_groups 'casa-editors';
+            auth_request_set $required_groups 'casa_editors';
         hosts:
         - host: esphome.pub.${CLUSTER_DOMAIN}
           paths:
@@ -63,7 +63,7 @@ spec:
           enabled: true
           annotations:
             nginx.ingress.kubernetes.io/configuration-snippet: |
-              auth_request_set $required_groups 'casa-editors';
+              auth_request_set $required_groups 'casa_editors';
           hosts:
           - host: esphome-editor.home.${CLUSTER_DOMAIN}
             paths:
