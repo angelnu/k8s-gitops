@@ -41,11 +41,9 @@ spec:
 
     ingress:
       main:
-        enabled: true
         annotations:
-          ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"
-          nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
-          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            auth_request_set $required_usernames 'eduardo';
         hosts:
         - host: paperless-edu.pub.${CLUSTER_DOMAIN}
           paths:

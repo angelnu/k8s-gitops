@@ -39,6 +39,9 @@ spec:
 
     ingress:
       main:
+        annotations:
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            auth_request_set $required_usernames 'mireille';
         hosts:
         - host: paperless-mireille-work.pub.${CLUSTER_DOMAIN}
           paths:
