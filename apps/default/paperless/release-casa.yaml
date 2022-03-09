@@ -42,7 +42,7 @@ spec:
       main:
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
-            auth_request_set $required_usernames 'anunez|mireille';
+            auth_request_set $required_usernames 'angel|mireille';
         hosts:
         - host: paperless.pub.${CLUSTER_DOMAIN}
           paths:
