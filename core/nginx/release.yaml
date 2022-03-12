@@ -72,7 +72,9 @@ spec:
       service:
         type: LoadBalancer
         externalTrafficPolicy: Local
-        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.128"
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_INTERNET}"
+        annotations:
+          metallb.universe.tf/allow-shared-ip: ${CLUSTER_LB_INTERNET_LABEL}
       #metrics:
       #  enabled: true
       #  serviceMonitor:

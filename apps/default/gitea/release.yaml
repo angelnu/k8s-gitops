@@ -27,7 +27,9 @@ spec:
       ssh:
         type: LoadBalancer
         port: 22
-        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_GITEA}"
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_INTERNET}"
+        annotations:
+          metallb.universe.tf/allow-shared-ip: ${CLUSTER_LB_INTERNET_LABEL}
     ingress:
       enabled: true
       annotations:
