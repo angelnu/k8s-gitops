@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://dl.gitea.io/charts/
       chart: gitea
-      version: 5.0.1
+      version: 5.0.2
       sourceRef:
         kind: HelmRepository
         name: gitea
@@ -27,9 +27,9 @@ spec:
       ssh:
         type: LoadBalancer
         port: 22
-        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_INTERNET}"
         annotations:
-          metallb.universe.tf/allow-shared-ip: ${CLUSTER_LB_INTERNET_LABEL}
+          metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_INTERNET}"
+          metallb.universe.tf/allow-shared-ip: "${CLUSTER_LB_INTERNET_LABEL}"
     ingress:
       enabled: true
       annotations:
