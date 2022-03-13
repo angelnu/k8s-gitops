@@ -28,8 +28,7 @@ spec:
         type: LoadBalancer
         port: 22
         annotations:
-          metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_INTERNET}"
-          metallb.universe.tf/allow-shared-ip: "${CLUSTER_LB_INTERNET_LABEL}"
+          metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_GITEA}"
     ingress:
       enabled: true
       annotations:

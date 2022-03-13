@@ -71,10 +71,9 @@ spec:
       use-forwarded-headers: "true"
       service:
         type: LoadBalancer
-        #externalTrafficPolicy: Local #Does not allow sharing IP
+        externalTrafficPolicy: Local #Required to keep source IP
         annotations:
-          metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_INTERNET}"
-          metallb.universe.tf/allow-shared-ip: "${CLUSTER_LB_INTERNET_LABEL}"
+          metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_INGRESS}"
       #metrics:
       #  enabled: true
       #  serviceMonitor:
