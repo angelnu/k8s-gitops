@@ -83,6 +83,11 @@ spec:
           ENABLE_NOTIFY_MAIL: true
         openid:
           ENABLE_OPENID_SIGNIN: false
+        oauth2:
+          ENABLE_AUTO_REGISTRATION: true
+          USERNAME: nickname 
+          UPDATE_AVATAR: true
+          ACCOUNT_LINKING: auto
         mailer:
           ENABLED: true
           HOST: ${CLUSTER_MAIL_SERVER}:${CLUSTER_MAIL_SERVER_PORT}
