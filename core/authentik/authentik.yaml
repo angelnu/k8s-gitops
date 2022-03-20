@@ -67,6 +67,22 @@ spec:
       auth:
         enabled: true
         # password: #in cret
+    
+    volumes:
+    - name: cluster-domain-cert
+      secret:
+        secretName: ${CLUSTER_DOMAIN_CERT}
+        optional: false # default setting; "mysecret" must exist
+        defaultMode: 0666
+        items:
+        - key: tls.crt
+          path: fullchain.pem
+        - key: tls.key
+          path: privkey.pem
+    volumeMounts:
+    - name: cluster-domain-cert
+      mountPath: /certs/${CLUSTER_DOMAIN}
+      readOnly: false
   
   valuesFrom:
   - kind: Secret
