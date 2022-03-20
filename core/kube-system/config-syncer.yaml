@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: config-syncer
+spec:
+  releaseName: config-syncer
+  chart:
+    spec:
+      # renovate: registryUrl=https://charts.appscode.com/stable
+      chart: kubed
+      version: v0.13.2
+      sourceRef:
+        kind: HelmRepository
+        name: appscode
+        namespace: flux-system
+  interval: 60m
+  install:
+    remediation:
+      retries: 3
+  # Default values
+  # https://github.com/kubeops/config-syncer/blob/master/charts/kubed/values.yaml
+  values: {}

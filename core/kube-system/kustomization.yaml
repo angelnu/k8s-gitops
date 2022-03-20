@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: kube-system
 resources:
   - authentication
+  - config-syncer.yaml
   - intel-gpu-plugin
   - kubernetes-dashboard
   - metallb.yaml
