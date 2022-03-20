@@ -1,9 +1,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+- authentik.yaml
 - ceph.yaml
 - ceph-rbd.yaml
 - cert-manager.yaml
+- maddy.yaml
 - monitoring.yaml
 - nginx.yaml
 - podinfo.yaml

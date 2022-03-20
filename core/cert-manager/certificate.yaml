@@ -67,3 +67,6 @@ spec:
   # This dummy can be changed to circumvent Letsencrypt check for duplicated certs
   # The right fix is to backup certificates correctly
   - '*.${CLUSTER_DOMAIN_DUMMY}.${CLUSTER_DOMAIN}'
+  secretTemplate:
+    annotations:
+      kubed.appscode.com/sync: "cert-manager=CLUSTER_DOMAIN_CERT" # Sync certificate to matching namespaces
