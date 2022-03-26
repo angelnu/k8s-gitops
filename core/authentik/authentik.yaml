@@ -71,7 +71,7 @@ spec:
     volumes:
     - name: cluster-domain-cert
       secret:
-        secretName: cluster-domain-cert
+        secretName: ${CLUSTER_DOMAIN_CERT}
         optional: false # default setting; "mysecret" must exist
         items:
         - key: tls.crt
@@ -80,8 +80,8 @@ spec:
           path: privkey.pem
     volumeMounts:
     - name: cluster-domain-cert
-      mountPath: /certs/${CLUSTER_DOMAIN}
-      readOnly: false
+      mountPath: /certs/cluster-domain-cert
+      readOnly: true
   
   valuesFrom:
   - kind: Secret
