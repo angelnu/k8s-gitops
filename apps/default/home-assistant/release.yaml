@@ -72,7 +72,7 @@ spec:
         enabled: true
         annotations:
           nginx.org/websocket-services: home-assistant
-          #nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
         - host: ha.${CLUSTER_DOMAIN}
           paths:
