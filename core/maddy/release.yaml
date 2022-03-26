@@ -55,6 +55,17 @@ spec:
           #               the server was signed by a trusted CA and the server host name
           #               matches the one in the certificate)
           sslmode: require
+      auth:
+        type: ldap
+        ldap:
+            # urls:  set in secret
+            # dn_template: set in secret
+
+            bind plain: null
+            base_dn: null
+            filter: null
+            debug: 'true'
+            connect_timeout: 1m
       smtp_rules:
         default:
           enabled: false
