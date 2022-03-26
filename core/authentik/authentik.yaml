@@ -71,9 +71,8 @@ spec:
     volumes:
     - name: cluster-domain-cert
       secret:
-        secretName: ${CLUSTER_DOMAIN_CERT}
+        secretName: cluster-domain-cert
         optional: false # default setting; "mysecret" must exist
-        defaultMode: 0666
         items:
         - key: tls.crt
           path: fullchain.pem
