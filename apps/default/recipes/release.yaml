@@ -16,7 +16,7 @@ spec:
       interval: 5m
   dependsOn:
     - name: recipes-db
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/recipes/values.yaml
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/recipes/values.yaml
   values:
     image:
       repository: vabene1111/recipes
@@ -43,6 +43,21 @@ spec:
       POSTGRES_USER: postgres
       #POSTGRES_PASSWORD: set in secret
       TIMEZONE: Europe/Berlin
+      REVERSE_PROXY_AUTH: 1
+      HTTP_REMOTE_USER: HTTP_X_AUTHENTIK_USERNAME
+      #SOCIAL_PROVIDERS: allauth.socialaccount.providers.nextcloud
+      #SOCIALACCOUNT_PROVIDERS: '{"nextcloud":{"SERVER":"https://nextcloud.${CLUSTER_DOMAIN}"}}'
+      # SOCIALACCOUNT_PROVIDERS: |
+      #   {
+      #       'openid': {
+      #           'SERVERS': [
+      #               { "id": 'authentik',
+      #                 "name": 'authentik',
+      #                 "openid_url": 'https://authentik.pub.${CLUSTER_DOMAIN}/application/o/tandoor-app/'
+      #               },
+      #           ]
+      #       }
+      #   }
 
     ingress:
       main:
@@ -64,25 +79,6 @@ spec:
         - hosts:
           - recipes.pub.${CLUSTER_DOMAIN}
           - recipes.home.${CLUSTER_DOMAIN}
-    
-    additionalContainers:
-    - name: nginx
-      image: nginx:1.21.6
-      ports:
-        - containerPort: 80
-          name: http
-      volumeMounts:
-      #
-      # If persistent volumes are enabled ; please uncomment the following lines
-      #
-      - name: media
-        mountPath: '/media'
-      - name: static
-        mountPath: '/static'
-      - name: recipes-config
-        mountPath: /etc/nginx/nginx.conf
-        subPath: nginx-config
-        readOnly: true
 
   valuesFrom:
   - kind: Secret
