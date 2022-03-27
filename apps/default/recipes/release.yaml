@@ -44,20 +44,6 @@ spec:
       #POSTGRES_PASSWORD: set in secret
       TIMEZONE: Europe/Berlin
       REVERSE_PROXY_AUTH: 1
-      HTTP_REMOTE_USER: HTTP_X_AUTHENTIK_USERNAME
-      #SOCIAL_PROVIDERS: allauth.socialaccount.providers.nextcloud
-      #SOCIALACCOUNT_PROVIDERS: '{"nextcloud":{"SERVER":"https://nextcloud.${CLUSTER_DOMAIN}"}}'
-      # SOCIALACCOUNT_PROVIDERS: |
-      #   {
-      #       'openid': {
-      #           'SERVERS': [
-      #               { "id": 'authentik',
-      #                 "name": 'authentik',
-      #                 "openid_url": 'https://authentik.pub.${CLUSTER_DOMAIN}/application/o/tandoor-app/'
-      #               },
-      #           ]
-      #       }
-      #   }
 
     ingress:
       main:
