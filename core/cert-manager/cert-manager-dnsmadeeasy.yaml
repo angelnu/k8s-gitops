@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: dnsmadeeasy-webhook
-      version: 4.4.1
+      version: 4.5.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
