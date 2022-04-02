@@ -25,7 +25,7 @@ spec:
     log_level: 4
 
     backend_hosts:
-    - "lorawan-server:1700"
+    #- "lorawan-server:1700"
     - "eu1.cloud.thethings.network:1700"
 
     gateway_ids:
