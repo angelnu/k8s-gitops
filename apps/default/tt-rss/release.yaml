@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: ghcr.io/k8s-at-home/tt-rss
-      tag: v1.9112.0
+      tag: v2.0.9112
     
     ingress:
       main:
@@ -46,6 +46,14 @@ spec:
       TTRSS_DB_NAME: tt-rss
       #TTRSS_DB_PASS: set in secret
       TTRSS_SESSION_COOKIE_LIFETIME: "2592000" # 30 days in seconds
+      TTRSS_PLUGINS: auth_ldap, note # auth_remote, auth_internal
+      
+      # LDAP settings
+      TTRSS_LDAP_AUTH_SERVER_URI: ldaps://ldap.${CLUSTER_DOMAIN}
+      #TTRSS_LDAP_AUTH_BINDDN: set in secret
+      #TTRSS_LDAP_AUTH_BASEDN: set in secret
+      #TTRSS_LDAP_AUTH_SEARCHFILTER: set in secret
+      TTRSS_LDAP_AUTH_LOGIN_ATTRIB: cn
     
     postgresql:
       enabled: false # use own chart
