@@ -7,6 +7,7 @@ spec:
   releaseName: podinfo
   chart:
     spec:
+      # renovate: registryUrl=https://stefanprodan.github.io/podinfo
       chart: podinfo
       version: 6.0.0
       sourceRef:

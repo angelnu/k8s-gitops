@@ -6,6 +6,7 @@ spec:
   interval: 5m
   chart:
     spec:
+      # renovate: registryUrl=https://mailu.github.io/helm-charts
       chart: mailu
       version: 0.1.2
       sourceRef:

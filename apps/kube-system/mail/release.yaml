@@ -6,6 +6,7 @@ spec:
   interval: 5m
   chart:
     spec:
+      # renovate: registryUrl=https://bokysan.github.io/docker-postfix
       chart: mail
       version: v3.3.0
       sourceRef:

@@ -6,6 +6,7 @@ spec:
   releaseName: redis
   chart:
     spec:
+      # renovate: registryUrl=https://charts.bitnami.com/bitnami
       chart: redis
       sourceRef:
         kind: HelmRepository
