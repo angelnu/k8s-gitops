@@ -2,3 +2,28 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: podinfo
+
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default
+  namespace: podinfo
+spec:
+  podSelector: {}
+  ingress:
+  - from:
+    # Only allow ingress from nginx
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: nginx
+  egress:
+  - to:
+    # Only allow egress to K8S
+    - ipBlock:
+        cidr: "10.0.0.0/8"
+  policyTypes:
+    - Ingress
+    - Egress
+
+
