@@ -1,8 +1,0 @@
-apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: HelmRepository
-metadata:
-  name: mail
-  namespace: flux-system
-spec:
-  interval: 15m
-  url: https://bokysan.github.io/docker-postfix

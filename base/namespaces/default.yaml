@@ -1,16 +1,14 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: authentik
-  labels:
-    cert-manager: CLUSTER_DOMAIN_CERT
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: default
 
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
   name: default
-  namespace: authentik
+  namespace: default
 spec:
   podSelector: {}
   ingress:
@@ -23,7 +21,7 @@ spec:
     # Allow local and operator ingress to PostgreSQL
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: authentik
+          kubernetes.io/metadata.name: default
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: postgres
@@ -35,24 +33,11 @@ spec:
     # Allow local ingress to Redis
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: authentik
+          kubernetes.io/metadata.name: default
     ports:
     - protocol: TCP
       port: 6379
       endPort: 6379
-  - from:
-    # Allow LDAP ingress
-    - ipBlock:
-        cidr: "10.0.0.0/8"
-    - ipBlock:
-        cidr: "192.0.0.0/8"
-    ports:
-    - protocol: TCP
-      port: 3389
-      endPort: 3389
-    - protocol: TCP
-      port: 6636
-      endPort: 6636
   egress:
   - to:
     # Allow all egress
@@ -61,3 +46,4 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+

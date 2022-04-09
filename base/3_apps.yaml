@@ -13,11 +13,11 @@ spec:
   path: ./apps
   prune: true
   validation: client
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v1beta1
-      kind: HelmRelease
-      name: podinfo
-      namespace: podinfo
+  # healthChecks:
+  #   - apiVersion: helm.toolkit.fluxcd.io/v1beta1
+  #     kind: HelmRelease
+  #     name: podinfo
+  #     namespace: podinfo
   decryption:
     provider: sops
     secretRef:

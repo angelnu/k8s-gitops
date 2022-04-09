@@ -1,0 +1,19 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: gitea
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: gitea
+  ingress:
+  - from:
+    # Allow ssh ingress
+    - ipBlock:
+        cidr: "0.0.0.0/0"
+    ports:
+    - protocol: TCP
+      port: 2222
+      endPort: 2222
+  policyTypes:
+    - Ingress

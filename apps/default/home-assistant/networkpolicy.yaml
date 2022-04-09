@@ -1,0 +1,28 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: home-assistant
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: home-assistant
+  ingress:
+  - from:
+    # Allow homematic ingress from K8S
+    - ipBlock:
+        cidr: "10.0.0.0/8"
+    # Allow homematic ingress from lan
+    - ipBlock:
+        cidr: "192.0.0.0/8"
+    ports:
+    - protocol: TCP
+      port: 2001
+      endPort: 2001
+  egress:
+  - to:
+    # Allow egress to Internet
+    - ipBlock:
+        cidr: "0.0.0.0/0"
+  policyTypes:
+    - Ingress
+    - Egress

@@ -5,13 +5,13 @@ resources:
 - ceph.yaml
 - ceph-rbd.yaml
 - cert-manager.yaml
+- default.yaml
 - kubernetes-dashboard.yaml
+- kube-system.yaml
 - maddy.yaml
 - monitoring.yaml
 - nginx.yaml
-- podinfo.yaml
 - postgres.yaml
-- redis.yaml
 - rook-ceph.yaml
 - vpn-gateway.yaml
 - vpn.yaml

@@ -12,7 +12,6 @@ resources:
   - monitoring
   - nginx
   - postgres
-  # - redis
   - rook-ceph
   - vpn
   - vpn-gateway

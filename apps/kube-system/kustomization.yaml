@@ -3,5 +3,3 @@ kind: Kustomization
 namespace: kube-system
 resources:
   - kured
-  # - mail
-  # - mailu

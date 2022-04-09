@@ -20,9 +20,11 @@ spec:
           kubernetes.io/metadata.name: nginx
   egress:
   - to:
-    # Allow all egress
+    # Only allow egress to K8S and local network
     - ipBlock:
-        cidr: "0.0.0.0/0"
+        cidr: "10.0.0.0/8"
+    - ipBlock:
+        cidr: "192.0.0.0/8"
   policyTypes:
     - Ingress
     - Egress

@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
   - kube-system
   - default
-  - podinfo
   - vpn

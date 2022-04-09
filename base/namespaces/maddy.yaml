@@ -25,11 +25,15 @@ spec:
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: maddy
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: postgres
     ports:
     - protocol: TCP
       port: 5432
       endPort: 5432
   - from:
+    # Allow Internet access to mail server
     - ipBlock:
         cidr: 0.0.0.0/0
     ports:
@@ -51,11 +55,14 @@ spec:
     - protocol: TCP
       port: 465
       endPort: 465
-  # egress:
-  # - to:
-  #   # Only allow egress to K8S
-  #   - ipBlock:
-  #       cidr: "10.0.0.0/8"
+  egress:
+  - to:
+    # Only allow egress to K8S
+    - ipBlock:
+        cidr: "10.0.0.0/8"
+    # Only allow egress to lan
+    - ipBlock:
+        cidr: "192.0.0.0/8"
   policyTypes:
     - Ingress
-    #- Egress
+    - Egress

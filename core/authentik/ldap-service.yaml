@@ -6,6 +6,7 @@ metadata:
     metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_LDAP}"
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   ports:
     - name: ldap
       protocol: TCP

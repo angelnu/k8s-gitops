@@ -16,6 +16,9 @@ spec:
       interval: 5m
   # https://github.com/zalando/postgres-operator/blob/master/charts/postgres-operator-ui/values.yaml
   values:
+    envs:
+      resourcesVisible: "True"
+      targetNamespace: # Show all namespaces
     ingress:
       enabled: true
       annotations:
