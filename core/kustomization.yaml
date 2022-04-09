@@ -6,7 +6,8 @@ resources:
   - ceph
   - ceph-rbd
   - flux-system
-  - kube-system
+  - kube-system  
+  - kubernetes-dashboard
   - maddy
   - monitoring
   - nginx

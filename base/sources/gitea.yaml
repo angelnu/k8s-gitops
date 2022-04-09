@@ -2,6 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: HelmRepository
 metadata:
   name: gitea
+  namespace: flux-system
 spec:
   interval: 30m
   url: https://dl.gitea.io/charts/

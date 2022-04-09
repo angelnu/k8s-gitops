@@ -2,3 +2,20 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: ceph-rbd
+
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default
+  namespace: ceph-rbd
+spec:
+  podSelector: {}
+  egress:
+  - to:
+    # Only allow egress to K8S
+    - ipBlock:
+        cidr: "10.0.0.0/8"
+  policyTypes:
+    - Ingress
+    - Egress

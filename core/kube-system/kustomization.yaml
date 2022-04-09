@@ -4,7 +4,6 @@ namespace: kube-system
 resources:
   - config-syncer.yaml
   - intel-gpu-plugin
-  - kubernetes-dashboard
   - metallb.yaml
   - multus_network.yaml
   - node-feature-discovery

@@ -2,6 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: HelmRepository
 metadata:
   name: forecastle
+  namespace: flux-system
 spec:
   interval: 30m
   url: https://stakater.github.io/stakater-charts

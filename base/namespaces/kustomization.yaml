@@ -5,6 +5,7 @@ resources:
 - ceph.yaml
 - ceph-rbd.yaml
 - cert-manager.yaml
+- kubernetes-dashboard.yaml
 - maddy.yaml
 - monitoring.yaml
 - nginx.yaml
