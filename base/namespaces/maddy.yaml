@@ -4,3 +4,58 @@ metadata:
   name: maddy
   labels:
     cert-manager: CLUSTER_DOMAIN_CERT
+
+---
+
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default
+  namespace: maddy
+spec:
+  podSelector: {}
+  ingress:
+  - from:
+    # Allow ingress from nginx
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: nginx
+  - from:
+    # Allow local ingress to PostgreSQL
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: maddy
+    ports:
+    - protocol: TCP
+      port: 5432
+      endPort: 5432
+  - from:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    ports:
+    - protocol: TCP
+      port: 25
+      endPort: 25
+    - protocol: TCP
+      port: 2525
+      endPort: 2525
+    - protocol: TCP
+      port: 143
+      endPort: 143
+    - protocol: TCP
+      port: 993
+      endPort: 993
+    - protocol: TCP
+      port: 587
+      endPort: 587
+    - protocol: TCP
+      port: 465
+      endPort: 465
+  # egress:
+  # - to:
+  #   # Only allow egress to K8S
+  #   - ipBlock:
+  #       cidr: "10.0.0.0/8"
+  policyTypes:
+    - Ingress
+    #- Egress
