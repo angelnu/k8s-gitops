@@ -57,12 +57,9 @@ spec:
       endPort: 465
   egress:
   - to:
-    # Only allow egress to K8S
+    # allow outbound email
     - ipBlock:
-        cidr: "10.0.0.0/8"
-    # Only allow egress to lan
-    - ipBlock:
-        cidr: "192.0.0.0/8"
+        cidr: "0.0.0.0/0"
   policyTypes:
     - Ingress
     - Egress
