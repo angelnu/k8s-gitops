@@ -11,11 +11,18 @@ metadata:
   namespace: ceph-rbd
 spec:
   podSelector: {}
-  egress:
-  - to:
-    # Only allow egress to K8S
+  ingress:
+  - from:
+    # Only allow ingress from K8S (admission controller)
     - ipBlock:
         cidr: "10.0.0.0/8"
+  egress:
+  - to:
+    # Only allow egress to K8S and local lan
+    - ipBlock:
+        cidr: "10.0.0.0/8"
+    - ipBlock:
+        cidr: "192.168.0.0/16"
   policyTypes:
     - Ingress
     - Egress
