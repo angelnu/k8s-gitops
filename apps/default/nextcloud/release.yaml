@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: nextcloud
-      tag: 23.0.3
+      tag: 23.0.4
 
     env:
       PHP_MEMORY_LIMIT: 256M
