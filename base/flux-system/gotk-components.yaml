@@ -5263,7 +5263,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/fluxcd/kustomize-controller:v0.24.4
+        image: ghcr.io/fluxcd/kustomize-controller:v0.25.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
