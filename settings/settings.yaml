@@ -4,7 +4,6 @@ metadata:
   namespace: flux-system
   name: global-settings
 data:
-  CLUSTER_MAIL_SERVER: mx.home.angelnu.com
   CLUSTER_MAIL_SERVER_PORT: "25"
   # mcvlan_static_range: &anchor_ip_mcvlan_static_range
   # 192.168.1.0-192.168.1.63
