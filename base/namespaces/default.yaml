@@ -38,6 +38,12 @@ spec:
     - protocol: TCP
       port: 6379
       endPort: 6379
+  - from:
+    # Allow access to Lora multiplyer
+    ports:
+    - protocol: UDP
+      port: 1700 
+      endPort: 1700
   egress:
   - to:
     # Allow all egress
