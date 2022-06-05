@@ -1,0 +1,168 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: gatus
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: gatus
+      version: 1.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/gatus/values.yaml
+  values:
+    image:
+      repository: twinproduction/gatus
+      tag: v3.8.0
+    
+    env:
+      TZ: "Europe/Berlin"
+      GATUS_CONFIG_FILE: /myconfig/config.yaml
+    
+    persistence:
+      config:
+        enabled: false
+      myconfig:
+        defaultMode: 420
+        enabled: true
+        items:
+        - key: config.yaml
+          path: config.yaml
+        name: gatus-config
+        type: configMap
+        mountPath: "/myconfig"
+      data:
+        enabled: true
+        mountPath: "/data"
+        existingClaim: gatus-pvc
+
+    ingress:
+      main:
+        enabled: true
+        hosts:
+        - host: gatus.pub.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - gatus.pub.${CLUSTER_DOMAIN}
+
+    configmap:
+      config:
+        data:
+          config.yaml: |
+            storage:
+              type: sqlite
+              path: /data/data.db
+            endpoints:
+              - name: Proxmox 1
+                group: core
+                url: "https://pve1.${CLUSTER_DOMAIN}:8006"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Proxmox 2
+                group: core
+                url: "https://pve2.${CLUSTER_DOMAIN}:8006"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Proxmox 3
+                group: core
+                url: "https://pve3.${CLUSTER_DOMAIN}:8006"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Proxmox 4
+                group: core
+                url: "https://pve4.${CLUSTER_DOMAIN}:8006"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+
+              # Homematic
+              - name: Home Assistant
+                group: home-assistant
+                url: "https://ha.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Raspberrymatic
+                group: home-assistant
+                url: "http://ccu"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: esphome
+                group: home-assistant
+                url: "https://esphome.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+
+              - name: paperless
+                group: paperless
+                url: "https://paperless.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: paperless-javi
+                group: paperless
+                url: "https://paperless-javi.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: paperless-mireille-work
+                group: paperless
+                url: "https://paperless-mireille-work.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Gitea
+                url: "http://git.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Nextcloud
+                url: "http://nextcloud.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Tiny tiny RSS
+                url: "http://rss.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Nas
+                url: "http://nas.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Homer
+                url: "http://home.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Jellyfin
+                url: "http://jellyfin.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Photos
+                url: "https://photos.pub.angelnu.com"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
