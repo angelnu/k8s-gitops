@@ -52,7 +52,7 @@ spec:
             pathType: Prefix
         tls:
         - hosts:
-          - paperless-madrid.home${CLUSTER_DOMAIN}
+          - paperless-madrid.home.${CLUSTER_DOMAIN}
 
   valuesFrom:
   - kind: ConfigMap

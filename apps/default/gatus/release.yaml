@@ -85,11 +85,46 @@ spec:
                 interval: 5m
                 conditions:
                   - "[STATUS] == 200"
+                  
+              - name: Authentik
+                group: core
+                url: "https://authentik.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
 
-              # Homematic
+              - name: LDAP
+                group: core
+                url: "tls://ldap.${CLUSTER_DOMAIN}:636"
+                interval: 30m
+                client:
+                  timeout: 5s
+                conditions:
+                  - "[CONNECTED] == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+
+              
               - name: Home Assistant
                 group: home-assistant
                 url: "https://ha.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Home Assistant editor
+                group: home-assistant
+                url: https://ha-editor.pub.angelnu.com
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Home Assistant Adppdaemon
+                group: home-assistant
+                url: https://ha-app.pub.angelnu.com
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Deepstack
+                group: home-assistant
+                url: https://deepstack.pub.angelnu.com
                 interval: 5m
                 conditions:
                   - "[STATUS] == 200"
@@ -105,7 +140,14 @@ spec:
                 interval: 5m
                 conditions:
                   - "[STATUS] == 200"
+              - name: Esphome editor
+                group: home-assistant
+                url: "https://esphome-editor.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
 
+              
               - name: paperless
                 group: paperless
                 url: "https://paperless.pub.${CLUSTER_DOMAIN}"
@@ -124,9 +166,148 @@ spec:
                 interval: 5m
                 conditions:
                   - "[STATUS] == 200"
+              - name: paperless-recipes
+                group: paperless
+                url: "https://paperless-recipes.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: paperless-madrid
+                group: paperless
+                url: "https://paperless-madrid.home.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: paperless-edu
+                group: paperless
+                url: "https://paperless-edu.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+
+              
+
+              - name: QBittorrent
+                group: downloads
+                url: "https://torrent.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: radarr
+                group: downloads
+                url: "https://radarr.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: sonarr
+                group: downloads
+                url: "https://sonarr.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: lidarr
+                group: downloads
+                url: "https://lidarr.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: readarr
+                group: downloads
+                url: "https://readarr.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: prowlarr
+                group: downloads
+                url: "https://prowlarr.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Ubuntu
+                group: downloads
+                url: "https://ubuntu.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Mega
+                group: downloads
+                url: "https://mega.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+
+
+              - name: Nextcloud
+                group: DNS
+                url: "192.168.2.1" # Address of the DNS server to use
+                interval: 30s
+                dns:
+                  query-name: "nextcloud.${CLUSTER_DOMAIN}"
+                  query-type: "A"
+                conditions:
+                  - "[BODY] == 192.168.1.128"
+                  - "[DNS_RCODE] == NOERROR"
+              - name: home-assistant
+                group: DNS
+                url: "192.168.2.1" # Address of the DNS server to use
+                interval: 30s
+                dns:
+                  query-name: "ha.${CLUSTER_DOMAIN}"
+                  query-type: "A"
+                conditions:
+                  - "[BODY] == 192.168.1.128"
+                  - "[DNS_RCODE] == NOERROR"
+              
+
+              - name: Maddy smtp extern starttls
+                group: mail
+                url: "starttls://mx.${CLUSTER_DOMAIN}:25"
+                interval: 30m
+                client:
+                  timeout: 5s
+                conditions:
+                  - "[CONNECTED] == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: Maddy smtp starttls
+                group: mail
+                url: "starttls://mx.${CLUSTER_DOMAIN}:587"
+                interval: 30m
+                client:
+                  timeout: 5s
+                conditions:
+                  - "[CONNECTED] == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: Maddy smtp tls
+                group: mail
+                url: "tls://mx.${CLUSTER_DOMAIN}:465"
+                interval: 30m
+                client:
+                  timeout: 5s
+                conditions:
+                  - "[CONNECTED] == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              # - name: Maddy imap starttls
+              #   group: mail
+              #   url: "starttls://mx.${CLUSTER_DOMAIN}:143"
+              #   interval: 30m
+              #   client:
+              #     timeout: 5s
+              #   conditions:
+              #     - "[CONNECTED] == true"
+              #     - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: Maddy imap tls
+                group: mail
+                url: "tls://mx.${CLUSTER_DOMAIN}:993"
+                interval: 30m
+                client:
+                  timeout: 5s
+                conditions:
+                  - "[CONNECTED] == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+                  
                   
               - name: Gitea
-                url: "http://git.${CLUSTER_DOMAIN}"
+                url: "https://git.${CLUSTER_DOMAIN}"
                 interval: 5m
                 conditions:
                   - "[STATUS] == 200"
@@ -148,9 +329,20 @@ spec:
                 interval: 5m
                 conditions:
                   - "[STATUS] == 200"
+              - name: Nas Backup
+                url: "http://nas-backup.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
                   
               - name: Homer
                 url: "http://home.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Hajimari
+                url: "https://home2.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
                 conditions:
                   - "[STATUS] == 200"
@@ -162,7 +354,37 @@ spec:
                   - "[STATUS] == 200"
                   
               - name: Photos
-                url: "https://photos.pub.angelnu.com"
+                url: "https://photos.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Recipes
+                url: "https://recipes.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Unifi
+                url: "https://unifi.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Postgres Operator
+                url: "https://postgres-operator.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Printer Cannon
+                url: "https://print.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Maddy editor
+                url: https://maddy-editor.pub.angelnu.com
                 interval: 5m
                 conditions:
                   - "[STATUS] == 200"
