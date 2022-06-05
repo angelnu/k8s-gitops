@@ -57,6 +57,23 @@ spec:
       config:
         data:
           config.yaml: |
+            alerting:
+              pagerduty:
+                integration-key: "${PAGERDUTTY_KEY}"
+                default-alert:
+                  enabled: true
+                  description: "health check failed"
+                  send-on-resolved: true
+                  failure-threshold: 5
+                  success-threshold: 5
+              slack: 
+                webhook-url: "${FLUX_SLACK_URL}"
+                default-alert:
+                  enabled: true
+                  description: "health check failed"
+                  send-on-resolved: true
+                  failure-threshold: 5
+                  success-threshold: 5
             storage:
               type: sqlite
               path: /data/data.db
@@ -65,85 +82,140 @@ spec:
                 group: core
                 url: "https://pve1.${CLUSTER_DOMAIN}:8006"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: Proxmox 2
                 group: core
                 url: "https://pve2.${CLUSTER_DOMAIN}:8006"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: Proxmox 3
                 group: core
                 url: "https://pve3.${CLUSTER_DOMAIN}:8006"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: Proxmox 4
                 group: core
                 url: "https://pve4.${CLUSTER_DOMAIN}:8006"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
-                  - "[STATUS] == 200"
-                  
+                  - "[STATUS] == 200"                  
               - name: Authentik
                 group: core
                 url: "https://authentik.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
-
               - name: LDAP
                 group: core
                 url: "tls://ldap.${CLUSTER_DOMAIN}:636"
                 interval: 30m
                 client:
-                  timeout: 5s
+                  timeout: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[CONNECTED] == true"
-                  - "[CERTIFICATE_EXPIRATION] > 48h"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"                  
+              - name: Nas
+                group: core
+                url: "http://nas.${CLUSTER_DOMAIN}"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Nas Backup
+                group: core
+                url: "http://nas-backup.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                conditions:
+                  - "[STATUS] == 200"
 
               
               - name: Home Assistant
                 group: home-assistant
                 url: "https://ha.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: Home Assistant editor
                 group: home-assistant
-                url: https://ha-editor.pub.angelnu.com
+                url: https://ha-editor.pub.${CLUSTER_DOMAIN}
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: Home Assistant Adppdaemon
                 group: home-assistant
-                url: https://ha-app.pub.angelnu.com
+                url: https://ha-app.pub.${CLUSTER_DOMAIN}
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: Deepstack
                 group: home-assistant
-                url: https://deepstack.pub.angelnu.com
+                url: https://deepstack.pub.${CLUSTER_DOMAIN}
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: Raspberrymatic
                 group: home-assistant
                 url: "http://ccu"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: esphome
                 group: home-assistant
                 url: "https://esphome.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: Esphome editor
                 group: home-assistant
                 url: "https://esphome-editor.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
 
@@ -152,36 +224,54 @@ spec:
                 group: paperless
                 url: "https://paperless.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: paperless-javi
                 group: paperless
                 url: "https://paperless-javi.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: paperless-mireille-work
                 group: paperless
                 url: "https://paperless-mireille-work.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: paperless-recipes
                 group: paperless
                 url: "https://paperless-recipes.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: paperless-madrid
                 group: paperless
                 url: "https://paperless-madrid.home.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: paperless-edu
                 group: paperless
                 url: "https://paperless-edu.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
 
@@ -191,48 +281,72 @@ spec:
                 group: downloads
                 url: "https://torrent.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: radarr
                 group: downloads
                 url: "https://radarr.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: sonarr
                 group: downloads
                 url: "https://sonarr.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: lidarr
                 group: downloads
                 url: "https://lidarr.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: readarr
                 group: downloads
                 url: "https://readarr.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: prowlarr
                 group: downloads
                 url: "https://prowlarr.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: Ubuntu
                 group: downloads
                 url: "https://ubuntu.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
               - name: Mega
                 group: downloads
                 url: "https://mega.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
 
@@ -240,7 +354,10 @@ spec:
               - name: Nextcloud
                 group: DNS
                 url: "192.168.2.1" # Address of the DNS server to use
-                interval: 30s
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 dns:
                   query-name: "nextcloud.${CLUSTER_DOMAIN}"
                   query-type: "A"
@@ -250,7 +367,10 @@ spec:
               - name: home-assistant
                 group: DNS
                 url: "192.168.2.1" # Address of the DNS server to use
-                interval: 30s
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 dns:
                   query-name: "ha.${CLUSTER_DOMAIN}"
                   query-type: "A"
@@ -264,7 +384,10 @@ spec:
                 url: "starttls://mx.${CLUSTER_DOMAIN}:25"
                 interval: 30m
                 client:
-                  timeout: 5s
+                  timeout: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[CONNECTED] == true"
                   - "[CERTIFICATE_EXPIRATION] > 48h"
@@ -273,7 +396,10 @@ spec:
                 url: "starttls://mx.${CLUSTER_DOMAIN}:587"
                 interval: 30m
                 client:
-                  timeout: 5s
+                  timeout: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[CONNECTED] == true"
                   - "[CERTIFICATE_EXPIRATION] > 48h"
@@ -282,7 +408,10 @@ spec:
                 url: "tls://mx.${CLUSTER_DOMAIN}:465"
                 interval: 30m
                 client:
-                  timeout: 5s
+                  timeout: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[CONNECTED] == true"
                   - "[CERTIFICATE_EXPIRATION] > 48h"
@@ -300,91 +429,131 @@ spec:
                 url: "tls://mx.${CLUSTER_DOMAIN}:993"
                 interval: 30m
                 client:
-                  timeout: 5s
+                  timeout: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[CONNECTED] == true"
-                  - "[CERTIFICATE_EXPIRATION] > 48h"
-                  
-                  
-              - name: Gitea
-                url: "https://git.${CLUSTER_DOMAIN}"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"                  
+              - name: Maddy editor
+                group: mail
+                url: https://maddy-editor.pub.${CLUSTER_DOMAIN}
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
                   
+                  
+              - name: Gitea
+                group: apps
+                url: "https://git.${CLUSTER_DOMAIN}"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                conditions:
+                  - "[STATUS] == 200"
+
               - name: Nextcloud
+                group: apps
                 url: "http://nextcloud.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
                   
               - name: Tiny tiny RSS
+                group: apps
                 url: "http://rss.${CLUSTER_DOMAIN}"
                 interval: 5m
-                conditions:
-                  - "[STATUS] == 200"
-                  
-              - name: Nas
-                url: "http://nas.${CLUSTER_DOMAIN}"
-                interval: 5m
-                conditions:
-                  - "[STATUS] == 200"
-              - name: Nas Backup
-                url: "http://nas-backup.pub.${CLUSTER_DOMAIN}"
-                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
                   
               - name: Homer
+                group: apps
                 url: "http://home.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
                   
               - name: Hajimari
+                group: apps
                 url: "https://home2.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
                   
               - name: Jellyfin
+                group: apps
                 url: "http://jellyfin.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
                   
               - name: Photos
+                group: apps
                 url: "https://photos.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
                   
               - name: Recipes
+                group: apps
                 url: "https://recipes.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
                   
               - name: Unifi
+                group: apps
                 url: "https://unifi.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
                   
               - name: Postgres Operator
+                group: apps
                 url: "https://postgres-operator.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
+
                   
               - name: Printer Cannon
+                group: others
                 url: "https://print.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
-                conditions:
-                  - "[STATUS] == 200"
-                  
-              - name: Maddy editor
-                url: https://maddy-editor.pub.angelnu.com
-                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
