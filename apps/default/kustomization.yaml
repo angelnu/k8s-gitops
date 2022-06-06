@@ -14,6 +14,7 @@ resources:
   - homer
   - jellyfin
   - lorawan
+  - mealie
   - nextcloud
   - paperless
   # - plex
