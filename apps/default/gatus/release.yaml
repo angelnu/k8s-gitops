@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: gatus
-      version: 1.0.0
+      version: 1.0.1
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -25,20 +25,7 @@ spec:
       GATUS_CONFIG_FILE: /myconfig/config.yaml
     
     persistence:
-      config:
-        enabled: false
-      myconfig:
-        defaultMode: 420
-        enabled: true
-        items:
-        - key: config.yaml
-          path: config.yaml
-        name: gatus-config
-        type: configMap
-        mountPath: "/myconfig"
       data:
-        enabled: true
-        mountPath: "/data"
         existingClaim: gatus-pvc
 
     ingress:
