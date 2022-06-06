@@ -10,6 +10,7 @@ resources:
   - gitea
   #- gow
   - hajimari
+  - handbrake
   - home-assistant
   - homer
   - jellyfin

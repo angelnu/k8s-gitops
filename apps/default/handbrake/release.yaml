@@ -1,0 +1,64 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: handbrake
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: handbrake
+      version: 0.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable//handbrake/values.yaml
+  values:
+    image:
+      repository: jlesage/handbrake
+      tag: v1.24.2
+
+    env:
+      TZ: "Europe/Berlin"
+    
+    persistence:
+      config:
+        enabled: true
+        existingClaim: handbrake-pvc
+      videos:
+        enabled: true
+        mountPath: /videos
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_VIDEO}"
+      downloads:
+        enabled: true
+        mountPath: /downloads
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
+
+    ingress:
+      main:
+        enabled: true
+        hosts:
+        - host: handbrake.pub.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            # Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+        - host: handbrake.home.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            # Ignored if not kubeVersion >= 1.14-0
+            pathType: Prefix
+        tls:
+        - hosts:
+          - handbrake.pub.${CLUSTER_DOMAIN}
+          - handbrake.home.${CLUSTER_DOMAIN}
