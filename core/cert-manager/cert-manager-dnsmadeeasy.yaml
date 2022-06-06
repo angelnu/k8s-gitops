@@ -16,7 +16,7 @@ spec:
       interval: 5m
   dependsOn:
     - name: cert-manager
-  #See https://github.com/k8s-at-home/charts/blob/master/charts/dnsmadeeasy-webhook/values.yaml
+  #See https://github.com/k8s-at-home/charts/blob/master/charts/stable/dnsmadeeasy-webhook/values.yaml
   values:
     groupName: "${CLUSTER_DOMAIN}"
 

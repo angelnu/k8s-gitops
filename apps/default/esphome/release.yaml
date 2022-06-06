@@ -14,7 +14,7 @@ spec:
         name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/esphome/values.yaml
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/esphome/values.yaml
   values:
     image:
       repository: ghcr.io/esphome/esphome

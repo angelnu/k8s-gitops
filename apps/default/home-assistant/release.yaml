@@ -15,7 +15,7 @@ spec:
         namespace: flux-system
       interval: 5m
 
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/home-assistant/values.yaml
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/home-assistant/values.yaml
   values:
     image:
       repository: ghcr.io/home-assistant/home-assistant

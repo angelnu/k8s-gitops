@@ -16,7 +16,7 @@ spec:
       interval: 5m
   dependsOn:
     - name: home-assistant
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/appdaemon/values.yaml
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/appdaemon/values.yaml
   values:
     image:
       repository: acockburn/appdaemon
