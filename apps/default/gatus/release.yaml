@@ -22,7 +22,6 @@ spec:
     
     env:
       TZ: "Europe/Berlin"
-      GATUS_CONFIG_FILE: /myconfig/config.yaml
     
     persistence:
       data:
