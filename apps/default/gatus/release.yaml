@@ -138,6 +138,25 @@ spec:
                   - type: slack
                   - type: pagerduty
                 conditions:
+                  - "[STATUS] == 200"                  
+              - name: Unifi
+                group: apps
+                url: "https://unifi.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                conditions:
+                  - "[STATUS] == 200"
+                  
+              - name: Postgres Operator
+                group: apps
+                url: "https://postgres-operator.pub.${CLUSTER_DOMAIN}"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                conditions:
                   - "[STATUS] == 200"
 
               
@@ -513,9 +532,9 @@ spec:
                 conditions:
                   - "[STATUS] == 200"
                   
-              - name: Unifi
+              - name: Handbrake
                 group: apps
-                url: "https://unifi.pub.${CLUSTER_DOMAIN}"
+                url: "https://handbrake.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
                 alerts:
                   - type: slack
@@ -523,9 +542,9 @@ spec:
                 conditions:
                   - "[STATUS] == 200"
                   
-              - name: Postgres Operator
+              - name: Mealie
                 group: apps
-                url: "https://postgres-operator.pub.${CLUSTER_DOMAIN}"
+                url: "https://mealie.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
                 alerts:
                   - type: slack
