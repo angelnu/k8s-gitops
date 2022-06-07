@@ -25,6 +25,7 @@ spec:
     
     persistence:
       data:
+        type: pvc
         existingClaim: gatus-pvc
 
     ingress:
@@ -140,7 +141,7 @@ spec:
                 conditions:
                   - "[STATUS] == 200"                  
               - name: Unifi
-                group: apps
+                group: core
                 url: "https://unifi.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
                 alerts:
@@ -150,7 +151,7 @@ spec:
                   - "[STATUS] == 200"
                   
               - name: Postgres Operator
-                group: apps
+                group: core
                 url: "https://postgres-operator.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
                 alerts:
