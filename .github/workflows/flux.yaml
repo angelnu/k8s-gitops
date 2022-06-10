@@ -4,7 +4,7 @@ name: update-flux
 
 on:
   workflow_dispatch:
-  # schedule:
+  schedule: []
   #   - cron: "0 0 * * *"
 
 jobs:
