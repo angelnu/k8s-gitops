@@ -463,6 +463,14 @@ spec:
                 conditions:
                   - "[STATUS] == 200"
 
+              - name: Gitea ssh
+                url: "ssh://git.${CLUSTER_DOMAIN}:22322"
+                client:
+                  insecure: true
+                conditions:
+                  - "[CONNECTED] == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"    
+
               - name: Nextcloud
                 group: apps
                 url: "http://nextcloud.${CLUSTER_DOMAIN}"
