@@ -577,6 +577,52 @@ spec:
                   - "[STATUS] == 200"
 
                   
+              - name: Fritzbox casa 96
+                group: wireguard
+                url: "https://192.168.63.1"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                client:
+                  insecure: true
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Fritzbox madrid
+                group: wireguard
+                url: "https://192.168.101.1"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                client:
+                  insecure: true
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Fritzbox casa 128
+                group: wireguard
+                url: "https://192.168.103.1"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                client:
+                  insecure: true
+                conditions:
+                  - "[STATUS] == 200"
+              - name: Fritzbox pueblo
+                group: wireguard
+                url: "https://192.168.105.1"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                client:
+                  insecure: true
+                conditions:
+                  - "[STATUS] == 200"
+
+                  
               - name: Printer Cannon
                 group: others
                 url: "https://print.pub.${CLUSTER_DOMAIN}"
