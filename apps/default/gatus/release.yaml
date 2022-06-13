@@ -100,7 +100,18 @@ spec:
                   - type: slack
                   - type: pagerduty
                 conditions:
-                  - "[STATUS] == 200"                  
+                  - "[STATUS] == 200"   
+              - name: dev ssh
+                group: core
+                url: "tcp://casa96.${CLUSTER_DOMAIN}:22322"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                client:
+                  insecure: true
+                conditions:
+                  - "[CONNECTED] == true"               
               - name: Authentik
                 group: core
                 url: "https://authentik.pub.${CLUSTER_DOMAIN}"
@@ -464,12 +475,16 @@ spec:
                   - "[STATUS] == 200"
 
               - name: Gitea ssh
-                url: "ssh://git.${CLUSTER_DOMAIN}:22322"
+                group: apps
+                url: "tcp://git.${CLUSTER_DOMAIN}:2222"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
                 client:
                   insecure: true
                 conditions:
                   - "[CONNECTED] == true"
-                  - "[CERTIFICATE_EXPIRATION] > 48h"    
 
               - name: Nextcloud
                 group: apps
