@@ -143,7 +143,7 @@ spec:
 
                 dmarc yes
                 check {
-                    require_mx_record
+                    # require_mx_record
                     dkim
                     spf
                 }
