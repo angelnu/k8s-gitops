@@ -27,6 +27,7 @@
   - name: "Check flux prerequisites"
     shell: flux check --pre
     changed_when: false
+    when: inventory_hostname in groups["masters"]
   
   - name: Install SOPS
     apt:
