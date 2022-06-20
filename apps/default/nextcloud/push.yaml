@@ -1,4 +1,8 @@
 ---
+# Enable
+# 1. Install "client push" app within nextcloud
+# 2. sudo -u www-data php -d memory_limit=-1 /var/www/html/occ notify_push:setup https://nextcloud.mydomain.com/push
+
 # -------------------- Deployment ------------------- #
 
 apiVersion: apps/v1

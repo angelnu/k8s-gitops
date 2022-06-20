@@ -29,6 +29,9 @@ spec:
     - protocol: TCP
       port: 5432
       endPort: 5432
+    - protocol: TCP
+      port: 8008 #Patroni
+      endPort: 8008
   - from:
     # Allow local ingress to Redis
     - namespaceSelector:
