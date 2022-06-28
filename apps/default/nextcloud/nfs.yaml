@@ -5,7 +5,7 @@ metadata:
 spec:
   storageClassName: nextcloud-storageclass
   capacity:
-    storage: 18T
+    storage: 48T
   accessModes:
     - ReadWriteMany
   mountOptions:
