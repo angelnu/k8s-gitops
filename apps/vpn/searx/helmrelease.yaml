@@ -19,12 +19,7 @@ spec:
       repository: searx/searx
       tag: 1.0.0-211-968b2899
     searx:
-      # -- Specify an existing secret that contains the environment variables
-      # required for the application configuration.
-      existingSecret:
-      # -- External URL where the application is reachable
-      baseUrl: "https://search.pub.${CLUSTER_DOMAIN}"
-      # mortyKey: in secret
+      existingSecret: searx-env
     caddy:
       noTls: true
     ingress:
@@ -43,9 +38,3 @@ spec:
         - hosts:
           - "search.pub.${CLUSTER_DOMAIN}"
           - "search.${CLUSTER_DOMAIN}"
-
-  valuesFrom:
-  - kind: Secret
-    name: "searx-helm-values"
-    valuesKey: searx.yaml
-    optional: false
