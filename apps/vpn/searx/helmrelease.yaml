@@ -1,0 +1,51 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: searx
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: searx
+      version: 5.5.2
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: searx/searx
+      tag: 1.0.0-211-968b2899
+    searx:
+      # -- Specify an existing secret that contains the environment variables
+      # required for the application configuration.
+      existingSecret:
+      # -- External URL where the application is reachable
+      baseUrl: "https://search.pub.${CLUSTER_DOMAIN}"
+      # mortyKey: in secret
+    caddy:
+      noTls: true
+    ingress:
+      main:
+        enabled: true
+        hosts:
+        - host: "search.pub.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        - host: "search.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - "search.pub.${CLUSTER_DOMAIN}"
+          - "search.${CLUSTER_DOMAIN}"
+
+  valuesFrom:
+  - kind: Secret
+    name: "searx-helm-values"
+    valuesKey: searx.yaml
+    optional: false

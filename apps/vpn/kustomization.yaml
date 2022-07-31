@@ -7,5 +7,6 @@ resources:
   - prowlarr
   - radarr
   - readarr
+  - searx
   - sonarr
   - vnc
