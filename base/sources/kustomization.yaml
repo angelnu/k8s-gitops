@@ -19,6 +19,7 @@ resources:
   - node-feature-discovery-charts.yaml
   - raspberrymatic.yaml
   - rook-ceph.yaml
+  - searxng.yaml
   - weaveworks-kured-charts.yaml
   - wobcom.yaml
   - zalando-postgres-operator.yaml
