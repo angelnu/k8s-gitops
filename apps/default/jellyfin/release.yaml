@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: ghcr.io/k8s-at-home/jellyfin
-      tag: v10.8.1
+      tag: v10.8.2
     env:
       TZ: "Europe/Berlin"
       JELLYFIN_CACHE_DIR: "/config/cache"
