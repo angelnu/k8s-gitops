@@ -1,0 +1,54 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: nextcloud-collabora
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://bjw-s.github.io/helm-charts
+      chart: app-template
+      version: 0.1.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 5m
+  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/gatus/values.yaml
+  values:
+    image:
+      repository: collabora/code
+      tag: 22.05.5.4.1
+    
+    env:
+      extra_params: --o:ssl.termination=true --o:ssl.enable=false
+    
+    autoscaling:
+      enabled: true
+      target:  # deploymentname
+      minReplicas:  1
+      maxReplicas:  3
+      targetCPUUtilizationPercentage:  80
+      targetMemoryUtilizationPercentage:  80
+  
+    service:
+      main:
+        ports:
+          http:
+            port: 9980
+    
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_WOPISrc"
+          #ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16,10.0.0.0/8"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+        hosts:
+        - host: collabora.pub.${CLUSTER_DOMAIN}
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - collabora.pub.${CLUSTER_DOMAIN}
