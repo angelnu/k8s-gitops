@@ -1,40 +1,27 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
-kind: HelmRelease
+# The address-pools lists the IP addresses that MetalLB is
+# allowed to allocate. You can have as many
+# address pools as you want.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
 metadata:
-  name: metallb
+  # A name for the address pool. Services can request allocation
+  # from a specific address pool using this name.
+  name: first-pool
+  #namespace: metallb-system
 spec:
-  releaseName: metallb
-  chart:
-    spec:
-      # renovate: registryUrl=https://charts.bitnami.com/bitnami
-      chart: metallb
-      version: 4.1.1
-      sourceRef:
-        kind: HelmRepository
-        name: bitnami
-        namespace: flux-system
-  interval: 60m
-  install:
-    remediation:
-      retries: 3
-  # Default values
-  # https://github.com/bitnami/charts/tree/master/bitnami/metallb/
-  values:
-    global:
-      imageRegistry: "quay.io"
-    controller:
-      image:
-        #bitnami version only has x86_64
-        repository: metallb/controller
-        tag: v0.12.1
-    speaker:
-      image:
-        #bitnami version only has x86_64
-        repository: metallb/speaker
-        tag: v0.12.1
-    configInline:
-      address-pools:
-      - name: default
-        protocol: layer2
-        addresses:
-        - "${CLUSTER_LB_RANGE}"
+  # A list of IP address ranges over which MetalLB has
+  # authority. You can list multiple ranges in a single pool, they
+  # will all share the same settings. Each range can be either a
+  # CIDR prefix, or an explicit start-end range of IPs.
+  addresses:
+  - "${CLUSTER_LB_RANGE}"
+  #- 192.168.9.1-192.168.9.5
+  #- fc00:f853:0ccd:e799::/124
+
+---
+
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  #namespace: metallb-system
