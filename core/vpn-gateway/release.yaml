@@ -23,10 +23,16 @@ spec:
   values:
 
     image:
-    # -- image repository of the gateway and inserted helper containers
-    repository: ghcr.io/angelnu/pod-gateway
-    tag: latest
-
+      repository: ghcr.io/angelnu/pod-gateway
+      # Use dev version
+      pullPolicy: Always
+      tag: dev
+    webhook:
+      image:
+        repository: ghcr.io/angelnu/gateway-admision-controller
+        # Use dev version
+        pullPolicy: Always
+        tag: dev
     addons:
       vpn:
         enabled: true
@@ -34,7 +40,7 @@ spec:
         openvpn:
           image:
             repository: dperson/openvpn-client
-            pullPolicy: Allways
+            pullPolicy: Always
             tag: latest
 
         configFileSecret: openvpn
