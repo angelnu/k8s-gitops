@@ -21,8 +21,10 @@ spec:
     groupName: "${CLUSTER_DOMAIN}"
 
     image:
-      repository: ghcr.io/k8s-at-home/dnsmadeeasy-webhook
-      tag: v1.8.0
+      repository: ghcr.io/angelnu/dnsmadeeasy-webhook
+      # Use dev version
+      pullPolicy: Always
+      tag: dev
     
     cert-manager:
       # -- Install cert-manager chart as dependency.
