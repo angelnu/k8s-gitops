@@ -5,6 +5,7 @@
     "dependencyDashboardTitle": "Renovate Dashboard",
     "commitMessageSuffix": "[ci-skip]",
     "commitBody": "Signed-off-by: angelnu <angelnu@users.noreply.github.com>",
+    "automergeType": "branch",
     // Do not notify on closed unmerged PRs
     "suppressNotifications": ["prIgnoreNotification"],
     // Do not rebase PRs
