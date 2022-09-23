@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/esphome/esphome
-      tag: 2022.8.3
+      tag: 2022.9.1
     
     persistence:
       config:
