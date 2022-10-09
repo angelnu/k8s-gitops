@@ -20,6 +20,6 @@ spec:
       tag: v3.9.1
     cni:
       image:
-        repository: ghcr.io/k8s-at-home/cni-plugins
+        repository: ghcr.io/angelnu/cni-plugins
         tag: v1.1.1
       version: "0.3.1"

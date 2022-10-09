@@ -19,8 +19,8 @@ spec:
   # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/tt-rss/values.yaml
   values:
     image:
-      repository: ghcr.io/k8s-at-home/tt-rss
-      tag: v2.0.9113
+      repository: ghcr.io/angelnu/tt-rss
+      tag: 2.0.9196
     
     ingress:
       main:
