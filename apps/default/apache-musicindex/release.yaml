@@ -1,3 +1,4 @@
+---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -6,7 +7,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: apache-musicindex
       version: 2.4.2
       sourceRef:
@@ -21,7 +21,7 @@ spec:
       tag: v1.4.1-2
 
     persistence:
-      music:  
+      music:
         enabled: true
         mountPath: /music
         type: custom
@@ -29,7 +29,7 @@ spec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_MUSIC}"
-      cache: 
+      cache:
         enabled: true
         mountPath: /cache
         type: custom
@@ -47,11 +47,10 @@ spec:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 
         hosts:
-        - host: music.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
+          - host: music.home.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
         tls:
-        - hosts:
-          - music.home.${CLUSTER_DOMAIN}
+          - hosts:
+              - music.home.${CLUSTER_DOMAIN}

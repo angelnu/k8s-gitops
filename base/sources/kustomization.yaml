@@ -21,7 +21,7 @@ resources:
   - raspberrymatic.yaml
   - rook-ceph.yaml
   - searxng.yaml
-  - weaveworks-kured-charts.yaml
+  - kubereboot-charts.yaml
   - wobcom.yaml
   - zalando-postgres-operator.yaml
   - zalando-postgres-ui.yaml
