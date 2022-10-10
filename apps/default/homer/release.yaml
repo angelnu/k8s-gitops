@@ -57,8 +57,8 @@ spec:
       codeserver:
         enabled: true
         image:
-          repository: ghcr.io/k8s-at-home/code-server
-          tag: v4.6.0
+          repository: ghcr.io/coder/code-server
+          tag: 4.7.1@sha256:cbe4f6c6b1dc898e8884b6eb01552cb67717e3edba2e1e23c5fdebfed785860d
         workingDir: "/www/assets"
         args:
         - --user-data-dir

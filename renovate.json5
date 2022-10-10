@@ -78,11 +78,11 @@
         "labels": ["renovate/helm-release", "dependency/patch"]
       },
       // Custom versions
-      {
-        "datasources": ["docker"],
-        "versioning": "loose",
-        "packageNames": ["plexinc/pms-docker", "ghcr.io/k8s-at-home/plex"]
-      },
+      // {
+      //   "datasources": ["docker"],
+      //   "versioning": "loose",
+      //   "packageNames": ["plexinc/pms-docker", "ghcr.io/onedr0p/plex"]
+      // },
       // auto-updates
       {
         "datasources": ["docker"],
@@ -93,7 +93,7 @@
         // "packageNames": [
         //   "homeassistant/home-assistant",
         //   "plexinc/pms-docker",
-        //   "ghcr.io/k8s-at-home/tt-rss"
+        //   "ghcr.io/angelnu/tt-rss"
         // ],
         excludePackageNames: []
       },
