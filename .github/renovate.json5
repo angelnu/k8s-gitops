@@ -26,7 +26,7 @@
   "suppressNotifications": ["prIgnoreNotification"],
   "rebaseWhen": "conflicted",
   "commitBodyTable": true,
-  "ignorePaths": ["^ansible/group_vars/all.yaml"],
+  "ignorePaths": ["ansible/group_vars/all.yaml"],
   "flux": {
     "fileMatch": ["[apps|base|clusters|core|crds|settings]/.+\\.ya?ml$"]
   },
@@ -34,7 +34,7 @@
     "fileMatch": ["[apps|base|clusters|core|crds|settings]/.+\\.ya?ml$"]
   },
   "kubernetes": {
-    "fileMatch": ["^(base|clusters|core|crds|settings)/.+\\.ya?ml$"]
+    "fileMatch": ["(base|clusters|core|crds|settings)/.+\\.ya?ml$"]
   },
   "regexManagers": [
     {
