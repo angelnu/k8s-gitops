@@ -1,0 +1,28 @@
+{
+  "packageRules": [
+    {
+      "description": "Cert-Manager image (for CRDs) and chart",
+      "groupName": "Cert-Manager",
+      "matchPackagePatterns": ["cert-manager"],
+      "matchDatasources": ["docker", "helm"],
+      "group": { "commitMessageTopic": "{{{groupName}}} group" },
+      "separateMinorPatch": true
+    },
+    {
+      "description": "Node Feature Discovery kustomization (for CRDs) and chart",
+      "groupName": "Node Feature Discovery",
+      "matchPackagePatterns": ["node-feature-discovery"],
+      "matchDatasources": ["helm", "github-tags"],
+      "group": { "commitMessageTopic": "{{{groupName}}} group" },
+      "separateMinorPatch": true
+    },
+    {
+      "description": "Rook-Ceph image and chart",
+      "groupName": "Rook-Ceph",
+      "matchPackagePatterns": ["rook.ceph"],
+      "matchDatasources": ["docker", "helm"],
+      "group": { "commitMessageTopic": "{{{groupName}}} group" },
+      "separateMinorPatch": true
+    }
+  ]
+}
