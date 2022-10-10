@@ -14,6 +14,10 @@ Secrets encrypted with [Ansible Vault](https://docs.ansible.com/ansible/latest/u
 
 If a password needs to be changed use the command `ansible-vault encrypt_string` from this folder - it will ask to enter the content to string and end with ctrd-d.
 
+## Dependencies
+
+Install all required galaxies and roles with `ansible-galaxy install -r requirements.yml`
+
 ## Install
 
 0. Create nodes
