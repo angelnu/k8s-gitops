@@ -116,6 +116,7 @@ sops my-secret.yaml # To edit it directly in you $EDITOR
 
 ## :handshake:&nbsp; Community
 
-This cluster in inspired by the work of others shared at [awesome-home-kubernetes](https://github.com/k8s-at-home/awesome-home-kubernetes), specially [billimek´s setup](https://github.com/billimek/k8s-gitops/).
+This cluster in inspired by the work of others shared at [awesome-home-kubernetes](https://github.com/k8s-at-home/awesome-home-kubernetes). These projects
+can be [searched in GitHub](https://nanne.dev/k8s-at-home-search/). They include the [k8s-at-home topic](https://github.com/topics/k8s-at-home).
 
 There is also an active [k8s@home Discord](https://discord.gg/7PbmHRK) for this community.
