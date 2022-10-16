@@ -82,7 +82,7 @@ spec:
     spec:
       containers:
       - name: comics-scrapper-test
-        image: ghcr.io/angelnu/comics-rss-feed:dev@sha256:d6382b1091eb69e15907a66aa61317dbd89f29b093d1a38da08b50928e98ca29
+        image: ghcr.io/angelnu/comics-rss-feed:dev@sha256:0a4eebc2507103a5f2aa9ca27515354b8a972c93f8e0ff5631cb03aa0fbeb636
         imagePullPolicy: Always
         env:
           - name: VERBOSE
