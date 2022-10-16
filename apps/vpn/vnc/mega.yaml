@@ -23,7 +23,7 @@ spec:
         fsGroup: 0
       containers:
       - name: mega-vnc
-        image: johnshine/mega.syno:latest
+        image: johnshine/mega.syno:latest@sha256:0fb83b3c97fc6217f4d60535268984b7d7e275d42985d3b1c5af6972da7bb402
         imagePullPolicy: IfNotPresent
         ### checks that vnc server is up and running
         livenessProbe:
