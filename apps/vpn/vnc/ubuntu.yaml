@@ -24,7 +24,7 @@ spec:
       containers:
       - name: ubuntu-vnc
         # https://github.com/fcwu/docker-ubuntu-vnc-desktop
-        image: dorowu/ubuntu-desktop-lxde-vnc
+        image: dorowu/ubuntu-desktop-lxde-vnc@sha256:775184eaa5bbc01bc4261a6c9596a642b3b43a433c1508637567bc724575964b
         imagePullPolicy: Always
         args:
           ### make normal UI startup to connect via: oc rsh <pod-name> bash

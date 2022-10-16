@@ -16,7 +16,7 @@ spec:
         spec:
           containers:
             - name: comics-scrapper
-              image: ghcr.io/angelnu/comics-rss-feed:v1.5.0
+              image: ghcr.io/angelnu/comics-rss-feed:v1.5.0@sha256:016fb6e3009f6aa66b0b35375f83c8a3379e2b93d69cb0bf46b4c108f7d2fa73
               env:
                 - name: VERBOSE
                   value: "True"
@@ -82,7 +82,7 @@ spec:
     spec:
       containers:
       - name: comics-scrapper-test
-        image: ghcr.io/angelnu/comics-rss-feed:dev
+        image: ghcr.io/angelnu/comics-rss-feed:dev@sha256:d6382b1091eb69e15907a66aa61317dbd89f29b093d1a38da08b50928e98ca29
         imagePullPolicy: Always
         env:
           - name: VERBOSE
@@ -158,7 +158,7 @@ spec:
     spec:
       containers:
       - name: comics-nginx
-        image: nginx:1.23.1
+        image: nginx:1.23.1@sha256:2f770d2fe27bc85f68fd7fe6a63900ef7076bc703022fe81b980377fe3d27b70
         resources:
           requests:
             memory: "3Mi"
