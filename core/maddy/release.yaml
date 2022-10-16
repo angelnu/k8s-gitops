@@ -18,10 +18,13 @@ spec:
   # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/maddy/values.yaml
   values:
     image:
-      # -- image repository
-      repository: angelnu/maddy
-      tag: dev
-      pullPolicy: Always
+      # -- image repository (official)
+      repository: foxcpp/maddy
+      tag: 0.6.2
+      # -- image repository (mine - for dev)
+      # repository: angelnu/maddy
+      # tag: dev
+      # pullPolicy: Always
 
     maddy:
       hostname: "mx.${CLUSTER_DOMAIN}"
