@@ -19,8 +19,8 @@ spec:
   values:
     image:
       # -- image repository (official)
-      repository: foxcpp/maddy
-      tag: 0.6.2
+      repository: ghcr.io/foxcpp/maddy # Dockerhub - foxcpp/maddy
+      tag: 0.6.2@sha256:de590fdcb207218b6bf9c37569097382ef089dc8e48303e4b262d6c5220fd847
       # -- image repository (mine - for dev)
       # repository: angelnu/maddy
       # tag: dev
