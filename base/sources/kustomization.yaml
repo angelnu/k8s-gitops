@@ -16,12 +16,12 @@ resources:
   - jetstack-charts.yaml
   - k8s-at-home-charts.yaml
   - kubernetes-dashboard.yaml
+  - kubereboot-charts.yaml
   - nextcloud.yaml
   - node-feature-discovery-charts.yaml
   - raspberrymatic.yaml
   - rook-ceph.yaml
   - searxng.yaml
-  - kubereboot-charts.yaml
   - wobcom.yaml
   - zalando-postgres-operator.yaml
   - zalando-postgres-ui.yaml
