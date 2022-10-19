@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: nextcloud-push-service
-        image: nextcloud:25.0.0@sha256:d7d5f5753d1807a4ea74050290f229c0544bd543fe26b04d50167339c11eeb82
+        image: nextcloud:25.0.0@sha256:b8d1410b0596fa928290147b54f009506657eb1723eae73a46d5a8e9f9278fea
         command:
         - /nextcloud/custom_apps/notify_push/bin/x86_64/notify_push
         - /nextcloud/config/config.php
