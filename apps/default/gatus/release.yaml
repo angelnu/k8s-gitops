@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: twinproduction/gatus
-      tag: v4.3.0
+      tag: v4.3.1
     
     env:
       TZ: "Europe/Berlin"
