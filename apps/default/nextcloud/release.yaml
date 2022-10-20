@@ -138,6 +138,7 @@ spec:
           post_max_size = 16G
           max_input_time = 3600
           max_execution_time = 3600
+          default_phone_region = DE
       configs:
         proxy.config.php: |-
           <?php
