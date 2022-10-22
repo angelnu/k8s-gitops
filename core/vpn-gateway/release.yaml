@@ -18,26 +18,12 @@ spec:
         name: angelnu-helm-charts
         namespace: flux-system
   #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/pod-gatewa/values.yaml
-  interval: 5m
-  chart:
-    spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: pod-gateway
-      version: 5.6.2
-      sourceRef:
-        kind: HelmRepository
-        name: k8s-at-home-charts
-        namespace: flux-system
-      interval: 5m
-
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/pod-gateway/values.yaml
   values:
 
     image:
       repository: ghcr.io/angelnu/pod-gateway
-      # Use dev version
-      pullPolicy: Always
-      tag: dev
+      # I am using dev version for testing - others should be using latest
+      tag: dev@sha256:690b6365728fe9012ad4cdfca38334992664596513dca187d1b93d2025205776
     webhook:
       image:
         repository: ghcr.io/angelnu/gateway-admision-controller
@@ -47,14 +33,36 @@ spec:
     addons:
       vpn:
         enabled: true
-        type: openvpn
-        openvpn:
+        type: gluetun
+        gluetun:
           image:
-            repository: dperson/openvpn-client
-            pullPolicy: Always
-            tag: latest
+            repository: docker.io/qmcgaw/gluetun
+            tag: latest@sha256:9c7b9a58fe027db2ea794aad018eec44b1a7f477ddf571d003dabdd64d4dd81c
 
-        configFileSecret: openvpn
+        env:
+        - name:  VPN_SERVICE_PROVIDER
+          value: airvpn
+        - name:  VPN_TYPE
+          value: wireguard
+        - name:  VPN_INTERFACE
+          value: wg0
+        - name:  FIREWALL
+          value: "off"
+        - name:  DOT
+          value: "off"
+        # - name:  WIREGUARD_PRIVATE_KEY
+        #   value: set in secret
+        # - name:  WIREGUARD_PRESHARED_KEY
+        #   value: set in secret
+        # - name:  WIREGUARD_ADDRESSES
+        #   value: set in secret
+        - name:  SERVER_COUNTRIES
+          value: Belgium
+        
+        envFrom:
+          - secretRef:
+              name: airvpn
+
 
         livenessProbe:
           exec:
@@ -75,7 +83,7 @@ spec:
                   cidr: 0.0.0.0/0
               ports:
               # VPN traffic
-              - port: 443
+              - port: &vpn_port 1637
                 protocol: UDP
             - to:
               - ipBlock:
@@ -86,11 +94,11 @@ spec:
     
     settings:
       # -- If using a VPN, interface name created by it
-      VPN_INTERFACE: tun0
+      VPN_INTERFACE: wg0
       # -- Prevent non VPN traffic to leave the gateway
       VPN_BLOCK_OTHER_TRAFFIC: true
       # -- If VPN_BLOCK_OTHER_TRAFFIC is true, allow VPN traffic over this port
-      VPN_TRAFFIC_PORT: 443
+      VPN_TRAFFIC_PORT: *vpn_port
       # -- Traffic to these IPs will be send through the K8S gateway
       VPN_LOCAL_CIDRS: "10.0.0.0/8 192.168.0.0/16"
     
