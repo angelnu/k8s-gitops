@@ -6,7 +6,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://charts.searxng.org
       chart: searxng
       version: 1.0.0
       sourceRef:
@@ -15,13 +14,16 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
+
     image:
       repository: searxng/searxng
       tag: latest
+
     env:
       INSTANCE_NAME: "${CLUSTER_DOMAIN}"
       BASE_URL: "http://localhost:8080/"
       AUTOCOMPLETE: "duckduckgo"
+
     searxng:
       config:
         use_default_settings: true
@@ -29,22 +31,23 @@ spec:
       # See https://docs.searxng.org/src/searx.plugins.limiter.html#limiter-plugin
       # server.limiter: true
       # redis.url: redis://@searxng-redis:6379/0
+
     ingress:
       main:
         enabled: true
         hosts:
-        - host: "search.pub.${CLUSTER_DOMAIN}"
+        - host: &host_pub "search.pub.${CLUSTER_DOMAIN}"
           paths:
           - path: /
             pathType: Prefix
-        - host: "search.${CLUSTER_DOMAIN}"
+        - host: &host "search.${CLUSTER_DOMAIN}"
           paths:
           - path: /
             pathType: Prefix
         tls:
         - hosts:
-          - "search.pub.${CLUSTER_DOMAIN}"
-          - "search.${CLUSTER_DOMAIN}"
+          - *host_pub
+          - *host
 
   valuesFrom:
   - kind: Secret

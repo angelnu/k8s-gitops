@@ -6,42 +6,45 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: sonarr
-      version: 16.3.2
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
       repository: ghcr.io/onedr0p/sonarr
       tag: 3.0.9.1549@sha256:8ab89f00d777645aea8e2dc3ef72c7d4f0b4625559515b420875854fe7c80410
     env:
       TZ: "Europe/Berlin"
+      PUSHOVER_DEBUG: "false"
+      PUSHOVER_APP_URL: &host "sonarr.pub.${CLUSTER_DOMAIN}"
+      SONARR__INSTANCE_NAME: Sonarr
+      SONARR__PORT: &port 8989
+      SONARR__APPLICATION_URL: "https://sonarr.pub.${CLUSTER_DOMAIN}"
+      SONARR__LOG_LEVEL: info
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
     ingress:
       main:
         enabled: true
         hosts:
-        - host: "sonarr.pub.${CLUSTER_DOMAIN}"
+        - host: &host "sonarr.pub.${CLUSTER_DOMAIN}"
           paths:
           - path: /
             pathType: Prefix
         tls:
         - hosts:
-          - "sonarr.pub.${CLUSTER_DOMAIN}"
-      api:
-        enabled: true
-        ingressClassName: "traefik"
-        hosts:
-        - host: "sonarr.pub.${CLUSTER_DOMAIN}"
-          paths:
-          - path: /api
-            pathType: Prefix
-        tls:
-        - hosts:
-          - "sonarr.pub.${CLUSTER_DOMAIN}"
+          - *host
+
     persistence:
       config:
         enabled: true
@@ -62,9 +65,13 @@ spec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_DOWNLOADS}"
+
     podSecurityContext:
-      supplementalGroups:
-      - 65536
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+
     resources:
       requests:
         memory: 250Mi

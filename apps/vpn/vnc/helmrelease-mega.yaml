@@ -1,0 +1,57 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mega-vnc
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    image:
+      repository: docker.io/johnshine/mega.syno
+      tag: latest@sha256:0fb83b3c97fc6217f4d60535268984b7d7e275d42985d3b1c5af6972da7bb402
+
+    service:
+      main:
+        ports:
+          http:
+            port: 6080
+          vnc:
+            enabled: false
+            port: 5901
+
+    ingress:
+      main:
+        enabled: true
+        hosts:
+        - host: &host "mega.pub.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - *host
+
+    persistence:
+      mega:
+        enabled: true
+        type: custom
+        subPath:
+          - path: .local
+            mountPath: /home/mega/.local
+          - path: MEGA
+            mountPath: /home/mega/MEGA
+          - path: MEGAsync Downloads
+            mountPath: /home/mega/MEGAsync Downloads
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}/downloaders/mega"

@@ -6,41 +6,43 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: radarr
-      version: 16.3.2
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
       repository: ghcr.io/onedr0p/radarr
       tag: 4.2.4.6635@sha256:21d2d1cfc838f04167989076ac0505e09de110e1f5ea4dd955d5c46463577ad1
     env:
       TZ: "Europe/Berlin"
+      RADARR__INSTANCE_NAME: Radarr
+      RADARR__PORT: &port 7878
+      RADARR__APPLICATION_URL: "https://radarr.pub.${CLUSTER_DOMAIN}"
+      RADARR__LOG_LEVEL: info
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
     ingress:
       main:
         enabled: true
         hosts:
-        - host: "radarr.pub.${CLUSTER_DOMAIN}"
+        - host: &host "radarr.pub.${CLUSTER_DOMAIN}"
           paths:
           - path: /
             pathType: Prefix
         tls:
         - hosts:
-          - "radarr.pub.${CLUSTER_DOMAIN}"
-      api:
-        enabled: true
-        hosts:
-        - host: "radarr.pub.${CLUSTER_DOMAIN}"
-          paths:
-          - path: /api
-            pathType: Prefix
-        tls:
-        - hosts:
-          - "radarr.pub.${CLUSTER_DOMAIN}"
+          - *host
+
     persistence:
       config:
         enabled: true
@@ -61,9 +63,13 @@ spec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_DOWNLOADS}"
+
     podSecurityContext:
-      supplementalGroups:
-      - 65536
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+
     resources:
       requests:
         memory: 250Mi

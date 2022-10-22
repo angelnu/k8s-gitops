@@ -7,43 +7,43 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: prowlarr
-      version: 4.5.2
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
       repository: ghcr.io/onedr0p/prowlarr-nightly
       tag: 0.4.7.2016@sha256:c745a0711067d707b50ec13deec094104c892d96ddcb75cf8cedb3431ff8cbf7
+
     env:
       TZ: "Europe/Berlin"
+      PROWLARR__INSTANCE_NAME: Prowlarr
+      PROWLARR__PORT: &port 9696
+      PROWLARR__LOG_LEVEL: info
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
     ingress:
       main:
         enabled: true
         hosts:
-        - host: "prowlarr.pub.${CLUSTER_DOMAIN}"
+        - host: &host "prowlarr.pub.${CLUSTER_DOMAIN}"
           paths:
           - path: /
             pathType: Prefix
         tls:
         - hosts:
-          - "prowlarr.pub.${CLUSTER_DOMAIN}"
-      api:
-        enabled: true
-        nameSuffix: "api"
-        ingressClassName: "traefik"
-        hosts:
-        - host: "prowlarr.pub.${CLUSTER_DOMAIN}"
-          paths:
-          - path: /api
-            pathType: Prefix
-        tls:
-        - hosts:
-          - "prowlarr.pub.${CLUSTER_DOMAIN}"
+          - *host
+    
     persistence:
       config:
         enabled: true
@@ -72,9 +72,13 @@ spec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_DOWNLOADS}"
+    
     podSecurityContext:
-      supplementalGroups:
-      - 65536
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+    
     resources:
       requests:
         memory: 250Mi
