@@ -1,9 +1,0 @@
-apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: HelmRepository
-metadata:
-  name: angelnu-charts
-  namespace: flux-system
-spec:
-  interval: 5m
-  url: https://angelnu.github.io/charts/
-  timeout: 3m
