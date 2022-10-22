@@ -7,14 +7,14 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: multus
-      version: 3.5.2
+      version: 3.6.0
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: angelnu-helm-charts
         namespace: flux-system
-      interval: 5m
+  #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/multus/values.yaml
   values:
     image:
       repository: ghcr.io/k8snetworkplumbingwg/multus-cni

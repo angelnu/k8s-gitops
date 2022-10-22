@@ -14,7 +14,6 @@ resources:
   - infracloudio-charts.yaml
   - ingress-nginx.yaml
   - jetstack-charts.yaml
-  - k8s-at-home-charts.yaml
   - kubernetes-dashboard.yaml
   - kubereboot-charts.yaml
   - nextcloud.yaml

@@ -6,17 +6,16 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: tt-rss
-      version: 5.1.2
+      version: 5.2.0
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: angelnu-helm-charts
         namespace: flux-system
-      interval: 5m
   dependsOn:
     - name: tt-rss-db
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/tt-rss/values.yaml
+  #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/tt-rss/values.yaml
   values:
     image:
       repository: ghcr.io/angelnu/tt-rss
