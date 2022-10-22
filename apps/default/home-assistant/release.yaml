@@ -6,20 +6,18 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: home-assistant
-      version: 13.4.2
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
-
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/home-assistant/values.yaml
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
       repository: ghcr.io/home-assistant/home-assistant
-      tag: 2022.10.5
+      tag: 2022.10.5@sha256:090d8cbd6f8675984ca1ca9d357d8aca97101c61f93f221e339731a702160887
 
     persistence:
       config:
@@ -38,11 +36,14 @@ spec:
 
     env:
       TZ: "Europe/Berlin"
+
     probes:
       #Circumvention - avoid restart
       liveness:
         enabled: false
       readiness:
+        enabled: false
+      startup:
         enabled: false
 
     podAnnotations:
