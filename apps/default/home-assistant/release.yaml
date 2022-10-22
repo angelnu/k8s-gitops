@@ -14,6 +14,8 @@ spec:
         name: bjw-s-helm-charts
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  dependsOn:
+    - name: home-assistant-db
   values:
     image:
       repository: ghcr.io/home-assistant/home-assistant

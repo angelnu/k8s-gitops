@@ -6,29 +6,30 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: recipes
-      version: 6.6.2
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   dependsOn:
     - name: recipes-db
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/recipes/values.yaml
   values:
     image:
-      repository: vabene1111/recipes
+      repository: docker.io/vabene1111/recipes
       tag: 1.4.4
     
     persistence:
       media:
         enabled: true
         existingClaim: recipes-media-pvc
+        mountPath: /opt/recipes/mediafiles
       static:
         enabled: true
         existingClaim: recipes-static-pvc
+        mountPath: /opt/recipes/staticfiles
 
     
     env:
@@ -44,6 +45,12 @@ spec:
       #POSTGRES_PASSWORD: set in secret
       TIMEZONE: Europe/Berlin
       REVERSE_PROXY_AUTH: 1
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8080
 
     ingress:
       main:
