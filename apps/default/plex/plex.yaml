@@ -7,15 +7,14 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: plex
-      version: 6.4.3
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
-  # All values at https://github.com/k8s-at-home/charts/blob/master/charts/stable/plex/values.yaml
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
       repository: ghcr.io/onedr0p/plex
@@ -54,6 +53,27 @@ spec:
     # -- Enable devices to be discoverable
     hostNetwork: true
 
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      # # Hardware acceleration using an Intel iGPU w/ QuickSync
+      # # These IDs below should be matched to your `video` and `render` group on the host
+      # # To obtain those IDs run the following grep statement on the host:
+      # # $ cat /etc/group | grep "video\|render"
+      # # video:x:44:
+      # # render:x:109:
+      supplementalGroups:
+        - 44
+        - 109
+        - 100
+
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "1"
+    
     service:
       main:
         type: LoadBalancer
@@ -61,6 +81,9 @@ spec:
         externalTrafficPolicy: Local
         annotations:
           metallb.universe.tf/allow-shared-ip: plex
+        ports:
+          http:
+            port: 32400
     persistence:
       config:
         enabled: true
