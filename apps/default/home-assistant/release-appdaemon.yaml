@@ -6,20 +6,19 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: appdaemon
-      version: 8.4.2
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
   dependsOn:
     - name: home-assistant
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/appdaemon/values.yaml
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
-      repository: acockburn/appdaemon
+      repository: docker.io/acockburn/appdaemon
       tag: 4.2.1
     
     persistence:
@@ -41,6 +40,15 @@ spec:
       HA_URL: "http://home-assistant:8123"
       DASH_URL: "http://$HOSTNAME:5050"
       # TOKEN: secret
+
+    # -- Configures service settings for the chart.
+    # @default -- See values.yaml
+    service:
+      main:
+        ports:
+          http:
+            port: 5050
+
     ingress:
       main:
         enabled: true
