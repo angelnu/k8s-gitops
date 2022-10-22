@@ -6,25 +6,33 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: jellyfin
-      version: 9.5.3
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
       repository: ghcr.io/onedr0p/jellyfin
       tag: 10.8.5@sha256:fc67ca18bd2f4a92c6510219658f1db9b126058fc2dc7dd443c4881f5fd52e29
+
     env:
       TZ: "Europe/Berlin"
       JELLYFIN_CACHE_DIR: "/config/cache"
+
     podSecurityContext:
       supplementalGroups:
+      #   # Hardware acceleration using an Intel iGPU w/ QuickSync
+      #   # These IDs below should be matched to your `video` and `render` group on the host
+      #   # To obtain those IDs run the following grep statement on the host:
+      #   # $ cat /etc/group | grep "video\|render"
       - 44
       - 109
       - 100
+
     service:
       main:
         enabled: true
@@ -33,8 +41,10 @@ spec:
         externalIPs:
         - ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_JELLYFIN}
         externalTrafficPolicy: Local
-        port:
-          port: 8096
+        ports:
+          http:
+            port: 8096
+
     ingress:
       main:
         enabled: true
@@ -53,6 +63,7 @@ spec:
         - hosts:
           - "jellyfin.home.${CLUSTER_DOMAIN}"
           - "jellyfin.pub.${CLUSTER_DOMAIN}"
+
     persistence:
       config:
         enabled: true
@@ -93,6 +104,7 @@ spec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_DOWNLOADS}"
+
     resources:
       requests:
         #gpu.intel.com/i915: 1
