@@ -6,7 +6,7 @@ resources:
   - appscode.yaml
   - authentik.yaml
   - bitnami.yaml
-  - bjw-s.yaml
+  - bjw-s-helm-charts.yaml
   - ceph-csi.yaml
   - forecastle.yaml
   - gitea.yaml

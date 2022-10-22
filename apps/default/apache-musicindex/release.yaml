@@ -8,8 +8,6 @@ spec:
   chart:
     spec:
       chart: app-template
-      # -- Version of the app-template helm chart
-      # this example is not automatically updated, so be sure to use the latest chart version
       version: 0.2.2
       interval: 15m
       sourceRef:
