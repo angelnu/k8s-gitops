@@ -6,27 +6,37 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: gatus
-      version: 1.1.2
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/gatus/values.yaml
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
-      repository: twinproduction/gatus
-      tag: v4.3.2
+      repository: docker.io/twinproduction/gatus
+      tag: v4.3.2@sha256:16d8f9f00fffa2f9e16e17b991f38d28b77658d4211c5578dd10da757c1f6922
     
     env:
       TZ: "Europe/Berlin"
     
     persistence:
       data:
+        enabled: true
         type: pvc
         existingClaim: gatus-pvc
+      config:
+        enabled: true
+        type: configMap
+        name: '{{ include "common.names.fullname" . }}-config'
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8080
 
     ingress:
       main:
@@ -39,9 +49,13 @@ spec:
         tls:
         - hosts:
           - gatus.pub.${CLUSTER_DOMAIN}
-
+      
     configmap:
       config:
+        # -- Store gatus configuration as a ConfigMap
+        enabled: true
+        # -- Gatus configuration. See [image documentation](https://github.com/TwiN/gatus/blob/master/config.yaml) for more information.
+        # @default -- See values.yaml
         data:
           config.yaml: |
             alerting:
