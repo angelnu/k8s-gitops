@@ -22,7 +22,7 @@ spec:
     additionalContainers:
       api:
         name: mealie-api
-        image: docker.io/hkotel/mealie:api-v1.0.0beta-4
+        image: docker.io/hkotel/mealie:api-v1.0.0beta-4@sha256:463bcf457fde8a7c739bb597822b409489d8e16d313913034e6e974c0b8e0fd8
         imagePullPolicy: IfNotPresent
         env:
           - name: API_PORT
