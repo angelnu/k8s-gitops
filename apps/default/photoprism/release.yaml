@@ -6,19 +6,18 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: photoprism
-      version: 7.1.2
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/paperless/values.yaml
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
-      repository: photoprism/photoprism
-      tag: "20220121"
+      repository: docker.io/photoprism/photoprism
+      tag: latest@sha256:2bd1b301e70373df0c7a53f0db5c29043c08cda1135bdd8a5d11a1b8c13cdbca
     
     env:
       PHOTOPRISM_STORAGE_PATH: /photoprism/storage
@@ -58,6 +57,13 @@ spec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_KUBERNETES}/photoprism/originals"
+
+    
+    service:
+      main:
+        ports:
+          http:
+            port: 2342
 
     ingress:
       main:
