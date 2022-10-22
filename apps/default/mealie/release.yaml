@@ -6,34 +6,59 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: mealie
-      version: 5.1.2
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable//mealie/values.yaml
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
-      repository: hkotel/mealie
-      tag: frontend-v1.0.0beta-2
+      repository: docker.io/hkotel/mealie
+      tag: frontend-v1.0.0beta-4
     
-    api:
-      image:
-        repository: hkotel/mealie
-        tag: api-v1.0.0beta-2
-      env:
-        TZ: "Europe/Berlin"
+    additionalContainers:
+      api:
+        name: mealie-api
+        image: docker.io/hkotel/mealie:api-v1.0.0beta-4
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: API_PORT
+            value: "9000"
+          - name: TZ
+            value: "Europe/Berlin"
+        ports:
+          - name: api
+            containerPort: 9000
+        volumeMounts:
+        - name: api-data
+          mountPath: /app/data/
 
     env:
       TZ: "Europe/Berlin"
+      # -- Set the application database type
+      DB_TYPE: sqlite
     
     persistence:
       api-data:
         enabled: true
+        mountPath: /app/data/
+        accessMode: ReadWriteOnce
+        size: 10Gi
         existingClaim: mealie-pvc
+
+    # -- Configures service settings for the chart.
+    # @default -- See values.yaml
+    service:
+      main:
+        ports:
+          http:
+            port: 3000
+          api:
+            enabled: true
+            port: 9000
 
     ingress:
       main:
