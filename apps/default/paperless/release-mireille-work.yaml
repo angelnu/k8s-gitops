@@ -6,15 +6,14 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: paperless
-      version: 9.1.3
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/paperless/values.yaml
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     env:
       PAPERLESS_OCR_LANGUAGE: eng

@@ -18,6 +18,7 @@ data:
       PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
       PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_X_AUTHENTIK_USERNAME
       PAPERLESS_LOGOUT_REDIRECT_URL: https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/sign_out
+
     persistence:
       data:
         enabled: true
@@ -51,6 +52,12 @@ data:
           nfs:
             server: "${NFS_SERVER}"
             # path: set in chart values
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8000
 
     ingress:
       main:
