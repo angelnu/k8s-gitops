@@ -6,27 +6,37 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: homer
-      version: 8.0.2
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-helm-charts
         namespace: flux-system
-      interval: 5m
-  # See https://github.com/k8s-at-home/charts/blob/master/charts/stable/homer/values.yaml
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     image:
-      repository: b4bz/homer
-      tag: v22.10.1
+      repository: docker.io/b4bz/homer
+      tag: v22.10.1@sha256:3ed13b3f15c32d541d4a1dd78cb6022d69ec7a2e205a6e5bd6747bf8f018208f
     
     env:
       TZ: "Europe/Berlin"
+      UID: "911"
+      GID: "911"
     
     persistence:
       config:
         enabled: true
+        mountPath: /www/assets
         existingClaim: homer-pvc
+
+    # -- Configures service settings for the chart.
+    # @default -- See values.yaml
+    service:
+      main:
+        ports:
+          http:
+            port: 8080
 
     ingress:
       main:
