@@ -5888,7 +5888,7 @@ spec:
               fieldPath: metadata.namespace
         - name: TUF_ROOT
           value: /tmp/.sigstore
-        image: ghcr.io/fluxcd/source-controller:v0.30.1@sha256:4b5ad2bf7f7df96afb4c672883bdcd1b65a2e79240d7c1ce324c87154158c2db
+        image: ghcr.io/fluxcd/source-controller:v0.31.0@sha256:1e0b062d5129a462250eb03c5e8bd09b4cc42e88b25e39e35eee81d7ed2d15c0
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
