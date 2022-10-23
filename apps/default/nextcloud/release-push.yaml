@@ -33,7 +33,7 @@ spec:
       - --port
       - &port "7867"
       - --log-level
-      - debug
+      - warning
     
     env:
       - name: NEXTCLOUD_URL 
