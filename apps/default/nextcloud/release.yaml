@@ -19,8 +19,8 @@ spec:
   # See https://github.com/nextcloud/helm/blob/master/charts/nextcloud/values.yaml
   values:
     image:
-      repository: nextcloud
-      tag: 25.0.0
+      repository: docker.io/library/nextcloud
+      tag: 25.0.0@sha256:673d2ec801f2aaa953c4587db5a9bd53430497c95d9d439819074f3ef05538ac
 
     env:
       PHP_MEMORY_LIMIT: 256M

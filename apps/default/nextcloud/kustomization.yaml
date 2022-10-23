@@ -7,4 +7,5 @@ resources:
   - secret.yaml
   - release-db.yaml
   - release.yaml
-  - push.yaml
+  # - push.yaml
+  - release-push.yaml

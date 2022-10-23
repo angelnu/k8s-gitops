@@ -1,0 +1,79 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: nextcloud-push-service
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 0.2.2
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+  dependsOn:
+    - name: nextcloud
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    image:
+      # -- image repository
+      repository: docker.io/library/nextcloud
+      # -- image tag
+      tag: 25.0.0@sha256:673d2ec801f2aaa953c4587db5a9bd53430497c95d9d439819074f3ef05538ac
+
+    # How to Enable
+    # 1. Install "client push" app within nextcloud
+    # 2. sudo -u www-data php -d memory_limit=-1 /var/www/html/occ notify_push:setup https://nextcloud.mydomain.com/push
+    command:
+      - /nextcloud/custom_apps/notify_push/bin/x86_64/notify_push
+      - /nextcloud/config/config.php
+      - --port
+      - &port "7867"
+      - --log-level
+      - debug
+    
+    env:
+      - name: NEXTCLOUD_URL 
+        value: http://nextcloud:8080
+    
+    service:
+      main:
+        ports:
+          http:
+            enabled: true
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          #ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16,10.0.0.0/8"
+
+        hosts:
+          - host: &host nextcloud.${CLUSTER_DOMAIN}
+            paths:
+              - path: /push/
+                pathType: Prefix
+          - host: &host_home nextcloud.home.${CLUSTER_DOMAIN}
+            paths:
+              - path: /push/
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+              - *host_home
+
+    persistence:
+      nextcloud:
+        enabled: true
+        mountPath: /nextcloud
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/nextcloud"
