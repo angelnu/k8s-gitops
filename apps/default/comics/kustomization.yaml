@@ -3,3 +3,5 @@ kind: Kustomization
 resources:
   - secrets.yaml
   - comics.yaml
+  - release-test.yaml
+  - release-nginx.yaml
