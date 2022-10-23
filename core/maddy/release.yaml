@@ -24,6 +24,9 @@ spec:
       # tag: dev
       # pullPolicy: Always
 
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+    
     maddy:
       hostname: "mx.${CLUSTER_DOMAIN}"
       primary_domain: "${CLUSTER_DOMAIN}"

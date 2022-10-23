@@ -50,6 +50,9 @@ spec:
         - hosts:
           - gatus.pub.${CLUSTER_DOMAIN}
       
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+    
     configmap:
       config:
         # -- Store gatus configuration as a ConfigMap
