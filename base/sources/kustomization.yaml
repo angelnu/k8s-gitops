@@ -8,7 +8,6 @@ resources:
   - bitnami.yaml
   - bjw-s-helm-charts.yaml
   - ceph-csi.yaml
-  - forecastle.yaml
   - gitea.yaml
   - hajimari.yaml
   - infracloudio-charts.yaml
@@ -21,6 +20,7 @@ resources:
   - raspberrymatic.yaml
   - rook-ceph.yaml
   - searxng.yaml
+  - stakater-charts.yaml
   - wobcom.yaml
   - zalando-postgres-operator.yaml
   - zalando-postgres-ui.yaml
