@@ -65,6 +65,7 @@ kind: Ingress
 metadata:
   name: nextcloud-push-service
   annotations:
+    hajimari.io/enable: "false"
     nginx.ingress.kubernetes.io/enable-global-auth: "false"
 spec:
   tls:

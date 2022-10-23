@@ -21,6 +21,11 @@ spec:
       port: 443
       ingress:
         annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Router
+          hajimari.io/icon: router
+          hajimari.io/info: Router
+          hajimari.io/group: Network
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
         - host: router.home.${CLUSTER_DOMAIN}
@@ -29,6 +34,12 @@ spec:
       externalName: fritz.box
       port: 80
       ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: DSL Router
+          hajimari.io/icon: arcticons:fritz-app-wlan
+          hajimari.io/info: Fritzbox Router
+          hajimari.io/group: Network
         hosts:
         - host: fritz.home.${CLUSTER_DOMAIN}
         - host: fritz.pub.${CLUSTER_DOMAIN}
@@ -36,20 +47,25 @@ spec:
       externalName: mobile.box
       port: 80
       ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Movile Router
+          hajimari.io/icon: cib:huawei
+          hajimari.io/info: Mobile Router
+          hajimari.io/group: Network
         hosts:
         - host: mobile.home.${CLUSTER_DOMAIN}
         - host: mobile.pub.${CLUSTER_DOMAIN}
-    - name: ap-workroom
-      externalName: ap-workroom.lan
-      port: 80
-      ingress:
-        hosts:
-        - host: ap-workroom.pub.${CLUSTER_DOMAIN}
-        - host: ap-workroom.home.${CLUSTER_DOMAIN}
     - name: octoprint
       externalName: prusa.lan
       port: 80
       ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Large Prusa
+          hajimari.io/icon: eos-icons:3d-print
+          hajimari.io/info: 3D Printer
+          hajimari.io/group: Printers
         hosts:
         - host: prusa.home.${CLUSTER_DOMAIN}
         - host: prusa.pub.${CLUSTER_DOMAIN}
@@ -58,6 +74,12 @@ spec:
       port: 80
       test: false
       ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Small Prusa
+          hajimari.io/icon: eos-icons:3d-print
+          hajimari.io/info: 3D Printer
+          hajimari.io/group: Printers
         hosts:
         - host: prusa-mini.home.${CLUSTER_DOMAIN}
         - host: prusa-mini.pub.${CLUSTER_DOMAIN}
@@ -65,6 +87,12 @@ spec:
       externalName: printer-canon.lan
       port: 80
       ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Paper Printer
+          hajimari.io/icon: printer
+          hajimari.io/info: Cannon
+          hajimari.io/group: Printers
         hosts:
         - host: print.pub.${CLUSTER_DOMAIN}
         - host: print.home.${CLUSTER_DOMAIN}
@@ -73,6 +101,12 @@ spec:
       port: 80
       test: false
       ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Resine Prusa
+          hajimari.io/icon: eos-icons:3d-print
+          hajimari.io/info: 3D Printer
+          hajimari.io/group: Printers
         hosts:
         - host: prusa-sla.pub.${CLUSTER_DOMAIN}
         - host: prusa-sla.home.${CLUSTER_DOMAIN}
@@ -81,6 +115,11 @@ spec:
       port: 5001
       ingress:
         annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: NAS
+          hajimari.io/icon: mdi:nas
+          hajimari.io/info: Synology
+          hajimari.io/group: tools
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
@@ -91,6 +130,11 @@ spec:
       port: 5001
       ingress:
         annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: NAS backup
+          hajimari.io/icon: mdi:nas
+          hajimari.io/info: Synology
+          hajimari.io/group: tools
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:

@@ -37,6 +37,10 @@ spec:
       main:
         enabled: true
         annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:esphome
+          hajimari.io/info: Programs esphome devices
+          hajimari.io/group: automation
           nginx.ingress.kubernetes.io/configuration-snippet: |
             auth_request_set $required_groups 'casa_editors';
         hosts:
@@ -67,6 +71,10 @@ spec:
         ingress:
           enabled: true
           annotations:
+            hajimari.io/enable: "true"
+            hajimari.io/icon: vscode-icons:file-type-vscode
+            hajimari.io/info: Esphome editor
+            hajimari.io/group: automation
             nginx.ingress.kubernetes.io/configuration-snippet: |
               auth_request_set $required_groups 'casa_editors';
           hosts:

@@ -41,6 +41,7 @@ spec:
     ingress:
       main:
         annotations:
+          hajimari.io/group: Spain
           nginx.ingress.kubernetes.io/configuration-snippet: |
             auth_request_set $required_groups 'madrid';
         hosts:

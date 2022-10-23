@@ -24,6 +24,10 @@ spec:
     ingress:
       enabled: true
       annotations:
+        hajimari.io/enable: "true"
+        hajimari.io/icon: login
+        hajimari.io/info: Single Sign On for Casa96
+        hajimari.io/group: tools
         nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
         nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
         nginx.org/websocket-services: authentik

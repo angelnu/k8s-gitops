@@ -35,6 +35,11 @@ spec:
     ingress:
       main:
         enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: cloud-search-outline
+          hajimari.io/info: Internet Search
+          hajimari.io/group: tools
         hosts:
         - host: &host_pub "search.pub.${CLUSTER_DOMAIN}"
           paths:

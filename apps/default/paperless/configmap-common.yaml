@@ -63,6 +63,10 @@ data:
       main:
         enabled: true
         annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: arcticons:paperless
+          hajimari.io/info: Store PDFs
+          hajimari.io/group: documents
           nginx.ingress.kubernetes.io/proxy-body-size: 4G
 
     # -- Deploy local redis instance.

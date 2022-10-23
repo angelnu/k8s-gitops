@@ -211,6 +211,7 @@ kind: Ingress
 metadata:
   name: comics-nginx
   annotations:
+    hajimari.io/enable: "false"
     nginx.ingress.kubernetes.io/enable-global-auth: "false"
 spec:
   tls:
@@ -235,6 +236,7 @@ kind: Ingress
 metadata:
   name: comics-nginx-backup
   annotations:
+    hajimari.io/enable: "false"
     nginx.ingress.kubernetes.io/enable-global-auth: "false"
 spec:
   tls:

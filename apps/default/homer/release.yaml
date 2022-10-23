@@ -41,27 +41,19 @@ spec:
     ingress:
       main:
         enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: view-dashboard
+          hajimari.io/info: Casa96 Dashboard
+          hajimari.io/group: tools
         hosts:
-        - host: home.${CLUSTER_DOMAIN}
+        - host: &home home2.pub.${CLUSTER_DOMAIN}
           paths:
           - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        - host: home.pub.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        - host: home.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
         tls:
         - hosts:
-          - home.${CLUSTER_DOMAIN}
-          - home.pub.${CLUSTER_DOMAIN}
-          - home.home${CLUSTER_DOMAIN}
+          - *home
 
     addons:
       codeserver:
@@ -77,6 +69,11 @@ spec:
         - "none"
         ingress:
           enabled: true
+          annotations:
+            hajimari.io/enable: "true"
+            hajimari.io/icon: vscode-icons:file-type-vscode
+            hajimari.io/info: Homer editor
+            hajimari.io/group: tools
           hosts:
           - host: home-editor.pub.${CLUSTER_DOMAIN}
             paths:

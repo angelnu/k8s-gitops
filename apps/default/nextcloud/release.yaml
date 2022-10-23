@@ -28,6 +28,10 @@ spec:
     ingress:
       enabled: true
       annotations:
+        hajimari.io/enable: "true"
+        hajimari.io/icon: simple-icons:nextcloud
+        hajimari.io/info: File and Calendar server
+        hajimari.io/group: tools
         nginx.ingress.kubernetes.io/proxy-body-size: 4G
         nginx.ingress.kubernetes.io/server-snippet: |-
           server_tokens off;

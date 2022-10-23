@@ -56,6 +56,11 @@ spec:
     ingress:
       main:
         enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: file-video
+          hajimari.io/info: Video editor
+          hajimari.io/group: media
         hosts:
         - host: handbrake.pub.${CLUSTER_DOMAIN}
           paths:

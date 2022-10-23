@@ -49,6 +49,10 @@ spec:
       main:
         enabled: true
         annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:jellyfin
+          hajimari.io/info: Video and Music Player
+          hajimari.io/group: media
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
         - host: "jellyfin.home.${CLUSTER_DOMAIN}"

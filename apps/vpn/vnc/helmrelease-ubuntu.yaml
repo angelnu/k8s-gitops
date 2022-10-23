@@ -31,6 +31,11 @@ spec:
     ingress:
       main:
         enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: logos:ubuntu
+          hajimari.io/info: Ubuntu
+          hajimari.io/group: tools
         hosts:
         - host: &host "ubuntu.pub.${CLUSTER_DOMAIN}"
           paths:

@@ -31,6 +31,11 @@ spec:
     ingress:
       main:
         enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:mega
+          hajimari.io/info: MEGA Downloader
+          hajimari.io/group: media
         hosts:
         - host: &host "mega.pub.${CLUSTER_DOMAIN}"
           paths:

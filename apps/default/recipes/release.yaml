@@ -56,6 +56,10 @@ spec:
       main:
         enabled: true
         annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: game-icons:meal
+          hajimari.io/info: Meal Recipes
+          hajimari.io/group: documents
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
         hosts:
         - host: recipes.pub.${CLUSTER_DOMAIN}

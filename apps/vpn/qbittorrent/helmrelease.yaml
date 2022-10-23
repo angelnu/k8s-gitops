@@ -44,6 +44,11 @@ spec:
     ingress:
       main:
         enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: cloud-download
+          hajimari.io/info: Torrent Downloader
+          hajimari.io/group: media
         hosts:
         - host: &host "torrent.pub.${CLUSTER_DOMAIN}"
           paths:

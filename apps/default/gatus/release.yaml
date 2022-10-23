@@ -41,6 +41,11 @@ spec:
     ingress:
       main:
         enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: connection
+          hajimari.io/info: Streams local music via Apache
+          hajimari.io/group: tools
         hosts:
         - host: gatus.pub.${CLUSTER_DOMAIN}
           paths:

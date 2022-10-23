@@ -22,6 +22,10 @@ spec:
     ingress:
       enabled: true
       annotations:
+        hajimari.io/enable: "true"
+        hajimari.io/icon: logos:postgresql
+        hajimari.io/info: PostgreSQL cluster editor
+        hajimari.io/group: Admin
         nginx.ingress.kubernetes.io/configuration-snippet: |
           auth_request_set $required_groups 'admin';
       hosts:

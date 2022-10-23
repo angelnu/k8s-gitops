@@ -44,6 +44,10 @@ spec:
       main:
         enabled: true
         annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: controller
+          hajimari.io/info: Streams games
+          hajimari.io/group: games
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16"

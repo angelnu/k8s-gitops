@@ -74,6 +74,10 @@ spec:
       main:
         enabled: true
         annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: home-assistant
+          hajimari.io/info: Home Automation
+          hajimari.io/group: automation
           nginx.org/websocket-services: home-assistant
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
@@ -111,6 +115,10 @@ spec:
         ingress:
           enabled: true
           annotations:
+            hajimari.io/enable: "true"
+            hajimari.io/icon: vscode-icons:file-type-vscode
+            hajimari.io/info: Home-Assistant Editor
+            hajimari.io/group: automation
             nginx.ingress.kubernetes.io/configuration-snippet: |
               auth_request_set $required_groups 'casa_editors';
           hosts:

@@ -320,6 +320,12 @@ spec:
           subPath: filters
         ingress:
           enabled: true
+          annotations:
+            hajimari.io/enable: "true"
+            hajimari.io/appName: Maddy Mail Server
+            hajimari.io/icon: vscode-icons:file-type-vscode
+            hajimari.io/info: Edit Mail Rules
+            hajimari.io/group: tools
           hosts:
           - host: maddy-editor.pub.${CLUSTER_DOMAIN}
             paths:
