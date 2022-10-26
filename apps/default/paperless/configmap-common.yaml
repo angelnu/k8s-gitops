@@ -68,6 +68,7 @@ data:
           hajimari.io/info: Store PDFs
           hajimari.io/group: documents
           nginx.ingress.kubernetes.io/proxy-body-size: 4G
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
 
     # -- Deploy local redis instance.
     # @default -- See values.yaml
