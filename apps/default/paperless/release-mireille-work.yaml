@@ -17,6 +17,7 @@ spec:
   values:
     env:
       PAPERLESS_OCR_LANGUAGE: eng
+      PAPERLESS_URL: https://paperless-mireille-work.pub.${CLUSTER_DOMAIN}
 
     persistence:
       data:
