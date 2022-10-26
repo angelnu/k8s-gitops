@@ -163,6 +163,12 @@ spec:
             #'appstoreurl' => 'https://apps.nextcloud.com/api/v0',
             'mail_domain' => '${CLUSTER_DOMAIN}',
           );
+        #Circumvention for client freezes - https://github.com/nextcloud/desktop/issues/5094
+        bulkupload.config.php: |-
+          <?php
+          $CONFIG = array (
+            'bulkupload.enabled' => false,
+          );
       mail:
         enabled: true
         fromAddress: nextcloud
