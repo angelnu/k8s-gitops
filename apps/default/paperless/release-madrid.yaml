@@ -19,6 +19,7 @@ spec:
     env:
       PAPERLESS_OCR_LANGUAGE: spa
       PAPERLESS_IGNORE_DATES: “1984-09-09”
+      PAPERLESS_URL: https://paperless-madrid.pub.${CLUSTER_DOMAIN}
 
     persistence:
       data:

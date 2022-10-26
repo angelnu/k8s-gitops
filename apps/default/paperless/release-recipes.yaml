@@ -18,6 +18,7 @@ spec:
 
     env:
       PAPERLESS_OCR_LANGUAGE: deu
+      PAPERLESS_URL: https://paperless-recipes.pub.${CLUSTER_DOMAIN}
 
     persistence:
       data:

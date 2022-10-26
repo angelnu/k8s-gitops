@@ -18,7 +18,8 @@ spec:
 
     env:
       PAPERLESS_IGNORE_DATES: “1978-09-19,1979-06-12,2010-2-8,2011-11-15”
-
+      PAPERLESS_URL: https://paperless.pub.${CLUSTER_DOMAIN}
+      
     persistence:
       data:
         volumeSpec:
@@ -43,20 +44,20 @@ spec:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             auth_request_set $required_usernames 'angel|mireille';
         hosts:
-        - host: paperless.pub.${CLUSTER_DOMAIN}
+        - host: &host_pub paperless.pub.${CLUSTER_DOMAIN}
           paths:
           - path: /
             # Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
-        - host: paperless.home.${CLUSTER_DOMAIN}
+        - host: &host_home paperless.home.${CLUSTER_DOMAIN}
           paths:
           - path: /
             # Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
         tls:
         - hosts:
-          - paperless.pub.${CLUSTER_DOMAIN}
-          - paperless.home${CLUSTER_DOMAIN}
+          - *host_pub
+          - *host_home
 
   valuesFrom:
   - kind: ConfigMap

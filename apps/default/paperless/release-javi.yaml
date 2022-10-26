@@ -18,6 +18,7 @@ spec:
 
     env:
       PAPERLESS_IGNORE_DATES: “1984-09-09”
+      PAPERLESS_URL: https://paperless-javi.pub.${CLUSTER_DOMAIN}
 
     persistence:
       data:
