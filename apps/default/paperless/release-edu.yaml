@@ -42,7 +42,7 @@ spec:
     ingress:
       main:
         annotations:
-          hajimari.io/group: Spain
+          hajimari.io/group: spain
           nginx.ingress.kubernetes.io/configuration-snippet: |
             auth_request_set $required_usernames 'eduardo';
         hosts:

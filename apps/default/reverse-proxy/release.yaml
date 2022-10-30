@@ -25,7 +25,7 @@ spec:
           hajimari.io/appName: Router
           hajimari.io/icon: router
           hajimari.io/info: Router
-          hajimari.io/group: Network
+          hajimari.io/group: network
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
         - host: router.home.${CLUSTER_DOMAIN}
@@ -39,7 +39,7 @@ spec:
           hajimari.io/appName: DSL Router
           hajimari.io/icon: arcticons:fritz-app-wlan
           hajimari.io/info: Fritzbox Router
-          hajimari.io/group: Network
+          hajimari.io/group: network
         hosts:
         - host: fritz.home.${CLUSTER_DOMAIN}
         - host: fritz.pub.${CLUSTER_DOMAIN}
@@ -52,7 +52,7 @@ spec:
           hajimari.io/appName: Movile Router
           hajimari.io/icon: cib:huawei
           hajimari.io/info: Mobile Router
-          hajimari.io/group: Network
+          hajimari.io/group: network
         hosts:
         - host: mobile.home.${CLUSTER_DOMAIN}
         - host: mobile.pub.${CLUSTER_DOMAIN}
