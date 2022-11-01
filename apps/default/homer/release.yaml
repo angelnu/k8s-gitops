@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: docker.io/b4bz/homer
-      tag: v22.10.1@sha256:3ed13b3f15c32d541d4a1dd78cb6022d69ec7a2e205a6e5bd6747bf8f018208f
+      tag: v22.10.2@sha256:4d84295dcd6473699caebdbab6f1d7bcb982cac235e46a48ab660e8d10925613
     
     env:
       TZ: "Europe/Berlin"
