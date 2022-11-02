@@ -20,6 +20,7 @@ resources:
   - paperless
   # - plex
   - photoprism
+  - searxng
   # - raspberrymatic
   - recipes
   - reverse-proxy
