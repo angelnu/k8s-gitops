@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: collabora/code
-      tag: 22.05.7.2.1
+      tag: 22.05.7.3.1
     
     env:
       extra_params: --o:ssl.termination=true --o:ssl.enable=false
