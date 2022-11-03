@@ -104,7 +104,7 @@ spec:
         enabled: true
         image:
           repository: ghcr.io/coder/code-server
-          tag: 4.8.1@sha256:fe86fffd0a6924465d2cfb55c92a83cef7a0a2be69546a3b8b7dac94671d4129
+          tag: 4.8.2@sha256:22475d09aff29cb7bd47d3d2214218c47cdca0f171abce4d42e5f22af14c1d3a
         volumeMounts:
         - name: config
           mountPath: /config
