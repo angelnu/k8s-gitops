@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: docker.io/photoprism/photoprism
-      tag: latest@sha256:01d97f1c7912c4297bd2bc20836f858e4f3af941ac83475e2cb7349243d045b1
+      tag: latest@sha256:38678bbdadd5d713f5642675ac5eebdbd41011a3e6e5ffc2af6b0385f8f3ab19
     
     env:
       PHOTOPRISM_STORAGE_PATH: /photoprism/storage
