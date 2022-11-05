@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: chirpstack-packet-multiplexer
-      version: 1.0.0
+      version: 2.1.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -18,8 +18,6 @@ spec:
     image:
       repository: ghcr.io/angelnu/chirpstack-packet-multiplexer
       tag: d8b5ed08c5fff375cd60d7a1af302d0a4237237c
-    
-    replicaCount: 1
 
     log_level: 4
 
@@ -33,5 +31,7 @@ spec:
     - "a840411ecd404150" #Madrid
 
     service:
-      type: LoadBalancer
-      loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_LORAFWD}"
+      main:
+        annotations:
+          metallb.universe.tf/loadBalancerIPs: ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_LORAFWD}
+        type: LoadBalancer

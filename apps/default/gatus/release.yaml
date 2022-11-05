@@ -30,7 +30,7 @@ spec:
       config:
         enabled: true
         type: configMap
-        name: '{{ include "common.names.fullname" . }}-config'
+        name: 'gatus-config'
 
     service:
       main:
@@ -58,7 +58,7 @@ spec:
     podAnnotations:
       reloader.stakater.com/auto: "true"
     
-    configmap:
+    configMaps:
       config:
         # -- Store gatus configuration as a ConfigMap
         enabled: true
