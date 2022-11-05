@@ -8,7 +8,7 @@
   ],  
   platform:     "github",
   username:     "angelnu-bot[bot]",
-  gitAuthor:    "angelnu-bot[bot] <249196+angelnu-bot[bot]@users.noreply.github.com>",
+  gitAuthor:    "angelnu-bot[bot] <115925344+angelnu-bot[bot]@users.noreply.github.com>",
   repositories: ["angelnu/k8s-gitops"],
 
   ignorePaths: ["ansible/group_vars/all.yaml"],
