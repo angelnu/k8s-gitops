@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: games-on-whales
-      version: 1.9.0
+      version: 2.0.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
