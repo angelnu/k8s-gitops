@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: dnsmadeeasy-webhook
-      version: 4.9.0
+      version: 5.0.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
