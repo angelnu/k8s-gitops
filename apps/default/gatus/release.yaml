@@ -30,7 +30,7 @@ spec:
       config:
         enabled: true
         type: configMap
-        name: 'gatus-config'
+        name: '{{ include "bjw-s.common.lib.chart.names.fullname" . }}-config'
 
     service:
       main:
