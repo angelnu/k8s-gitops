@@ -37,7 +37,7 @@ spec:
         annotations:
           hajimari.io/enable: "true"
           hajimari.io/icon: filmstrip
-          hajimari.io/info: Media Search
+          hajimari.io/info: Film Search
           hajimari.io/group: media
         hosts:
         - host: &host "radarr.pub.${CLUSTER_DOMAIN}"

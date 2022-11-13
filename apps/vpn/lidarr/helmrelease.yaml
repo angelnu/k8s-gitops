@@ -37,7 +37,7 @@ spec:
         annotations:
           hajimari.io/enable: "true"
           hajimari.io/icon: music-box
-          hajimari.io/info: Search for Music
+          hajimari.io/info: Music Search
           hajimari.io/group: media
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           external-dns.alpha.kubernetes.io/target: "ipv4.${SECRET_DOMAIN}"
