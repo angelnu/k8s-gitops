@@ -20,7 +20,7 @@ spec:
       # -- image repository
       repository: docker.io/library/nginx
       # -- image tag
-      tag: 1.23.2@sha256:ea6e783bdb6b14997e85052acc18738af5471c4e0299a6b072e60377da394bd8
+      tag: 1.23.2@sha256:a0d21cf90a6af6e4328b6a62cb78486a72affc3d9aad59dbd2fefa3c3be97858
 
     service:
       main:
