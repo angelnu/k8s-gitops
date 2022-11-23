@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: docker.io/twinproduction/gatus
-      tag: v4.3.2@sha256:16d8f9f00fffa2f9e16e17b991f38d28b77658d4211c5578dd10da757c1f6922
+      tag: v4.4.0@sha256:acb2669eaa3664b661c9ca2695f176c862347ad550ee3f8658e5bf51ddb4c887
     
     env:
       TZ: "Europe/Berlin"
