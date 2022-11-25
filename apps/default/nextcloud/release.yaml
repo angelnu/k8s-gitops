@@ -176,7 +176,7 @@ spec:
         smtp:
           host: ${CLUSTER_MAIL_SERVER}
           secure:
-          port: ${CLUSTER_ALL_MAIL_SERVER_PORT}
+          port: ${CLUSTER_MAIL_SERVER_PORT}
           authtype:
           name:
           password:

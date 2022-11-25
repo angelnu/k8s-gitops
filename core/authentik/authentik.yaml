@@ -48,7 +48,7 @@ spec:
 
       email:
         host: ${CLUSTER_MAIL_SERVER}
-        port: ${CLUSTER_ALL_MAIL_SERVER_PORT}
+        port: ${CLUSTER_MAIL_SERVER_PORT}
         #host: smtp.gmail.com
         #use_tls: true
 
