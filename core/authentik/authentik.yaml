@@ -49,6 +49,7 @@ spec:
       email:
         host: ${CLUSTER_MAIL_SERVER}
         port: ${CLUSTER_MAIL_SERVER_PORT}
+        from: authentik@${CLUSTER_DOMAIN}
         #host: smtp.gmail.com
         #use_tls: true
 
