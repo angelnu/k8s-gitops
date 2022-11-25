@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/radarr
-      tag: 4.2.4.6635@sha256:a95364b356c9252a1f1910158f261f9e18f0d49306212b1903a565dc49ba2fb6
+      tag: 4.2.4.6635@sha256:5428d9af7fd569c99c7e3dadc5bc95b775234b52d6926392d030c0e56e3a1790
     env:
       TZ: "Europe/Berlin"
       RADARR__INSTANCE_NAME: Radarr
