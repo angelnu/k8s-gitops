@@ -5755,7 +5755,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/fluxcd/helm-controller:v0.26.0@sha256:ff129164a8c2070a4c8630c3c5d31e1609a27d75fbe41749a9c8a6aee39063ad
+        image: ghcr.io/fluxcd/helm-controller:v0.27.0@sha256:728e604487ab51ee4f62afa9cfec2bb97f4cc4828620259d3c624d90f7e7ef3a
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -5920,7 +5920,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/fluxcd/notification-controller:v0.28.0@sha256:70284161e440b3655340194650d1636eb36611ccf166d1fc2b2c6fc0f8a93d22
+        image: ghcr.io/fluxcd/notification-controller:v0.29.0@sha256:ce0a795ae9d78531d9c716e965fd4fc3aa0dba42e7ca8607ab4dcaf3a4b3ba48
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
