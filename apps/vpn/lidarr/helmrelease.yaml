@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/lidarr
-      tag: 1.0.2.2592@sha256:826218a565d6394a95e41f1c88217d31e3d97053a89c76e5fc3d3b7fbf634459
+      tag: 1.0.2.2592@sha256:44fb1ce68a2368c87e660fac368113e23723e6d9315ed14afe85ddaa6ddfded6
 
     env:
       TZ: "Europe/Berlin"
