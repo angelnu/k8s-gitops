@@ -68,6 +68,10 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+        git:
+          # -- Existing secret containing SSH private key
+          # The chart expects it to be present under the `id_rsa` key.
+          deployKeySecret: git-ssh-keys
         ingress:
           enabled: true
           annotations:
