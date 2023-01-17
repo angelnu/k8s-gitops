@@ -22,5 +22,5 @@ spec:
     cni:
       image:
         repository: ghcr.io/angelnu/cni-plugins
-        tag: v1.1.1
+        tag: 1.2.0
       version: "0.3.1"
