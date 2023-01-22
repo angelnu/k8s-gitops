@@ -63,8 +63,8 @@ spec:
           hajimari.io/info: Meal Recipes
           hajimari.io/group: documents
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            more_set_headers "REMOTE-USER: $upstream_http_X_authentik_username";
+          # nginx.ingress.kubernetes.io/configuration-snippet: |
+          #   more_set_input_headers "REMOTE-USER: $upstream_http_X_authentik_username"; Waiting for https://github.com/kubernetes/ingress-nginx/issues/7811
         hosts:
         - host: recipes.pub.${CLUSTER_DOMAIN}
           paths:
