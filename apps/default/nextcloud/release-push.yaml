@@ -28,7 +28,7 @@ spec:
     # 1. Install "client push" app within nextcloud
     # 2. sudo -u www-data php -d memory_limit=-1 /var/www/html/occ notify_push:setup https://nextcloud.mydomain.com/push
     command:
-      - /nextcloud/custom_apps/notify_push/bin/x86_64/notify_push
+      - /nextcloud/custom_apps/notify_push/notify_push/bin/x86_64/notify_push
       - /nextcloud/config/config.php
       - --port
       - &port "7867"
