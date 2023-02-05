@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 1.3.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: docker.io/twinproduction/gatus
-      tag: v5.1.1@sha256:de953abbfeaf6e151b0406cd3f57f38785ffa4cf415f4ba15e96e6219afce019
+      tag: v5.2.0@sha256:0f45bf9b28bd92d92e0a6f0622af8e199b7444c900f34a5bb83cc5893d6468df
     
     env:
       TZ: "Europe/Berlin"

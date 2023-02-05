@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 1.3.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: ghcr.io/home-assistant/home-assistant
-      tag: 2023.1.6@sha256:533318192468a5681be3ea34cbf9c0fdb8d25e9177128ddc0b2062808b8be3ba
+      tag: 2023.2.1@sha256:8c81db8d4efe0a8cd985d8189bfa613844dea03e8ef84aaef076fe20ade158ce
 
     persistence:
       config:

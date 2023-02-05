@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 1.3.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/readarr-nightly
-      tag: 0.1.2.1533@sha256:483758fcf12d51f73ed7be53c2d3c1070de74a5fdc36a50ea7eefb9f814f14a3
+      tag: 0.1.3.1567@sha256:2831b758727e305a8a48e835a5d8679699cbdf59e7f6c839cb13472bdb791d89
     env:
       TZ: "Europe/Berlin"
       READARR__INSTANCE_NAME: Readarr (Audio)

@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 1.3.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/prowlarr-nightly
-      tag: 1.1.1.2367@sha256:a56d146d10aa6c5441dcec1dbb27c9ecef5419600bfe46d006d9a137ab7d3ffc
+      tag: 1.2.0.2523@sha256:8e12738492641c30a00d52cd1a1b4d42532ac71c80371481f36b2f5491153288
 
     env:
       TZ: "Europe/Berlin"
