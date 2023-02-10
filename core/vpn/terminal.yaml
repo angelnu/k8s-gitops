@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: alpine
-        image: alpine@sha256:f271e74b17ced29b915d351685fd4644785c6d1559dd1f2d4189a5e851ef753a
+        image: alpine@sha256:c8deccde20bcc319a17c28ce674b80b9b7e945a8b460a11272b7f0a3e0d6a746
         command:
         - /bin/sh
         - -c
