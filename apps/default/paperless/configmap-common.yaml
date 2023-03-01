@@ -74,5 +74,5 @@ data:
     # @default -- See values.yaml
     additionalContainers:
       - name: broker
-        image: redis:7.0@sha256:6a59f1cbb8d28ac484176d52c473494859a512ddba3ea62a547258cf16c9b3ae
+        image: redis:7.0@sha256:e1ce7c3f74cb6ce2bf078d5bc9caad2238ec84237dab20a086ef2fb9502942c5
         imagePullPolicy: IfNotPresent
