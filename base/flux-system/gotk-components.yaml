@@ -6387,7 +6387,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/fluxcd/helm-controller:v0.31.2@sha256:8180a8cd8765d79b181a961000e051ab99dc50407740b3d3523cba98300936ff
+        image: ghcr.io/fluxcd/helm-controller:v0.32.0@sha256:1d885770bf20ccc6644076a10d435ee12f0c5c5fa0510c9a84ab5e685e8d7812
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
