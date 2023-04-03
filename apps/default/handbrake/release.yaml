@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: docker.io/jlesage/handbrake
-      tag: v1.25.1@sha256:4f433d8dcf43a2ab4cf750430cad504af3f717e1c55b749dbf7c8bd97a090df5
+      tag: v23.03.2@sha256:1adba874618a11adedb2aacf19b92af0b6a9459a43dabee9b7af5103da9e3f09
 
     env:
       TZ: "Europe/Berlin"
