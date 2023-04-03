@@ -24,6 +24,7 @@ spec:
       tag: dev
       pullPolicy: Always
 
+
     podAnnotations:
       reloader.stakater.com/auto: "true"
     
@@ -300,7 +301,8 @@ spec:
           smtp-intern:
             enabled: true
             port: 2525
-
+      openmetrics:
+        enabled: false
     persistence:
       data:
         enabled: true
