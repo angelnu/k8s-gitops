@@ -8,7 +8,7 @@ spec:
     spec:
       # renovate: registryUrl=https://nextcloud.github.io/helm/
       chart: nextcloud
-      version: 3.5.4
+      version: 3.5.7
       sourceRef:
         kind: HelmRepository
         name: nextcloud
@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: docker.io/library/nextcloud
-      tag: 25.0.5@sha256:91b7d8b13327adf57f36c756988bf4ff67ac7d9e78fe21353d7c347fa43e7fe6
+      tag: 25.0.5@sha256:97cd38d4905c4ecd8c24738082c6c7bc7b266d80e1b316bc53441ca0ee4c022b
 
     env:
       PHP_MEMORY_LIMIT: 256M
