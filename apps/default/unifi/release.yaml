@@ -43,11 +43,11 @@ spec:
 
     service:
       main:
-        annotations:
-          metallb.universe.tf/loadBalancerIPs: ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}
-          metallb.universe.tf/allow-shared-ip: unifi
-        type: LoadBalancer
-        externalTrafficPolicy: Local
+        #annotations:
+        #  metallb.universe.tf/loadBalancerIPs: ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}
+        #  metallb.universe.tf/allow-shared-ip: unifi
+        #type: LoadBalancer
+        #externalTrafficPolicy: Local
         ports:
           http:
             port: 8443
