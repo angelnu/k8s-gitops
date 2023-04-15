@@ -8,7 +8,9 @@
 
 ## Status of all clusters
 
-`kubectl get pods -o go-template='{{range .items}} kubectl -n {{.metadata.namespace}} exec {{.metadata.name}} -- patronictl list{{"\n"}}{{end}}' -A|grep postgres-0|bash -C`
+```
+kubectl get pods -o go-template='{{range .items}} kubectl -n {{.metadata.namespace}} exec {{.metadata.name}} -- patronictl list{{"\n"}}{{end}}' -A|grep postgres-0|bash -C
+```
 
 ## Repair HowTo
 
