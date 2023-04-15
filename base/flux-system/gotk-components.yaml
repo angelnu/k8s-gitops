@@ -6497,7 +6497,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/fluxcd/kustomize-controller:v0.35.1
+        image: ghcr.io/fluxcd/kustomize-controller:v0.35.1@sha256:2424a65bc28cd6f0ee42c591a83678cbb7c13ebbd5f2f6cb473bc51d97d358b3
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -6579,7 +6579,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/fluxcd/notification-controller:v0.33.0
+        image: ghcr.io/fluxcd/notification-controller:v0.33.0@sha256:e626df76f427b68e756322ffae263d827c44bf76dbaf9d7327f3e8bda526d020
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -6674,7 +6674,7 @@ spec:
               fieldPath: metadata.namespace
         - name: TUF_ROOT
           value: /tmp/.sigstore
-        image: ghcr.io/fluxcd/source-controller:v0.36.1
+        image: ghcr.io/fluxcd/source-controller:v0.36.1@sha256:5c531641cdf441d2aa45c33797efb33b0fd96ff1a5bc1dfacc4c0e7ea9ca10b1
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
