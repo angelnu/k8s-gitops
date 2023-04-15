@@ -73,6 +73,7 @@ data:
     # -- Deploy local redis instance.
     # @default -- See values.yaml
     additionalContainers:
-      - name: broker
+      broker:
+        name: broker
         image: redis:7.0@sha256:92b8b307ee28ed74da17578064c73307ad41e43f422f0b7e4e91498b406c59e3
         imagePullPolicy: IfNotPresent
