@@ -6,7 +6,8 @@ data:
   commmon.yaml: |
     image:
       repository: ghcr.io/paperless-ngx/paperless-ngx
-      tag: 1.13.0
+      # renovate: datasource=helm-values depName=docker lookupName=ghcr.io/paperless-ngx/paperless-ngx
+      tag: 1.12.2
     
     env:
       PAPERLESS_OCR_LANGUAGE: deu
