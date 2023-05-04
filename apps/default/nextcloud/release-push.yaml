@@ -22,7 +22,7 @@ spec:
       # -- image repository
       repository: docker.io/library/nextcloud
       # -- image tag
-      tag: 26.0.1@sha256:73f76cd3be1ae7479d2164667b16ec492addb34f78b7d184de0b7b4348361e19
+      tag: 26.0.1@sha256:b4514829f20b5b45f74bb5f68a6380b6ab2659cc984bcd3af76555d13748efbe
 
     # How to Enable
     # 1. Install "client push" app within nextcloud
