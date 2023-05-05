@@ -56,7 +56,7 @@ This should not be needed since there is GitHub workflow to do this automaticall
    ```
    flux uninstall
    ```
-2. Uninstall k3s (TBD)
+2. Uninstall k3s
    ```
    ansible-playbook -i hosts-production k3s_remove.yaml
    ```

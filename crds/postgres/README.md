@@ -33,3 +33,14 @@ kubectl get pods -o go-template='{{range .items}} kubectl -n {{.metadata.namespa
 - reinit member of cluster:
   - kubectl exec -ti recipes-db-zalando-postgres-cluster-postgres-0 -- patronictl reinit <cluster name> <cluster member>
 
+## Usefull commands for psql
+
+Enter psql with `psql -U postgres`
+
+### Query hash from user password
+
+SELECT rolpassword FROM pg_authid;
+
+### Change password
+
+ALTER USER postgres WITH PASSWORD 'new_password';
