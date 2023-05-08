@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: multus
-      version: 4.0.0
+      version: 5.0.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -18,9 +18,8 @@ spec:
   values:
     image:
       repository: ghcr.io/k8snetworkplumbingwg/multus-cni
-      tag: v3.9.3
+      tag: v4.0.1-thick
     cni:
       image:
-        repository: ghcr.io/angelnu/cni-plugins
-        tag: 1.2.0
-      version: "0.3.1"
+        repository: ghcr.io/k8s-at-home/cni-plugins
+        tag: v1.1.1
