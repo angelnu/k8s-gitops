@@ -28,6 +28,11 @@ spec:
     podAnnotations:
       reloader.stakater.com/auto: "true"
     
+    securityContext:
+      capabilities:
+        add:
+          - SYS_PTRACE #enable debuging
+    
     maddy:
       hostname: "mx.${CLUSTER_DOMAIN}"
       primary_domain: "${CLUSTER_DOMAIN}"
