@@ -98,6 +98,7 @@ spec:
           enabled: true
           custom: |
             msgpipeline local_routing {
+                debug yes
                 modify {
                     # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).
                     replace_rcpt &local_rewrites
@@ -141,18 +142,18 @@ spec:
             
             smtp tcp://0.0.0.0:2525 {
                 debug yes
-                limits {
-                    # Up to 20 msgs/sec across max. 10 SMTP connections.
-                    all rate 20 1s
-                    all concurrency 10
-                }
+                # limits {
+                #     # Up to 20 msgs/sec across max. 10 SMTP connections.
+                #     all rate 20 1s
+                #     all concurrency 10
+                # }
 
-                dmarc yes
-                check {
-                    # require_mx_record
-                    dkim
-                    spf
-                }
+                # dmarc yes
+                # check {
+                #     # require_mx_record
+                #     dkim
+                #     spf
+                # }
 
                 source $(local_domains) {
                     reject 501 5.1.8 "Use Submission for outgoing SMTP"
