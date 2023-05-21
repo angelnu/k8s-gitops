@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/readarr-nightly
-      tag: 0.1.5.1832@sha256:9dbce2f85d1c4a4028c11fc4eb2ab55bbea46a05041147ca56310b7f18c74864
+      tag: 0.1.6.1851@sha256:3f1ffb309013bc15c376332c95bc3754074ef29f243c24a85c79352b92ca4f80
     env:
       TZ: "Europe/Berlin"
       READARR__INSTANCE_NAME: Readarr (Audio)
