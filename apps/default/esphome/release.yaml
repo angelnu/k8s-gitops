@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/esphome/esphome
-      tag: 2023.5.2@sha256:2df13cf510461d1bf44ac6c430356fff6dbab6721512d48fa3a18fa908e101ad
+      tag: 2023.5.3@sha256:4942e2010b6988eec1570a5620ed57ba6dc83ae5009329f22fafb08e173202a4
     
     persistence:
       config:
