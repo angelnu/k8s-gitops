@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.0
+      version: 1.5.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/lidarr
-      tag: 1.1.4.3027@sha256:74ff600e40d165684005da1fdf9d050d9d7e087caf74733c34e255a55784b6fe
+      tag: 1.1.4.3027@sha256:4e30e7525a4cfd20b0f4632b719bae5215258a9ebd2ef71bdbd99d140aee6a19
 
     env:
       TZ: "Europe/Berlin"

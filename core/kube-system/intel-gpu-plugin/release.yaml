@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.0
+      version: 1.5.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -22,7 +22,7 @@ spec:
 
     image:
       repository: docker.io/intel/intel-gpu-plugin
-      tag: 0.26.1
+      tag: 0.27.0
 
     affinity:
       nodeAffinity:

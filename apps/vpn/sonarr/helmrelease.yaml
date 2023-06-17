@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.0
+      version: 1.5.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/sonarr
-      tag: 3.0.10.1567@sha256:d2a88c3182f3315a406715abf0b0f7a5439d56e2d7527a1de747fd2400450002
+      tag: 3.0.10.1567@sha256:c890d6cada4319afb9c15e08d443b96040b183e9d74585166ce1c696f9494c65
     env:
       TZ: "Europe/Berlin"
       PUSHOVER_DEBUG: "false"

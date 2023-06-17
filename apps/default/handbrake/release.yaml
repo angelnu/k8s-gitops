@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.0
+      version: 1.5.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: docker.io/jlesage/handbrake
-      tag: v23.04.1@sha256:1cc68cf39f5d5484bd09a61d547a266c1331bb13c15d1eb46f68aee7983cabd8
+      tag: v23.06.1@sha256:5f097b13a5d20efe829204deb8985a6c2b905af1b342a53365bc18e1dcbe465b
 
     env:
       TZ: "Europe/Berlin"

@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.0
+      version: 1.5.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: ghcr.io/home-assistant/home-assistant
-      tag: 2023.5.2@sha256:40c15990157cf3240f873c32bc5a327fa8fc2b18f8c163d97a85e735eac29b66
+      tag: 2023.6.2@sha256:8e069fcfddbd95c0acff88b9e515e3b208c2a5b4ad801a8f0cb8b55be417fc45
 
     persistence:
       config:
@@ -80,7 +80,7 @@ spec:
           hajimari.io/group: automation
           nginx.org/websocket-services: home-assistant
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
-          nginx.ingress.kubernetes.io/force-ssl-redirect: "false" #Required by Reolink integration to push images via http
+          nginx.ingress.kubernetes.io/ssl-redirect: "false" #Required by Reolink integration to push images via http
         hosts:
         - host: ha.${CLUSTER_DOMAIN}
           paths:
@@ -105,7 +105,7 @@ spec:
         enabled: true
         image:
           repository: ghcr.io/coder/code-server
-          tag: 4.12.0@sha256:fb7c8905f51d49ef3363035201f2e4803dffe054f24de7d209c810bc88639d94
+          tag: 4.14.0@sha256:cc0093decebb4b3553294056ba06ba95aa4b68b6b5a988302974ee4c97f74d1d
         volumeMounts:
         - name: config
           mountPath: /config
