@@ -80,6 +80,7 @@ spec:
           hajimari.io/group: automation
           nginx.org/websocket-services: home-assistant
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "false" #Required by Reolink integration to push images via http
         hosts:
         - host: ha.${CLUSTER_DOMAIN}
           paths:
