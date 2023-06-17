@@ -60,7 +60,7 @@ spec:
         enabled: true
         image:
           repository: ghcr.io/coder/code-server
-          tag: 4.13.0@sha256:1aa7c6581d2f392ae5f5fb2214b935fb12f257debb53ca767775de2e99adefdf
+          tag: 4.14.0@sha256:cc0093decebb4b3553294056ba06ba95aa4b68b6b5a988302974ee4c97f74d1d
         workingDir: "/www/assets"
         args:
         - --user-data-dir
