@@ -37,7 +37,7 @@ spec:
         gluetun:
           image:
             repository: docker.io/qmcgaw/gluetun
-            tag: latest@sha256:e47fc06c1b2ca465e42bfd9b73b2590ab4dd5f66ded9e5f20d8df52883c094cc
+            tag: latest@sha256:e904144a7493029bc43ca6edb755bebc95312d164bb2a4ff13aaa645af7bacf7
 
         env:
         - name:  VPN_SERVICE_PROVIDER
