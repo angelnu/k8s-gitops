@@ -6579,7 +6579,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/fluxcd/notification-controller:v0.33.0@sha256:e626df76f427b68e756322ffae263d827c44bf76dbaf9d7327f3e8bda526d020
+        image: ghcr.io/fluxcd/notification-controller:v1.0.0@sha256:4b7d3049d7539e9bbdd3e988549a1f3b69fbbb43713f35aba8061df9125285c4
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
