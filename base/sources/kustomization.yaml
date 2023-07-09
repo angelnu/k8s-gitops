@@ -21,6 +21,7 @@ resources:
   - rook-ceph.yaml
   - searxng.yaml
   - stakater-charts.yaml
+  - weaveworks.yaml
   - wobcom.yaml
   - zalando-postgres-operator.yaml
   - zalando-postgres-ui.yaml
