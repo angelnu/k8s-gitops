@@ -205,7 +205,7 @@ The clusters dir contains the Flux configuration:
 In **clusters/staging/** dir we have the Kustomization definitions:
 
 ```yaml
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: apps
@@ -221,7 +221,7 @@ spec:
   prune: true
   validation: client
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: infrastructure
@@ -371,7 +371,7 @@ resources:
 Enable decryption on your clusters by editing the `infrastructure.yaml` files:
 
 ```yaml
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: infrastructure
