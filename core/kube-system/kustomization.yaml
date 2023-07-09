@@ -7,3 +7,4 @@ resources:
   - metallb.yaml
   - multus_network.yaml
   - node-feature-discovery
+  - weave-gitops-dashboard
