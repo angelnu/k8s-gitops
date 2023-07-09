@@ -48,6 +48,6 @@ spec:
 
   valuesFrom:
   - kind: Secret
-    name: "authentik"
+    name: "authentik-config"
     valuesKey: postgres.yaml
     optional: false
