@@ -12,7 +12,7 @@ spec:
     name: flux-system
   path: ./core
   prune: true
-  validation: client
+  #validation: client
   decryption:
     provider: sops
     secretRef:

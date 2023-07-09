@@ -219,7 +219,7 @@ spec:
     name: flux-sytem
   path: ./apps/staging
   prune: true
-  validation: client
+ # validation: client
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

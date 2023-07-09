@@ -10,7 +10,7 @@ spec:
     name: flux-system
   path: ./settings/production
   prune: true
-  validation: client
+  #validation: client
   decryption:
     provider: sops
     secretRef:
