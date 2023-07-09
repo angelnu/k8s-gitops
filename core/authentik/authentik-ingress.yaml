@@ -7,14 +7,19 @@ metadata:
       nginx.ingress.kubernetes.io/enable-global-auth: "false"
 spec:
     rules:
-        - host: app.company
+        - host: authentik.pub.${CLUSTER_DOMAIN}
           http:
-              paths: /outpost.goauthentik.io
-              pathType: Prefix
-              backend:
-                  # Or, to use an external Outpost, create an ExternalName service and reference that here.
-                  # See https://kubernetes.io/docs/concepts/services-networking/service/#externalname
-                  service:
-                      name: ak-outpost-ingress
-                      port:
-                          number: 9000
+              paths: 
+              - path: /outpost.goauthentik.io
+                pathType: Prefix
+                backend:
+                    # Or, to use an external Outpost, create an ExternalName service and reference that here.
+                    # See https://kubernetes.io/docs/concepts/services-networking/service/#externalname
+                    service:
+                        name: ak-outpost-ingress
+                        port:
+                            number: 9000
+
+    tls:
+    - hosts:
+      - authentik.pub.${CLUSTER_DOMAIN}
