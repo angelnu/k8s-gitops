@@ -5,4 +5,5 @@ resources:
   - authentik-secret.yaml
   - authentik-db.yaml
   - authentik.yaml
+  - authentik-ingress.yaml
   - ldap-service.yaml
