@@ -17,8 +17,6 @@ spec:
   values:
     app:
       image:
-        name: kubernetesui/dashboard
-        tag: v2.3.0
         pullPolicy: IfNotPresent
       
       ingress:
@@ -34,6 +32,7 @@ spec:
         hosts:
           - dashboard.${CLUSTER_DOMAIN}
           - dashboard.home.${CLUSTER_DOMAIN}
+        secretName: null 
         tls:
         - hosts:
           - dashboard.${CLUSTER_DOMAIN}
