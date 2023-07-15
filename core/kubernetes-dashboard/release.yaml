@@ -15,33 +15,34 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    image:
-      name: kubernetesui/dashboard
-      tag: v2.3.0
-      pullPolicy: IfNotPresent
-    
-    ingress:
-      enabled: true
-      annotations:
-        hajimari.io/enable: "true"
-        hajimari.io/icon: logos:kubernetes
-        hajimari.io/info: Kubernetes dashboard
-        hajimari.io/group: admin
-        nginx.ingress.kubernetes.io/proxy-body-size: "100m"
-        nginx.ingress.kubernetes.io/configuration-snippet: |
-          auth_request_set $required_groups 'kubernetes_dashboard';
-      hosts:
-        - dashboard.${CLUSTER_DOMAIN}
-        - dashboard.home.${CLUSTER_DOMAIN}
-      tls:
-      - hosts:
-        - dashboard.${CLUSTER_DOMAIN}
-        - dashboard.home.${CLUSTER_DOMAIN}
-    # protocolHttp: true
-    extraArgs:
-      - --enable-skip-login
-      - --disable-settings-authorizer
-      - --enable-insecure-login
+    app:
+      image:
+        name: kubernetesui/dashboard
+        tag: v2.3.0
+        pullPolicy: IfNotPresent
+      
+      ingress:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: logos:kubernetes
+          hajimari.io/info: Kubernetes dashboard
+          hajimari.io/group: admin
+          nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            auth_request_set $required_groups 'kubernetes_dashboard';
+        hosts:
+          - dashboard.${CLUSTER_DOMAIN}
+          - dashboard.home.${CLUSTER_DOMAIN}
+        tls:
+        - hosts:
+          - dashboard.${CLUSTER_DOMAIN}
+          - dashboard.home.${CLUSTER_DOMAIN}
+      # protocolHttp: true
+      extraArgs:
+        - --enable-skip-login
+        - --disable-settings-authorizer
+        - --enable-insecure-login
     metricsScraper:
       enabled: true
     nginx:
