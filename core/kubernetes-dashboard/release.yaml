@@ -44,3 +44,7 @@ spec:
       - --enable-insecure-login
     metricsScraper:
       enabled: true
+    nginx:
+      enabled: false
+    cert-manager:
+      enabled: false
