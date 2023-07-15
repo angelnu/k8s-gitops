@@ -43,7 +43,7 @@ spec:
       - --disable-settings-authorizer
       - --enable-insecure-login
     metricsScraper:
-      enabled: true
+      enabled: false
     nginx:
       enabled: false
     cert-manager:
