@@ -43,8 +43,10 @@ spec:
       - --disable-settings-authorizer
       - --enable-insecure-login
     metricsScraper:
-      enabled: false
+      enabled: true
     nginx:
       enabled: false
     cert-manager:
+      enabled: false
+    metrics-server:
       enabled: false
