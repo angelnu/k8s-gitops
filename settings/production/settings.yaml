@@ -25,5 +25,7 @@ data:
   NFS_VIDEO: /volume1/video
   NFS_MUSIC: /volume1/music
 
+  IS_PRODUCTION: "true"
+  IS_STAGING: "false"
   ONE_PROD_REPLICA: "1"
   ONE_STAGING_REPLICA: "0"
