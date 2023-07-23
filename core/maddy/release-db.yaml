@@ -21,6 +21,7 @@ spec:
         postgres:
         - superuser
         - createdb
+        - login
       databases:
         maddy: postgres
       postgresql:
