@@ -17,6 +17,12 @@ spec:
       interval: 5m
   # https://github.com/zalando/postgres-operator/blob/master/charts/postgres-operator/values.yaml
   values:
+    image:
+      registry: docker.io
+      repository: angelnu/postgres-operator
+      tag: 04f18b9-dirty
+      pullPolicy: "Always"
+    
     configUsers:
       # postgres username used for replication between instances
       replication_username: postgres
