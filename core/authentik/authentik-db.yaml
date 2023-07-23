@@ -22,6 +22,8 @@ spec:
         - superuser
         - createdb
         - login
+        standby:
+        - replication
       databases:
         postgres: postgres
       postgresql:
