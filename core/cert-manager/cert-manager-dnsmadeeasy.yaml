@@ -22,7 +22,7 @@ spec:
     image:
       repository: ghcr.io/angelnu/dnsmadeeasy-webhook
       # I am using dev version for testing - others should be using latest
-      tag: dev@sha256:8ae311ff345f99a07cd59767e072a7085065a0efbee563856a828d6cc05fb3e9
+      tag: dev@sha256:6492e96fc8d1d6f14ab5a552972a42b6f371bf2f1b29659db4645470d2212544
     
     cert-manager:
       # -- Install cert-manager chart as dependency.
