@@ -49,7 +49,8 @@ spec:
 
     persistence:
       enabled: true
-      existingClaim: nfs-gitea
+      create: false
+      claimName: nfs-gitea
 
     # databases
     postgresql-ha:
