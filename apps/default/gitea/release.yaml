@@ -52,11 +52,9 @@ spec:
       existingClaim: nfs-gitea
 
     # databases
+    postgresql-ha:
+      enabled: false
     postgresql:
-      enabled: false
-    mysql:
-      enabled: false
-    mariadb:
       enabled: false
 
     gitea:
