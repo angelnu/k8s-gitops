@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/esphome/esphome
-      tag: 2023.7.0@sha256:21322f093bef7566e235bacddf6400737a404f5916842be39c54116dbf4f5284
+      tag: 2023.7.1@sha256:187741f9f5f390fe72ddb5093d8726a07d70275ce4911a8e399cbad82b72387c
     
     persistence:
       config:
@@ -63,7 +63,7 @@ spec:
       codeserver:
         image:
           repository: ghcr.io/coder/code-server
-          tag: 4.15.0@sha256:d0a5bc6149d3eb4587a419d91d47f9c4573e21d3267332367494c7740bfd3da1
+          tag: 4.16.1@sha256:5e3cedfc6e029035b0c74364d9bfb89faa896379f284a648c296b7a2425fa015
         enabled: true
         volumeMounts:
         - name: config
