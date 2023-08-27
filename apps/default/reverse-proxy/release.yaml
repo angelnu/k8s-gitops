@@ -56,6 +56,34 @@ spec:
         hosts:
         - host: mobile.home.${CLUSTER_DOMAIN}
         - host: mobile.pub.${CLUSTER_DOMAIN}
+    - name: pve1
+      externalName: 192.168.4.11
+      port: 8006
+      ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Proxmox Server 1 (Internet)
+          hajimari.io/icon: simple-icons:proxmox
+          hajimari.io/info: Internet access to PVE1
+          hajimari.io/group: Admin
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        hosts:
+        - host: pve1.home.${CLUSTER_DOMAIN}
+        - host: pve1.pub.${CLUSTER_DOMAIN}
+    - name: pve2
+      externalName: 192.168.4.12
+      port: 8006
+      ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Proxmox Server 2 (Internet)
+          hajimari.io/icon: simple-icons:proxmox
+          hajimari.io/info: Internet access to PVE2
+          hajimari.io/group: Admin
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        hosts:
+        - host: pve2.home.${CLUSTER_DOMAIN}
+        - host: pve2.pub.${CLUSTER_DOMAIN}
     - name: octoprint
       externalName: prusa.lan
       port: 80
