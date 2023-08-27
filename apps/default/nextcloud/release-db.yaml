@@ -24,7 +24,7 @@ spec:
       databases:
         postgres: postgres
       postgresql:
-        version: "13"
+        version: "15"
 
     superuser: {}
       # password: set in secret
