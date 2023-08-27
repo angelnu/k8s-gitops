@@ -62,10 +62,10 @@ spec:
       ingress:
         annotations:
           hajimari.io/enable: "true"
-          hajimari.io/appName: Proxmox Server 1 (Internet)
+          hajimari.io/appName: Proxmox 1
           hajimari.io/icon: simple-icons:proxmox
-          hajimari.io/info: Internet access to PVE1
-          hajimari.io/group: Admin
+          hajimari.io/info: Over Internet
+          hajimari.io/group: admin
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
         - host: pve1.home.${CLUSTER_DOMAIN}
@@ -76,14 +76,56 @@ spec:
       ingress:
         annotations:
           hajimari.io/enable: "true"
-          hajimari.io/appName: Proxmox Server 2 (Internet)
+          hajimari.io/appName: Proxmox 2
           hajimari.io/icon: simple-icons:proxmox
-          hajimari.io/info: Internet access to PVE2
-          hajimari.io/group: Admin
+          hajimari.io/info: Over Internet
+          hajimari.io/group: admin
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
         - host: pve2.home.${CLUSTER_DOMAIN}
         - host: pve2.pub.${CLUSTER_DOMAIN}
+    - name: pve3
+      externalName: 192.168.4.13
+      port: 8006
+      ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Proxmox 3
+          hajimari.io/icon: simple-icons:proxmox
+          hajimari.io/info: Over Internet
+          hajimari.io/group: admin
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        hosts:
+        - host: pve3.home.${CLUSTER_DOMAIN}
+        - host: pve3.pub.${CLUSTER_DOMAIN}
+    - name: pve4
+      externalName: 192.168.4.14
+      port: 8006
+      ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Proxmox 4
+          hajimari.io/icon: simple-icons:proxmox
+          hajimari.io/info: Over Internet
+          hajimari.io/group: admin
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        hosts:
+        - host: pve4.home.${CLUSTER_DOMAIN}
+        - host: pve4.pub.${CLUSTER_DOMAIN}
+    - name: pve5
+      externalName: 192.168.4.15
+      port: 8006
+      ingress:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Proxmox 5
+          hajimari.io/icon: simple-icons:proxmox
+          hajimari.io/info: Over Internet
+          hajimari.io/group: admin
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        hosts:
+        - host: pve5.home.${CLUSTER_DOMAIN}
+        - host: pve5.pub.${CLUSTER_DOMAIN}
     - name: octoprint
       externalName: prusa.lan
       port: 80
