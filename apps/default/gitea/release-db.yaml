@@ -24,7 +24,7 @@ spec:
       databases:
         gitea: postgres
       postgresql:
-        version: "14"
+        version: "15"
 
     superuser: {}
       # password: set in secret
