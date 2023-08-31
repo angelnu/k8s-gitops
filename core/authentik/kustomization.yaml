@@ -7,5 +7,6 @@ resources:
   - authentik-db-copy.yaml
   - authentik-db-new.yaml
   - authentik.yaml
+  - authentik-new.yaml
   - authentik-ingress.yaml
   - ldap-service.yaml

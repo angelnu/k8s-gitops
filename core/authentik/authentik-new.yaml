@@ -1,0 +1,97 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: authentik-new
+  namespace: system-security
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://charts.goauthentik.io
+      chart: authentik
+      version: 2023.8.1
+      sourceRef:
+        kind: HelmRepository
+        name: authentik
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: ghcr.io/goauthentik/dev-server
+      tag: gh-main-1672594721-f90a52c7d6fda926b9e6d9845d8ca3030837c224
+      #repository: ghcr.io/goauthentik/server
+      #tag: 2022.12.1
+      pullPolicy: IfNotPresent
+
+    ingress:
+      enabled: true
+      annotations:
+        hajimari.io/enable: "true"
+        hajimari.io/icon: login
+        hajimari.io/info: Single Sign On for Casa96
+        hajimari.io/group: tools
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+        nginx.org/websocket-services: authentik
+        nginx.ingress.kubernetes.io/enable-global-auth: "false"
+
+      hosts:
+      - host: authentik-new.pub.${CLUSTER_DOMAIN}
+        paths:
+        - path: /
+
+      tls:
+      - hosts:
+        - authentik-new.pub.${CLUSTER_DOMAIN}
+
+    authentik:
+      #secret_key: #in cret
+      log_level: debug
+
+      email:
+        host: ${CLUSTER_MAIL_SERVER}
+        port: ${CLUSTER_MAIL_SERVER_PORT}
+        from: authentik@${CLUSTER_DOMAIN}
+        #host: smtp.gmail.com
+        #use_tls: true
+
+      postgresql:
+        host: 'authentik-db-new-zalando-postgres-cluster-postgres'
+        name: postgres
+        user: postgres
+        # password: #in cret
+      redis:
+        host: '{{ .Release.Name }}-redis-master'
+        # password: #in cret
+
+    postgresql:
+      enabled: false
+
+    redis:
+      enabled: true
+      persistence:
+        enabled: false
+      auth:
+        enabled: true
+        # password: #in cret
+    
+    volumes:
+    - name: cluster-domain-cert
+      secret:
+        secretName: ${CLUSTER_DOMAIN_CERT}
+        optional: false # default setting; "mysecret" must exist
+        items:
+        - key: tls.crt
+          path: fullchain.pem
+        - key: tls.key
+          path: privkey.pem
+    volumeMounts:
+    - name: cluster-domain-cert
+      mountPath: /certs/cluster-domain-cert
+      readOnly: true
+  
+  valuesFrom:
+  - kind: Secret
+    name: "authentik-config"
+    valuesKey: values.yaml
+    optional: false
