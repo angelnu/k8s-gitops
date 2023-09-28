@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: docker.io/johnshine/mega.syno
-      tag: latest@sha256:0fb83b3c97fc6217f4d60535268984b7d7e275d42985d3b1c5af6972da7bb402
+      tag: latest@sha256:1625bbabd89a443677e016ec1e5bb990e16f5d53245e23631d77e44d5c901dc8
 
     service:
       main:
