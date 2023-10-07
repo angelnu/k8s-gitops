@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/jellyfin
-      tag: 10.8.11@sha256:85af5319ec493cb00cb57315f237751fecc853b4aefb46cd127a4e1fa566b4d2
+      tag: 10.8.11@sha256:2ca67983b5b872f09ff46ae1d6974bc2c2a3882f2fbbd68b00fe295f95df43fd
 
     env:
       TZ: "Europe/Berlin"
