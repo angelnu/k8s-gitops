@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/plex
-      tag: 1.32.6.7557-1cf77d501@sha256:46c72a0383f31c2b3edf10e9b2c70d61ae709469dfd962333244bd63874c9b73
+      tag: 1.32.6.7557-1cf77d501@sha256:7cc587ba32ba8b1f00b0f1b6bd07d8d6290e6e06c5bb05ea00cd5e9f13bbd40c
     ingress:
       main:
         enabled: true
