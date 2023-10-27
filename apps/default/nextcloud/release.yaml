@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: docker.io/library/nextcloud
-      tag: 27.1.2@sha256:cff13b7e3f59dba891b141d8021d10736f4111f68f4367fa131f0464024118a0
+      tag: 27.1.3@sha256:cd4acdd3de9cc87ef44eaf0db70c4a7dd716d83a2afcd0742368347923164004
 
     env:
       PHP_MEMORY_LIMIT: 256M
