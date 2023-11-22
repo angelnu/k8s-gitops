@@ -76,5 +76,5 @@ data:
     additionalContainers:
       broker:
         name: broker
-        image: redis:7.2@sha256:62ac3cc68e41dee3fbebb1e538f7430dc3a58c23424eb1a639ac32fe2a13ea49
+        image: redis:7.2@sha256:31f2ab93065d238a25dbcfc7feb00f419cdfd66efefd40d066924227567147c8
         imagePullPolicy: IfNotPresent
