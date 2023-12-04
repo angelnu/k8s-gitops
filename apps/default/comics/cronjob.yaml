@@ -16,7 +16,7 @@ spec:
         spec:
           containers:
             - name: comics-scrapper
-              image: ghcr.io/angelnu/comics-rss-feed:v1.5.0@sha256:016fb6e3009f6aa66b0b35375f83c8a3379e2b93d69cb0bf46b4c108f7d2fa73
+              image: ghcr.io/angelnu/comics-rss-feed:v1.6.0@sha256:b3c8b3fa0cd10f9c4d293f3e88dc459003c41ad9da5d7543f187b1f6b764942a
               env:
                 - name: VERBOSE
                   value: "True"
