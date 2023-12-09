@@ -1,8 +1,6 @@
 {
   extends: [
-    "github>angelnu/renovate-config",
-    "github>angelnu/renovate-config:automerge-github-actions",
-    "github>angelnu/k8s-gitops//.github/renovate/autoMerge.json5",
+    "github>angelnu/renovate-config:default-automerge.json",
     "github>angelnu/k8s-gitops//.github/renovate/disabledDatasources.json5",
     "github>angelnu/k8s-gitops//.github/renovate/groups.json5",
   ],  
