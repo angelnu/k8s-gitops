@@ -1,0 +1,51 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: prusaslicer-novnc
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    image:
+      repository: ghcr.io/angelnu/prusaslicer-novnc
+      tag: 2.7.1@sha256:432fd2811774b05308adf31109d1821e0d3430cbf4c46c9ab00f5c15f647b38c
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8080
+          vnc:
+            enabled: false
+            port: 5900
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: logos:printer
+          hajimari.io/info: Prusa Slicer
+          hajimari.io/group: tools
+        hosts:
+        - host: &host "prusaslicer.pub.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - *host
+
+    podSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0

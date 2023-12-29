@@ -17,6 +17,7 @@ resources:
   - lorawan
   - mealie
   - nextcloud
+  - novnc
   - paperless
   # - plex
   - photoprism
