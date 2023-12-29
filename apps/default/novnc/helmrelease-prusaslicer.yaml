@@ -44,7 +44,25 @@ spec:
         tls:
         - hosts:
           - *host
-
+    
+    persistence:
+      config:
+        enabled: true
+        mountPath: /configs/.config/PrusaSlicer
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_SOFTWARE}/3D-printer/prusaslicer"
+      prints:
+        enabled: true
+        mountPath: /prints
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_SOFTWARE}/3D-printer/projects"
+    
     podSecurityContext:
       runAsUser: 0
       runAsGroup: 0
