@@ -33,7 +33,7 @@ spec:
         enabled: true
         annotations:
           hajimari.io/enable: "true"
-          hajimari.io/icon: logos:printer
+          hajimari.io/icon: mdi:printer-3d
           hajimari.io/info: Prusa Slicer
           hajimari.io/group: tools
         hosts:
