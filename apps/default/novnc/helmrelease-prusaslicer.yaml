@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/angelnu/prusaslicer-novnc
-      tag: 2.7.1@sha256:432fd2811774b05308adf31109d1821e0d3430cbf4c46c9ab00f5c15f647b38c
+      tag: 2.7.1@sha256:ffa6d4acccd8b20f457f85d1a73e156ac831fbfbce40d080f2ebb8ea4e2af407
 
     service:
       main:
@@ -64,6 +64,6 @@ spec:
             path: "${NFS_SOFTWARE}/3D-printer/projects"
     
     podSecurityContext:
-      runAsUser: 0
-      runAsGroup: 0
-      fsGroup: 0
+      runAsUser: 33 # www-data
+      runAsGroup: 33 # www-data
+      fsGroup: 33 # www-data
