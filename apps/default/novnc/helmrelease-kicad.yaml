@@ -1,0 +1,69 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kicad-novnc
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    image:
+      repository: ghcr.io/angelnu/kicad-novnc
+      tag: 7.0.0@sha256:a6d45a8fa13308a233b20775bf352d782c60a98fda6abbb58db99b7dabeea68b
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8080
+          vnc:
+            enabled: false
+            port: 5900
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:kicad
+          hajimari.io/info: KiCad
+          hajimari.io/group: tools
+        hosts:
+        - host: &host "kicad.pub.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - *host
+    
+    persistence:
+      config:
+        enabled: true
+        mountPath: /configs/.config
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/kicad"
+      prints:
+        enabled: true
+        mountPath: /prints
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_SOFTWARE}/3D-printer/projects"
+    
+    podSecurityContext:
+      runAsUser: 33 # www-data
+      runAsGroup: 33 # www-data
+      fsGroup: 33 # www-data
