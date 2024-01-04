@@ -53,6 +53,8 @@ spec:
       claimName: nfs-gitea
 
     # databases
+    redis-cluster:
+      enabled: false
     postgresql-ha:
       enabled: false
     postgresql:
