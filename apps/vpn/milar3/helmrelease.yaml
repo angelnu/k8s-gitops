@@ -1,0 +1,82 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: milar3
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+      remediateLastFailure: true
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    image:
+      repository: ghcr.io/linuxserver/mylar3
+      tag: version-v0.7.2
+    env:
+      TZ: "Europe/Berlin"
+      PUID: "33"
+      PGID: "33"
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8090
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:mdbook
+          hajimari.io/info: Comic Book
+          hajimari.io/group: media
+        hosts:
+        - host: &host "milar3.pub.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: milar3-pvc
+      reading:
+        enabled: true
+        mountPath: /reading
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/nextcloud/data/angel/files/Reading"
+      downloads:
+        enabled: true
+        mountPath: /downloads
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
+
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 500m
+      limits:
+        memory: 1500Mi

@@ -4,6 +4,7 @@ namespace: vpn
 resources:
   - qbittorrent
   - lidarr
+  - milar3
   - prowlarr
   - radarr
   - readarr
