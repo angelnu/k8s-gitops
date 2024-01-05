@@ -35,6 +35,13 @@ spec:
 
     nodeSelector:
       kubernetes.io/arch: amd64
+    
+    hostAliases:
+    # We cannot access the ingress LB address directly - go through external IP
+    - ip: "${FIX_EXTERNAL_IP}"
+      hostnames:
+      - "nextcloud.${CLUSTER_DOMAIN}"
+      - "jellyfin.pub.${CLUSTER_DOMAIN}"
 
     env:
       TZ: "Europe/Berlin"
