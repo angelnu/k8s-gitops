@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/angelnu/kicad-novnc
-      tag: 7.0.0@sha256:86cdc466543196dfd8e7fd19cdda6abf4ebeeb5cc960a77d5daea33c8ee23949
+      tag: 7.0.9@sha256:09103fe8ef44e6af02864b925ad42f9eb959829d534face27c24596ed48f24f2
 
     service:
       main:
