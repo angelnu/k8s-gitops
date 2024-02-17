@@ -13,7 +13,11 @@ spec:
         "type": "host-local",
         "subnet": "192.168.0.0/19",
         "rangeStart": "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.0",
-        "rangeEnd": "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.63"
+        "rangeEnd": "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.63",
+        "routes": [
+          { "dst": "192.168.0.0/16" }
+        ],
+        "gateway": "192.168.2.1"
       }
     }'
 
