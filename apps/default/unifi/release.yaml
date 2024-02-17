@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: docker.io/jacobalberty/unifi
-      tag: v8.0.24
+      tag: v8.0.28
 
     podAnnotations:
       k8s.v1.cni.cncf.io/networks: |

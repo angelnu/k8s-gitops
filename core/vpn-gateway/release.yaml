@@ -23,7 +23,7 @@ spec:
     image:
       repository: ghcr.io/angelnu/pod-gateway
       # I am using dev version for testing - others should be using latest
-      tag: dev@sha256:26e89cc1b58999caf3ddbd497834672e311d778a203e37268042f7e3c43429e4
+      tag: dev@sha256:d1d6b124c5c0fc3bdad99825565c6f4516865258cd5047396cd7396f21647a6e
     webhook:
       image:
         repository: ghcr.io/angelnu/gateway-admision-controller
@@ -37,7 +37,7 @@ spec:
         gluetun:
           image:
             repository: docker.io/qmcgaw/gluetun
-            tag: latest@sha256:1b6962746d67d33b7a0791f648c8789bec181179d50005dcc80599877cad52e3
+            tag: latest@sha256:da7aad9cca602b86cb92ab586c1c58317af4f9c0975a71f641b22a20309efbf6
 
         env:
         - name:  VPN_SERVICE_PROVIDER
