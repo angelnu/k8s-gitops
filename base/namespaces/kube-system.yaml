@@ -7,7 +7,7 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: default
+  name: default-ingress
   namespace: kube-system
 spec:
   podSelector: {}
@@ -16,12 +16,21 @@ spec:
     # Only allow ingress from K8S (DNS server)
     - ipBlock:
         cidr: "10.0.0.0/8"
+  policyTypes:
+  - Ingress
+
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-egress
+  namespace: kube-system
+spec:
+  podSelector: {}
   egress:
   - to:
     # Allow all egress (multus has to pull CNI plugins, DNS server)
     - ipBlock:
         cidr: "0.0.0.0/0"
   policyTypes:
-    - Ingress
-    - Egress
-
+  - Egress

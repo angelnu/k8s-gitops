@@ -9,7 +9,7 @@ metadata:
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: default
+  name: default-ingress
   namespace: authentik
 spec:
   podSelector: {}
@@ -56,11 +56,22 @@ spec:
     - protocol: TCP
       port: 6636
       endPort: 6636
+  policyTypes:
+  - Ingress
+
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-egress
+  namespace: authentik
+spec:
+  podSelector: {}
   egress:
   - to:
     # Allow all egress
     - ipBlock:
         cidr: "0.0.0.0/0"
+
   policyTypes:
-    - Ingress
-    - Egress
+  - Egress

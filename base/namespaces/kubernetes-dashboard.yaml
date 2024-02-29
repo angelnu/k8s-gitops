@@ -4,11 +4,10 @@ metadata:
   name: kubernetes-dashboard
 
 ---
-
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: default
+  name: default-ingress
   namespace: kubernetes-dashboard
 spec:
   podSelector: {}
@@ -18,6 +17,17 @@ spec:
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: nginx
+  policyTypes:
+  - Ingress
+
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-egress
+  namespace: kubernetes-dashboard
+spec:
+  podSelector: {}
   egress:
   - to:
     # Only allow egress to K8S and local network
@@ -26,5 +36,4 @@ spec:
     - ipBlock:
         cidr: "192.0.0.0/8"
   policyTypes:
-    - Ingress
-    - Egress
+  - Egress

@@ -7,7 +7,7 @@ metadata:
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: default
+  name: default-ingress
   namespace: postgres
 spec:
   podSelector: {}
@@ -20,11 +20,21 @@ spec:
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: postgres
+  policyTypes:
+  - Ingress
+
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-egress
+  namespace: postgres
+spec:
+  podSelector: {}
   egress:
   - to:
     # Only allow egress to K8S
     - ipBlock:
         cidr: "10.0.0.0/0"
   policyTypes:
-    - Ingress
-    - Egress
+  - Egress

@@ -7,7 +7,7 @@ metadata:
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: default
+  name: default-ingress
   namespace: ceph
 spec:
   podSelector: {}
@@ -16,6 +16,17 @@ spec:
     # Only allow ingress from K8S (admission controller)
     - ipBlock:
         cidr: "10.0.0.0/8"
+  policyTypes:
+  - Ingress
+
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-egress
+  namespace: ceph
+spec:
+  podSelector: {}
   egress:
   - to:
     # Only allow egress to K8S and local lan
@@ -24,6 +35,5 @@ spec:
     - ipBlock:
         cidr: "192.168.0.0/16"
   policyTypes:
-    - Ingress
-    - Egress
+  - Egress
 
