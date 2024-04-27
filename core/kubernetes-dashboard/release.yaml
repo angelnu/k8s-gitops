@@ -21,6 +21,7 @@ spec:
       
       ingress:
         enabled: true
+        useDefaultIngressClass: true
         annotations:
           hajimari.io/enable: "true"
           hajimari.io/icon: logos:kubernetes
