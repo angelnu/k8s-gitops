@@ -30,9 +30,9 @@ spec:
           auth_request_set $required_groups 'admin';
       hosts:
       - host: "postgres-operator.pub.${CLUSTER_DOMAIN}"
-        paths: [""]
+        paths: ["/"]
       - host: "postgres-operator.home.${CLUSTER_DOMAIN}"
-        paths: [""]
+        paths: ["/"]
       tls:
       - hosts:
         - "postgres-operator.pub.${CLUSTER_DOMAIN}"
