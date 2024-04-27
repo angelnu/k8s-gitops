@@ -38,16 +38,16 @@ spec:
           - dashboard.${CLUSTER_DOMAIN}
           - dashboard.home.${CLUSTER_DOMAIN}
       # protocolHttp: true
-    api:
-      containers:
-      # https://github.com/kubernetes/dashboard/blob/master/docs/common/arguments.md
-        args:
-          # When enabled, the skip button on the login page will be shown.
-          - --enable-skip-login
-          # When enabled, Dashboard settings page will not require user to be logged in and authorized to access settings page.
-          - --disable-settings-authorizer
-          # When enabled, Dashboard login view will also be shown when Dashboard is not served over HTTPS.
-          - --enable-insecure-login
+    # api:
+    #   containers:
+    #   # https://github.com/kubernetes/dashboard/blob/master/docs/common/arguments.md
+    #     args:
+    #       # When enabled, the skip button on the login page will be shown.
+    #       - --enable-skip-login
+    #       # When enabled, Dashboard settings page will not require user to be logged in and authorized to access settings page.
+    #       - --disable-settings-authorizer
+    #       # When enabled, Dashboard login view will also be shown when Dashboard is not served over HTTPS.
+    #       - --enable-insecure-login
     metricsScraper:
       enabled: true
     nginx:
