@@ -4,7 +4,6 @@ namespace: flux-system
 resources:
   - angelnu-helm-charts.yaml
   - authentik.yaml
-  - bitnami.yaml
   - bjw-s-helm-charts.yaml
   - ceph-csi.yaml
   - gitea.yaml
