@@ -17,9 +17,9 @@ spec:
       interval: 5m
   values:
 
-    global:
-      image:
-        tag: 2024.2
+    # global:
+    #   image:
+    #     tag: 2024.2
 
     authentik:
       #secret_key: #in cret
