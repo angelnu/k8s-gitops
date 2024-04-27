@@ -16,12 +16,6 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    image:
-      repository: ghcr.io/goauthentik/dev-server
-      tag: gh-main-1672594721-f90a52c7d6fda926b9e6d9845d8ca3030837c224
-      #repository: ghcr.io/goauthentik/server
-      #tag: 2022.12.1
-      pullPolicy: IfNotPresent
 
     ingress:
       enabled: true
