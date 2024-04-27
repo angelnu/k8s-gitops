@@ -19,7 +19,7 @@ spec:
 
     global:
       image:
-        tag: 2023.10
+        tag: 2023.12
 
     authentik:
       #secret_key: #in cret
