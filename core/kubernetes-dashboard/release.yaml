@@ -32,9 +32,9 @@ spec:
         hosts:
           - dashboard.${CLUSTER_DOMAIN}
           - dashboard.home.${CLUSTER_DOMAIN}
-        secretName: "" 
         tls:
-        - hosts:
+          secretName: null
+          hosts:
           - dashboard.${CLUSTER_DOMAIN}
           - dashboard.home.${CLUSTER_DOMAIN}
       # protocolHttp: true
