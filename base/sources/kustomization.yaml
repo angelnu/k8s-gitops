@@ -14,6 +14,7 @@ resources:
   - jetstack-charts.yaml
   - kubernetes-dashboard.yaml
   - kubereboot-charts.yaml
+  - metallb.yaml
   - mittwald.yaml
   - nextcloud.yaml
   - node-feature-discovery-charts.yaml
