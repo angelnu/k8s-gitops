@@ -17,27 +17,6 @@ spec:
       interval: 5m
   values:
 
-    ingress:
-      enabled: true
-      annotations:
-        hajimari.io/enable: "true"
-        hajimari.io/icon: login
-        hajimari.io/info: Single Sign On for Casa96
-        hajimari.io/group: tools
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-        nginx.org/websocket-services: authentik
-        nginx.ingress.kubernetes.io/enable-global-auth: "false"
-
-      hosts:
-      - host: authentik.pub.${CLUSTER_DOMAIN}
-        paths:
-        - path: /
-
-      tls:
-      - hosts:
-        - authentik.pub.${CLUSTER_DOMAIN}
-
     authentik:
       #secret_key: #in cret
       log_level: debug
@@ -69,20 +48,44 @@ spec:
         enabled: true
         # password: #in cret
     
-    volumes:
-    - name: cluster-domain-cert
-      secret:
-        secretName: ${CLUSTER_DOMAIN_CERT}
-        optional: false # default setting; "mysecret" must exist
-        items:
-        - key: tls.crt
-          path: fullchain.pem
-        - key: tls.key
-          path: privkey.pem
-    volumeMounts:
-    - name: cluster-domain-cert
-      mountPath: /certs/cluster-domain-cert
-      readOnly: true
+    server:
+      replicas: 2
+      volumes:
+      - name: cluster-domain-cert
+        secret:
+          secretName: ${CLUSTER_DOMAIN_CERT}
+          optional: false # default setting; "mysecret" must exist
+          items:
+          - key: tls.crt
+            path: fullchain.pem
+          - key: tls.key
+            path: privkey.pem
+      volumeMounts:
+      - name: cluster-domain-cert
+        mountPath: /certs/cluster-domain-cert
+        readOnly: true
+
+      ingress:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: login
+          hajimari.io/info: Single Sign On for Casa96
+          hajimari.io/group: tools
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+          nginx.org/websocket-services: authentik
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+
+        hosts:
+        - authentik.pub.${CLUSTER_DOMAIN}
+
+        tls:
+        - hosts:
+          - authentik.pub.${CLUSTER_DOMAIN}
+
+    worker:
+      replicas: 2
   
   valuesFrom:
   - kind: Secret
