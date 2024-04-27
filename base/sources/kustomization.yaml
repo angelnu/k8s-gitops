@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: flux-system
 resources:
   - angelnu-helm-charts.yaml
-  - appscode.yaml
   - authentik.yaml
   - bitnami.yaml
   - bjw-s-helm-charts.yaml
@@ -15,6 +14,7 @@ resources:
   - jetstack-charts.yaml
   - kubernetes-dashboard.yaml
   - kubereboot-charts.yaml
+  - mittwald.yaml
   - nextcloud.yaml
   - node-feature-discovery-charts.yaml
   - raspberrymatic.yaml

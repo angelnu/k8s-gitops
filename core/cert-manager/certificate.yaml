@@ -69,4 +69,4 @@ spec:
   - '*.${CLUSTER_DOMAIN_DUMMY}.${CLUSTER_DOMAIN}'
   secretTemplate:
     annotations:
-      kubed.appscode.com/sync: "cert-manager=CLUSTER_DOMAIN_CERT" # Sync certificate to matching namespaces
+      replicator.v1.mittwald.de/replicate-to: "authentik,maddy"

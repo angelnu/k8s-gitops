@@ -1,0 +1,10 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: mittwald
+  namespace: flux-system
+spec:
+  interval: 2h
+  url: https://helm.mittwald.de
+  timeout: 3m
