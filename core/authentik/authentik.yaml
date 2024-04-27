@@ -17,6 +17,10 @@ spec:
       interval: 5m
   values:
 
+    global:
+      image:
+        tag: 2023.8
+
     authentik:
       #secret_key: #in cret
       log_level: debug
