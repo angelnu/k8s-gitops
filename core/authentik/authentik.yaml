@@ -9,7 +9,7 @@ spec:
     spec:
       # renovate: registryUrl=https://charts.goauthentik.io
       chart: authentik
-      version: 2024.4.1
+      version: "2023.10"
       sourceRef:
         kind: HelmRepository
         name: authentik
@@ -53,7 +53,7 @@ spec:
         # password: #in cret
     
     server:
-      replicas: 2
+      replicas: 1
       volumes:
       - name: cluster-domain-cert
         secret:
