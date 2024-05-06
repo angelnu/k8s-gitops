@@ -17,13 +17,27 @@ spec:
       interval: 5m
   values:
 
-    # global:
+    global:
+      volumes:
+      - name: cluster-domain-cert
+        secret:
+          secretName: ${CLUSTER_DOMAIN_CERT}
+          optional: false # default setting; "mysecret" must exist
+          items:
+          - key: tls.crt
+            path: fullchain.pem
+          - key: tls.key
+            path: privkey.pem
+      volumeMounts:
+      - name: cluster-domain-cert
+        mountPath: /certs/cluster-domain-cert
+        readOnly: true
     #   image:
     #     tag: 2024.2
 
     authentik:
       #secret_key: #in cret
-      log_level: debug
+      #log_level: debug
 
       email:
         host: ${CLUSTER_MAIL_SERVER}
@@ -54,20 +68,6 @@ spec:
     
     server:
       replicas: 1
-      volumes:
-      - name: cluster-domain-cert
-        secret:
-          secretName: ${CLUSTER_DOMAIN_CERT}
-          optional: false # default setting; "mysecret" must exist
-          items:
-          - key: tls.crt
-            path: fullchain.pem
-          - key: tls.key
-            path: privkey.pem
-      volumeMounts:
-      - name: cluster-domain-cert
-        mountPath: /certs/cluster-domain-cert
-        readOnly: true
 
       ingress:
         enabled: true
