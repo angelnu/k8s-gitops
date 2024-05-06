@@ -43,8 +43,8 @@ spec:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       #POSTGRES_PASSWORD: set in secret
-      TIMEZONE: Europe/Berlin
-      REVERSE_PROXY_AUTH: 1
+      TZ: Europe/Berlin
+      REMOTE_USER_AUTH: 1
       # SOCIALACCOUNT_PROVIDERS: set in secret as { "openid_connect": { "SERVERS": [{ "id": "authentik", "name": "Authentik", "server_url": "https://domain.tld/application/o/recipes/.well-known/openid-configuration", "token_auth_method": "client_secret_basic", "APP": { "client_id": "YXZ", "secret": "YXZ" } } ] } } 
       SOCIAL_PROVIDERS: allauth.socialaccount.providers.openid_connect
 
