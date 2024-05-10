@@ -57,13 +57,14 @@ spec:
           - "ma.pub.${CLUSTER_DOMAIN}"
 
     persistence:
-      config:
+      data:
         enabled: true
+        mountPath: /data
         type: custom
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_KUBERNETES}/jellyfin/config"
+            path: "${NFS_KUBERNETES}/music-manager/data"
       music:  
         enabled: true
         mountPath: /music
