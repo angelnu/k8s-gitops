@@ -43,13 +43,13 @@ spec:
           hajimari.io/info: Music Assistant for Home Assistant
           hajimari.io/group: media
         hosts:
-        - host: "mm.pub.${CLUSTER_DOMAIN}"
+        - host: "ma.pub.${CLUSTER_DOMAIN}"
           paths:
           - path: /
             pathType: Prefix
         tls:
         - hosts:
-          - "mm.pub.${CLUSTER_DOMAIN}"
+          - "ma.pub.${CLUSTER_DOMAIN}"
       home:
         enabled: true
         annotations:
@@ -57,7 +57,7 @@ spec:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
         hosts:
-        - host: "mm.home.${CLUSTER_DOMAIN}"
+        - host: "ma.home.${CLUSTER_DOMAIN}"
           paths:
           - path: /
             pathType: Prefix
@@ -65,7 +65,7 @@ spec:
               identifier: main
         tls:
         - hosts:
-          - "mm.home.${CLUSTER_DOMAIN}"
+          - "ma.home.${CLUSTER_DOMAIN}"
 
     persistence:
       data:
