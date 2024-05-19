@@ -42,7 +42,7 @@ spec:
         annotations:
           hajimari.io/enable: "false"
           nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_WOPISrc"
-          #ingress.kubernetes.io/whitelist-source-range: "192.168.2.0/16,10.0.0.0/8"
+          #nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
         - host: collabora.pub.${CLUSTER_DOMAIN}

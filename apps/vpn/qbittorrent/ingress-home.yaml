@@ -6,6 +6,7 @@ metadata:
     hajimari.io/enable: "false"
     nginx.ingress.kubernetes.io/proxy-body-size: 4M
     nginx.ingress.kubernetes.io/enable-global-auth: "false"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
 spec:
   tls:
     - hosts:
