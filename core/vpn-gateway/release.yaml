@@ -23,7 +23,7 @@ spec:
     image:
       repository: ghcr.io/angelnu/pod-gateway
       # I am using dev version for testing - others should be using latest
-      tag: dev@sha256:04edcd24925d2e6850d76fe669a1fac63e4f6d76adb29d938be3edc4c5f2a13c
+      tag: dev@sha256:2e623f4fe8cb362207ae0c1ea79565b11782e23e06f173d0911e699b4a5fa301
     webhook:
       image:
         repository: ghcr.io/angelnu/gateway-admision-controller
