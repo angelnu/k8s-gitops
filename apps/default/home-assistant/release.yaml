@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: ghcr.io/home-assistant/home-assistant
-      tag: 2024.5.5@sha256:031d355a2e52e82fc33cd6854753fb19fc5d6a31af6f0f54c277d6f118ad993e
+      tag: 2024.6.2@sha256:c35d4d5e2902172c7f7f3af6ab301d4f545130c85e050d66924d9045a1326502
 
     persistence:
       config:
@@ -112,7 +112,7 @@ spec:
         enabled: true
         image:
           repository: ghcr.io/coder/code-server
-          tag: 4.89.1@sha256:3b56b9e77d242241c107b6e9ec3be91ea23ab733e016f8a5e318c974b2a97107
+          tag: 4.90.2@sha256:0f21d336db045b2f5f7fd8e118b85709beab8202bd2ff0c86db51650fb3ae82e
         volumeMounts:
         - name: config
           mountPath: /config
