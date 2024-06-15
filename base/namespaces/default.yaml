@@ -42,11 +42,23 @@ spec:
       port: 6379
       endPort: 6379
   - from:
+    # Allow from any IP
+    - ipBlock:
+        cidr: "0.0.0.0/0"
     # Allow access to Lora multiplyer
     ports:
     - protocol: UDP
       port: 1700 
       endPort: 1700
+  - from:
+    # Allow from any IP
+    - ipBlock:
+        cidr: "0.0.0.0/0"
+    # Allow access to Daiking
+    ports:
+    - protocol: UDP
+      port: 30000 
+      endPort: 30000
   policyTypes:
   - Ingress
 
