@@ -22,7 +22,7 @@ spec:
     additionalContainers:
       api:
         name: mealie-api
-        image: ghcr.io/mealie-recipes/mealie:v1.9.0@sha256:c43d5db470109478c3299c6229d6cde5403cbf9ada8b4fc735f91a259360fc32
+        image: ghcr.io/mealie-recipes/mealie:v1.10.2@sha256:54a976880161c3c96de30b63cd0092d1f069aa8b23686669b726558ddf112724
         imagePullPolicy: IfNotPresent
         env:
           - name: API_PORT
