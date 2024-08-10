@@ -21,5 +21,5 @@ spec:
       tag: v4.1.0-thick
     cni:
       image:
-        repository: ghcr.io/k8s-at-home/cni-plugins
-        tag: v1.1.1
+        repository: ghcr.io/angelnu/cni-plugins
+        tag: v1.5.1
