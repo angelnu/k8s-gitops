@@ -2,7 +2,7 @@ collections:
   - name: community.general
     version: 9.2.0
   - name: community.sops
-    version: 1.8.1
+    version: 1.8.2
 roles:
   - name: xanmanning.k3s
     src: https://github.com/PyratLabs/ansible-role-k3s.git
