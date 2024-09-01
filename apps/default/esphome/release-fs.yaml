@@ -7,7 +7,7 @@ spec:
     requests:
       storage: "1Gi"
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   - ReadOnlyMany
   storageClassName: esphome-storageclass
 ---
@@ -20,7 +20,7 @@ spec:
   capacity:
     storage: "1Gi"
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   - ReadOnlyMany
   csi:
     driver: cephfs.csi.ceph.com
