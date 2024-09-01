@@ -62,6 +62,11 @@ spec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_SOFTWARE}/3D-printer/projects"
+      esphome-devices:
+        enabled: true
+        mountPath: /prints/Electronica/esphome_devices
+        existingClaim: esphome-pvc
+        subPath: devices
     
     podSecurityContext:
       runAsUser: 33 # www-data
