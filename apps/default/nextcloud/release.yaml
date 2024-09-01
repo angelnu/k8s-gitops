@@ -127,6 +127,9 @@ spec:
         nfs:
           server: "${NFS_SERVER}"
           path: "${NFS_DOWNLOADS}"
+      - name: esphome
+        persistentVolumeClaim:
+          claimName: esphome-pvc
       extraVolumeMounts:
       - name: nfs-video
         mountPath: "/video"
@@ -136,6 +139,8 @@ spec:
         mountPath: "/music"
       - name: nfs-downloads
         mountPath: "/downloads"
+      - name: esphome
+        mountPath: "/esphome"
       phpConfigs:
         uploadLimit.ini: |
           upload_max_filesize = 16G
