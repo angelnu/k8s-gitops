@@ -1,0 +1,69 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: dev-novnc
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    image:
+      repository: ghcr.io/angelnu/prusaslicer-novnc
+      tag: 2.7.1@sha256:b395196d9e9beb2cac96a3e65a9e75a0926d60640423046f9372b14ee87fab53
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8080
+          vnc:
+            enabled: false
+            port: 5900
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: mdi:printer-3d
+          hajimari.io/info: Prusa Slicer
+          hajimari.io/group: tools
+        hosts:
+        - host: &host "prusaslicer.pub.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - *host
+    
+    persistence:
+      config:
+        enabled: true
+        mountPath: /configs/.config/PrusaSlicer
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_SOFTWARE}/3D-printer/prusaslicer"
+      prints:
+        enabled: true
+        mountPath: /prints
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_SOFTWARE}/3D-printer/projects"
+    
+    podSecurityContext:
+      runAsUser: 33 # www-data
+      runAsGroup: 33 # www-data
+      fsGroup: 33 # www-data

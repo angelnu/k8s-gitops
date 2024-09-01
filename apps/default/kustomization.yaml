@@ -16,7 +16,7 @@ resources:
   - jellyfin
   - lorawan
   - mealie
-  - music-assistant
+  - music-manager
   - nextcloud
   - novnc
   - paperless

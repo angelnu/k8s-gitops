@@ -135,12 +135,13 @@ spec:
         mountPath: "/video"
       - name: nfs-software
         mountPath: "/software"
+      - name: esphome
+        subPath: devices
+        mountPath: "/software/3D-printer/projects/Electronica/esphome_devices"
       - name: nfs-music
         mountPath: "/music"
       - name: nfs-downloads
         mountPath: "/downloads"
-      - name: esphome
-        mountPath: "/esphome"
       phpConfigs:
         uploadLimit.ini: |
           upload_max_filesize = 16G
