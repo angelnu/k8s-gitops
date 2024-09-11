@@ -31,7 +31,7 @@ spec:
   values:
     image:
       repository: quay.io/mittwald/kubernetes-replicator
-      tag: v2.10.1
+      tag: v2.10.2
     grantClusterAdmin: false
     args:
       - -resync-period=5m
