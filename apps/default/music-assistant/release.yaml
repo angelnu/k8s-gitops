@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: ghcr.io/music-assistant/server
-      tag: 2.2.6
+      tag: 2.2.7
 
     podAnnotations:
       k8s.v1.cni.cncf.io/networks: |
