@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: docker.io/jellyfin/jellyfin
-      tag: 10.9.11
+      tag: 10.10.0
 
     env:
       TZ: "Europe/Berlin"
