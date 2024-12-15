@@ -65,6 +65,17 @@ spec:
       auth:
         enabled: true
         # password: #in cret
+      master:
+        resources:
+          limits:
+            cpu: 150m
+            ephemeral-storage: 2Gi
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            ephemeral-storage: 50Mi
+            memory: 128Mi
+
     
     server:
       replicas: 1
