@@ -90,7 +90,8 @@ spec:
           ACCOUNT_LINKING: auto
         mailer:
           ENABLED: true
-          SMTP_ADDR: ${CLUSTER_MAIL_SERVER}:${CLUSTER_MAIL_SERVER_PORT}
+          SMTP_ADDR: "${CLUSTER_MAIL_SERVER}"
+          SMTP_PORT: "${CLUSTER_MAIL_SERVER_PORT}"
           IS_TLS_ENABLED: false
           FROM: "gitea@${CLUSTER_DOMAIN}"
           USER: ""
