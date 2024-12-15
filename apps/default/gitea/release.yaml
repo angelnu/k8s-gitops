@@ -6,23 +6,17 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://dl.gitea.io/charts/
-      chart: gitea
-      version: 10.6.0
+      chart: forgejo
+      version: "10.1.2"
       sourceRef:
         kind: HelmRepository
-        name: gitea
+        name: forgejo
         namespace: flux-system
       interval: 5m
   dependsOn:
     - name: gitea-db
   # All values at https://gitea.com/gitea/helm-chart
   values:
-    image:
-      repository: gitea/gitea
-      tag: 1.22.6
-      pullPolicy: IfNotPresent
-  
     service:
       ssh:
         type: LoadBalancer
