@@ -6,6 +6,7 @@ resources:
   - authentik.yaml
   - bjw-s-helm-charts.yaml
   - ceph-csi.yaml
+  - forgejo.yaml
   - gitea.yaml
   - hajimari.yaml
   - infracloudio-charts.yaml
