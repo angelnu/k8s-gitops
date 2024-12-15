@@ -92,7 +92,7 @@ spec:
           ENABLED: true
           SMTP_ADDR: "${CLUSTER_MAIL_SERVER}"
           SMTP_PORT: "${CLUSTER_MAIL_SERVER_PORT}"
-          IS_TLS_ENABLED: false
+          PROTOCOL: smtp
           FROM: "gitea@${CLUSTER_DOMAIN}"
           USER: ""
           PASSWD: ""
