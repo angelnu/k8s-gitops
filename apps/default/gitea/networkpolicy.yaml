@@ -5,7 +5,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: gitea
+      app.kubernetes.io/name: forgejo
   ingress:
   - from:
     # Allow ssh ingress
