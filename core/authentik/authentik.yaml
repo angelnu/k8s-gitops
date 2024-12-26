@@ -68,9 +68,9 @@ spec:
       master:
         resources:
           limits:
-            cpu: 150m
+            cpu: 2
             ephemeral-storage: 2Gi
-            memory: 512Mi
+            memory: 2048Mi
           requests:
             cpu: 100m
             ephemeral-storage: 50Mi
