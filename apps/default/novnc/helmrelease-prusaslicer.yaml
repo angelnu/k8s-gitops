@@ -68,10 +68,8 @@ spec:
         existingClaim: esphome-pvc
         subPath: devices
     
-    securityContext:
-      privileged: true
-    
     podSecurityContext:
-      runAsUser: 33 # www-data
+      privileged: true
+      #runAsUser: 33 # www-data
       runAsGroup: 33 # www-data
       fsGroup: 33 # www-data
