@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: nextcloud-collabora
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,23 +17,39 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: collabora/code
-      tag: 24.04.11.1.1
-    
-    env:
-      extra_params: --o:ssl.termination=true --o:ssl.enable=false
-    
-    autoscaling:
-      enabled: true
-      target:  # deploymentname
-      minReplicas:  1
-      maxReplicas:  3
-      targetCPUUtilizationPercentage:  80
-      targetMemoryUtilizationPercentage:  80
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: collabora/code
+              tag: 24.04.11.1.1
+            env:
+              extra_params: --o:ssl.termination=true --o:ssl.enable=false
+    rawResources:
+      autoscaling:
+        enabled: true
+        apiVersion: autoscaling/v2
+        kind: HorizontalPodAutoscaler
+        spec:
+          spec:
+            scaleTargetRef:
+              apiVersion: apps/v1
+              kind: Deployment
+              name: nextcloud-collabora
+            minReplicas: 1
+            maxReplicas: 3
+            metrics:
+            - type: Resource
+              resource:
+                name: cpu
+                target:
+                  type: Utilization
+                  averageUtilization: 50
   
     service:
       main:
+        controller: main
         ports:
           http:
             port: 9980
@@ -49,6 +67,6 @@ spec:
           paths:
           - path: /
             pathType: Prefix
-        tls:
-        - hosts:
-          - collabora.pub.${CLUSTER_DOMAIN}
+            service:
+              identifier: main
+              port: http
