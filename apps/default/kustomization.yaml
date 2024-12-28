@@ -19,7 +19,6 @@ resources:
   - nextcloud
   - novnc
   - paperless
-  # - plex
   - photoprism
   - searxng
   # - raspberrymatic
