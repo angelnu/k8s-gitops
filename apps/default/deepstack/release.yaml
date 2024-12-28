@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: deepstack
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,69 +17,58 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: docker.io/deepquestai/deepstack
-      tag: cpu@sha256:4320be73987468b3040b2ca63daf2d3935c4d469b53aa40efb6176858488b500
-      pullPolicy: IfNotPresent
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: docker.io/deepquestai/deepstack
+              tag: cpu@sha256:4320be73987468b3040b2ca63daf2d3935c4d469b53aa40efb6176858488b500
+            env:
+              # -- Enable scene recognition
+              # VISION-SCENE: "True"
+              # -- Enable face detection
+              VISION-FACE: "True"
+              # -- Enable object detection
+              VISION-DETECTION: "True"
+              # -- Protect detection and recognition APIs with a key
+              # API-KEY: set in secrets
+              # -- Protect admin APIs (such as managing models) with a key
+              # ADMIN-KEY: set in secrets
+            envFrom:
+              - secret: deepstack-keys
+          ui:
+            image:
+              repository: docker.io/robmarkcole/deepstack-ui
+              tag: latest@sha256:41027572645947141c217e530e102297d4be4a0cfbfb870d3f3fcecd09c72e85
+            env:
+              DEEPSTACK_IP: localhost
+              DEEPSTACK_PORT: '5000'
+              DEEPSTACK_API_KEY: 
+                valueFrom:
+                  secretKeyRef:
+                    name: deepstack-keys
+                    key: API-KEY
+              # DEEPSTACK_TIMEOUT: the timeout to wait for deepstack, default 30 seconds
+              # DEEPSTACK_CUSTOM_MODEL: the name of a custom model, if you wish to use one
+              # DEEPSTACK_UI_DEBUG_MODE: `True` or `False` (default). Lowers the minimum confidence threshold to 1%
     
-    # -- environment variables. See more environment variables in the [deepstack documentation](https://docs.deepstack.cc).
-    # @default -- See below
-    env:
-      # -- Enable scene recognition
-      # VISION-SCENE: "True"
-      # -- Enable face detection
-      VISION-FACE: "True"
-      # -- Enable object detection
-      VISION-DETECTION: "True"
-      # -- Protect detection and recognition APIs with a key
-      # API-KEY: set in secrets
-      # -- Protect admin APIs (such as managing models) with a key
-      # ADMIN-KEY: set in secrets
-
-    # -- security context. May be necessary when using GPU image
-    # @default -- See values.yaml
-    securityContext: {}
-      # privileged: true
-
     persistence:
-      data:
+      datastore:
         enabled: true
-        mountPath: /datastore
         existingClaim: deepstack-pvc
-    
-    additionalContainers:
-      ui:
-        image: docker.io/robmarkcole/deepstack-ui:latest@sha256:41027572645947141c217e530e102297d4be4a0cfbfb870d3f3fcecd09c72e85
-        imagePullPolicy: IfNotPresent
-        env:
-        # -- the IP address of your deepstack instance
-        - name: DEEPSTACK_IP
-          value: localhost
-        # -- the port of your deepstack instance
-        - name: DEEPSTACK_PORT
-          value: '5000'
-        - name: DEEPSTACK_API_KEY
-          value : '{{ index .Values.env "API-KEY" }}'
-        # - name: DEEPSTACK_TIMEOUT
-        #   value: the timeout to wait for deepstack, default 30 seconds
-        # - name: DEEPSTACK_CUSTOM_MODEL
-        #   value: the name of a custom model, if you wish to use one
-        # - name: DEEPSTACK_UI_DEBUG_MODE
-        #   value: options `True` or `False` (default). Lowers the minimum confidence threshold to 1%
-        ports:
-        - name: ui
-          containerPort: 8501
-          protocol: TCP
 
     service:
       main:
-        enabled: true
+        controller: main
         ports:
-          ui:
-            enabled: true
-            port: 8501
           http:
             port: 5000
+      ui:
+        controller: ui
+        ports:
+          http:
+            port: 8501
 
     ingress:
       main:
@@ -89,23 +80,12 @@ spec:
           hajimari.io/group: automation
         hosts:
         - host: deepstack.pub.${CLUSTER_DOMAIN}
-          paths:
+          paths: &path
           - path: /
             pathType: Prefix
             service:
-              port: 8501
+              identifier: ui
+              port: http
         - host: deepstack.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
-            service:
-              port: 8501
-        tls:
-        - hosts:
-          - deepstack.pub.${CLUSTER_DOMAIN}
-          - deepstack.home.${CLUSTER_DOMAIN}
-  valuesFrom:
-  - kind: Secret
-    name: "deepstack-helm-values"
-    valuesKey: values.yaml
-    optional: false
+          paths: *path
+
