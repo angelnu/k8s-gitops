@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: recipes
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -17,39 +19,46 @@ spec:
   dependsOn:
     - name: recipes-db
   values:
-    image:
-      repository: docker.io/vabene1111/recipes
-      tag: beta #1.4.5
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: docker.io/vabene1111/recipes
+              tag: beta #1.4.5    
+            env:
+              DEBUG: "0"
+              ALLOWED_HOSTS: "*"
+              #SECRET_KEY: set in secret
+              DB_ENGINE: django.db.backends.postgresql_psycopg2
+              DB_OPTIONS: '{"sslmode":"require"}'
+              POSTGRES_HOST: recipes-db-zalando-postgres-cluster-postgres
+              POSTGRES_PORT: "5432"
+              POSTGRES_DB: postgres
+              POSTGRES_USER: postgres
+              #POSTGRES_PASSWORD: set in secret
+              TZ: Europe/Berlin
+              REMOTE_USER_AUTH: 1
+              # SOCIALACCOUNT_PROVIDERS: set in secret as { "openid_connect": { "SERVERS": [{ "id": "authentik", "name": "Authentik", "server_url": "https://domain.tld/application/o/recipes/.well-known/openid-configuration", "token_auth_method": "client_secret_basic", "APP": { "client_id": "YXZ", "secret": "YXZ" } } ] } } 
+              SOCIAL_PROVIDERS: allauth.socialaccount.providers.openid_connect
     
     persistence:
       media:
         enabled: true
         existingClaim: recipes-media-pvc
-        mountPath: /opt/recipes/mediafiles
+        globalMounts:
+        - path: /opt/recipes/mediafiles
+          readOnly: false
       static:
         enabled: true
         existingClaim: recipes-static-pvc
-        mountPath: /opt/recipes/staticfiles
-
-    
-    env:
-      DEBUG: "0"
-      ALLOWED_HOSTS: "*"
-      #SECRET_KEY: set in secret
-      DB_ENGINE: django.db.backends.postgresql_psycopg2
-      DB_OPTIONS: '{"sslmode":"require"}'
-      POSTGRES_HOST: recipes-db-zalando-postgres-cluster-postgres
-      POSTGRES_PORT: "5432"
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      #POSTGRES_PASSWORD: set in secret
-      TZ: Europe/Berlin
-      REMOTE_USER_AUTH: 1
-      # SOCIALACCOUNT_PROVIDERS: set in secret as { "openid_connect": { "SERVERS": [{ "id": "authentik", "name": "Authentik", "server_url": "https://domain.tld/application/o/recipes/.well-known/openid-configuration", "token_auth_method": "client_secret_basic", "APP": { "client_id": "YXZ", "secret": "YXZ" } } ] } } 
-      SOCIAL_PROVIDERS: allauth.socialaccount.providers.openid_connect
+        globalMounts:
+        - path: /opt/recipes/staticfiles
+          readOnly: false
 
     service:
       main:
+        controller: main
         ports:
           http:
             port: 8080
@@ -67,19 +76,14 @@ spec:
           #   more_set_input_headers "REMOTE-USER: $upstream_http_X_authentik_username"; Waiting for https://github.com/kubernetes/ingress-nginx/issues/7811
         hosts:
         - host: recipes.pub.${CLUSTER_DOMAIN}
-          paths:
+          paths: &paths
           - path: /
-            # Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
+            service:
+              identifier: main
+              port: http
         - host: recipes.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        tls:
-        - hosts:
-          - recipes.pub.${CLUSTER_DOMAIN}
-          - recipes.home.${CLUSTER_DOMAIN}
+          paths: *paths
 
   valuesFrom:
   - kind: Secret
