@@ -14,20 +14,20 @@ spec:
         namespace: flux-system
       interval: 5m
   dependsOn:
-    - name: gitea-db
-  # All values at https://gitea.com/gitea/helm-chart
+    - name: forgejo-db
+  # All values at https://code.forgejo.org/forgejo-helm/forgejo-helm
   values:
     service:
       ssh:
         type: LoadBalancer
         port: 2222
         annotations:
-          metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_GITEA}"
+          metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_FORGEJO}"
     ingress:
       enabled: true
       annotations:
         hajimari.io/enable: "true"
-        hajimari.io/icon: simple-icons:gitea
+        hajimari.io/icon: simple-icons:forgejo
         hajimari.io/info: Home Source Repository
         hajimari.io/group: tools
         nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
@@ -44,7 +44,7 @@ spec:
     persistence:
       enabled: true
       create: false
-      claimName: nfs-gitea
+      claimName: nfs-forgejo
 
     # databases
     redis-cluster:
@@ -56,13 +56,13 @@ spec:
 
     gitea:
       admin:
-        username: gitea_admin
+        username: admin
         # password: set in secret
-        email: "gitea@${CLUSTER_DOMAIN}"
+        email: "forgejo@${CLUSTER_DOMAIN}"
 
-      # See https://docs.gitea.io/en-us/config-cheat-sheet/
+      # See https://forgejo.org/docs/latest/admin/config-cheat-sheet/
       config:
-        APP_NAME: "Gitea for ${CLUSTER_DOMAIN}: Git with a cup of tea"
+        APP_NAME: "Forgejo for ${CLUSTER_DOMAIN}"
         #RUN_MODE: dev
         server:
           SSH_PORT : 2222   
@@ -72,7 +72,7 @@ spec:
           #SECRET_KEY: set in secret
         database:
           DB_TYPE: postgres
-          HOST: gitea-db-zalando-postgres-cluster-postgres:5432
+          HOST: forgejo-db-zalando-postgres-cluster-postgres:5432
           SSL_MODE: require
           NAME: gitea
           #PASSWD: set in secret
@@ -93,12 +93,12 @@ spec:
           SMTP_ADDR: "${CLUSTER_MAIL_SERVER}"
           SMTP_PORT: "${CLUSTER_MAIL_SERVER_PORT}"
           PROTOCOL: smtp
-          FROM: "gitea@${CLUSTER_DOMAIN}"
+          FROM: "forgejo@${CLUSTER_DOMAIN}"
           USER: ""
           PASSWD: ""
 
   valuesFrom:
   - kind: Secret
-    name: "gitea-helm-values"
-    valuesKey: gitea.yaml
+    name: "forgejo-helm-values"
+    valuesKey: forgejo.yaml
     optional: false

@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: gitea-db
+  name: forgejo-db
 spec:
   interval: 5m
   chart:
@@ -48,6 +48,6 @@ spec:
 
   valuesFrom:
   - kind: Secret
-    name: "gitea-helm-values"
+    name: "forgejo-helm-values"
     valuesKey: postgres.yaml
     optional: false
