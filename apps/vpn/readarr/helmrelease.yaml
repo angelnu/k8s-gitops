@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: readarr
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,17 +17,46 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: ghcr.io/onedr0p/readarr-nightly
-      tag: 0.4.0.2593@sha256:22154f5d5ea888c9bbc797e235d34c11cc8c89d49d7f3d6ec9c5c60220962ee6
-    env:
-      TZ: "Europe/Berlin"
-      READARR__INSTANCE_NAME: Readarr (Audio)
-      READARR__PORT: &port 8787
-      READARR__LOG_LEVEL: info
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/readarr-nightly
+              tag: 0.4.0.2593@sha256:22154f5d5ea888c9bbc797e235d34c11cc8c89d49d7f3d6ec9c5c60220962ee6
+            env:
+              TZ: "Europe/Berlin"
+              READARR__INSTANCE_NAME: Readarr (Audio)
+              READARR__PORT: &port 8787
+              READARR__LOG_LEVEL: info
+            resources:
+              requests:
+                memory: 250Mi
+                cpu: 500m
+              limits:
+                memory: 1500Mi
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: "OnRootMismatch"
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: readarr-pvc
+      downloads:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
 
     service:
       main:
+        controller: main
         ports:
           http:
             port: *port
@@ -39,36 +70,10 @@ spec:
           hajimari.io/info: Book Search
           hajimari.io/group: media
         hosts:
-        - host: &host "readarr.pub.${CLUSTER_DOMAIN}"
+        - host: readarr.pub.${CLUSTER_DOMAIN}
           paths:
           - path: /
             pathType: Prefix
-        tls:
-        - hosts:
-          - *host
-
-    persistence:
-      config:
-        enabled: true
-        existingClaim: readarr-pvc
-      downloads:
-        enabled: true
-        mountPath: /downloads
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_DOWNLOADS}"
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-
-    resources:
-      requests:
-        memory: 250Mi
-        cpu: 500m
-      limits:
-        memory: 1500Mi
+            service:
+              identifier: main
+              port: http
