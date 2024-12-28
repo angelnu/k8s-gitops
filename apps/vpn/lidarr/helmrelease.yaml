@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: lidarr
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,18 +17,56 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: ghcr.io/onedr0p/lidarr
-      tag: 2.4.3.4248@sha256:fcf7417a7dfa9967a78d668904c62888272bd6dd814b4b9c4500618f51be6b86
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/lidarr
+              tag: 2.4.3.4248@sha256:fcf7417a7dfa9967a78d668904c62888272bd6dd814b4b9c4500618f51be6b86
 
-    env:
-      TZ: "Europe/Berlin"
-      LIDARR__INSTANCE_NAME: Lidarr
-      LIDARR__PORT: &port 8686
-      LIDARR__LOG_LEVEL: info
+            env:
+              TZ: "Europe/Berlin"
+              LIDARR__INSTANCE_NAME: Lidarr
+              LIDARR__PORT: &port 8686
+              LIDARR__LOG_LEVEL: info
+
+            resources:
+              requests:
+                memory: 250Mi
+                cpu: 500m
+              limits:
+                memory: 1500Mi
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: "OnRootMismatch"
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: lidarr-pvc
+      music:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_MUSIC}"
+      downloads:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
+
 
     service:
       main:
+        controller: main
         ports:
           http:
             port: *port
@@ -46,40 +86,6 @@ spec:
           paths:
           - path: /
             pathType: Prefix
-        tls:
-        - hosts:
-          - *host
-
-    persistence:
-      config:
-        enabled: true
-        existingClaim: lidarr-pvc
-      music:
-        enabled: true
-        mountPath: /music
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_MUSIC}"
-      downloads:
-        enabled: true
-        mountPath: /downloads
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_DOWNLOADS}"
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-
-    resources:
-      requests:
-        memory: 250Mi
-        cpu: 500m
-      limits:
-        memory: 1500Mi
+            service:
+              identifier: main
+              port: http
