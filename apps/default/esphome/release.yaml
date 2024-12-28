@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,82 +17,54 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: ghcr.io/esphome/esphome
-      tag: 2024.12.2@sha256:ce313b07edc3d0bde937ce23821b5e0476dcc1cfb62456bef7a6f79b8109f678
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/esphome/esphome
+              tag: 2024.12.2@sha256:ce313b07edc3d0bde937ce23821b5e0476dcc1cfb62456bef7a6f79b8109f678
+            env:
+              ESPHOME_DASHBOARD_USE_PING: "true"
+          editor:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.96.2@sha256:6b8c0e944caec80057e71d2c2f352cee38fe00ae4b7515fc4458eb300844f699
+            args:
+            - --auth
+            - none
+            - --port
+            - "12321"
+            - /config
+            securityContext:
+              runAsUser: 0
     
     persistence:
       config:
         enabled: true
         existingClaim: esphome-pvc
-
-    env:
-      ESPHOME_DASHBOARD_USE_PING: "true"
+      ssh-key:
+        enabled: true
+        type: secret
+        name: git-ssh-keys
+        defaultMode: 256
+        items:
+        - key: id_rsa
+          path: id_rsa
+        advancedMounts:
+          main:
+            editor:
+            - path: /root/.ssh/id_rsa
+              subPath: id_rsa
 
     service:
       main:
+        controller: main
         ports:
           http:
             port: 6052
-    
-    ingress:
-      main:
-        enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: simple-icons:esphome
-          hajimari.io/info: Programs esphome devices
-          hajimari.io/group: automation
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            auth_request_set $required_groups 'casa_editors';
-        hosts:
-        - host: esphome.pub.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        - host: esphome.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        tls:
-        - hosts:
-          - esphome.pub.${CLUSTER_DOMAIN}
-          - esphome.home.${CLUSTER_DOMAIN}
-
-    addons:
-      codeserver:
-        image:
-          repository: ghcr.io/coder/code-server
-          tag: 4.96.2@sha256:6b8c0e944caec80057e71d2c2f352cee38fe00ae4b7515fc4458eb300844f699
-        enabled: true
-        volumeMounts:
-        - name: config
-          mountPath: /config
-        git:
-          # -- Existing secret containing SSH private key
-          # The chart expects it to be present under the `id_rsa` key.
-          deployKeySecret: git-ssh-keys
-        ingress:
-          enabled: true
-          annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/icon: vscode-icons:file-type-vscode
-            hajimari.io/info: Esphome editor
-            hajimari.io/group: automation
-            nginx.ingress.kubernetes.io/configuration-snippet: |
-              auth_request_set $required_groups 'casa_editors';
-          hosts:
-          - host: esphome-editor.home.${CLUSTER_DOMAIN}
-            paths:
-            - path: /
-              pathType: Prefix
-          - host: esphome-editor.pub.${CLUSTER_DOMAIN}
-            paths:
-            - path: /
-              pathType: Prefix
-          tls:
-          - hosts:
-            - esphome-editor.home.${CLUSTER_DOMAIN}
-            - esphome-editor.pub.${CLUSTER_DOMAIN}
+      editor:
+        controller: main
+        ports:
+          http:
+            port: 12321
