@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: unifi
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,34 +17,37 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: docker.io/jacobalberty/unifi
-      tag: v8.6.9
-
-    podAnnotations:
-      k8s.v1.cni.cncf.io/networks: |
-        [{
-          "name":"macvlan-static",
-          "namespace": "kube-system",
-          "ips": ["${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_MACVLAN_UNIFI}"]
-        }]
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: docker.io/jacobalberty/unifi
+              tag: v8.6.9    
+            env:
+              RUNAS_UID0: "false"
+              UNIFI_UID: "999"
+              UNIFI_GID: "999"
+              UNIFI_STDOUT: "true"
+              JVM_INIT_HEAP_SIZE:
+              JVM_MAX_HEAP_SIZE: 1024M
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [{
+                "name":"macvlan-static",
+                "namespace": "kube-system",
+                "ips": ["${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_MACVLAN_UNIFI}"]
+              }]
     
     persistence:
-      data:
+      unifi:
         enabled: true
         existingClaim: unifi-pvc
-        mountPath: /unifi
-    
-    env:
-      RUNAS_UID0: "false"
-      UNIFI_UID: "999"
-      UNIFI_GID: "999"
-      UNIFI_STDOUT: "true"
-      JVM_INIT_HEAP_SIZE:
-      JVM_MAX_HEAP_SIZE: 1024M
 
     service:
       main:
+        controller: main
         #annotations:
         #  metallb.universe.tf/loadBalancerIPs: ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}
         #  metallb.universe.tf/allow-shared-ip: unifi
@@ -93,14 +98,11 @@ spec:
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
         hosts:
         - host: unifi.pub.${CLUSTER_DOMAIN}
-          paths:
+          paths: &paths
           - path: /
             pathType: Prefix
+            service:
+              identifier: main
+              port: http
         - host: unifi.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
-        tls:
-        - hosts:
-          - unifi.pub.${CLUSTER_DOMAIN}
-          - unifi.home.${CLUSTER_DOMAIN}
+          paths: *paths
