@@ -64,10 +64,7 @@ spec:
         ports:
           http:
             port: 5000
-      ui:
-        controller: ui
-        ports:
-          http:
+          ui:
             port: 8501
 
     ingress:
