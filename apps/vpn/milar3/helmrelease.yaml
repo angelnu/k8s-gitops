@@ -90,26 +90,3 @@ spec:
             service:
               identifier: main
               port: http
-
-    persistence:
-      config:
-        enabled: true
-        existingClaim: milar3-pvc
-      reading:
-        enabled: true
-        mountPath: /reading
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_KUBERNETES}/nextcloud/data/angel/files/Reading"
-      downloads:
-        enabled: true
-        mountPath: /downloads
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_DOWNLOADS}"
-
-    resources:
