@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: jellyfin
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,27 +17,72 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: docker.io/jellyfin/jellyfin
-      tag: 10.10.3
-
-    env:
-      TZ: "Europe/Berlin"
-      JELLYFIN_CACHE_DIR: "/config/cache"
-
-    podSecurityContext:
-      supplementalGroups:
-      #   # Hardware acceleration using an Intel iGPU w/ QuickSync
-      #   # These IDs below should be matched to your `video` and `render` group on the host
-      #   # To obtain those IDs run the following grep statement on the host:
-      #   # $ cat /etc/group | grep "video\|render"
-      - 44
-      - 109
-      - 100
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: docker.io/jellyfin/jellyfin
+              tag: 10.10.3
+            env:
+              TZ: "Europe/Berlin"
+              JELLYFIN_CACHE_DIR: "/config/cache"
+            securityContext:
+              supplementalGroups:
+              #   # Hardware acceleration using an Intel iGPU w/ QuickSync
+              #   # These IDs below should be matched to your `video` and `render` group on the host
+              #   # To obtain those IDs run the following grep statement on the host:
+              #   # $ cat /etc/group | grep "video\|render"
+              - 44
+              - 109
+              - 100
+            resources:
+              requests:
+                #gpu.intel.com/i915: 1
+                cpu: 500m
+                memory: 1000Mi
+              limits:
+                #gpu.intel.com/i915: 1
+                memory: 8000Mi
+    
+    persistence:
+      config:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/jellyfin/config"
+      transcode:
+        enabled: true
+        type: emptyDir
+        #medium: "Memory"
+        sizeLimit: 10Gi
+      videos:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_VIDEO}"
+      music:  
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_MUSIC}"
+      downloads:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
 
     service:
       main:
-        enabled: true
+        controller: main
         type: LoadBalancer
         loadBalancerIP: ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_JELLYFIN}
         externalIPs:
@@ -55,65 +102,12 @@ spec:
           hajimari.io/group: media
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
-        - host: "jellyfin.home.${CLUSTER_DOMAIN}"
-          paths:
+        - host: jellyfin.home.${CLUSTER_DOMAIN}
+          paths: &paths
           - path: /
             pathType: Prefix
-        - host: "jellyfin.pub.${CLUSTER_DOMAIN}"
-          paths:
-          - path: /
-            pathType: Prefix
-        tls:
-        - hosts:
-          - "jellyfin.home.${CLUSTER_DOMAIN}"
-          - "jellyfin.pub.${CLUSTER_DOMAIN}"
-
-    persistence:
-      config:
-        enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_KUBERNETES}/jellyfin/config"
-      transcode:
-        enabled: true
-        type: emptyDir
-        accessMode: ReadWriteOnce
-        emptyDir:
-          enabled: true
-          #medium: "Memory"
-          sizeLimit: 10Gi
-      videos:
-        enabled: true
-        mountPath: /videos
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_VIDEO}"
-      music:  
-        enabled: true
-        mountPath: /music
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_MUSIC}"
-      downloads:
-        enabled: true
-        mountPath: /downloads
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_DOWNLOADS}"
-
-    resources:
-      requests:
-        #gpu.intel.com/i915: 1
-        cpu: 500m
-        memory: 1000Mi
-      limits:
-        #gpu.intel.com/i915: 1
-        memory: 8000Mi
+            service:
+              identifier: main
+              port: http
+        - host: jellyfin.pub.${CLUSTER_DOMAIN}
+          paths: *paths
