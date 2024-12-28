@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: paperless-casa
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,10 +17,13 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-
-    env:
-      PAPERLESS_IGNORE_DATES: “1978-09-19,1979-06-12,2010-2-8,2011-11-15”
-      PAPERLESS_URL: https://paperless.pub.${CLUSTER_DOMAIN}
+    controllers:
+      main:
+        containers:
+          app:
+            env:
+              PAPERLESS_IGNORE_DATES: “1978-09-19,1979-06-12,2010-2-8,2011-11-15”
+              PAPERLESS_URL: https://paperless.pub.${CLUSTER_DOMAIN}
       
     persistence:
       data:
@@ -44,20 +49,15 @@ spec:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             auth_request_set $required_usernames 'angel|mireille';
         hosts:
-        - host: &host_pub paperless.pub.${CLUSTER_DOMAIN}
-          paths:
+        - host: paperless.pub.${CLUSTER_DOMAIN}
+          paths: &paths
           - path: /
-            # Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
-        - host: &host_home paperless.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        tls:
-        - hosts:
-          - *host_pub
-          - *host_home
+            service:
+              identifier: main
+              port: http
+        - host: paperless.home.${CLUSTER_DOMAIN}
+          paths: *paths
 
   valuesFrom:
   - kind: ConfigMap

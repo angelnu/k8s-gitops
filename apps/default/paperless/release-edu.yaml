@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: paperless-edu
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,11 +17,14 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-
-    env:
-      PAPERLESS_OCR_LANGUAGE: spa
-      PAPERLESS_IGNORE_DATES: “1984-09-09”
-      PAPERLESS_URL: https://paperless-edu.pub.${CLUSTER_DOMAIN}
+    controllers:
+      main:
+        containers:
+          app:
+            env:
+              PAPERLESS_OCR_LANGUAGE: spa
+              PAPERLESS_IGNORE_DATES: “1984-09-09”
+              PAPERLESS_URL: https://paperless-edu.pub.${CLUSTER_DOMAIN}
 
     persistence:
       data:
@@ -47,19 +52,14 @@ spec:
             auth_request_set $required_usernames 'eduardo';
         hosts:
         - host: paperless-edu.pub.${CLUSTER_DOMAIN}
-          paths:
+          paths: &paths
           - path: /
-            # Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
+            service:
+              identifier: main
+              port: http
         - host: paperless-edu.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        tls:
-        - hosts:
-          - paperless-edu.pub.${CLUSTER_DOMAIN}
-          - paperless-edu.home${CLUSTER_DOMAIN}
+          paths: *paths
 
   valuesFrom:
   - kind: ConfigMap
