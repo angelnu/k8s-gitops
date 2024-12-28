@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: gatus
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,25 +17,30 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: docker.io/twinproduction/gatus
-      tag: v5.14.0@sha256:a00b8db44671c9c0c0815835c34608bcba41b2f66e96d283c3d0809e93ff7cc6
-    
-    env:
-      TZ: "Europe/Berlin"
+    controllers:
+      main:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: docker.io/twinproduction/gatus
+              tag: v5.14.0@sha256:a00b8db44671c9c0c0815835c34608bcba41b2f66e96d283c3d0809e93ff7cc6
+            env:
+              TZ: "Europe/Berlin"
     
     persistence:
       data:
         enabled: true
-        type: pvc
         existingClaim: gatus-pvc
       config:
         enabled: true
         type: configMap
-        name: '{{ include "bjw-s.common.lib.chart.names.fullname" . }}-config'
+        name: config
 
     service:
       main:
+        controller: main
         ports:
           http:
             port: 8080
@@ -51,12 +58,9 @@ spec:
           paths:
           - path: /
             pathType: Prefix
-        tls:
-        - hosts:
-          - gatus.pub.${CLUSTER_DOMAIN}
-      
-    podAnnotations:
-      reloader.stakater.com/auto: "true"
+            service:
+              identifier: main
+              port: http
     
     configMaps:
       config:
