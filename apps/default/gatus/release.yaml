@@ -532,19 +532,9 @@ spec:
                 conditions:
                   - "[STATUS] == 200"
                   
-              - name: Homer
-                group: apps
-                url: "http://home.${CLUSTER_DOMAIN}"
-                interval: 5m
-                alerts:
-                  - type: slack
-                  - type: pagerduty
-                conditions:
-                  - "[STATUS] == 200"
-                  
               - name: Hajimari
                 group: apps
-                url: "https://home2.pub.${CLUSTER_DOMAIN}"
+                url: "https://home.${CLUSTER_DOMAIN}"
                 interval: 5m
                 alerts:
                   - type: slack
