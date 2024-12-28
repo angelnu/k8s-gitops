@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: home-assistant
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -17,54 +19,72 @@ spec:
   dependsOn:
     - name: home-assistant-db
   values:
-    image:
-      repository: ghcr.io/home-assistant/home-assistant
-      tag: 2024.12.5@sha256:132ef461504be5c5ebd6e34e5d3fb3d7958bb6758a5136107eea9f84c299254a
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-assistant/home-assistant
+              tag: 2024.12.5@sha256:132ef461504be5c5ebd6e34e5d3fb3d7958bb6758a5136107eea9f84c299254a
+            env:
+              TZ: "Europe/Berlin"
+            probes:
+              #Circumvention - avoid restart
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+          editor:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.96.2@sha256:6b8c0e944caec80057e71d2c2f352cee38fe00ae4b7515fc4458eb300844f699
+            args:
+            - --auth
+            - none
+            - --port
+            - "12321"
+            - /config
+            securityContext:
+              runAsUser: 0
+        pod:
+          hostAliases:
+          # We cannot access the ingress LB address directly - go through external IP
+          - ip: "${FIX_EXTERNAL_IP}"
+            hostnames:
+            - "nextcloud.${CLUSTER_DOMAIN}"
+            - "jellyfin.pub.${CLUSTER_DOMAIN}"
 
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [{
+                "name":"macvlan-static",
+                "namespace": "kube-system",
+                "ips": ["${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_MACVLAN_HA}"]
+              }]
+    
     persistence:
       config:
         enabled: true
         existingClaim: home-assistant-pvc
-    
-    mariadb:
-      enabled: false
-    postgresql:
-      enabled: false
-    influxdb:
-      enabled: false  
-
-    nodeSelector:
-      kubernetes.io/arch: amd64
-    
-    hostAliases:
-    # We cannot access the ingress LB address directly - go through external IP
-    - ip: "${FIX_EXTERNAL_IP}"
-      hostnames:
-      - "nextcloud.${CLUSTER_DOMAIN}"
-      - "jellyfin.pub.${CLUSTER_DOMAIN}"
-
-    env:
-      TZ: "Europe/Berlin"
-
-    probes:
-      #Circumvention - avoid restart
-      liveness:
-        enabled: false
-      readiness:
-        enabled: false
-      startup:
-        enabled: false
-
-    podAnnotations:
-      k8s.v1.cni.cncf.io/networks: |
-        [{
-          "name":"macvlan-static",
-          "namespace": "kube-system",
-          "ips": ["${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_MACVLAN_HA}"]
-        }]
+      ssh-key:
+        enabled: true
+        type: secret
+        name: git-ssh-keys
+        defaultMode: 256
+        items:
+        - key: id_rsa
+          path: id_rsa
+        advancedMounts:
+          main:
+            editor:
+            - path: /root/.ssh/id_rsa
+              subPath: id_rsa
 
     service:
       main:
+        controller: main
         type: LoadBalancer
         loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_HA}"
         #Allows exposing the port for raspberrymatic to connect to
@@ -76,6 +96,11 @@ spec:
             enabled: true
             port: 2001
             targetPort: 2001
+      editor:
+        controller: main
+        ports:
+          http:
+            port: 12321
 
     ingress:
       main:
@@ -90,50 +115,30 @@ spec:
           nginx.ingress.kubernetes.io/ssl-redirect: "false" #Required by Reolink integration to push images via http
         hosts:
         - host: ha.${CLUSTER_DOMAIN}
-          paths:
+          paths: &paths
           - path: /
             pathType: Prefix
+            service:
+              identifier: main
+              port: http
         - host: ha.pub.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
+          paths: *paths
         - host: ha.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
-        tls:
-        - hosts:
-          - ha.${CLUSTER_DOMAIN}
-          - ha.pub.${CLUSTER_DOMAIN}
-          - ha.home.${CLUSTER_DOMAIN}
-
-    addons:
-      codeserver:
+          paths: *paths
+      editor:
         enabled: true
-        image:
-          repository: ghcr.io/coder/code-server
-          tag: 4.96.2@sha256:6b8c0e944caec80057e71d2c2f352cee38fe00ae4b7515fc4458eb300844f699
-        volumeMounts:
-        - name: config
-          mountPath: /config
-        git:
-          # -- Existing secret containing SSH private key
-          # The chart expects it to be present under the `id_rsa` key.
-          deployKeySecret: git-ssh-keys
-        ingress:
-          enabled: true
-          annotations:
+        annotations:
             hajimari.io/enable: "true"
             hajimari.io/icon: vscode-icons:file-type-vscode
             hajimari.io/info: Home-Assistant Editor
             hajimari.io/group: automation
             nginx.ingress.kubernetes.io/configuration-snippet: |
               auth_request_set $required_groups 'casa_editors';
-          hosts:
-          - host: ha-editor.pub.${CLUSTER_DOMAIN}
-            paths:
-            - path: /
-              pathType: Prefix
-          tls:
-          - hosts:
-            - ha-editor.pub.${CLUSTER_DOMAIN}
+        hosts:
+        - host: ha-editor.pub.${CLUSTER_DOMAIN}
+          paths: &paths_editor
+          - path: /
+            pathType: Prefix
+            service:
+              identifier: editor
+              port: http
