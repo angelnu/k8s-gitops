@@ -83,7 +83,7 @@ spec:
           hajimari.io/info: Comic Book
           hajimari.io/group: media
         hosts:
-        - host: "milar3.pub.${CLUSTER_DOMAIN}"
+        - host: milar3.pub.${CLUSTER_DOMAIN}
           paths:
           - path: /
             pathType: Prefix
