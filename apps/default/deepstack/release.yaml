@@ -81,8 +81,8 @@ spec:
           - path: /
             pathType: Prefix
             service:
-              identifier: ui
-              port: http
+              identifier: main
+              port: ui
         - host: deepstack.home.${CLUSTER_DOMAIN}
           paths: *path
 
