@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: handbrake
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,12 +17,15 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: docker.io/jlesage/handbrake
-      tag: v24.12.1@sha256:aa9786d715b0957f6960fad2e98f4781d934f71b18621cc116072db56e49b8aa
-
-    env:
-      TZ: "Europe/Berlin"
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: docker.io/jlesage/handbrake
+              tag: v24.12.1@sha256:aa9786d715b0957f6960fad2e98f4781d934f71b18621cc116072db56e49b8aa
+            env:
+              TZ: "Europe/Berlin"
     
     persistence:
       config:
@@ -28,7 +33,6 @@ spec:
         existingClaim: handbrake-pvc
       videos:
         enabled: true
-        mountPath: /videos
         type: custom
         volumeSpec:
           nfs:
@@ -36,23 +40,22 @@ spec:
             path: "${NFS_VIDEO}"
       downloads:
         enabled: true
-        mountPath: /downloads
         type: custom
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_DOWNLOADS}"
 
-    # -- Configures service settings for the chart.
-    # @default -- See values.yaml
     service:
       main:
+        controller: main
         ports:
           http:
             port: 5800
           vnc:
             enabled: false
             port: 5900
+
     ingress:
       main:
         enabled: true
@@ -63,16 +66,11 @@ spec:
           hajimari.io/group: media
         hosts:
         - host: handbrake.pub.${CLUSTER_DOMAIN}
-          paths:
+          paths: &paths
           - path: /
-            # Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
+            service:
+              identifier: main
+              port: http
         - host: handbrake.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        tls:
-        - hosts:
-          - handbrake.pub.${CLUSTER_DOMAIN}
-          - handbrake.home.${CLUSTER_DOMAIN}
+          paths: *paths
