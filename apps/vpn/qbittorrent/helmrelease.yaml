@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: qbittorrent
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,24 +17,66 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: ghcr.io/onedr0p/qbittorrent
-      tag: 5.0.3@sha256:025f32d260a3e924885405c0ca01ab8e396360330438ef8562ffd973d2dbb927
-
-    hostname: torrent # needed for an static IP
-
-    env:
-      TZ: "Europe/Berlin"
-      QBITTORRENT__PORT: &port 8080
-      QBITTORRENT__BT_PORT: &port-bt 18289
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/qbittorrent
+              tag: 5.0.3@sha256:025f32d260a3e924885405c0ca01ab8e396360330438ef8562ffd973d2dbb927
+            env:
+              TZ: "Europe/Berlin"
+              QBITTORRENT__PORT: &port 8080
+              QBITTORRENT__BT_PORT: &port-bt 18289
+            resources:
+              requests:
+                memory: 250Mi
+                cpu: 500m
+              limits:
+                memory: 6000Mi
+        pod:
+          hostname: torrent # needed for an static IP
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: "OnRootMismatch"
+  
+    persistence:
+      config:
+        enabled: true
+        existingClaim: qbitorrent-pvc
+      videos:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_VIDEO}"
+      music:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_MUSIC}"
+      downloads:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
 
     service:
       main:
+        controller: main
         ports:
           http:
             port: *port
       bittorrent:
         enabled: true
+        controller: main
         type: ClusterIP
         ports:
           bittorrent:
@@ -50,53 +94,10 @@ spec:
           hajimari.io/info: Torrent Downloader
           hajimari.io/group: media
         hosts:
-        - host: &host "torrent.pub.${CLUSTER_DOMAIN}"
+        - host: torrent.pub.${CLUSTER_DOMAIN}
           paths:
           - path: /
             pathType: Prefix
-        tls:
-        - hosts:
-          - *host
-
-    persistence:
-      config:
-        enabled: true
-        existingClaim: qbitorrent-pvc
-      videos:
-        enabled: true
-        mountPath: /videos
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_VIDEO}"
-      music:
-        enabled: true
-        mountPath: /music
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_MUSIC}"
-      downloads:
-        enabled: true
-        mountPath: /downloads
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_DOWNLOADS}"
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      supplementalGroups:
-      - 65536
-
-    resources:
-      requests:
-        memory: 250Mi
-        cpu: 500m
-      limits:
-        memory: 6000Mi
+            service:
+              identifier: main
+              port: http
