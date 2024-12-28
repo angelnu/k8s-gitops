@@ -103,18 +103,13 @@ spec:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           #nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
         hosts:
-        - host: "rss.${CLUSTER_DOMAIN}"
-          paths:
+        - host: rss.${CLUSTER_DOMAIN}
+          paths: &paths
           - path: /scrapping/
             pathType: Prefix
             service:
               identifier: main
               port: http
-        - host: "rss.home.${CLUSTER_DOMAIN}"
-          paths:
-          - path: /scrapping/
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
+        - host: rss.home.${CLUSTER_DOMAIN}
+          paths: *paths
 

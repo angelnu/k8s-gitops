@@ -68,7 +68,7 @@ spec:
           nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
-        - host: "music.home.${CLUSTER_DOMAIN}"
+        - host: music.home.${CLUSTER_DOMAIN}
           paths:
           - path: /
             pathType: Prefix

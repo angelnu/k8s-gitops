@@ -77,12 +77,12 @@ spec:
           hajimari.io/group: automation
         hosts:
         - host: deepstack.pub.${CLUSTER_DOMAIN}
-          paths: &path
+          paths: &paths
           - path: /
             pathType: Prefix
             service:
               identifier: main
               port: ui
         - host: deepstack.home.${CLUSTER_DOMAIN}
-          paths: *path
+          paths: *paths
 
