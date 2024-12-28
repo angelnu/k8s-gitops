@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: ubuntu-vnc
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,12 +17,22 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: docker.io/dorowu/ubuntu-desktop-lxde-vnc
-      tag: latest@sha256:775184eaa5bbc01bc4261a6c9596a642b3b43a433c1508637567bc724575964b
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: docker.io/dorowu/ubuntu-desktop-lxde-vnc
+              tag: latest@sha256:775184eaa5bbc01bc4261a6c9596a642b3b43a433c1508637567bc724575964b
+        pod:
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroup: 0
 
     service:
       main:
+        controller: main
         ports:
           http:
             port: 80
@@ -37,15 +49,10 @@ spec:
           hajimari.io/info: Ubuntu
           hajimari.io/group: tools
         hosts:
-        - host: &host "ubuntu.pub.${CLUSTER_DOMAIN}"
+        - host: ubuntu.pub.${CLUSTER_DOMAIN}
           paths:
           - path: /
             pathType: Prefix
-        tls:
-        - hosts:
-          - *host
-
-    podSecurityContext:
-      runAsUser: 0
-      runAsGroup: 0
-      fsGroup: 0
+            service:
+              identifier: main
+              port: http
