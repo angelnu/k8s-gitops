@@ -1,4 +1,6 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: photoprism
@@ -7,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.6.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,35 +17,41 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-    image:
-      repository: docker.io/photoprism/photoprism
-      tag: latest@sha256:32da029428be9335889ab13f03ea839201af49c2a1699c8f7c4de5b5911e2e1a
-    
-    env:
-      PHOTOPRISM_STORAGE_PATH: /photoprism/storage
-      PHOTOPRISM_ORIGINALS_PATH: /photoprism/originals
-      ## See other config options from PhotoPrism documentation: https://docs.photoprism.org/getting-started/config-options/
-      # PHOTOPRISM_ADMIN_PASSWORD: "please-change"     # Initial admin password: PLEASE CHANGE!
-      # PHOTOPRISM_DEBUG: "false"                      # Run in debug mode (shows additional log messages)
-      PHOTOPRISM_PUBLIC: "true"                     # No authentication required (disables password protection)
-      # PHOTOPRISM_READONLY: "false"                   # Don't modify originals directory (reduced functionality)
-      # PHOTOPRISM_EXPERIMENTAL: "false"               # Enable experimental features
-      PHOTOPRISM_SITE_URL: "https://photos.pub.${CLUSTER_DOMAIN}/"  # Canonical / public site URL
-      PHOTOPRISM_SITE_TITLE: "Nunez Gregoire"
-      PHOTOPRISM_SITE_CAPTION: "Casa"
-      PHOTOPRISM_SITE_DESCRIPTION: "una descripcion"
-      # PHOTOPRISM_SITE_AUTHOR: ""
-      # # You may optionally set user, group and/or file permissions using environment variables:
-      # UID: 1000
-      # GID: 1000
-      # UMASK: 0000
-      PHOTOPRISM_ORIGINALS_LIMIT: 4000 # in MB (default 1000)
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: docker.io/photoprism/photoprism
+              tag: latest@sha256:32da029428be9335889ab13f03ea839201af49c2a1699c8f7c4de5b5911e2e1a
+            
+            env:
+              PHOTOPRISM_STORAGE_PATH: /photoprism/storage
+              PHOTOPRISM_ORIGINALS_PATH: /photoprism/originals
+              ## See other config options from PhotoPrism documentation: https://docs.photoprism.org/getting-started/config-options/
+              # PHOTOPRISM_ADMIN_PASSWORD: "please-change"     # Initial admin password: PLEASE CHANGE!
+              # PHOTOPRISM_DEBUG: "false"                      # Run in debug mode (shows additional log messages)
+              PHOTOPRISM_PUBLIC: "true"                     # No authentication required (disables password protection)
+              # PHOTOPRISM_READONLY: "false"                   # Don't modify originals directory (reduced functionality)
+              # PHOTOPRISM_EXPERIMENTAL: "false"               # Enable experimental features
+              PHOTOPRISM_SITE_URL: "https://photos.pub.${CLUSTER_DOMAIN}/"  # Canonical / public site URL
+              PHOTOPRISM_SITE_TITLE: "Nunez Gregoire"
+              PHOTOPRISM_SITE_CAPTION: "Casa"
+              PHOTOPRISM_SITE_DESCRIPTION: "una descripcion"
+              # PHOTOPRISM_SITE_AUTHOR: ""
+              # # You may optionally set user, group and/or file permissions using environment variables:
+              # UID: 1000
+              # GID: 1000
+              # UMASK: 0000
+              PHOTOPRISM_ORIGINALS_LIMIT: 4000 # in MB (default 1000)
 
     persistence:
       config:
         enabled: true
-        mountPath: /photoprism/storage
         type: custom
+        globalMounts:
+        - path: /photoprism/storage
+          readOnly: false
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
@@ -51,16 +59,18 @@ spec:
 
       originals:
         enabled: true
-        mountPath: "/photoprism/originals"
         type: custom
+        globalMounts:
+        - path: /photoprism/originals
+          readOnly: false
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_KUBERNETES}/photoprism/originals"
-
     
     service:
       main:
+        controller: main
         ports:
           http:
             port: 2342
@@ -76,16 +86,11 @@ spec:
           nginx.ingress.kubernetes.io/proxy-body-size: 4G
         hosts:
         - host: photos.pub.${CLUSTER_DOMAIN}
-          paths:
+          paths: &paths
           - path: /
-            # Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
+            service:
+              identifier: main
+              port: http
         - host: photos.home.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
-        tls:
-        - hosts:
-          - photos.pub.${CLUSTER_DOMAIN}
-          - photos.home${CLUSTER_DOMAIN}
+          paths: *paths
