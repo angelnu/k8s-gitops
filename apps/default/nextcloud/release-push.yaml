@@ -68,7 +68,7 @@ spec:
         hosts:
           - host: nextcloud.${CLUSTER_DOMAIN}
             paths: &paths
-            - path: /
+            - path: /push/
               pathType: Prefix
               service:
                 identifier: main
