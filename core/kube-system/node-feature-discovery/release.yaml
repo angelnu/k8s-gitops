@@ -8,16 +8,13 @@ spec:
     spec:
       # renovate: registryUrl=https://kubernetes-sigs.github.io/node-feature-discovery/charts
       chart: node-feature-discovery
-      version: 0.16.6
+      version: 0.17.0
       sourceRef:
         kind: HelmRepository
         name: node-feature-discovery-charts
         namespace: flux-system
       interval: 5m
   values:
-    image:
-      repository: gcr.io/k8s-staging-nfd/node-feature-discovery
-      tag: v0.17.0
     master:
       tolerations:
       - key: "node-role.kubernetes.io/master"
