@@ -210,3 +210,14 @@ spec:
         hosts:
         - host: nas-backup.home.${CLUSTER_DOMAIN}
         - host: nas-backup.pub.${CLUSTER_DOMAIN}
+    - name: kvant
+      externalName: kvant.cloud
+      port: 443
+      test: false
+      ingress:
+        annotations:
+          hajimari.io/enable: "false"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        hosts:
+        - host: kvant.pub.${CLUSTER_DOMAIN}
