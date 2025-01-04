@@ -12,8 +12,8 @@
   # - name: Add and update packages
   #   import_tasks: tasks/hw/apt.yaml
 
-  # - name: Setup system parameters (boot, hosts, timzone)
-  #   import_tasks: tasks/hw/system.yaml
+  - name: Setup system parameters (boot, hosts, timzone)
+    import_tasks: tasks/hw/system.yaml
 
   # - name: Setup network parameters
   #   import_tasks: tasks/hw/network.yaml

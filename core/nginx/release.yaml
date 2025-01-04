@@ -26,6 +26,7 @@ spec:
       replicaCount: 3
       config:
         custom-http-errors: 404,401,403,500,503
+        annotations-risk-level: Critical # We need it to enforce users (paperless) after https://github.com/kubernetes/ingress-nginx/issues/12618
         hsts-max-age: "31449600"
         # See instructions at https://goauthentik.io/docs/providers/proxy/forward_auth
         global-auth-url: "http://ak-outpost-ingress.authentik.svc.cluster.local:9000/outpost.goauthentik.io/auth/nginx"
