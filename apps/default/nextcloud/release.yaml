@@ -202,6 +202,7 @@ spec:
         cd /var/www/html;
         ./occ upgrade;
         ./occ db:add-missing-indices;
+        /bin/true
 
     persistence:
       enabled: true
