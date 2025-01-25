@@ -198,7 +198,7 @@ spec:
       - -s
       - /bin/sh
       - -c
-      - >
+      - >-
         cd /var/www/html;
         ./occ upgrade;
         ./occ db:add-missing-indices;
