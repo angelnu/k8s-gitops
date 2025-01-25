@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.6.0
+      version: 3.6.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: collabora/code
-              tag: 24.04.11.1.1
+              tag: 24.04.12.1.1
             env:
               extra_params: --o:ssl.termination=true --o:ssl.enable=false
     rawResources:

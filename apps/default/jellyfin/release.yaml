@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.6.0
+      version: 3.6.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: docker.io/jellyfin/jellyfin
-              tag: 10.10.3
+              tag: 10.10.4
             env:
               TZ: "Europe/Berlin"
               JELLYFIN_CACHE_DIR: "/config/cache"

@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.6.0
+      version: 3.6.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/angelnu/freecad-novnc
-              tag: 1.0.0@sha256:0162214b88f6fc199ae1da0f7f1e532abb7a0afff73a383e51ec726c855f02e0
+              tag: 1.0.0@sha256:cbe12b9017fdd5b4daa20d6cab45d6e76c6966138d10cf2dcef511b1a6a8042c
     
             securityContext:
               runAsUser: 33 # www-data

@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.6.0
+      version: 3.6.1
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -23,13 +23,13 @@ spec:
           app:
             image:
               repository: ghcr.io/esphome/esphome
-              tag: 2024.12.2@sha256:ce313b07edc3d0bde937ce23821b5e0476dcc1cfb62456bef7a6f79b8109f678
+              tag: 2024.12.4@sha256:9874fb1af9aac33595881c9ae3b6caa3a6424a09589f3f35368da54abfde7fa6
             env:
               ESPHOME_DASHBOARD_USE_PING: "true"
           editor:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.96.2@sha256:6b8c0e944caec80057e71d2c2f352cee38fe00ae4b7515fc4458eb300844f699
+              tag: 4.96.4@sha256:f93810f7f6636b3af3b1a750faf612349cddb89fbb6d28d69123a214fc75ee9e
             args:
             - --auth
             - none
