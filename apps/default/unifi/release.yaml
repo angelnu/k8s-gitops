@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: docker.io/jacobalberty/unifi
-              tag: v8.6.9    
+              tag: v9.0.114    
             env:
               RUNAS_UID0: "false"
               UNIFI_UID: "999"
