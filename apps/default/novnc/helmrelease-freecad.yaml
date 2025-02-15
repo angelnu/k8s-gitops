@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/angelnu/freecad-novnc
-              tag: 1.0.0@sha256:7aef620f64bf12430c661a446b6f97bace6075fedeae971fec5aee0e958a8a4e
+              tag: 1.0.0@sha256:1b1950fe54907692cf2cfea0eea9e32bb4897dfffd8ce8a4f33bf6ae6f07951d
     
             securityContext:
               runAsUser: 33 # www-data
