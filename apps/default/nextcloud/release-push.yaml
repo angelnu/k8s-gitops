@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: docker.io/library/nextcloud
-              tag: 30.0.6@sha256:b5670399ca37dd0ae35744be1ff8e47e5d2bc79d40213ccb10839b428871104a
+              tag: 30.0.7@sha256:3fe4b0696eeaa7eddb2461f7f78212a03debe262b6b073a5b8370f102cdb0759
             # How to Enable
             # 1. Install "client push" app within nextcloud
             # 2. sudo -u www-data php -d memory_limit=-1 /var/www/html/occ notify_push:setup https://nextcloud.mydomain.com/push
