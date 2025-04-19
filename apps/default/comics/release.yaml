@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: ghcr.io/angelnu/comics-rss-feed
-              tag: v1.7.0@sha256:6fce07401cb7e7ff8c5096f33b24b775c24cdf93c77909161b7eab918b45794f
+              tag: v1.7.1@sha256:2dad4f87c5dc0dd15521d7e8a32dfdb92700849a31b0373ebac0ef6ac3aa45e5
             
             env:
               VERBOSE: "True"
