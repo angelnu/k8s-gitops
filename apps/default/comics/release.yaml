@@ -24,7 +24,7 @@ spec:
           app:
             image:
               repository: docker.io/library/nginx
-              tag: 1.27.5@sha256:5ed8fcc66f4ed123c1b2560ed708dc148755b6e4cbd8b943fab094f2c6bfa91e
+              tag: 1.28.0@sha256:0ad9e58f00f6a0d92f8c0a2a32285366a0ee948d9f91aee4a2c965a5516c59d5
       cronjob:
         enabled: true
         type: cronjob
@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: ghcr.io/angelnu/comics-rss-feed
-              tag: v1.7.1@sha256:2dad4f87c5dc0dd15521d7e8a32dfdb92700849a31b0373ebac0ef6ac3aa45e5
+              tag: v1.7.3@sha256:83c468fde849010de42a1a262190d4d837bf82bb7ddeea42f445eb8f214b5436
             
             env:
               VERBOSE: "True"

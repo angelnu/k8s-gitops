@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-assistant/home-assistant
-              tag: 2025.4.3@sha256:e3bc87aecb7121fe66876bd750172627b947da3b72af1a5bf8da8286fb397914
+              tag: 2025.5.2@sha256:aa0d85544d00f135e6db6ab81f3ba3775e02715526fb524f0c8c67eaba31002b
             env:
               TZ: "Europe/Berlin"
             probes:
@@ -39,7 +39,7 @@ spec:
           editor:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.99.3@sha256:e822acb286dca144f1a10ef847bc8f905d92ea79998f4f021802064badcae5fe
+              tag: 4.100.2@sha256:0c31654f1125c3a685a42ed1f2946573f5ebaaf016c5bc0640c72f9f571267e0
             args:
             - --auth
             - none
