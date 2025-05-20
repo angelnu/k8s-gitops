@@ -1,75 +1,94 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "github>angelnu/renovate-config:default-automerge.json",
-    "github>angelnu/k8s-gitops//.github/renovate/disabledDatasources.json5",
-    "github>angelnu/k8s-gitops//.github/renovate/groups.json5"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'github>angelnu/renovate-config:default-automerge.json',
+    'github>angelnu/k8s-gitops//.github/renovate/disabledDatasources.json5',
+    'github>angelnu/k8s-gitops//.github/renovate/groups.json5',
   ],
-  "platform": "github",
-  "username": "angelnu-bot[bot]",
-  "gitAuthor": "angelnu-bot[bot] <115925344+angelnu-bot[bot]@users.noreply.github.com>",
-  "repositories": ["angelnu/k8s-gitops"],
-  "ignorePaths": ["ansible/group_vars/all.yaml"],
-  "flux": {
-    "fileMatch": ["(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$"]
-  },
-  "helm-values": {
-    "fileMatch": ["(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$"]
-  },
-  "kubernetes": {
-    "fileMatch": ["(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$"]
-  },
-  "customManagers": [
-    {
-      "customType": "regex",
-      "description": "Process CRD dependencies",
-      "fileMatch": ["(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$"],
-      "matchStrings": [
-        // GitRepository where 'Git release/tag' matches 'Helm' version
-        "registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n",
-        // Kustomization where 'GitHub release artifact URL' matches 'Docker image' version
-        "datasource=(?<datasource>\\S+) image=(?<depName>\\S+)\n.*?-\\s(.*?)/(?<currentValue>[^/]+)/[^/]+\n"
-      ],
-      "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}"
-    },
-    {
-      "customType": "regex",
-      "description": "Process various dependencies",
-      "fileMatch": [
-        "ansible/.+\\.ya?ml$",
-        "(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$"
-      ],
-      "matchStrings": [
-        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?\"(?<currentValue>.*)\"\n"
-      ],
-      "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
-      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
-    },
-    {
-      "customType": "regex",
-      "description": "Process raw GitHub URLs",
-      "fileMatch": ["(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$"],
-      "matchStrings": [
-        "https:\\/\\/raw.githubusercontent.com\\/(?<depName>[\\w\\d\\-_]+\\/[\\w\\d\\-_]+)\\/(?<currentValue>[\\w\\d\\.\\-_]+)\\/.*"
-      ],
-      "datasourceTemplate": "github-releases",
-      "versioningTemplate": "semver"
-    }
+  platform: 'github',
+  username: 'angelnu-bot[bot]',
+  gitAuthor: 'angelnu-bot[bot] <115925344+angelnu-bot[bot]@users.noreply.github.com>',
+  repositories: [
+    'angelnu/k8s-gitops',
   ],
-  "packageRules": [
+  ignorePaths: [
+    'ansible/group_vars/all.yaml',
+  ],
+  flux: {
+    managerFilePatterns: [
+      '/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/',
+    ],
+  },
+  'helm-values': {
+    managerFilePatterns: [
+      '/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/',
+    ],
+  },
+  kubernetes: {
+    managerFilePatterns: [
+      '/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/',
+    ],
+  },
+  customManagers: [
     {
-      "description": "Use loose versioning for certain dependencies",
-      "matchDatasources": ["docker", "github-releases"],
-      "versioning": "loose",
-      "matchPackageNames": [
-        "ghcr.io/home-operations/qbittorrent",
-      ]
+      customType: 'regex',
+      description: 'Process CRD dependencies',
+      managerFilePatterns: [
+        '/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/',
+      ],
+      matchStrings: [
+        'registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n',
+        'datasource=(?<datasource>\\S+) image=(?<depName>\\S+)\n.*?-\\s(.*?)/(?<currentValue>[^/]+)/[^/]+\n',
+      ],
+      datasourceTemplate: '{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}',
     },
     {
-      "description": "Use custom versioning for Minio",
-      "matchDatasources": ["docker"],
-      "versioning": "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+)T.*Z(-(?<compatibility>.*))?$",
-      "matchPackageNames": ["quay.io/minio/minio"]
-    }
-  ]
+      customType: 'regex',
+      description: 'Process various dependencies',
+      managerFilePatterns: [
+        '/ansible/.+\\.ya?ml$/',
+        '/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/',
+      ],
+      matchStrings: [
+        'datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?"(?<currentValue>.*)"\n',
+      ],
+      datasourceTemplate: '{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}',
+      versioningTemplate: '{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}',
+    },
+    {
+      customType: 'regex',
+      description: 'Process raw GitHub URLs',
+      managerFilePatterns: [
+        '/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/',
+      ],
+      matchStrings: [
+        'https:\\/\\/raw.githubusercontent.com\\/(?<depName>[\\w\\d\\-_]+\\/[\\w\\d\\-_]+)\\/(?<currentValue>[\\w\\d\\.\\-_]+)\\/.*',
+      ],
+      datasourceTemplate: 'github-releases',
+      versioningTemplate: 'semver',
+    },
+  ],
+  packageRules: [
+    {
+      description: 'Use loose versioning for certain dependencies',
+      matchDatasources: [
+        'docker',
+        'github-releases',
+      ],
+      versioning: 'loose',
+      matchPackageNames: [
+        'ghcr.io/home-operations/qbittorrent',
+      ],
+    },
+    {
+      description: 'Use custom versioning for Minio',
+      matchDatasources: [
+        'docker',
+      ],
+      versioning: 'regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+)T.*Z(-(?<compatibility>.*))?$',
+      matchPackageNames: [
+        'quay.io/minio/minio',
+      ],
+    },
+  ],
 }
