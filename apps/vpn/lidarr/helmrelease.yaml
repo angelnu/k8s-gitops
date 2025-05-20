@@ -22,8 +22,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/lidarr
-              tag: 2.4.3.4248@sha256:fcf7417a7dfa9967a78d668904c62888272bd6dd814b4b9c4500618f51be6b86
+              repository: ghcr.io/home-operations/lidarr
+              tag: 2.12.0.4633@sha256-be4ba95475c2d44ac98feac32c967991d51a2c68e7e16d3c1f2396a55ad163ca
 
             env:
               TZ: "Europe/Berlin"
