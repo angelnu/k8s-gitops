@@ -31,7 +31,7 @@ spec:
               #LATITUDE: secret
               #LONGITUDE: secret
               #ELEVATION: secret
-              HA_URL: "http://home-assistant:8123"
+              HA_URL: "http://home-assistant-main:8123"
               DASH_URL: "http://$HOSTNAME:5050"
               # TOKEN: secret
             envFrom:
