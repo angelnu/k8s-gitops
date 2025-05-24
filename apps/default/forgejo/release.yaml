@@ -50,7 +50,7 @@ spec:
 
     # databases
     redis-cluster:
-      enabled: false
+      enabled: true
     postgresql-ha:
       enabled: false
     postgresql:
