@@ -17,6 +17,8 @@ spec:
     - name: forgejo-db
   # All values at https://code.forgejo.org/forgejo-helm/forgejo-helm
   values:
+    image:
+      tag: 11.0.1-rootless
     service:
       ssh:
         type: LoadBalancer
