@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/readarr
-              tag: 0.4.16@sha256-6e25e1d4886cbda4c572afb4d629918f2795d09a2613910c550ca9cbb221f7b2
+              tag: 0.4.16@sha256:6e25e1d4886cbda4c572afb4d629918f2795d09a2613910c550ca9cbb221f7b2
             env:
               TZ: "Europe/Berlin"
               READARR__INSTANCE_NAME: Readarr (Audio)
