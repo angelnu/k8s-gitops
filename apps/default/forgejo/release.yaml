@@ -18,7 +18,7 @@ spec:
   # All values at https://code.forgejo.org/forgejo-helm/forgejo-helm
   values:
     image:
-      tag: 11.0.1-rootless
+      tag: 11.0.1
     service:
       ssh:
         type: LoadBalancer
