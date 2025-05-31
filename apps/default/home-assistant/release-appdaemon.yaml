@@ -32,7 +32,7 @@ spec:
               #LONGITUDE: secret
               #ELEVATION: secret
               HA_URL: "http://home-assistant-main:8123"
-              DASH_URL: "http://$HOSTNAME:5050"
+              DASH_URL: "http://0.0.0.0:5050"
               # TOKEN: secret
             envFrom:
               - secret: appdaemon-env
