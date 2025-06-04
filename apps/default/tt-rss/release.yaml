@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: ghcr.io/angelnu/tt-rss
-      tag: 2.0.9656
+      tag: 2.0.9664
       pullPolicy: Always      
     
     ingress:
