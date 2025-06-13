@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-assistant/home-assistant
-              tag: 2025.5.3@sha256:8a99004ff832dbd535e6ac4d141042bc31141ff6a86b4d5bb288b3680fbceac1
+              tag: 2025.6.1@sha256:857745bd01589750174e60f2c477a65da1169c4f1c098a58db792baae7f7ada6
             env:
               TZ: "Europe/Berlin"
             probes:
