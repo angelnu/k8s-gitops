@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/lidarr
-              tag: 2.12.1.4636@sha256:eded02b53dc2818dd865dd5814f43bdaad9d7bcd07687edbc3131d1f0f3d3ca1
+              tag: 2.13.0.4664@sha256:b2dec31a6ff0a5c99703eea84caf1a9b285fe01c31bc1224641b2c78989b1008
 
             env:
               TZ: "Europe/Berlin"

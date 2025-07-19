@@ -24,7 +24,7 @@ spec:
           app:
             image:
               repository: docker.io/library/nginx
-              tag: 1.28.0@sha256:eaa7e36decc3421fc04478c586dfea0d931cebe47d5bc0b15d758a32ba51126f
+              tag: 1.29.0@sha256:f5c017fb33c6db484545793ffb67db51cdd7daebee472104612f73a85063f889
       cronjob:
         enabled: true
         type: cronjob

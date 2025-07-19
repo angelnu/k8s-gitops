@@ -23,13 +23,13 @@ spec:
           app:
             image:
               repository: ghcr.io/esphome/esphome
-              tag: 2025.5.2@sha256:04258d0d520d4755e92f9eb550bd94cb2487ceca8b02f30fae9c939e54969903
+              tag: 2025.7.2@sha256:3254321f9925c7a8589759d05472088efc02b997f74c34969e64d558424c4091
             env:
               ESPHOME_DASHBOARD_USE_PING: "true"
           editor:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.100.3@sha256:c5b7ec231b24f26ecee243e8d9f9df57af906d03c9c8238efd893217c9f1f725
+              tag: 4.102.1@sha256:8e54ed8a175d4dc223186078dc0c89157887ad8a2c17b41b2ff6f1a0b3d724d9
             args:
             - --auth
             - none
