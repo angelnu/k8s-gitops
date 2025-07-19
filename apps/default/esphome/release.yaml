@@ -43,6 +43,16 @@ spec:
       config:
         enabled: true
         existingClaim: esphome-pvc
+      build:
+        enabled: true
+        type: custom
+        globalMounts:
+        - path: /config/.esphome
+          readOnly: false
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/esphome_build"
       ssh-key:
         enabled: true
         type: secret
