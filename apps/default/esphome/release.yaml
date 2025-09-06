@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/esphome/esphome
-              tag: 2025.8.2@sha256:e2a591dbd83c1dd6b2d4000abc024591cd22e4be662472486e688e7726975706
+              tag: 2025.8.3@sha256:ce1225c9385420732016424394471bfb8fc067bd3cdd37925a467fea09b26cc7
             env:
               ESPHOME_DASHBOARD_USE_PING: "true"
           editor:
