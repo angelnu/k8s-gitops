@@ -23,3 +23,5 @@ spec:
       image:
         repository: ghcr.io/angelnu/cni-plugins
         tag: 1.8.0
+      path:
+        bin: /var/lib/rancher/k3s/data/cni
