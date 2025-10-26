@@ -14,7 +14,7 @@ spec:
   prune: true
   #validation: client
   # healthChecks:
-  #   - apiVersion: helm.toolkit.fluxcd.io/v1beta1
+  #   - apiVersion: helm.toolkit.fluxcd.io/v1
   #     kind: HelmRelease
   #     name: podinfo
   #     namespace: podinfo
