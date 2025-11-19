@@ -4493,7 +4493,7 @@ spec:
             resourceFieldRef:
               containerName: manager
               resource: limits.memory
-        image: ghcr.io/fluxcd/source-controller:v1.7.3
+        image: ghcr.io/fluxcd/source-controller:v1.7.4
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
