@@ -81,7 +81,8 @@ spec:
       replicas: 2
     
       env:
-        AUTHENTIK_POSTGRESQL__SSLMODE: require
+        - name: AUTHENTIK_POSTGRESQL__SSLMODE
+          value: require
 
       ingress:
         enabled: true
