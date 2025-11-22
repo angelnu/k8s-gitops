@@ -57,6 +57,9 @@ spec:
 
     postgresql:
       enabled: false
+    
+    env:
+      AUTHENTIK_POSTGRESQL__SSLMODE: require
 
     redis:
       enabled: true
