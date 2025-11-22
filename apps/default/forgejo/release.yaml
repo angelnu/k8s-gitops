@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: forgejo
-      version: "15.0.2"
+      version: "15.0.3"
       sourceRef:
         kind: HelmRepository
         name: forgejo
