@@ -57,9 +57,6 @@ spec:
 
     postgresql:
       enabled: false
-    
-    env:
-      AUTHENTIK_POSTGRESQL__SSLMODE: require
 
     redis:
       enabled: true
@@ -81,7 +78,10 @@ spec:
 
     
     server:
-      replicas: 1
+      replicas: 2
+    
+      env:
+        AUTHENTIK_POSTGRESQL__SSLMODE: require
 
       ingress:
         enabled: true
