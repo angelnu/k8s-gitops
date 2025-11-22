@@ -7,8 +7,7 @@ spec:
     requests:
       storage: "1Gi"
   accessModes:
-  - ReadWriteOnce
-  - ReadOnlyMany
+  - ReadWriteMany
   storageClassName: home-assistant-storageclass
 ---
 apiVersion: v1
@@ -20,8 +19,7 @@ spec:
   capacity:
     storage: "1Gi"
   accessModes:
-  - ReadWriteOnce
-  - ReadOnlyMany
+  - ReadWriteMany
   csi:
     driver: cephfs.csi.ceph.com
     nodeStageSecretRef:
