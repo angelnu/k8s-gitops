@@ -17,7 +17,10 @@ spec:
       interval: 5m
   values:
 
-    global:
+    global:    
+      env:
+        - name: AUTHENTIK_POSTGRESQL__SSLMODE
+          value: require
       volumes:
       - name: cluster-domain-cert
         secret:
@@ -79,10 +82,6 @@ spec:
     
     server:
       replicas: 2
-    
-      env:
-        - name: AUTHENTIK_POSTGRESQL__SSLMODE
-          value: require
 
       ingress:
         enabled: true
