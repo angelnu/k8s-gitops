@@ -8,14 +8,14 @@ spec:
       storage: "1Gi"
   accessModes:
   - ReadWriteMany
-  storageClassName: maddy-storageclass
+  storageClassName: maddy
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: maddy-pv
 spec:
-  storageClassName: maddy-storageclass
+  storageClassName: maddy
   capacity:
     storage: "1Gi"
   accessModes:
@@ -36,6 +36,6 @@ spec:
       "rootPath": /k8s/${CLUSTER_ENV}/maddy
     # volumeHandle can be anything, need not to be same
     # as PV name or volume name. keeping same for brevity
-    volumeHandle: maddy-pv
+    volumeHandle: maddy
   persistentVolumeReclaimPolicy: Delete
   volumeMode: Filesystem
