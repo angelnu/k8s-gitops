@@ -13,7 +13,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: maddy-pv
+  name: maddy
 spec:
   storageClassName: maddy
   capacity:
