@@ -17,12 +17,12 @@ spec:
   values:
     image:
       # -- image repository (official)
-      # repository: ghcr.io/foxcpp/maddy # Dockerhub - foxcpp/maddy
-      # tag: 0.8.1@sha256:55636d8a29588eea62d81d51acdafe38e0f694fb91801ab12dc1ed8c47b6439d
+      repository: ghcr.io/foxcpp/maddy # Dockerhub - foxcpp/maddy
+      tag: 0.8.1@sha256:55636d8a29588eea62d81d51acdafe38e0f694fb91801ab12dc1ed8c47b6439d
       # -- image repository (mine - for dev)
-      repository: angelnu/maddy
-      tag: dev
-      pullPolicy: Always
+      #repository: angelnu/maddy
+      #tag: dev
+      #pullPolicy: Always
 
 
     podAnnotations:
