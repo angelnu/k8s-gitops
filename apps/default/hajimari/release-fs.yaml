@@ -8,7 +8,6 @@ spec:
       storage: "1Gi"
   accessModes:
   - ReadWriteOnce
-  - ReadOnlyMany
   storageClassName: hajimari-storageclass
 ---
 apiVersion: v1
@@ -21,7 +20,6 @@ spec:
     storage: "1Gi"
   accessModes:
   - ReadWriteOnce
-  - ReadOnlyMany
   csi:
     driver: cephfs.csi.ceph.com
     nodeStageSecretRef:
