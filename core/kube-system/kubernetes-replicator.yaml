@@ -11,7 +11,7 @@ spec:
     spec:
       # renovate: registryUrl=https://windmill-labs.github.io/windmill-helm-charts/
       chart: kubernetes-replicator
-      version: 2.12.1
+      version: 2.12.2
       sourceRef:
         kind: HelmRepository
         name: mittwald
@@ -31,7 +31,7 @@ spec:
   values:
     image:
       repository: quay.io/mittwald/kubernetes-replicator
-      tag: v2.12.1
+      tag: v2.12.2
     grantClusterAdmin: false
     args:
       - -resync-period=5m
