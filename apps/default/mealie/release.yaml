@@ -31,7 +31,7 @@ spec:
           api:
             image:
               repository: ghcr.io/mealie-recipes/mealie
-              tag: v3.5.0@sha256:7f776bbb5457db7f58951c11e3aa881f0167675a78459d7a7f2cd5e42d181fa5
+              tag: v3.6.1@sha256:e4690164cc4ed1bbd82adc00dd9aeed37bd49d938fe2f0ca46cb5082d05ddb71
             env:
               TZ: "Europe/Berlin"
               API_PORT: &api_port "9000"
