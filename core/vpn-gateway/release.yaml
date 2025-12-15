@@ -63,6 +63,7 @@ spec:
 
             probes:
               liveness:
+                enabled: true
                 custom: true
                 type: custom
                 spec:
