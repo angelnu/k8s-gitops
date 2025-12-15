@@ -71,10 +71,11 @@ spec:
                     command:
                       - sh
                       - -c
-                      - if [ $(wget -q -O- https://ipinfo.io/country) == 'BE' ]; then exit 0; else exit $?; fi
+                      - COUNTRY=$(wget -q -O- https://ipinfo.io/country); echo $COUNTRY; if [ '$COUNTRY' == 'BE' ]; then exit 0; else exit $?; fi
                   initialDelaySeconds: 30
                   periodSeconds: 60
                   failureThreshold: 3
+                  timeoutSeconds: 5
       webhook:
         # Configure the main controller - this runs the VPN server
         containers:
