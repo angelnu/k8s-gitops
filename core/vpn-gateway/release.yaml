@@ -25,10 +25,10 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/angelnu/pod-gateway
-              # I am using dev version for testing - others should be using the default from the chart
-              pullPolicy: Always
-              tag: dev
+              # repository: ghcr.io/angelnu/pod-gateway
+              # # I am using dev version for testing - others should be using the default from the chart
+              # pullPolicy: Always
+              # tag: dev
           gluetun:
             enabled: true
             type: gluetun
