@@ -11,7 +11,7 @@ spec:
   chart:
     spec:
       chart: pod-gateway
-      version: 6.5.1
+      version: 7.0.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -19,75 +19,92 @@ spec:
         namespace: flux-system
   #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/pod-gatewa/values.yaml
   values:
+    controllers:
+      main:
+        # Configure the main controller - this runs the VPN server
+        containers:
+          main:
+            image:
+              repository: ghcr.io/angelnu/pod-gateway
+              # I am using dev version for testing - others should be using the default from the chart
+              pullPolicy: Always
+              tag: dev
+          gluetun:
+            enabled: true
+            type: gluetun
+            gluetun:
+              image:
+                repository: ghcr.io/qdm12/gluetun
+                tag: v3.40.3@sha256:ef4a44819a60469682c7b5e69183e6401171891feaa60186652d292c59e41b30
 
-    image:
-      repository: ghcr.io/angelnu/pod-gateway
-      # I am using dev version for testing - others should be using latest
-      tag: dev@sha256:88de9d27246087111f9ff621faa9c4b61c344f82b092b705f2fc2cca3b2ee11f
-    webhook:
-      image:
-        repository: ghcr.io/angelnu/gateway-admision-controller
-        # Use dev version
-        pullPolicy: Always
-        tag: dev
-    addons:
-      vpn:
+            env:
+            - name:  VPN_SERVICE_PROVIDER
+              value: airvpn
+            - name:  VPN_TYPE
+              value: wireguard
+            - name:  VPN_INTERFACE
+              value: wg0
+            - name:  FIREWALL
+              value: "off"
+            - name:  DOT
+              value: "off"
+            # - name:  WIREGUARD_PRIVATE_KEY
+            #   value: set in secret
+            # - name:  WIREGUARD_PRESHARED_KEY
+            #   value: set in secret
+            # - name:  WIREGUARD_ADDRESSES
+            #   value: set in secret
+            - name:  SERVER_COUNTRIES
+              value: Belgium
+            
+            envFrom:
+              - secretRef:
+                  name: airvpn
+
+            probes:
+              liveness:
+                enabled: true
+                type: custom
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - if [ $(wget -q -O- https://ipinfo.io/country) == 'BE' ]; then exit 0; else exit $?; fi
+                  initialDelaySeconds: 30
+                  periodSeconds: 60
+                  failureThreshold: 3
+      webhook:
+        # Configure the main controller - this runs the VPN server
+        containers:
+          main:
+            image:
+              repository: ghcr.io/angelnu/gateway-admision-controller
+              # I am using dev version for testing - others should be using the default from the chart
+              pullPolicy: Always
+              tag: dev
+
+    networkpolicies:
+      main:
         enabled: true
-        type: gluetun
-        gluetun:
-          image:
-            repository: docker.io/qmcgaw/gluetun
-            tag: latest@sha256:6a59b7901068b7c50ef52200152db3afd4b9cebc13e272b2169de4cdcad91006
-
-        env:
-        - name:  VPN_SERVICE_PROVIDER
-          value: airvpn
-        - name:  VPN_TYPE
-          value: wireguard
-        - name:  VPN_INTERFACE
-          value: wg0
-        - name:  FIREWALL
-          value: "off"
-        - name:  DOT
-          value: "off"
-        # - name:  WIREGUARD_PRIVATE_KEY
-        #   value: set in secret
-        # - name:  WIREGUARD_PRESHARED_KEY
-        #   value: set in secret
-        # - name:  WIREGUARD_ADDRESSES
-        #   value: set in secret
-        - name:  SERVER_COUNTRIES
-          value: Belgium
-        
-        envFrom:
-          - secretRef:
-              name: airvpn
-
-
-        livenessProbe:
-          exec:
-            command:
-              - sh
-              - -c
-              - if [ $(wget -q -O- https://ipinfo.io/country) == 'BE' ]; then exit 0; else exit $?; fi
-          initialDelaySeconds: 30
-          periodSeconds: 60
-          failureThreshold: 3
-
-        networkPolicy:
-          enabled: true
-
+        controller: main
+        policyTypes:
+          - Egress
+        rules:
           egress:
+            # Allow only VPN traffic to Internet
             - to:
-              - ipBlock:
-                  cidr: 0.0.0.0/0
+                - ipBlock:
+                    cidr: 0.0.0.0/0
               ports:
-              # VPN traffic
-              - port: &vpn_port 1637
-                protocol: UDP
+                # VPN traffic
+                - port: &vpn_port 1637
+                  protocol: UDP
+            # Allow any traffic within k8s
             - to:
-              - ipBlock:
-                  cidr: 10.0.0.0/8
+                - ipBlock:
+                    # Cluster IPs (default k3s)
+                    cidr: 10.0.0.0/8
 
     routed_namespaces:
     - vpn
