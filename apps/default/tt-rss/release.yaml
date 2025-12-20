@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: tt-rss
-      version: 6.0.0
+      version: t.0.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -17,11 +17,34 @@ spec:
     - name: tt-rss-db
   #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/tt-rss/values.yaml
   values:
-    image:
-      repository: ghcr.io/angelnu/tt-rss
-      tag: 2.0.9703
-      pullPolicy: Always      
-    
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/angelnu/tt-rss
+              tag: 2.0.9703
+              pullPolicy: Always
+
+            env:
+              TTRSS_SELF_URL_PATH: https://rss.${CLUSTER_DOMAIN}/
+              TTRSS_DB_HOST: tt-rss-db-zalando-postgres-cluster-postgres
+              TTRSS_DB_PORT: "5432"
+              TTRSS_DB_USER: postgres
+              TTRSS_DB_NAME: tt-rss
+              #TTRSS_DB_PASS: set in secret
+              TTRSS_SESSION_COOKIE_LIFETIME: "2592000" # 30 days in seconds
+              TTRSS_PLUGINS: auth_ldap, note # auth_remote, auth_internal
+
+              # LDAP settings
+              TTRSS_LDAP_AUTH_SERVER_URI: ldap://ldap.${CLUSTER_DOMAIN}
+              #TTRSS_LDAP_AUTH_USETLS: true #It does not work with php8.1
+              #TTRSS_LDAP_AUTH_ALLOW_UNTRUSTED_CERT: true
+              #TTRSS_LDAP_AUTH_BINDDN: set in secret
+              #TTRSS_LDAP_AUTH_BASEDN: set in secret
+              #TTRSS_LDAP_AUTH_SEARCHFILTER: set in secret
+              TTRSS_LDAP_AUTH_LOGIN_ATTRIB: cn
+
     ingress:
       main:
         enabled: true
@@ -33,39 +56,19 @@ spec:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
         hosts:
-        - host: rss.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            # Ignored if not kubeVersion >= 1.14-0
-            pathType: Prefix
+          - host: rss.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                # Ignored if not kubeVersion >= 1.14-0
+                pathType: Prefix
         tls:
-        - hosts:
-          - rss.${CLUSTER_DOMAIN}
-
-    env:
-      TTRSS_SELF_URL_PATH: https://rss.${CLUSTER_DOMAIN}/
-      TTRSS_DB_HOST: tt-rss-db-zalando-postgres-cluster-postgres
-      TTRSS_DB_PORT: "5432"
-      TTRSS_DB_USER: postgres
-      TTRSS_DB_NAME: tt-rss
-      #TTRSS_DB_PASS: set in secret
-      TTRSS_SESSION_COOKIE_LIFETIME: "2592000" # 30 days in seconds
-      TTRSS_PLUGINS: auth_ldap, note # auth_remote, auth_internal
-      
-      # LDAP settings
-      TTRSS_LDAP_AUTH_SERVER_URI: ldap://ldap.${CLUSTER_DOMAIN}
-      #TTRSS_LDAP_AUTH_USETLS: true #It does not work with php8.1
-      #TTRSS_LDAP_AUTH_ALLOW_UNTRUSTED_CERT: true
-      #TTRSS_LDAP_AUTH_BINDDN: set in secret
-      #TTRSS_LDAP_AUTH_BASEDN: set in secret
-      #TTRSS_LDAP_AUTH_SEARCHFILTER: set in secret
-      TTRSS_LDAP_AUTH_LOGIN_ATTRIB: cn
-    
+          - hosts:
+              - rss.${CLUSTER_DOMAIN}
     postgresql:
       enabled: false # use own chart
 
   valuesFrom:
-  - kind: Secret
-    name: "tt-rss-helm-values"
-    valuesKey: tt-rss.yaml
-    optional: false
+    - kind: Secret
+      name: "tt-rss-helm-values"
+      valuesKey: tt-rss.yaml
+      optional: false
