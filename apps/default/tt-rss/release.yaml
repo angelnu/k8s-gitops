@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: tt-rss
-      version: t.0.0
+      version: 7.0.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
