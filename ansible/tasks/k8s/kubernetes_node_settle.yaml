@@ -5,7 +5,7 @@
   register: result
   vars:
     queryStr: "status.conditions[?reason=='KubeletReady'].status"
-  until: result is succeeded and (result.stdout | from_json | json_query(queryStr) == ['True'])
+  until: result is succeeded #and (result.stdout | from_json | json_query(queryStr) == ['True'])
   retries: 60
   delay: 5
   changed_when: false

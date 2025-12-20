@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: dnsmadeeasy-webhook
-      version: 5.0.0
+      version: 6.0.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -19,11 +19,15 @@ spec:
   values:
     groupName: "${CLUSTER_DOMAIN}"
 
-    image:
-      repository: ghcr.io/angelnu/dnsmadeeasy-webhook
-      # I am using dev version for testing - others should be using latest
-      tag: dev@sha256:cf9dfdf6fdd254cd21953d759ff10b6be64d02911a79a0acbd9de9b1db208866
-    
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            repository: ghcr.io/angelnu/dnsmadeeasy-webhook
+            # I am using dev version for testing - others should be using latest
+            tag: dev@sha256:cf9dfdf6fdd254cd21953d759ff10b6be64d02911a79a0acbd9de9b1db208866
+
     cert-manager:
       # -- Install cert-manager chart as dependency.
       # Usually this is already installed in the cluster and not needed.
