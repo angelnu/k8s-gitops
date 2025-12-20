@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: zalando-postgres-cluster
-      version: 4.1.1
+      version: 5.0.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -15,14 +15,13 @@ spec:
         namespace: flux-system
   #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/zalando-postgres-cluster/values.yaml
   values:
-
     postgresql:
       volume:
         size: "10Gi"
       users:
         postgres:
-        - superuser
-        - createdb
+          - superuser
+          - createdb
       databases:
         postgres: postgres
       postgresql:
@@ -34,10 +33,10 @@ spec:
     persistentVolumes:
       hostPath: /media/db/home-assistant
       replicaNodes:
-      - ${CLUSTER_DB_NODE_0}
-      - ${CLUSTER_DB_NODE_1}
-      - ${CLUSTER_DB_NODE_2}
-    
+        - ${CLUSTER_DB_NODE_0}
+        - ${CLUSTER_DB_NODE_1}
+        - ${CLUSTER_DB_NODE_2}
+
     dumpBackup:
       enabled: true
       type: custom
@@ -49,7 +48,7 @@ spec:
       schedule: "@daily"
 
   valuesFrom:
-  - kind: Secret
-    name: "home-assistant-helm-values"
-    valuesKey: postgres.yaml
-    optional: false
+    - kind: Secret
+      name: "home-assistant-helm-values"
+      valuesKey: postgres.yaml
+      optional: false
