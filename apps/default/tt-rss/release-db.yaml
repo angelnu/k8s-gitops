@@ -23,7 +23,7 @@ spec:
       databases:
         tt-rss: postgres
       postgresql:
-        version: "15"
+        version: "17"
 
     superuser: {}
       # password: set in secret
