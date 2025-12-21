@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: multus
-      version: 5.0.7
+      version: 6.0.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -16,12 +16,18 @@ spec:
         namespace: flux-system
   #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/multus/values.yaml
   values:
-    image:
-      repository: ghcr.io/k8snetworkplumbingwg/multus-cni
-      tag: v4.2.3-thick
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/k8snetworkplumbingwg/multus-cni
+              tag: v4.2.3-thick
+        initContainers:
+          cni-installer:
+            image:
+              repository: ghcr.io/angelnu/cni-plugins
+              tag: 1.9.0
     cni:
-      image:
-        repository: ghcr.io/angelnu/cni-plugins
-        tag: 1.9.0
       path:
         bin: /var/lib/rancher/k3s/data/cni
