@@ -21,7 +21,7 @@ spec:
       nginx:
         enabled: true
         containers:
-          app:
+          main:
             image:
               repository: docker.io/library/nginx
               tag: 1.29.4@sha256:fb01117203ff38c2f9af91db1a7409459182a37c87cced5cb442d1d8fcc66d19
@@ -37,51 +37,51 @@ spec:
           successfulJobsHistory: 1
           suspend: false
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/angelnu/comics-rss-feed
               tag: v1.7.3@sha256:83c468fde849010de42a1a262190d4d837bf82bb7ddeea42f445eb8f214b5436
-            
+
             env:
               VERBOSE: "True"
 
             envFrom:
-            - secretRef:
-                name: comic-secrets
+              - secretRef:
+                  name: comic-secrets
       test:
         enabled: true
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/angelnu/comics-rss-feed
               tag: dev
               pullPolicy: Always
 
             command:
-            - "/bin/sh"
-            - "-c"
-            - |
-              trap 'exit' INT TERM
-              while [ 1 ]; do
-                sleep 600 &
-                wait $!
-              done
-            
+              - "/bin/sh"
+              - "-c"
+              - |
+                trap 'exit' INT TERM
+                while [ 1 ]; do
+                  sleep 600 &
+                  wait $!
+                done
+
             env:
               VERBOSE: "True"
 
             envFrom:
-            - secretRef:
-                name: comic-secrets
-    
+              - secretRef:
+                  name: comic-secrets
+
     persistence:
       feeds:
         enabled: true
         globalMounts:
-        - path: /feeds
-          readOnly: false
-        - path: /usr/share/nginx/html/scrapping
-          readOnly: true
+          - path: /feeds
+            readOnly: false
+          - path: /usr/share/nginx/html/scrapping
+            readOnly: true
         type: custom
         volumeSpec:
           nfs:
@@ -103,13 +103,12 @@ spec:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           #nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
         hosts:
-        - host: rss.${CLUSTER_DOMAIN}
-          paths: &paths
-          - path: /scrapping/
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
-        - host: rss.home.${CLUSTER_DOMAIN}
-          paths: *paths
-
+          - host: rss.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /scrapping/
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: rss.home.${CLUSTER_DOMAIN}
+            paths: *paths

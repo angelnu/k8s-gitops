@@ -20,7 +20,7 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: docker.io/hkotel/mealie
               tag: frontend-v1.0.0beta-4
@@ -35,7 +35,7 @@ spec:
             env:
               TZ: "Europe/Berlin"
               API_PORT: &api_port "9000"
-        
+
     persistence:
       api-data:
         enabled: true
@@ -43,7 +43,7 @@ spec:
         advancedMounts:
           main:
             api:
-            - path: /app/data
+              - path: /app/data
 
     service:
       main:
@@ -65,12 +65,12 @@ spec:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             auth_request_set $required_groups 'casa_editors';
         hosts:
-        - host: mealie.pub.${CLUSTER_DOMAIN}
-          paths: &paths
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
-        - host: mealie.home.${CLUSTER_DOMAIN}
-          paths: *paths
+          - host: mealie.pub.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: mealie.home.${CLUSTER_DOMAIN}
+            paths: *paths

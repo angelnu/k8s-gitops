@@ -21,7 +21,7 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/home-operations/prowlarr
               tag: 2.3.1@sha256:4394dff2311238bf5c31e006872122ed4e5f6bf042d33528d80acd44a09c57f7
@@ -42,7 +42,7 @@ spec:
             runAsGroup: 568
             fsGroup: 568
             fsGroupChangePolicy: "OnRootMismatch"
-    
+
     persistence:
       config:
         enabled: true
@@ -85,10 +85,10 @@ spec:
           hajimari.io/info: Media Search
           hajimari.io/group: media
         hosts:
-        - host: prowlarr.pub.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
+          - host: prowlarr.pub.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http

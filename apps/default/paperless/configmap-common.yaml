@@ -7,7 +7,7 @@ data:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               # renovate: datasource=helm-values depName=docker lookupName=ghcr.io/paperless-ngx/paperless-ngx
               repository: ghcr.io/paperless-ngx/paperless-ngx
@@ -88,4 +88,3 @@ data:
           hajimari.io/group: documents
           nginx.ingress.kubernetes.io/proxy-body-size: 4G
           nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-

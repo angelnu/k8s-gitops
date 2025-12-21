@@ -20,22 +20,22 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/angelnu/kicad-novnc
               tag: 7.0.9@sha256:2e0b872d092d81e2555cdfcade898336f72210be1f18a03c720af3d71174cd6c
-    
+
             securityContext:
               runAsUser: 33 # www-data
               runAsGroup: 33 # www-data
               fsGroup: 33 # www-data
-    
+
     persistence:
       config:
         enabled: true
         globalMounts:
-        - path: /configs/.config
-          readOnly: false
+          - path: /configs/.config
+            readOnly: false
         type: custom
         volumeSpec:
           nfs:
@@ -51,9 +51,9 @@ spec:
       esphome-devices:
         enabled: true
         globalMounts:
-        - path: /prints/Electronica/esphome_devices
-          subPath: devices
-          readOnly: false
+          - path: /prints/Electronica/esphome_devices
+            subPath: devices
+            readOnly: false
         existingClaim: esphome-pvc
 
     service:
@@ -75,13 +75,13 @@ spec:
           hajimari.io/info: KiCad
           hajimari.io/group: tools
         hosts:
-        - host: "kicad.pub.${CLUSTER_DOMAIN}"
-          paths:
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
+          - host: "kicad.pub.${CLUSTER_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
     image:
       repository: ghcr.io/angelnu/kicad-novnc
       tag: 7.0.9@sha256:2e0b872d092d81e2555cdfcade898336f72210be1f18a03c720af3d71174cd6c

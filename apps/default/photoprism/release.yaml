@@ -20,21 +20,21 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: docker.io/photoprism/photoprism
               tag: latest@sha256:db16ee6b1ba3e5bc5ad787a3141a082532d1b30932c8b1396fa609394374b83f
-            
+
             env:
               PHOTOPRISM_STORAGE_PATH: /photoprism/storage
               PHOTOPRISM_ORIGINALS_PATH: /photoprism/originals
               ## See other config options from PhotoPrism documentation: https://docs.photoprism.org/getting-started/config-options/
               # PHOTOPRISM_ADMIN_PASSWORD: "please-change"     # Initial admin password: PLEASE CHANGE!
               # PHOTOPRISM_DEBUG: "false"                      # Run in debug mode (shows additional log messages)
-              PHOTOPRISM_PUBLIC: "true"                     # No authentication required (disables password protection)
+              PHOTOPRISM_PUBLIC: "true" # No authentication required (disables password protection)
               # PHOTOPRISM_READONLY: "false"                   # Don't modify originals directory (reduced functionality)
               # PHOTOPRISM_EXPERIMENTAL: "false"               # Enable experimental features
-              PHOTOPRISM_SITE_URL: "https://photos.pub.${CLUSTER_DOMAIN}/"  # Canonical / public site URL
+              PHOTOPRISM_SITE_URL: "https://photos.pub.${CLUSTER_DOMAIN}/" # Canonical / public site URL
               PHOTOPRISM_SITE_TITLE: "Nunez Gregoire"
               PHOTOPRISM_SITE_CAPTION: "Casa"
               PHOTOPRISM_SITE_DESCRIPTION: "una descripcion"
@@ -50,8 +50,8 @@ spec:
         enabled: true
         type: custom
         globalMounts:
-        - path: /photoprism/storage
-          readOnly: false
+          - path: /photoprism/storage
+            readOnly: false
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
@@ -61,13 +61,13 @@ spec:
         enabled: true
         type: custom
         globalMounts:
-        - path: /photoprism/originals
-          readOnly: false
+          - path: /photoprism/originals
+            readOnly: false
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_KUBERNETES}/photoprism/originals"
-    
+
     service:
       main:
         controller: main
@@ -85,12 +85,12 @@ spec:
           hajimari.io/group: media
           nginx.ingress.kubernetes.io/proxy-body-size: 4G
         hosts:
-        - host: photos.pub.${CLUSTER_DOMAIN}
-          paths: &paths
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
-        - host: photos.home.${CLUSTER_DOMAIN}
-          paths: *paths
+          - host: photos.pub.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: photos.home.${CLUSTER_DOMAIN}
+            paths: *paths

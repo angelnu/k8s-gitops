@@ -20,7 +20,7 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/esphome/esphome
               tag: 2025.12.1@sha256:3a81bf977aca174a74800e33baa11565a77c3f56b574206087555349c6f275bc
@@ -31,14 +31,14 @@ spec:
               repository: ghcr.io/coder/code-server
               tag: 4.107.0@sha256:4b622c4cd1b0f559fec0df67fcf09042d63e9ce84c575102066afd9511695627
             args:
-            - --auth
-            - none
-            - --port
-            - "12321"
-            - /config
+              - --auth
+              - none
+              - --port
+              - "12321"
+              - /config
             securityContext:
               runAsUser: 0
-    
+
     persistence:
       config:
         enabled: true
@@ -47,21 +47,21 @@ spec:
         enabled: true
         type: emptyDir
         globalMounts:
-        - path: /config/.esphome
-          readOnly: false
+          - path: /config/.esphome
+            readOnly: false
       ssh-key:
         enabled: true
         type: secret
         name: git-ssh-keys
         defaultMode: 256
         items:
-        - key: id_rsa
-          path: id_rsa
+          - key: id_rsa
+            path: id_rsa
         advancedMounts:
           main:
             editor:
-            - path: /root/.ssh/id_rsa
-              subPath: id_rsa
+              - path: /root/.ssh/id_rsa
+                subPath: id_rsa
 
     service:
       main:
@@ -86,31 +86,31 @@ spec:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             auth_request_set $required_groups 'casa_editors';
         hosts:
-        - host: esphome.pub.${CLUSTER_DOMAIN}
-          paths: &paths
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
-        - host: esphome.home.${CLUSTER_DOMAIN}
-          paths: *paths
+          - host: esphome.pub.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: esphome.home.${CLUSTER_DOMAIN}
+            paths: *paths
       editor:
         enabled: true
         annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/icon: vscode-icons:file-type-vscode
-            hajimari.io/info: Esphome editor
-            hajimari.io/group: automation
-            nginx.ingress.kubernetes.io/configuration-snippet: |
-              auth_request_set $required_groups 'casa_editors';
+          hajimari.io/enable: "true"
+          hajimari.io/icon: vscode-icons:file-type-vscode
+          hajimari.io/info: Esphome editor
+          hajimari.io/group: automation
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            auth_request_set $required_groups 'casa_editors';
         hosts:
-        - host: esphome-editor.home.${CLUSTER_DOMAIN}
-          paths: &paths_editor
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: editor
-              port: http
-        - host: esphome-editor.pub.${CLUSTER_DOMAIN}
-          paths: *paths_editor
+          - host: esphome-editor.home.${CLUSTER_DOMAIN}
+            paths: &paths_editor
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: editor
+                  port: http
+          - host: esphome-editor.pub.${CLUSTER_DOMAIN}
+            paths: *paths_editor

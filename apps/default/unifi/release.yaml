@@ -20,10 +20,10 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: docker.io/jacobalberty/unifi
-              tag: v10.0.162    
+              tag: v10.0.162
             env:
               RUNAS_UID0: "false"
               UNIFI_UID: "999"
@@ -39,7 +39,7 @@ spec:
                 "namespace": "kube-system",
                 "ips": ["${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_MACVLAN_UNIFI}"]
               }]
-    
+
     persistence:
       unifi:
         enabled: true
@@ -97,12 +97,12 @@ spec:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
         hosts:
-        - host: unifi.pub.${CLUSTER_DOMAIN}
-          paths: &paths
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
-        - host: unifi.home.${CLUSTER_DOMAIN}
-          paths: *paths
+          - host: unifi.pub.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: unifi.home.${CLUSTER_DOMAIN}
+            paths: *paths

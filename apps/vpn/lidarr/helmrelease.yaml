@@ -20,7 +20,7 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/home-operations/lidarr
               tag: 3.1.1.4876@sha256:0982783dcc1ede8d45458ffc1d0d96607503035d743f6d18f9c2676a765d5dfe
@@ -63,7 +63,6 @@ spec:
             server: "${NFS_SERVER}"
             path: "${NFS_DOWNLOADS}"
 
-
     service:
       main:
         controller: main
@@ -73,7 +72,7 @@ spec:
 
     ingress:
       main:
-        enabled: true        
+        enabled: true
         annotations:
           hajimari.io/enable: "true"
           hajimari.io/icon: music-box
@@ -82,10 +81,10 @@ spec:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           external-dns.alpha.kubernetes.io/target: "ipv4.${SECRET_DOMAIN}"
         hosts:
-        - host: lidarr.pub.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
+          - host: lidarr.pub.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http

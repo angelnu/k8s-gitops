@@ -20,7 +20,7 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: collabora/code
               tag: 25.04.8.1.1
@@ -40,20 +40,20 @@ spec:
             minReplicas: 1
             maxReplicas: 3
             metrics:
-            - type: Resource
-              resource:
-                name: cpu
-                target:
-                  type: Utilization
-                  averageUtilization: 50
-  
+              - type: Resource
+                resource:
+                  name: cpu
+                  target:
+                    type: Utilization
+                    averageUtilization: 50
+
     service:
       main:
         controller: main
         ports:
           http:
             port: 9980
-    
+
     ingress:
       main:
         enabled: true
@@ -63,10 +63,10 @@ spec:
           #nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
-        - host: collabora.pub.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
+          - host: collabora.pub.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http

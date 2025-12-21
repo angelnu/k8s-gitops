@@ -20,7 +20,7 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: docker.io/jellyfin/jellyfin
               tag: 10.11.4
@@ -29,13 +29,13 @@ spec:
               JELLYFIN_CACHE_DIR: "/config/cache"
             securityContext:
               supplementalGroups:
-              #   # Hardware acceleration using an Intel iGPU w/ QuickSync
-              #   # These IDs below should be matched to your `video` and `render` group on the host
-              #   # To obtain those IDs run the following grep statement on the host:
-              #   # $ cat /etc/group | grep "video\|render"
-              - 44
-              - 109
-              - 100
+                #   # Hardware acceleration using an Intel iGPU w/ QuickSync
+                #   # These IDs below should be matched to your `video` and `render` group on the host
+                #   # To obtain those IDs run the following grep statement on the host:
+                #   # $ cat /etc/group | grep "video\|render"
+                - 44
+                - 109
+                - 100
             resources:
               requests:
                 #gpu.intel.com/i915: 1
@@ -44,7 +44,7 @@ spec:
               limits:
                 #gpu.intel.com/i915: 1
                 memory: 8000Mi
-    
+
     persistence:
       config:
         enabled: true
@@ -65,7 +65,7 @@ spec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_VIDEO}"
-      music:  
+      music:
         enabled: true
         type: custom
         volumeSpec:
@@ -86,7 +86,7 @@ spec:
         type: LoadBalancer
         loadBalancerIP: ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_JELLYFIN}
         externalIPs:
-        - ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_JELLYFIN}
+          - ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_JELLYFIN}
         externalTrafficPolicy: Local
         ports:
           http:
@@ -102,12 +102,12 @@ spec:
           hajimari.io/group: media
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
-        - host: jellyfin.home.${CLUSTER_DOMAIN}
-          paths: &paths
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
-        - host: jellyfin.pub.${CLUSTER_DOMAIN}
-          paths: *paths
+          - host: jellyfin.home.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: jellyfin.pub.${CLUSTER_DOMAIN}
+            paths: *paths

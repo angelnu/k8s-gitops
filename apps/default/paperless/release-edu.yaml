@@ -20,7 +20,7 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             env:
               PAPERLESS_OCR_LANGUAGE: spa
               PAPERLESS_IGNORE_DATES: “1984-09-09”
@@ -51,18 +51,18 @@ spec:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             auth_request_set $required_usernames 'eduardo';
         hosts:
-        - host: paperless-edu.pub.${CLUSTER_DOMAIN}
-          paths: &paths
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
-        - host: paperless-edu.home.${CLUSTER_DOMAIN}
-          paths: *paths
+          - host: paperless-edu.pub.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: paperless-edu.home.${CLUSTER_DOMAIN}
+            paths: *paths
 
   valuesFrom:
-  - kind: ConfigMap
-    name: "paperless-helm-values"
-    valuesKey: commmon.yaml
-    optional: false
+    - kind: ConfigMap
+      name: "paperless-helm-values"
+      valuesKey: commmon.yaml
+      optional: false

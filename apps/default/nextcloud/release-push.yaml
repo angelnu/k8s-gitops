@@ -22,7 +22,7 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: docker.io/library/nextcloud
               tag: 32.0.3@sha256:a9ef7ed15dbf3f9fcf6dc2a41a15af572fcc077f220640cabfe574a3ffbf5766
@@ -37,7 +37,7 @@ spec:
               - --log-level
               - warning
             env:
-              - name: NEXTCLOUD_URL 
+              - name: NEXTCLOUD_URL
                 value: http://nextcloud:8080
 
     persistence:
@@ -48,7 +48,7 @@ spec:
           nfs:
             server: "${NFS_SERVER}"
             path: "${NFS_KUBERNETES}/nextcloud"
-    
+
     service:
       main:
         controller: main
@@ -68,10 +68,10 @@ spec:
         hosts:
           - host: nextcloud.${CLUSTER_DOMAIN}
             paths: &paths
-            - path: /push/
-              pathType: Prefix
-              service:
-                identifier: main
-                port: http
+              - path: /push/
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
           - host: nextcloud.home.${CLUSTER_DOMAIN}
             paths: *paths

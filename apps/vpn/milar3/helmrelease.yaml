@@ -27,7 +27,7 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/linuxserver/mylar3
               tag: version-v0.7.2
@@ -76,17 +76,17 @@ spec:
 
     ingress:
       main:
-        enabled: true        
+        enabled: true
         annotations:
           hajimari.io/enable: "true"
           hajimari.io/icon: simple-icons:mdbook
           hajimari.io/info: Comic Book
           hajimari.io/group: media
         hosts:
-        - host: milar3.pub.${CLUSTER_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
+          - host: milar3.pub.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http

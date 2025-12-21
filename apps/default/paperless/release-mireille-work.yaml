@@ -20,7 +20,7 @@ spec:
     controllers:
       main:
         containers:
-          app:
+          main:
             env:
               PAPERLESS_OCR_LANGUAGE: eng
               PAPERLESS_URL: https://paperless-mireille-work.pub.${CLUSTER_DOMAIN}
@@ -49,18 +49,18 @@ spec:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             auth_request_set $required_usernames 'mireille';
         hosts:
-        - host: paperless-mireille-work.pub.${CLUSTER_DOMAIN}
-          paths: &paths
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: main
-              port: http
-        - host: paperless-mireille-work.home.${CLUSTER_DOMAIN}
-          paths: *paths
+          - host: paperless-mireille-work.pub.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: paperless-mireille-work.home.${CLUSTER_DOMAIN}
+            paths: *paths
 
   valuesFrom:
-  - kind: ConfigMap
-    name: "paperless-helm-values"
-    valuesKey: commmon.yaml
-    optional: false
+    - kind: ConfigMap
+      name: "paperless-helm-values"
+      valuesKey: commmon.yaml
+      optional: false
