@@ -23,7 +23,7 @@ spec:
           main:
             image:
               repository: ghcr.io/angelnu/tt-rss
-              tag: 2.0.9703
+              tag: 2.0.9909
               pullPolicy: Always
 
             env:
