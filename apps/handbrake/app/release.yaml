@@ -1,0 +1,90 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: "${MY_APP}"
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        serviceAccount:
+          identifier: default
+        containers:
+          main:
+            image:
+              repository: docker.io/jlesage/handbrake
+              tag: v25.12.4@sha256:e18ac010fe9808eaa8744c4ebc21bb6d451321953b3ac112dc85421213bb15c6
+            env:
+              TZ: "Europe/Berlin"
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:hostmount-anyuid-v2  # For NFS mount
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: handbrake-pvc
+      videos:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_VIDEO}"
+      downloads:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 5800
+          vnc:
+            enabled: false
+            port: 5900
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: file-video
+          hajimari.io/info: Video editor
+          hajimari.io/group: media
+        hosts:
+          - host: handbrake.pub.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: handbrake.home.${CLUSTER_DOMAIN}
+            paths: *paths
