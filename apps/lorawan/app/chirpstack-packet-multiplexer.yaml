@@ -20,6 +20,9 @@ spec:
       tag: d8b5ed08c5fff375cd60d7a1af302d0a4237237c
 
     log_level: 4
+    
+    securityContext:
+      runAsUser: 0
 
     backend_hosts:
     #- "lorawan-server:1700"
