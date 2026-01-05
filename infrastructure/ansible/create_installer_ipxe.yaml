@@ -1,0 +1,57 @@
+- name: Cluster {{ cluster_id }} - Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755 # For some reason, item.mode converts 0755 into 493 ... weird
+  loop:
+    - clusters/{{ cluster_id }}
+
+- name: Cluster {{ cluster_id }} - Create openshift-install configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  vars:
+    ssh_pub_key: "{{ ssh_pub_key_task.stdout }}"
+    pull_secret: "{{ lookup('file', './files/pull_secret.txt', errors='ignore') }}"
+  with_items:
+    - {
+        src: templates/install-config.yaml.j2,
+        dest: "clusters/{{ cluster_id }}/install-config.yaml",
+      }
+    - {
+        src: templates/agent-config.yaml.j2,
+        dest: "clusters/{{ cluster_id }}/agent-config.yaml",
+      }
+  register: okd_installer_config_files
+
+# Let's create the proper OKD installation files (ignition, manifests, ...)
+- name: Cluster {{ cluster_id }} - Run openshift-installer
+  when: okd_installer_config_files.changed
+  shell: |
+    cd clusters/{{ cluster_id }}
+    rm -rf install-dir
+    mkdir install-dir
+    cp install-config.yaml agent-config.yaml install-dir/
+    {% if ipxe.enabled %}
+      {% set cmd = "pxe-files" %}
+    {% else %}
+      {% set cmd = "image" %}
+    {% endif %}
+    openshift-install agent create {{ cmd }} --dir=install-dir
+  environment:
+    PATH: "/usr/local/bin:{{ lookup('env', 'PATH') }}"
+  register: installer_task
+
+# Make these files available on the Web server
+- name: Cluster {{ cluster_id }} - Copy boot-artifacts to www directory
+  when: installer_task.changed
+  become: true
+  shell: |
+    rm -rf /var/www/html/{{ cluster_id }}
+    mkdir /var/www/html/{{ cluster_id }}
+    {% if ipxe.enabled %}
+    cp -R clusters/{{ cluster_id }}/install-dir/boot-artifacts/* /var/www/html/{{ cluster_id }}
+    {% else %}
+    cp clusters/{{ cluster_id }}/install-dir/agent.x86_64.iso /var/www/html/{{ cluster_id }}/
+    {% endif %}
+    chmod -R 755 /var/www/html/{{ cluster_id }}

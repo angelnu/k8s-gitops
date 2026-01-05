@@ -1,0 +1,15 @@
+---
+user:
+  name: ansible
+  home: /home/ansible
+ipxe:
+  enabled: false
+service:
+  name: okd-service
+  os: centos10-cloudinit
+  target_host: pve4
+  ip: 192.168.5.250
+  macaddr: 7A:00:00:00:03:FF
+  cores: 2
+  ram: 2048
+  vmid: 400

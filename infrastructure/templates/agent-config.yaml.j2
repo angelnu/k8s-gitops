@@ -1,0 +1,43 @@
+---
+{% set cluster = clusters[cluster_id] %}
+apiVersion: v1alpha1
+metadata:
+  name: {{ cluster_id }}
+  namespace: agent
+rendezvousIP: {{ clusters[cluster_id].rendezvousIP }}
+bootArtifactsBaseURL: http://{{ service.ip }}:8080/{{ cluster_id }}
+hosts:
+{% for machine in cluster.masters + clusters[cluster_id].workers %}
+{% if machine in cluster.masters %}
+  - role: master
+    hostname: control-plane{{ loop.index0 }}
+{% else %}
+  - role: worker
+    hostname: worker{{ loop.index0 - (cluster.masters | length) }}
+{% endif %}
+    interfaces:
+      - name: ens18
+        macAddress: {{ machine.macaddr }}
+    networkConfig:
+      interfaces:
+        - name: ens18
+          type: ethernet
+          state: up
+          mac-address: {{ machine.macaddr }}
+          ipv4:
+            enabled: true
+            address:
+              - ip: {{ machine.ip }}
+                prefix-length: {{ lab_subnet }}
+            dhcp: false
+      dns-resolver:
+        config:
+          server:
+            - {{ resolver }}
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: {{ lab_gw }}
+            next-hop-interface: ens18
+            table-id: 254
+{% endfor %}

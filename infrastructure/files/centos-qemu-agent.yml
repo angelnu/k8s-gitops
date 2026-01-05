@@ -1,0 +1,4 @@
+#cloud-config
+runcmd:
+  - yum install -y qemu-guest-agent
+  - systemctl start qemu-guest-agent

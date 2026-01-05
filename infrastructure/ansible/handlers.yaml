@@ -1,0 +1,10 @@
+---
+- name: Restart DHCP
+  service:
+    name: kea-dhcp4
+    state: restarted
+
+- name: Restart WebServer
+  service:
+    name: httpd
+    state: restarted

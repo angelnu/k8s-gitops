@@ -1,0 +1,14 @@
+domain: angelnu.com
+resolver: 192.168.2.1 # DNS server
+# If ipxe, ensure to use a subnetwork without DHCP server
+lab_cidr: 192.168.0.0/19
+lab_gw: 192.168.2.1
+lab_subnet: 19
+
+bridge: vmbr0
+vlan: 0
+network_type: OVNKubernetes #Cilium
+
+# Only needed if ipxe.enabled
+lab_dhcp_start: 192.168.251.100
+lab_dhcp_stop: 192.168.251.150

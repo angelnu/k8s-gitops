@@ -1,0 +1,133 @@
+---
+- name: Setting up Linux server
+  hosts: service
+  vars_files:
+    - vars/main.yaml
+    - vars/clusters.yaml
+    - vars/network.yaml
+  handlers:
+    - import_tasks: ansible/handlers.yaml
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  tasks:
+    - name: Install common packages
+      yum:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - httpd # To host files for IPXE or Proxmox
+          - nmstate # for openshift-installer to validate network config in agente-config.yaml
+
+    - name: Enable services
+      service:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - httpd
+
+    - name: set timezone to Europe/Brussels
+      timezone:
+        name: Europe/Brussels
+
+    - name: Create directories
+      file:
+        path: "{{ item.name }}"
+        state: directory
+        owner: "{{ item.owner }}"
+        mode: 0755 # For some reason, item.mode converts 0755 into 493 ... weird
+      loop:
+        - { name: tmp, owner: ansible, mode: 0755 }
+        - { name: /etc/dhcp, owner: root, mode: 0755 }
+
+    - name: Install KEA (DHCP) packages if ipxe boot
+      yum:
+        name:
+          - kea # replaces old ISC DHCP server
+        state: '{{ "present" if ipxe.enabled else "absent" }}'
+
+    - name: Enable KEA (DHCP Server) service if ipxe boot
+      when: ipxe.enabled
+      service:
+        name: kea-dhcp4
+        state: started
+
+    - name: Create KEA (DHCP Server) configuration if ipxe boot
+      when: ipxe.enabled
+      template:
+        src: templates/kea.yaml.j2
+        dest: /etc/kea/kea-dhcp4.conf
+        owner: root
+        mode: 0640
+      notify:
+        - Restart DHCP
+
+    - name: change httpd (Web Server) port
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: "^Listen.*80"
+        line: "Listen 8080"
+        backup: yes
+      notify:
+        - Restart WebServer
+
+- name: Fetch OKD installer
+  hosts: service
+  vars_files:
+    - vars/okd-version.yaml
+  become_method: sudo
+  gather_facts: no
+  tasks:
+    # Let's download the right files for our version of OKD
+    - name: Download OKD files
+      get_url:
+        url: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        mode: 0644
+      with_items:
+        - { src: "{{ okd.client }}", dest: tmp/client.tar.gz }
+        - { src: "{{ okd.install }}", dest: tmp/install.tar.gz }
+      register: download_okd
+
+    - name: Extract OKD binaries (oc, kubectl, openshift-install) to /usr/local/bin
+      when: download_okd.changed
+      become: yes
+      unarchive:
+        src: "{{ item.src }}"
+        dest: /usr/local/bin
+        remote_src: yes
+      loop:
+        - { src: "tmp/install.tar.gz" }
+        - { src: "tmp/client.tar.gz" }
+
+    - name: Remove generated cluster install_dirs when new installer was fetched
+      when: download_okd.changed
+      ansible.builtin.file:
+        path: clusters
+        state: absent
+
+    # Generating the key that will be used by OKD to communicate will all nodes.
+    - name: keygen
+      community.crypto.openssh_keypair:
+        path: .ssh/ssh_okd
+
+- name: Create installer iPXE for each cluster
+  hosts: service
+  vars_files:
+    - vars/clusters.yaml
+    - vars/main.yaml
+    - vars/network.yaml
+  become_method: sudo
+  gather_facts: no
+  tasks:
+    - name: Read ssh public key
+      command: "cat .ssh/ssh_okd.pub"
+      register: ssh_pub_key_task
+      changed_when: false
+
+    - name: Run a set of tasks multiple times
+      ansible.builtin.include_tasks: ansible/create_installer_ipxe.yaml
+      loop: "{{ clusters.keys() }}"
+      loop_control:
+        loop_var: cluster_id

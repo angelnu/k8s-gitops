@@ -1,0 +1,36 @@
+---
+{% set cluster = clusters[cluster_id] %}
+apiVersion: v1
+baseDomain: {{ domain }}
+metadata:
+  name: {{ cluster_id }}
+
+compute:
+- hyperthreading: Enabled
+  name: worker
+  replicas: {{ cluster.workers | length }}
+
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: {{ cluster.masters | length }}
+
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14 
+    hostPrefix: 23 
+  machineNetwork:
+  - cidr: {{ lab_cidr }}
+  networkType: OVNKubernetes
+  serviceNetwork: 
+  - 172.30.0.0/16
+
+platform:
+  baremetal:
+    apiVips: 
+      - {{ cluster.apiVip }}
+    ingressVips: 
+      - {{ cluster.ingressVip }}
+
+pullSecret: '{{ pull_secret | default('{"auths":{"fake":{"auth": ""}}}', true) }}'
+sshKey: '{{ ssh_pub_key }}'   
