@@ -1,0 +1,114 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ${MY_NAMESPACE}
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: docker.io/jacobalberty/unifi
+              tag: v10.0.162
+            env:
+              RUNAS_UID0: "false"
+              BIND_PRIV: "true"
+              UNIFI_STDOUT: "true"
+              JVM_INIT_HEAP_SIZE:
+              JVM_MAX_HEAP_SIZE: 1024M
+            securityContext:
+              runAsUser: 999
+              runAsGroup: 999
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name": "localnet",
+                  "interface": "localnet",
+                  "ips": [
+                    "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LOCALNET_UNIFI}/${CLUSTER_LOCALNET_PREFIX_LENGTH}"
+                    ]
+                }
+              ]
+
+    persistence:
+      unifi:
+        enabled: true
+        existingClaim: unifi-pvc
+
+    service:
+      main:
+        controller: main
+        #annotations:
+        #  metallb.universe.tf/loadBalancerIPs: ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}
+        #  metallb.universe.tf/allow-shared-ip: unifi
+        #type: LoadBalancer
+        #externalTrafficPolicy: Local
+        ports:
+          http:
+            port: 8443
+            protocol: HTTPS
+          controller:
+            enabled: true
+            port: 8080
+            protocol: TCP
+          portal-http:
+            enabled: false
+            port: 8880
+            protocol: HTTP
+          portal-https:
+            enabled: false
+            port: 8843
+            protocol: HTTPS
+          speedtest:
+            enabled: true
+            port: 6789
+            protocol: TCP
+          stun:
+            enabled: true
+            port: 3478
+            protocol: UDP
+          syslog:
+            enabled: true
+            port: 5514
+            protocol: UDP
+          discovery:
+            enabled: true
+            port: 10001
+            protocol: UDP
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: wifi
+          hajimari.io/info: Manage Unifi Devices
+          hajimari.io/group: network
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+        hosts:
+          - host: unifi.pub.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: unifi.home.${CLUSTER_DOMAIN}
+            paths: *paths

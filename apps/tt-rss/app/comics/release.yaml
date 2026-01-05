@@ -1,0 +1,130 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: comics
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      nginx:
+        serviceAccount:
+          identifier: default
+        enabled: true
+        containers:
+          main:
+            image:
+              repository: docker.io/library/nginx
+              tag: 1.29.4@sha256:fb01117203ff38c2f9af91db1a7409459182a37c87cced5cb442d1d8fcc66d19
+      cronjob:
+        serviceAccount:
+          identifier: default
+        type: cronjob
+        cronjob:
+          backoffLimit: 6
+          concurrencyPolicy: Replace
+          failedJobsHistory: 1
+          schedule: "0 10 * * *"
+          startingDeadlineSeconds: 30
+          successfulJobsHistory: 1
+          suspend: false
+        containers:
+          main:
+            image:
+              repository: ghcr.io/angelnu/comics-rss-feed
+              tag: v1.8.@sha256:b54685d47500b5a3224d801c8bc3e7c629faaf4328ceffa76fa1c5be69311c8c
+
+            env:
+              VERBOSE: "True"
+
+            envFrom:
+              - secretRef:
+                  name: comic-secrets
+      test:
+        serviceAccount:
+          identifier: default
+        containers:
+          main:
+            image:
+              repository: ghcr.io/angelnu/comics-rss-feed
+              tag: dev
+              pullPolicy: Always
+
+            command:
+              - "/bin/sh"
+              - "-c"
+              - |
+                trap 'exit' INT TERM
+                while [ 1 ]; do
+                  sleep 600 &
+                  wait $!
+                done
+
+            env:
+              VERBOSE: "True"
+
+            envFrom:
+              - secretRef:
+                  name: comic-secrets
+
+    persistence:
+      feeds:
+        enabled: true
+        globalMounts:
+          - path: /feeds
+            readOnly: false
+          - path: /usr/share/nginx/html/scrapping
+            readOnly: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/ttrss/feeds"
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:hostmount-anyuid  # For NFS mount
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+
+    service:
+      main:
+        controller: nginx
+        ports:
+          http:
+            port: 80
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          #nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
+        hosts:
+          - host: rss.${CLUSTER_SHORT_DOMAIN}
+            paths: &paths
+              - path: /scrapping/
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: rss.home.${CLUSTER_DOMAIN}
+            paths: *paths

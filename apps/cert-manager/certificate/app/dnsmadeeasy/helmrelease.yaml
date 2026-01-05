@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: dnsmadeeasy-webhook
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: dnsmadeeasy-webhook
+      version: 5.0.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: angelnu-helm-charts
+        namespace: flux-system
+  #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/dnsmadeeasy-webhook/values.yaml
+  values:
+    groupName: "${CLUSTER_DOMAIN}"
+    serviceAccountName: cert-manager
+
+    image:
+      repository: ghcr.io/angelnu/dnsmadeeasy-webhook
+      # I am using dev version for testing - others should be using latest
+      tag: dev@sha256:5e0a82744e137b3dc30d0ed10a496362bdd08b24c5ad506e9e2f6887a88b3708
+    
+    cert-manager:
+      # -- Install cert-manager chart as dependency.
+      # Usually this is already installed in the cluster and not needed.
+      enabled: false

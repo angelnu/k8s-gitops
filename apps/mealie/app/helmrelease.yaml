@@ -1,0 +1,85 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: "${MY_NAMESPACE}"
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/mealie-recipes/mealie
+              tag: v3.9.2
+            env:
+              TZ: "Europe/Berlin"
+              ALLOW_SIGNUP: "true"
+              ALLOW_PASSWORD_LOGIN: "false"
+
+              API_PORT: &api_port "9000"
+
+              DB_ENGINE: sqlite # Optional: 'sqlite', 'postgres'
+              # =====================================
+              # Postgres Config
+              POSTGRES_USER: mealie
+              POSTGRES_PASSWORD: mealie
+              POSTGRES_SERVER: postgres
+              POSTGRES_PORT: 5432
+              POSTGRES_DB: mealie
+              # =====================================
+              # Email Configuration
+              # SMTP_HOST=
+              # SMTP_PORT=587
+              # SMTP_FROM_NAME=Mealie
+              # SMTP_AUTH_STRATEGY=TLS # Options: 'TLS', 'SSL', 'NONE'
+              # SMTP_FROM_EMAIL=
+              # SMTP_USER=
+              # SMTP_PASSWORD=
+
+    persistence:
+      api-data:
+        enabled: true
+        existingClaim: mealie-pvc
+        globalMounts:
+        - path: /app/data
+
+    service:
+      main:
+        controller: main
+        ports:
+          api:
+            port: *api_port
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: game-icons:meal
+          hajimari.io/info: Meal Recipes
+          hajimari.io/group: documents
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            auth_request_set $required_groups 'casa_editors';
+        hosts:
+          - host: mealie.pub.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: api
+          - host: mealie.home.${CLUSTER_DOMAIN}
+            paths: *paths

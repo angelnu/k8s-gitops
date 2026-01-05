@@ -1,0 +1,22 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ingress-nginx-scc
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: ${MY_NAMESPACE}
+  - kind: ServiceAccount
+    name: ingress-nginx-admission
+    namespace: ${MY_NAMESPACE}
+  - kind: ServiceAccount
+    name: ingress-nginx
+    namespace: ${MY_NAMESPACE}
+  - kind: ServiceAccount
+    name: ingress-nginx-backend
+    namespace: ${MY_NAMESPACE}
+roleRef:
+  kind: ClusterRole
+  name: system:openshift:scc:privileged
+  apiGroup: rbac.authorization.k8s.io

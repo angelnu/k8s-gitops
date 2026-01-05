@@ -1,0 +1,91 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nextcloud-push-service
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  dependsOn:
+    - name: nextcloud
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        serviceAccount:
+          identifier: default
+        containers:
+          main:
+            image:
+              repository: docker.io/library/nextcloud
+              tag: 32.0.3@sha256:a283ac77493c810ea3153ae5de71feec6f5abe30fc9e110888ae937e3cf28965
+            # How to Enable
+            # 1. Install "client push" app within nextcloud
+            # 2. sudo -u www-data php -d memory_limit=-1 /var/www/html/occ notify_push:setup https://nextcloud.mydomain.com/push
+            command:
+              - /nextcloud/custom_apps/notify_push/bin/x86_64/notify_push
+              - /nextcloud/config/config.php
+              - --port
+              - &port "7867"
+              - --log-level
+              - warning
+            env:
+              - name: NEXTCLOUD_URL
+                value: http://nextcloud:8080
+
+    persistence:
+      nextcloud:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_KUBERNETES}/nextcloud"
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:hostmount-anyuid  # For NFS mount
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            enabled: true
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          #nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
+
+        hosts:
+          - host: nextcloud.${CLUSTER_SHORT_DOMAIN}
+            paths: &paths
+              - path: /push/
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: nextcloud.home.${CLUSTER_DOMAIN}
+            paths: *paths

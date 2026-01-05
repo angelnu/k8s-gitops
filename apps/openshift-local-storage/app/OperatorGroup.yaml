@@ -1,0 +1,9 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: local-storage-operator
+spec:
+  selector:
+    matchLabels:
+      local-storage-operator: "true"
+  upgradeStrategy: Default

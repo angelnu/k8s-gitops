@@ -1,0 +1,9 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: ceph-csi
+  namespace: ceph
+spec:
+  interval: 2h
+  url: https://ceph.github.io/csi-charts

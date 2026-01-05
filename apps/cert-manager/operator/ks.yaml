@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app cert-manager-operator
+  namespace: flux-system
+spec:
+  targetNamespace: &ns cert-manager
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./apps/cert-manager/operator/app
+  sourceRef:
+    kind: GitRepository
+    name: cluster-repository
+  wait: true
+  prune: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+  postBuild:
+    substitute:
+      MY_NAMESPACE: *ns

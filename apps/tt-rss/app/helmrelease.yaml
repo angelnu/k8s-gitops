@@ -1,0 +1,125 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: tt-rss
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: tt-rss
+      version: 7.0.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: angelnu-helm-charts
+        namespace: flux-system
+  #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/tt-rss/values.yaml
+  values:
+    controllers:
+      main:
+        serviceAccount:
+          identifier: default
+        containers:
+          main:
+            image:
+              repository: ghcr.io/angelnu/tt-rss
+              tag: 2.0.9909
+              pullPolicy: Always
+
+            securityContext:
+              runAsUser: 0
+
+            env:
+              TTRSS_SELF_URL_PATH: https://rss.${CLUSTER_SHORT_DOMAIN}/
+              # TTRSS_DB_HOST:
+              # TTRSS_DB_PORT:
+              # TTRSS_DB_USER:
+              # TTRSS_DB_NAME:
+              # TTRSS_DB_PASS:
+              TTRSS_SESSION_COOKIE_LIFETIME: "2592000" # 30 days in seconds
+              TTRSS_PLUGINS: auth_ldap, note # auth_remote, auth_internal
+
+              # LDAP settings
+              TTRSS_LDAP_AUTH_SERVER_URI: ldap://ldap.${CLUSTER_DOMAIN}
+              #TTRSS_LDAP_AUTH_USETLS: true #It does not work with php8.1
+              #TTRSS_LDAP_AUTH_ALLOW_UNTRUSTED_CERT: true
+              #TTRSS_LDAP_AUTH_BINDDN: set in secret
+              #TTRSS_LDAP_AUTH_BASEDN: set in secret
+              #TTRSS_LDAP_AUTH_SEARCHFILTER: set in secret
+              TTRSS_LDAP_AUTH_LOGIN_ATTRIB: cn
+    
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:privileged  # For NFS mount and sudo
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: rss
+          hajimari.io/info: Feed reader
+          hajimari.io/group: tools
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
+        hosts:
+          - host: rss.${CLUSTER_SHORT_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - rss.${CLUSTER_SHORT_DOMAIN}
+    postgresql:
+      enabled: false # use own chart
+
+  valuesFrom:
+    - kind: Secret
+      name: "tt-rss-helm-values"
+      valuesKey: tt-rss.yaml
+      optional: false
+    # Postgres generated secret
+    - kind: Secret
+      name: tt-rss-db-app
+      optional: false
+      valuesKey: host
+      targetPath: controllers.main.containers.main.env.TTRSS_DB_HOST
+    - kind: Secret
+      name: tt-rss-db-app
+      optional: false
+      valuesKey: dbname
+      targetPath: controllers.main.containers.main.env.TTRSS_DB_NAME
+    - kind: Secret
+      name: tt-rss-db-app
+      optional: false
+      valuesKey: user
+      targetPath: controllers.main.containers.main.env.TTRSS_DB_USER
+    - kind: Secret
+      name: tt-rss-db-app
+      optional: false
+      valuesKey: password
+      targetPath: controllers.main.containers.main.env.TTRSS_DB_PASS
+    - kind: Secret
+      name: tt-rss-db-app
+      optional: false
+      valuesKey: password
+      targetPath: controllers.main.containers.main.env.DB_PASS
+    - kind: Secret
+      name: tt-rss-db-app
+      optional: false
+      valuesKey: password
+      targetPath: controllers.main.containers.main.env.DB_ENV_PASS
+    - kind: Secret
+      name: tt-rss-db-app
+      optional: false
+      valuesKey: port
+      targetPath: controllers.main.containers.main.env.TTRSS_DB_PORT

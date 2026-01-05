@@ -1,0 +1,73 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: "appdaemon"
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: docker.io/acockburn/appdaemon
+              tag: 4.5.12 # Adding sha from docker hub breaks (points to invalid arch?)
+            env:
+              TZ: "Europe/Berlin"
+              #LATITUDE: secret
+              #LONGITUDE: secret
+              #ELEVATION: secret
+              HA_URL: "http://home-assistant-main:8123"
+              DASH_URL: "http://0.0.0.0:5050"
+              # TOKEN: secret
+            envFrom:
+              - secret: appdaemon-env
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: home-assistant-pvc
+        globalMounts:
+          - path: /ha-conf
+            readOnly: false
+          - path: /conf
+            readOnly: false
+            subPath: appdaemon
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 5050
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: home-automation
+          hajimari.io/info: Home Automation scripts
+          hajimari.io/group: automation
+        hosts:
+          - host: ha-app.home.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: ha-app.pub.${CLUSTER_DOMAIN}
+            paths: *paths

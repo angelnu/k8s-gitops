@@ -1,0 +1,386 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: "${MY_NAMESPACE}"
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: maddy
+      version: 4.1.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: angelnu-helm-charts
+        namespace: flux-system
+  #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/maddy/values.yaml
+  values:
+    image:
+      # -- image repository (official)
+      repository: ghcr.io/foxcpp/maddy # Dockerhub - foxcpp/maddy
+      tag: 0.8.1@sha256:55636d8a29588eea62d81d51acdafe38e0f694fb91801ab12dc1ed8c47b6439d
+      # -- image repository (mine - for dev)
+      #repository: angelnu/maddy
+      #tag: dev
+      #pullPolicy: Always
+
+
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+    
+    securityContext:
+      capabilities:
+        add:
+          - SYS_PTRACE #enable debuging
+    
+    maddy:
+      hostname: "mx.${CLUSTER_SHORT_DOMAIN}"
+      primary_domain: "${CLUSTER_SHORT_DOMAIN}"
+      #secondary_domains: <set in secret>
+      tls_secret_name: "${CLUSTER_DOMAIN_CERT}"
+      # config_files:
+      #   aliases: |
+      #     <set in secret>
+      #   disabled-aliases: |
+      #     <set in secret>
+      sql:
+        type: postgres
+        postgres_dsn:
+          # host:
+          # dbname:
+          # user:
+          # -- The DB user password
+          # @default -- user set in embedded postgres chart
+          # password: < set in secret>
+          # -- SSL model for the DB
+          # disable - No SSL
+          # require - Always SSL (skip verification)
+          # verify-ca - Always SSL (verify that the certificate presented by the
+          #             server was signed by a trusted CA)
+          # verify-full - Always SSL (verify that the certification presented by
+          #               the server was signed by a trusted CA and the server host name
+          #               matches the one in the certificate)
+          sslmode: require
+      auth:
+        type: ldap
+        ldap:
+            # urls:  set in secret
+            # dn_template: set in secret
+
+            bind plain: null
+            base_dn: null
+            filter: null
+            debug: 'true'
+            connect_timeout: 1m
+      smtp_rules:
+        default:
+          enabled: false
+        rewrites:
+          enabled: true
+          custom: |
+            table.chain local_rewrites {
+                optional_step regexp "(.+)\+(.+)@(.+)" "$1@$3"
+                optional_step static {
+                    entry postmaster postmaster@$(primary_domain)
+                }
+                optional_step file $(alias_file)
+            }
+
+            table.chain local_rewrites_catchall {
+                optional_step regexp ".*@(.+)" "catchall@$1"
+                optional_step &local_rewrites
+            }
+
+            table.chain local_rewrites_catchall_auth {
+                optional_step regexp "(.*)@(.+)" "$1@$2" "catchall@$2"
+                optional_step &local_rewrites
+            }
+        local_routing:
+          enabled: true
+          custom: |
+            msgpipeline local_routing {
+                debug yes
+                modify {
+                    # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).
+                    replace_rcpt &local_rewrites
+                }
+
+                # If there exists an explicitly created mailbox with that name - send it there.
+                destination_in &local_mailboxes {
+                    deliver_to &local_mailboxes
+                }
+                # If that's a disabled address - reject the message.
+                destination_in file /config/disabled-aliases { 
+                    reject
+                }
+                #Apply catchall rules
+                destination $(local_domains) {
+                    modify {
+                        replace_rcpt &local_rewrites_catchall
+                    }
+                    reroute {
+                        destination_in &local_mailboxes {
+                            deliver_to &local_mailboxes
+                        }
+                        default_destination {
+                            reject 550 5.1.1 "User doesn't exist"
+                        }
+                    }
+                }
+
+                # This allows aliases to be remote
+                default_destination {
+                    modify {
+                        dkim $(primary_domain) $(local_domains) default
+                    }
+                    deliver_to &remote_queue
+                }
+            }
+        incoming_email:
+          enabled: true
+          custom: |
+            # Incoming email
+            
+            smtp tcp://0.0.0.0:2525 {
+                debug yes
+                # limits {
+                #     # Up to 20 msgs/sec across max. 10 SMTP connections.
+                #     all rate 20 1s
+                #     all concurrency 10
+                # }
+
+                # dmarc yes
+                # check {
+                #     # require_mx_record
+                #     dkim
+                #     spf
+                # }
+
+                source $(local_domains) {
+                    reject 501 5.1.8 "Use Submission for outgoing SMTP"
+                }
+                default_source {
+                    destination postmaster $(local_domains) {
+                        deliver_to &local_routing
+                    }
+                    default_destination {
+                        reject 550 5.1.1 "User doesn't exist. Not a public relay!"
+                    }
+                }
+            }
+        outgoing_email:
+          enabled: true
+          custom: |
+            submission tls://0.0.0.0:465 tcp://0.0.0.0:587 {
+                #modified
+                debug yes
+                
+                limits {
+                    # Up to 50 msgs/sec across any amount of SMTP connections.
+                    all rate 50 1s
+                }
+
+                auth &local_authdb
+
+                source $(local_domains) {
+                    check {
+                        authorize_sender {
+                            prepare_email &local_rewrites_catchall_auth
+                            user_to_email identity
+                        }
+                    }
+
+                    destination postmaster $(local_domains) {
+                        deliver_to &local_routing
+                    }
+                    default_destination {
+                        # changed - let sendgrid to sign
+                        modify {
+                            dkim $(primary_domain) $(local_domains) default
+                        }
+                        deliver_to &remote_queue
+                    }
+                }
+                default_source {
+                    reject 501 5.1.8 "Non-local sender domain"
+                }
+            }
+
+            # changed
+            # target.remote outbound_delivery {
+            #     limits {
+            #         # Up to 20 msgs/sec across max. 10 SMTP connections
+            #         # for each recipient domain.
+            #         destination rate 20 1s
+            #         destination concurrency 10
+            #     }
+            #     mx_auth {
+            #         dane
+            #         mtasts {
+            #             cache fs
+            #             fs_dir mtasts_cache/
+            #         }
+            #         local_policy {
+            #             min_tls_level encrypted
+            #             min_mx_level none
+            #         }
+            #     }
+            # }
+        outbound_delivery:
+          enabled: true
+          # custom: |
+          #   target.smtp outbound_delivery {
+          #     debug no
+          #     require_tls yes
+          #     auth plain apikey <sendgrid key>
+          #     targets tcp://smtp.sendgrid.net:587
+          #   }
+        remote_queue:
+          enabled: true
+          custom: |
+            target.queue remote_queue {
+                target &outbound_delivery
+
+                autogenerated_msg_domain $(primary_domain)
+                bounce {
+                    destination postmaster $(local_domains) {
+                        deliver_to &local_routing
+                    }
+                    default_destination {
+                        reject 550 5.0.0 "Refusing to send DSNs to non-local addresses"
+                    }
+                }
+            }
+        internal_outgoing_email:
+          enabled: true
+          custom: |
+            smtp tcp://0.0.0.0:25 {
+                #modified
+                debug yes
+                
+                limits {
+                    # Up to 50 msgs/sec across any amount of SMTP connections.
+                    all rate 50 1s
+                }
+
+                source $(local_domains) {
+                    destination $(local_domains) {
+                        deliver_to &local_routing
+                    }
+                    default_destination {
+                        #reject 550 5.1.1 "Refusing to send to non-local addresses"
+                        modify {
+                            dkim $(primary_domain) $(local_domains) default
+                        }
+                        deliver_to &remote_queue
+                    }
+                }
+                default_source {
+                    modify {
+                        # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).
+                        replace_sender regexp "(.?)" "device@$(primary_domain)"
+                    }
+                    destination $(local_domains) {
+                        deliver_to &local_routing
+                    }
+                    default_destination {
+                        reject 550 5.1.1 "Refusing to send to non-local addresses"
+                    }
+                }
+            }
+      extra_settings:
+        local_mailboxes:
+            imap_filter: |
+                {
+                    command /data/filters/entry.sh --source_ip={source_ip} --source_host={source_host} --source_rdns={source_rdns} --msg_id={msg_id} --auth_user={auth_user} --account_name={account_name} --sender={sender} --rcpt_to={rcpt_to} --original_rcpt_to={original_rcpt_to} --subject={subject}
+                }  
+
+    service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_MADDY}"
+        externalTrafficPolicy: Local
+        ports:
+          smtp-intern:
+            enabled: true
+            port: 2525
+      openmetrics:
+        enabled: false
+    persistence:
+      data:
+        enabled: true
+        mountPath: /data
+        type: pvc
+        existingClaim: maddy-pvc
+
+    addons:
+      codeserver:
+        enabled: true
+        image:
+          repository: ghcr.io/coder/code-server
+          tag: 4.107.0@sha256:4b622c4cd1b0f559fec0df67fcf09042d63e9ce84c575102066afd9511695627
+        volumeMounts:
+        - name: data
+          mountPath: /data
+          subPath: filters
+        ingress:
+          enabled: true
+          annotations:
+            hajimari.io/enable: "true"
+            hajimari.io/appName: Maddy Mail Server
+            hajimari.io/icon: vscode-icons:file-type-vscode
+            hajimari.io/info: Edit Mail Rules
+            hajimari.io/group: tools
+          hosts:
+          - host: maddy-editor.pub.${CLUSTER_DOMAIN}
+            paths:
+            - path: /
+              pathType: Prefix
+          - host: maddy-editor.home.${CLUSTER_DOMAIN}
+            paths:
+            - path: /
+              pathType: Prefix
+          tls:
+          - hosts:
+            - maddy-editor.pub.${CLUSTER_DOMAIN}
+            - maddy-editor.home.${CLUSTER_DOMAIN}
+
+
+  valuesFrom:
+  - kind: Secret
+    name: "maddy-helm-values"
+    valuesKey: maddy.yaml
+    optional: false
+  # Postgres generated secret
+  - kind: Secret
+    name: maddy-db-app
+    optional: false
+    valuesKey: host
+    targetPath: maddy.sql.postgres_dsn.host
+  - kind: Secret
+    name: maddy-db-app
+    optional: false
+    valuesKey: dbname
+    targetPath: maddy.sql.postgres_dsn.dbname
+  - kind: Secret
+    name: maddy-db-app
+    optional: false
+    valuesKey: user
+    targetPath: maddy.sql.postgres_dsn.user
+  - kind: Secret
+    name: maddy-db-app
+    optional: false
+    valuesKey: password
+    targetPath: maddy.sql.postgres_dsn.password
+  - kind: Secret
+    name: maddy-db-app
+    optional: false
+    valuesKey: port
+    targetPath: maddy.sql.postgres_dsn.port
+
+
+    # sieve:
+    #   - http://sieve.info/clients
+    #   - managesieve lib: https://github.com/miracle2k/pysieved
+    #   - desktop: https://github.com/thsmi/sieve/releases
+    #   - library: https://www.freshports.org/mail/libsieve/

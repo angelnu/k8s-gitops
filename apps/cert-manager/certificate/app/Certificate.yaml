@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "${CLUSTER_DOMAIN_CERT}"
+spec:
+  secretName: "${CLUSTER_DOMAIN_CERT}"
+  issuerRef:
+    #name: letsencrypt-test
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - '${CLUSTER_SHORT_DOMAIN}'
+  - '*.${CLUSTER_SHORT_DOMAIN}'
+  - '*.${CLUSTER_DOMAIN}'
+  - '*.home.${CLUSTER_DOMAIN}'
+  - '*.pub.${CLUSTER_DOMAIN}'
+  - '*.apps.${CLUSTER_DOMAIN}'
+  # This dummy can be changed to circumvent Letsencrypt check for duplicated certs
+  # The right fix is to backup certificates correctly
+  #- '*.${CLUSTER_DOMAIN_DUMMY}.${CLUSTER_DOMAIN}'
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "openshift-ingress,authentik,maddy"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"

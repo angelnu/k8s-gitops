@@ -1,0 +1,19 @@
+apiVersion: k8s.ovn.org/v1
+kind: ClusterUserDefinedNetwork
+metadata:
+  name: localnet
+spec:
+  namespaceSelector:
+    matchLabels:
+      secondary.network: localnet
+  network:
+    topology: Localnet
+    localnet:
+      role: Secondary
+      # subnets: - not compatible with using static IPs
+      # - "192.168.6.64/26"
+      # See https://docs.okd.io/latest/networking/multiple_networks/secondary_networks/creating-secondary-nwt-ovnk.html#configuration-localnet-switched-topology_configuring-additional-network-ovnk
+
+      physicalNetworkName: physnet # br-ex #localnet1 <- documentation says to create a mapping (localnet1) but this requires installing the Kubernetes-nmstate - see NodeNetworkConfigurationPolicy
+      ipam:
+        mode: Disabled

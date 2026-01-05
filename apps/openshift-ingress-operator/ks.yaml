@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app openshift-ingress-operator
+  namespace: flux-system
+spec:
+  targetNamespace: *app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./apps/openshift-ingress-operator/app
+  prune: true
+  dependsOn:
+    - name: cert-manager-certificate
+    - name: reflector
+  sourceRef:
+    kind: GitRepository
+    name: cluster-repository
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+  postBuild:
+    substitute:
+      MY_NAMESPACE: *app

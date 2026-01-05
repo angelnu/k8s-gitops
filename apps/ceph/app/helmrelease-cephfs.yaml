@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app ceph-csi-cephfs
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: ceph-csi-cephfs
+      version: 3.15.1
+      sourceRef:
+        kind: HelmRepository
+        name: ceph-csi
+        namespace: ceph
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  #See https://github.com/ceph/ceph-csi/blob/devel/charts/ceph-csi-cephfs/values.yaml
+  values:
+    csiConfig:
+      - clusterID: "2ec73f92-a0c8-11eb-b84d-eb70282a4edf" #just a UUID
+        monitors:
+          - ${CEPH_MONITOR_HOST_1}
+          - ${CEPH_MONITOR_HOST_2}
+          - ${CEPH_MONITOR_HOST_3}
+        cephFS:
+          subvolumeGroup: ""

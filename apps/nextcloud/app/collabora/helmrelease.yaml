@@ -1,0 +1,92 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nextcloud-collabora
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  dependsOn:
+    - name: nextcloud
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        serviceAccount:
+          identifier: default
+        containers:
+          main:
+            image:
+              repository: docker.io/collabora/code
+              tag: 25.04.8.1.1
+            env:
+              extra_params: --o:ssl.termination=true --o:ssl.enable=false
+            securityContext:
+              runAsUser: 1001
+              runAsGroup: 1001
+              fsGroup: 1001
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:nonroot  # For runAsUser
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+    rawResources:
+      autoscaling:
+        enabled: true
+        apiVersion: autoscaling/v2
+        kind: HorizontalPodAutoscaler
+        spec:
+          spec:
+            scaleTargetRef:
+              apiVersion: apps/v1
+              kind: Deployment
+              name: nextcloud-collabora
+            minReplicas: 1
+            maxReplicas: 3
+            metrics:
+              - type: Resource
+                resource:
+                  name: cpu
+                  target:
+                    type: Utilization
+                    averageUtilization: 50
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 9980
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+          nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_WOPISrc"
+          #nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+        hosts:
+          - host: collabora.pub.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http

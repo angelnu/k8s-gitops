@@ -1,9 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: authentik
-resources:
-  - authentik-secret.yaml
-  - authentik-db.yaml
-  - authentik.yaml
-  - authentik-ingress.yaml
-  - ldap-service.yaml

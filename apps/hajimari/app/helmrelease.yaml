@@ -1,0 +1,110 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hajimari
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://hajimari.io
+      chart: hajimari
+      version: 2.0.2
+      sourceRef:
+        kind: HelmRepository
+        name: hajimari
+        namespace: hajimari
+      interval: 5m
+  # See https://github.com/toboshii/hajimari/tree/main/charts/hajimari
+  values:
+    image:
+      # -- image repository
+      repository: ghcr.io/toboshii/hajimari
+      # -- image pull policy
+      pullPolicy: IfNotPresent
+      # -- image tag
+      tag: v0.3.1
+    
+    env:
+      TZ: "Europe/Berlin"    
+      
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+    
+    hajimari:
+      title: Casa96
+      name: You
+      defaultEnable: true
+      namespaceSelector:
+        any: true
+        # matchNames:
+        # - downloads
+        # - media
+      alwaysTargetBlank: true
+      showAppGroups: true
+      showAppUrls: false
+      showAppInfo: true
+      showGlobalBookmarks: true
+      defaultSearchProvider: SearXNG
+      searchProviders:
+      - name: SearXNG
+        token: s
+        icon: mdi:cloud-search-outline
+        searchUrl: https://search.${CLUSTER_DOMAIN}/search?q={query}
+        url: https://search.${CLUSTER_DOMAIN}
+      - name: Google
+        token: g
+        icon: simple-icons:google
+        searchUrl: https://www.google.com/search?q={query}
+        url: https://www.google.com
+      - name: DuckDuckGo
+        token: d
+        icon: simple-icons:duckduckgo
+        searchUrl: https://duckduckgo.com/?q={query}
+        url: https://duckduckgo.com
+      - name: IMDB
+        token: i
+        icon: simple-icons:imdb
+        searchUrl: https://www.imdb.com/find?q={query}
+        url: https://www.imdb.com
+      - name: Reddit
+        token: r
+        icon: simple-icons:reddit
+        searchUrl: https://www.reddit.com/search?q={query}
+        url: https://www.reddit.com
+      - name: YouTube
+        token: 'y'
+        icon: simple-icons:youtube
+        searchUrl: https://www.youtube.com/results?search_query={query}
+        url: https://www.youtube.com
+      - name: Spotify
+        token: s
+        icon: simple-icons:spotify
+        searchUrl: hhttps://open.spotify.com/search/{query}
+        url: https://open.spotify.com
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: weather-sunset
+          hajimari.io/info: Casa96 dashboard
+          hajimari.io/group: tools
+        hosts:
+          - host: &host home.${CLUSTER_SHORT_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+        - hosts:
+          - *host
+    persistence:
+      data:
+        enabled: true
+        existingClaim: hajimari-pvc
+
+  valuesFrom:
+  - kind: Secret
+    name: hajimari-helm-values
+    valuesKey: hajimari.yaml
+    optional: false

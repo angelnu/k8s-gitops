@@ -1,0 +1,133 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ${MY_NAMESPACE}
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        serviceAccount:
+          identifier: default
+        containers:
+          main:
+            image:
+              repository: ghcr.io/esphome/esphome
+              tag: 2025.12.2@sha256:84d986f14c0e2807f6b572b367411bbdc6ed456f2350a1d00ea109233558d545
+            env:
+              ESPHOME_DASHBOARD_USE_PING: "true"
+          editor:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.107.0@sha256:4b622c4cd1b0f559fec0df67fcf09042d63e9ce84c575102066afd9511695627
+            args:
+              - --auth
+              - none
+              - --port
+              - "12321"
+              - /config
+            securityContext:
+              runAsUser: 0
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:anyuid  # For runAsUser
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: esphome-pvc
+      build:
+        enabled: true
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        # type: emptyDir
+        # globalMounts:
+        #   - path: /config/.esphome
+        #     readOnly: false
+      ssh-key:
+        enabled: true
+        type: secret
+        name: git-ssh-keys
+        defaultMode: 256
+        items:
+          - key: id_rsa
+            path: id_rsa
+        advancedMounts:
+          main:
+            editor:
+              - path: /root/.ssh/id_rsa
+                subPath: id_rsa
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 6052
+      editor:
+        controller: main
+        ports:
+          http:
+            port: 12321
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:esphome
+          hajimari.io/info: Programs esphome devices
+          hajimari.io/group: automation
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            auth_request_set $required_groups 'casa_editors';
+        hosts:
+          - host: esphome.pub.${CLUSTER_DOMAIN}
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: esphome.home.${CLUSTER_DOMAIN}
+            paths: *paths
+      editor:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: vscode-icons:file-type-vscode
+          hajimari.io/info: Esphome editor
+          hajimari.io/group: automation
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            auth_request_set $required_groups 'casa_editors';
+        hosts:
+          - host: esphome-editor.home.${CLUSTER_DOMAIN}
+            paths: &paths_editor
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: editor
+                  port: http
+          - host: esphome-editor.pub.${CLUSTER_DOMAIN}
+            paths: *paths_editor

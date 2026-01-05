@@ -1,0 +1,112 @@
+
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: &ClusterName "${MY_NAMESPACE}-db"
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: enabled # Allow for backup source and target to be the same
+spec:
+  instances: 3 # 1 Primary + 2 Replicas for High Availability
+
+  minSyncReplicas: 1
+  maxSyncReplicas: 2
+
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.1
+
+  # 1. Continuous Backup to Synology (MinIO)
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: cluster-nas-backup
+
+  # 2. Resource Management (Guaranteed QoS)
+  # Keeping requests and limits identical prevents OOM kills
+  resources:
+    requests:
+      memory: "192Mi"
+      cpu: "20m"
+    limits:
+      memory: "1Gi"
+      cpu: "1"
+
+  # 3. Storage Configuration
+  storage:
+    storageClass: longhorn-postgres-replica-storage
+    size: 3Gi
+  walStorage:
+    # Separate WAL storage is recommended for production to avoid IO contention
+    storageClass: longhorn-postgres-replica-storage
+    size: 2Gi
+
+  externalClusters:
+    - name: source
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: cluster-nas-backup
+          serverName: *ClusterName
+
+  backup:
+    target: prefer-standby # instead of primary
+  
+  # 4. Database Initialization
+  bootstrap:
+    recovery:
+      source: source
+      database: app
+    # initdb:
+    #   database: app
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nas-s3-creds
+stringData:
+  ACCESS_KEY_ID: "${S3_NAS_USERNAME}"
+  ACCESS_SECRET_KEY: "${S3_NAS_PASSWORD}"
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: cluster-nas-backup
+spec:
+  retentionPolicy: "30d" # Automatically clean up old backups on the NAS
+  configuration:
+    destinationPath: s3://${S3_NAS_POSTGRES_BUCKET}/
+    endpointURL: "${S3_NAS_URL}"
+    s3Credentials:
+      accessKeyId:
+        name: nas-s3-creds
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: nas-s3-creds
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip # Compresses logs before sending to NAS
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: "${MY_NAMESPACE}"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg
+  podMetricsEndpoints:
+    - port: metrics
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: "${MY_NAMESPACE}"
+spec:
+  immediate: true
+  schedule: "0 0 0 * * *" # At midnight every day
+  backupOwnerReference: self
+  cluster:
+    name: "${MY_NAMESPACE}-db"
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io

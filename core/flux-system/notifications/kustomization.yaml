@@ -1,8 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - slack_provider.yaml
-  - slack_alert.yaml
-  - github_secret.yaml
-  - github_provider.yaml
-  - github_alert.yaml

@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-vars
+  namespace: flux-system
+spec:
+  interval: 30m
+  path: ./clusters/prod/flux/vars
+  prune: false
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: cluster-repository
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age

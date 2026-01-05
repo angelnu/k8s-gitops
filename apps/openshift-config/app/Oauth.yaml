@@ -1,0 +1,29 @@
+# kustomize/patches/identity-providers-patch.yaml
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+  identityProviders:
+    - name: Casa96
+      type: OpenID
+      mappingMethod: add
+      openID:
+        claims:
+          email:
+            - email
+          groups:
+            - groups
+          name:
+            - email
+          preferredUsername:
+            - preferred_username
+        clientID: okd
+        clientSecret:
+          name: authentik-secret
+        extraScopes:
+          - profile
+          - email
+        issuer: ${OAUTH_ISSUER}

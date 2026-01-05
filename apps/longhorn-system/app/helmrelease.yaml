@@ -1,0 +1,68 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app longhorn
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: longhorn
+      version: 1.10.1
+      sourceRef:
+        kind: HelmRepository
+        name: longhorn
+        namespace: longhorn-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    openshift:
+      enabled: true
+      ui:
+        route: "longhorn-ui"
+        port: 443
+        proxy: 8443
+    image:
+      longhorn:
+        engine:
+          registry: &defaultRegistry docker.io
+        manager:
+          registry: *defaultRegistry
+        ui:
+          registry: *defaultRegistry
+        instanceManager:
+          registry: *defaultRegistry
+        shareManager:
+          registry: *defaultRegistry
+        backingImageManager:
+          registry: *defaultRegistry
+        supportBundleKit:
+          registry: *defaultRegistry
+      csi:
+        attacher:
+          registry: *defaultRegistry
+        provisioner:
+          registry: *defaultRegistry
+        nodeDriverRegistrar:
+          registry: *defaultRegistry
+        resizer:
+          registry: *defaultRegistry
+        snapshotter:
+          registry: *defaultRegistry
+        livenessProbe:
+          registry: *defaultRegistry
+      openshift:
+        oauthProxy:
+          registry: quay.io
+          repository: openshift/origin-oauth-proxy
+          tag: 4.20
+      defaultBackupStore:
+        backupTarget: cifs://nas.home.angelnu.com/NetBackup/longhorn/${CLUSTER_NAME}
+        backupTargetCredentialSecret: cifs-secret

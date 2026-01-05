@@ -1,0 +1,233 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nextcloud
+spec:
+  interval: 30m
+  chart:
+    spec:
+      # renovate: registryUrl=https://nextcloud.github.io/helm/
+      chart: nextcloud
+      version: 8.7.0
+      sourceRef:
+        kind: HelmRepository
+        name: nextcloud
+        namespace: nextcloud
+      interval: 5m
+  # See https://github.com/nextcloud/helm/blob/master/charts/nextcloud/values.yaml
+  values:
+    # image:
+    #   repository: docker.io/library/nextcloud
+    #   tag: 29.0.3@sha256:2ab0c5de2afd33c55721e69e87bd1667cad6c4550ba0fd0303cfeb7abb260750
+
+    env:
+      PHP_MEMORY_LIMIT: 256M
+      TRUSTED_PROXIES: '${NETWORK_K8S_CLUSTER_CIDR}'
+      FORWARDED_FOR_HEADERS: HTTP_X_FORWARDED_FOR
+
+    ingress:
+      enabled: true
+      annotations:
+        hajimari.io/enable: "true"
+        hajimari.io/icon: simple-icons:nextcloud
+        hajimari.io/info: File and Calendar server
+        hajimari.io/group: tools
+        nginx.ingress.kubernetes.io/proxy-body-size: 4G
+        nginx.ingress.kubernetes.io/server-snippet: |-
+          server_tokens off;
+          proxy_hide_header X-Powered-By;
+        
+          # Rule borrowed from .htaccess to handle Microsoft DAV clients
+          location = / {
+            if ( $http_user_agent ~ ^DavClnt ) {
+              return 302 /remote.php/webdav/$is_args$args;
+            }
+          }
+     
+          location = /robots.txt {
+              allow all;
+              log_not_found off;
+              access_log off;
+          }
+
+          location ^~ /.well-known {
+          
+            # The rules in this block are an adaptation of the rules
+            # in .htaccess that concern /.well-known.
+
+            location = /.well-known/carddav { return 301 /remote.php/dav/; }
+            location = /.well-known/caldav  { return 301 /remote.php/dav/; }
+            
+            location /.well-known/acme-challenge    { try_files $uri $uri/ =404; }
+            location /.well-known/pki-validation    { try_files $uri $uri/ =404; }
+            
+            # Let Nextcloud's API for /.well-known URIs handle all other
+            # requests by passing them to the front-end controller.
+            return 301 /index.php$request_uri;
+          }
+          
+          # Rules borrowed from .htaccess to hide certain paths from clients
+          location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/ {
+            deny all;
+          }
+          location ~ ^/(?:autotest|occ|issue|indie|db_|console) {
+            deny all;
+          }
+
+          # Rule borrowed from .htaccess
+          #location /remote {
+          #    return 301 /remote.php$request_uri;
+          #}
+
+        nginx.ingress.kubernetes.io/enable-global-auth: "false"
+      tls:
+      - hosts:
+        - nextcloud.${CLUSTER_SHORT_DOMAIN}
+    #username: admin
+    #password: password
+    redis:
+      enabled: true
+      # password: set in secret
+      master:
+        persistence:
+          enabled: false
+      replica:
+        persistence:
+          enabled: false
+    internalDatabase:
+      enabled: false
+    externalDatabase:
+      enabled: true
+      type: postgresql
+      existingSecret:
+        enabled: true
+        secretName: nextcloud-db-app
+        usernameKey: user
+        passwordKey: password
+        hostKey: host
+        databaseKey: dbname
+    cronjob:
+      enabled: true
+      failedJobsHistoryLimit: 1
+      successfulJobsHistoryLimit: 1
+
+    nextcloud:
+      host: nextcloud.${CLUSTER_SHORT_DOMAIN}
+      trustedDomains:
+        - nextcloud.${CLUSTER_SHORT_DOMAIN}
+        - nextcloud.pub.${CLUSTER_DOMAIN}
+        - nextcloud.home.${CLUSTER_DOMAIN}
+      extraVolumes:
+      - name: nfs-video
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_VIDEO}"
+      - name: nfs-software
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_SOFTWARE}"
+      - name: nfs-music
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_MUSIC}"
+      - name: nfs-downloads
+        nfs:
+          server: "${NFS_SERVER}"
+          path: "${NFS_DOWNLOADS}"
+      - name: esphome
+        persistentVolumeClaim:
+          claimName: esphome-pvc
+      extraVolumeMounts:
+      - name: nfs-video
+        mountPath: "/video"
+      - name: nfs-software
+        mountPath: "/software"
+      # - name: esphome
+      #   subPath: devices
+      #   mountPath: "/software/3D-printer/projects/Electronica/esphome_devices"
+      - name: nfs-music
+        mountPath: "/music"
+      - name: nfs-downloads
+        mountPath: "/downloads"
+      phpConfigs:
+        uploadLimit.ini: |
+          upload_max_filesize = 16G
+          post_max_size = 16G
+          max_input_time = 3600
+          max_execution_time = 3600
+          default_phone_region = DE
+      configs:
+        gitops.config.php: |-
+          <?php
+          $CONFIG = array (
+            'appstoreenabled' => true,
+            #'appstoreurl' => 'https://apps.nextcloud.com/api/v0',
+            'mail_domain' => '${CLUSTER_DOMAIN}',
+          );
+        #Circumvention for client freezes - https://github.com/nextcloud/desktop/issues/5094
+        bulkupload.config.php: |-
+          <?php
+          $CONFIG = array (
+            'bulkupload.enabled' => false,
+          );
+        # Circumvention for NEXTCLOUD_TRUSTED_DOMAINS not used in old config
+        trusted_domains.config.php: |-
+          <?php
+          $trustedDomains = getenv('NEXTCLOUD_TRUSTED_DOMAINS');
+          if ($trustedDomains) {
+            $CONFIG['trusted_domains'] = array_filter(array_map('trim', explode(' ', $trustedDomains)));
+          }
+        # Circumvention for autoconfig only used first time
+        circumvention_autoconfig.config.php.config.php: |-
+          <?php
+          include \OC::$configDir . 'autoconfig.php';
+          $CONFIG = $AUTOCONFIG;
+          $CONFIG['dbpassword'] = $AUTOCONFIG['dbpass'];
+          $trustedProxies = getenv('TRUSTED_PROXIES');
+          if ($trustedProxies) {
+            $CONFIG['trusted_proxies'] = array_filter(array_map('trim', explode(' ', $trustedProxies)));
+          }
+      mail:
+        enabled: true
+        fromAddress: nextcloud
+        domain: ${CLUSTER_DOMAIN}
+        smtp:
+          host: ${CLUSTER_MAIL_SERVER}
+          secure:
+          port: ${CLUSTER_MAIL_SERVER_PORT}
+          authtype:
+          name:
+          password:
+    livenessProbe:
+      enabled: false
+    readinessProbe:
+      enabled: false
+    
+    lifecycle:
+      postStartCommand:
+      - su
+      - www-data
+      - -s
+      - /bin/sh
+      - -c
+      - >-
+        cd /var/www/html;
+        ./occ upgrade;
+        ./occ db:add-missing-indices;
+        /bin/true
+
+    persistence:
+      enabled: true
+      existingClaim: nfs-nextcloud
+    
+    rbac:
+      enabled: true
+      serviceaccount:
+        create: true
+        name: nextcloud
+
+  valuesFrom:
+    - kind: Secret
+      name: "nextcloud-helm-values"
+      valuesKey: nextcloud.yaml
+      optional: false

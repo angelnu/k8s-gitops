@@ -1,0 +1,98 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: "${MY_APP}"
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        serviceAccount:
+          identifier: default
+        containers:
+          main:
+            image:
+              repository: ghcr.io/angelnu/prusaslicer-novnc
+              tag: 2.9.4@sha256:933d08bd11457dc39836a14bdf0b923adc7cf29dcf304b5524f8c22e5165968e
+            securityContext:
+              privileged: true
+              #runAsUser: 33 # www-data
+              runAsGroup: 33 # www-data
+              fsGroup: 33 # www-data
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:privileged # For privileged, user 33 and NFS
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+
+    persistence:
+      config:
+        enabled: true
+        globalMounts:
+          - path: /configs/.config/PrusaSlicer
+            readOnly: false
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_SOFTWARE}/3D-printer/prusaslicer"
+      prints:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_SOFTWARE}/3D-printer/projects"
+      esphome-devices:
+        enabled: true
+        globalMounts:
+          - path: /prints/Electronica/esphome_devices
+            subPath: devices
+            readOnly: false
+        existingClaim: esphome-pvc
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8080
+          vnc:
+            enabled: false
+            port: 5900
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: mdi:printer-3d
+          hajimari.io/info: Prusa Slicer
+          hajimari.io/group: tools
+        hosts:
+          - host: "prusaslicer.pub.${CLUSTER_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http

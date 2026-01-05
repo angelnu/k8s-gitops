@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-settings
+  namespace: flux-system
+data:
+  # Cluster dependent
+  CLUSTER_NAME: test
+
+  CLUSTER_EXTERNAL_SUBNET_PREFIX: "192.168.6"
+  CLUSTER_LB_RANGE: "192.168.6.128-192.168.6.192"
+
+  FLUX_NOTIFICATIONS_CHANNEL: k8s-staging
+  BOTKUBE_NOTIFICATIONS_CHANNEL: k8s-staging
+
+  NFS_KUBERNETES: /volume1/test/kubernetes
+  NFS_DOWNLOADS: /volume1/test/downloads
+  NFS_SOFTWARE: /volume1/test/software
+  NFS_VIDEO: /volume1/test/video
+  NFS_MUSIC: /volume1/test/music

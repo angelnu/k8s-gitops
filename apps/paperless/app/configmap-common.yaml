@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: paperless-helm-values
+data:
+  commmon.yaml: |
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              # renovate: datasource=helm-values depName=docker lookupName=ghcr.io/paperless-ngx/paperless-ngx
+              repository: ghcr.io/paperless-ngx/paperless-ngx
+              tag: 1.12.2
+            
+            env:
+              PAPERLESS_OCR_LANGUAGE: deu
+              PAPERLESS_TIME_ZONE: "Europe/Berlin"
+              PAPERLESS_CONSUMER_POLLING: "60"
+              #PAPERLESS_CONSUMER_RECURSIVE: "true"
+              #PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
+              PAPERLESS_REDIS: redis://localhost:6379
+              PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+              PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_X_AUTHENTIK_USERNAME
+              PAPERLESS_LOGOUT_REDIRECT_URL: https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/sign_out
+          broker:
+            image:
+              repository: docker.io/library/redis
+              tag: 7.4@sha256:bb142a9c18ac18a16713c1491d779697b4e107c22a97266616099d288237ef47
+
+    persistence:
+      data:
+        enabled: true
+        type: custom
+        globalMounts:
+        - path: /usr/src/paperless/data
+          readOnly: false
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            # path: set in chart values
+      media:
+        enabled: true
+        type: custom
+        globalMounts:
+        - path: /usr/src/paperless/media
+          readOnly: false
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            # path: set in chart values
+      consume:
+        enabled: true
+        type: custom
+        globalMounts:
+        - path: /usr/src/paperless/consume
+          readOnly: false
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            # path: set in chart values
+      export:
+        enabled: true
+        type: custom
+        globalMounts:
+        - path: /usr/src/paperless/export
+          readOnly: false
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            # path: set in chart values
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8000
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: arcticons:paperless
+          hajimari.io/info: Store PDFs
+          hajimari.io/group: documents
+          nginx.ingress.kubernetes.io/proxy-body-size: 4G
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
