@@ -1,9 +1,7 @@
 {
-  extends: [
-    "github>angelnu/renovate-config:default-automerge"
-  ],
-  platform:     "github",
-  username:     "angelnu-bot[bot]",
-  gitAuthor:    "angelnu-bot[bot] <115925344+angelnu-bot[bot]@users.noreply.github.com>",
-  repositories: ["angelnu/proxmox-openshift-setup"],
+  extends: ["github>angelnu/renovate-config:default-automerge"],
+  platform: "github",
+  username: "angelnu-bot[bot]",
+  gitAuthor: "angelnu-bot[bot] <115925344+angelnu-bot[bot]@users.noreply.github.com>",
+  repositories: ["angelnu/k8s-gitops"],
 }
