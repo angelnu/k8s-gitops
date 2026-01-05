@@ -4,4 +4,19 @@
   username: "angelnu-bot[bot]",
   gitAuthor: "angelnu-bot[bot] <115925344+angelnu-bot[bot]@users.noreply.github.com>",
   repositories: ["angelnu/k8s-gitops"],
+  flux: {
+    managerFilePatterns: [
+      "/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/",
+    ],
+  },
+  "helm-values": {
+    managerFilePatterns: [
+      "/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/",
+    ],
+  },
+  kubernetes: {
+    managerFilePatterns: [
+      "/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/",
+    ],
+  },
 }
