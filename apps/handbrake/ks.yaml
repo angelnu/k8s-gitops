@@ -14,6 +14,7 @@ spec:
   prune: true
   dependsOn:
     - name: ingress-nginx
+    - name: ceph
   sourceRef:
     kind: GitRepository
     name: cluster-repository
