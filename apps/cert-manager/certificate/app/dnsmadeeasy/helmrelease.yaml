@@ -19,6 +19,14 @@ spec:
   values:
     groupName: "${CLUSTER_DOMAIN}"
     serviceAccountName: cert-manager
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/angelnu/dnsmadeeasy-webhook
+              # I am using dev version for testing - others should be using latest
+              # tag: dev@sha256:cf9dfdf6fdd254cd21953d759ff10b6be64d02911a79a0acbd9de9b1db208866
 
     image:
       repository: ghcr.io/angelnu/dnsmadeeasy-webhook
