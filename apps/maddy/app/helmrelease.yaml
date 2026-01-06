@@ -335,7 +335,7 @@ spec:
             main:
               - path: /data
             editor:
-              - path: /config
+              - path: /data
                 subPath: filters
         
 
