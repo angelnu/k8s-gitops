@@ -330,6 +330,14 @@ spec:
       data:
         type: persistentVolumeClaim
         existingClaim: maddy-pvc
+        advancedMounts:
+          main:
+            main:
+              - path: /data
+            editor:
+              - path: /config
+                subPath: filters
+        
 
     ingress:
       editor:
