@@ -15,23 +15,38 @@ spec:
         namespace: flux-system
   #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/maddy/values.yaml
   values:
-    image:
-      # -- image repository (official)
-      repository: ghcr.io/foxcpp/maddy # Dockerhub - foxcpp/maddy
-      tag: 0.8.1@sha256:55636d8a29588eea62d81d51acdafe38e0f694fb91801ab12dc1ed8c47b6439d
-      # -- image repository (mine - for dev)
-      #repository: angelnu/maddy
-      #tag: dev
-      #pullPolicy: Always
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              # -- image repository (official)
+              repository: ghcr.io/foxcpp/maddy # Dockerhub - foxcpp/maddy
+              tag: 0.8.1@sha256:55636d8a29588eea62d81d51acdafe38e0f694fb91801ab12dc1ed8c47b6439d
+              # -- image repository (mine - for dev)
+              #repository: angelnu/maddy
+              #tag: dev
+              #pullPolicy: Always
+          editor:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.107.0@sha256:4b622c4cd1b0f559fec0df67fcf09042d63e9ce84c575102066afd9511695627
+            args:
+              - --auth
+              - none
+              - --port
+              - "12321"
+              - /data
+            securityContext:
+              runAsUser: 0
 
-
-    podAnnotations:
-      reloader.stakater.com/auto: "true"
+        podAnnotations:
+          reloader.stakater.com/auto: "true"
     
-    securityContext:
-      capabilities:
-        add:
-          - SYS_PTRACE #enable debuging
+        securityContext:
+          capabilities:
+            add:
+              - SYS_PTRACE #enable debuging
     
     maddy:
       hostname: "mx.${CLUSTER_SHORT_DOMAIN}"
@@ -297,7 +312,6 @@ spec:
 
     service:
       main:
-        type: LoadBalancer
         loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_MADDY}"
         externalTrafficPolicy: Local
         ports:
@@ -305,7 +319,8 @@ spec:
             enabled: true
             port: 2525
       openmetrics:
-        enabled: false
+        enabled: false $ TBD - use in OKD
+    
     persistence:
       data:
         enabled: true
@@ -313,37 +328,22 @@ spec:
         type: pvc
         existingClaim: maddy-pvc
 
-    addons:
-      codeserver:
-        enabled: true
-        image:
-          repository: ghcr.io/coder/code-server
-          tag: 4.107.0@sha256:4b622c4cd1b0f559fec0df67fcf09042d63e9ce84c575102066afd9511695627
-        volumeMounts:
-        - name: data
-          mountPath: /data
-          subPath: filters
-        ingress:
-          enabled: true
-          annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Maddy Mail Server
-            hajimari.io/icon: vscode-icons:file-type-vscode
-            hajimari.io/info: Edit Mail Rules
-            hajimari.io/group: tools
-          hosts:
+    ingress:
+      editor:
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Maddy Mail Server
+          hajimari.io/icon: vscode-icons:file-type-vscode
+          hajimari.io/info: Edit Mail Rules
+          hajimari.io/group: tools
+        hosts:
           - host: maddy-editor.pub.${CLUSTER_DOMAIN}
-            paths:
-            - path: /
-              pathType: Prefix
-          - host: maddy-editor.home.${CLUSTER_DOMAIN}
-            paths:
-            - path: /
-              pathType: Prefix
-          tls:
-          - hosts:
-            - maddy-editor.pub.${CLUSTER_DOMAIN}
-            - maddy-editor.home.${CLUSTER_DOMAIN}
+            paths: &paths_editor
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: editor
+                  port: http
 
 
   valuesFrom:
