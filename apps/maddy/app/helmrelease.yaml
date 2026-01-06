@@ -312,14 +312,15 @@ spec:
 
     service:
       main:
+        enabled: true
         loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_MADDY}"
         externalTrafficPolicy: Local
+        controller: main
         ports:
           smtp-intern:
-            enabled: true
             port: 2525
-      openmetrics:
-        enabled: false $ TBD - use in OKD
+          openmetrics:
+            enabled: false # TBD - use in OKD
       editor:
         controller: main
         ports:
