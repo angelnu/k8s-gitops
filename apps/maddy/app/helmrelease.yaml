@@ -320,6 +320,11 @@ spec:
             port: 2525
       openmetrics:
         enabled: false $ TBD - use in OKD
+      editor:
+        controller: main
+        ports:
+          http:
+            port: 12321
     
     persistence:
       data:
