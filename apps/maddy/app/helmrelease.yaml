@@ -323,9 +323,6 @@ spec:
     
     persistence:
       data:
-        enabled: true
-        mountPath: /data
-        type: pvc
         existingClaim: maddy-pvc
 
     ingress:
