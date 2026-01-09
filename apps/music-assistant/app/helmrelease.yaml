@@ -28,7 +28,7 @@ spec:
               tag: 2.7.3
             env:
               TZ: "Europe/Berlin"
-        # pod:
+        pod:
         #   hostAliases:
         #     # We cannot access the ingress LB address directly - go through external IP
         #     - ip: "${FIX_EXTERNAL_IP}"
