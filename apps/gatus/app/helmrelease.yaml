@@ -167,6 +167,15 @@ spec:
                   - type: slack
                   - type: pagerduty
                 conditions:
+                  - "[STATUS] == 200"               
+              - name: Nas
+                group: core
+                url: "https://search.${CLUSTER_SHORT_DOMAIN}"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                conditions:
                   - "[STATUS] == 200"
               - name: Nas Backup
                 group: core
