@@ -168,7 +168,7 @@ spec:
                   - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"               
-              - name: Nas
+              - name: Search
                 group: core
                 url: "https://search.${CLUSTER_SHORT_DOMAIN}"
                 interval: 5m
