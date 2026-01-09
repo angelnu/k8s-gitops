@@ -1,61 +1,59 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: ${MY_APP}
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
-      chart: searxng
-      version: 1.0.1
+      chart: app-template
+      version: 4.5.0
+      interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: searxng
-        namespace: searxng
-      interval: 60m
+        name: bjw-s
+        namespace: flux-system
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
-
-    image:
-      repository: docker.io/searxng/searxng
-      tag: latest
-
-    env:
-      INSTANCE_NAME: "${CLUSTER_NAME}"
-      BASE_URL: "https://${CLUSTER_DOMAIN}"
-      AUTOCOMPLETE: "duckduckgo"
-
-    searxng:
-      config:
-        use_default_settings: true
-      # Uncomment when using the builtin rate limiter
-      # See https://docs.searxng.org/src/searx.plugins.limiter.html#limiter-plugin
-      # server.limiter: true
-      # redis.url: redis://@searxng-redis:6379/0
+    controllers:
+      main:
+        strategy: "RollingUpdate"
+        containers:
+          main:
+            image:
+              repository: ghcr.io/searxng/searxng
+              tag: 2026.1.9-b83e88ea7
+            env:
+              INSTANCE_NAME: "${CLUSTER_NAME}"
+              BASE_URL: "https://search.${CLUSTER_DOMAIN}"
+              AUTOCOMPLETE: "true"
+              # MORTY_URL: "http://morty:8080"
+              # MORTY_KEY: "mysecretkey"
+              BIND_ADDRESS: "0.0.0.0:8080"
+    
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8080
 
     ingress:
       main:
-        enabled: true
         annotations:
           hajimari.io/enable: "true"
           hajimari.io/icon: cloud-search-outline
           hajimari.io/info: Internet Search
           hajimari.io/group: tools
         hosts:
-        - host: &host_pub "search.pub.${CLUSTER_DOMAIN}"
-          paths:
-          - path: /
-            pathType: Prefix
-        - host: &host "search.${CLUSTER_SHORT_DOMAIN}"
-          paths:
-          - path: /
-            pathType: Prefix
-        tls:
-        - hosts:
-          - *host_pub
-          - *host
-
-  valuesFrom:
-  - kind: Secret
-    name: "searxng-helm-values"
-    valuesKey: searxng.yaml
-    optional: false
+          - host: "search.${CLUSTER_SHORT_DOMAIN}"
+            paths: &paths
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+          - host: "search.pub.${CLUSTER_DOMAIN}"
+            paths: *paths
