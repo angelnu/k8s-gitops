@@ -17,6 +17,7 @@ spec:
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
+    # secret_key: # Set in the secret
     controllers:
       main:
         strategy: "RollingUpdate"
@@ -33,6 +34,26 @@ spec:
               # MORTY_KEY: "mysecretkey"
               BIND_ADDRESS: "0.0.0.0:8080"
     
+    configMaps:
+      config:
+        data:
+          settings.yml: |
+            use_default_settings: true
+            server:
+              secret_key: {{ .Values.secret_key}}
+            # Uncomment when using the builtin rate limiter
+            # See https://docs.searxng.org/src/searx.plugins.limiter.html#limiter-plugin
+            # server.limiter: true
+            # redis.url: redis://@searxng-redis:6379/0
+
+    persistence:
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+        - path: /etc/searxng/settings.yml
+          subPath: settings.yml
+
     service:
       main:
         controller: main
@@ -57,3 +78,8 @@ spec:
                   port: http
           - host: "search.pub.${CLUSTER_DOMAIN}"
             paths: *paths
+  valuesFrom:
+  - kind: Secret
+    name: "searxng-helm-values"
+    valuesKey: searxng.yaml
+    optional: false
