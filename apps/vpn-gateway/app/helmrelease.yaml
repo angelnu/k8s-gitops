@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ${MY_APP}
+  name: "${MY_APP}"
   labels:
     # Avoid variable substitution of shell variables bellow
     kustomize.toolkit.fluxcd.io/substitute: disabled
