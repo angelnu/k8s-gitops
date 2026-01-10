@@ -95,7 +95,7 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: "${MY_NAMESPACE}"
+  name: "${MY_APP}"
 spec:
   selector:
     matchLabels:
@@ -106,7 +106,7 @@ spec:
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
 metadata:
-  name: "${MY_NAMESPACE}"
+  name: "${MY_APP}"
 spec:
   immediate: true
   schedule: "0 0 0 * * *" # At midnight every day

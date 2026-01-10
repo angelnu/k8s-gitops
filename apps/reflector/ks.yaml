@@ -6,7 +6,7 @@ metadata:
   name: &app reflector
   namespace: flux-system
 spec:
-  targetNamespace: *app
+  targetNamespace: &ns reflector
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -21,4 +21,5 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
-      MY_NAMESPACE: *app
+      MY_NAMESPACE: *ns
+      MY_APP: *app

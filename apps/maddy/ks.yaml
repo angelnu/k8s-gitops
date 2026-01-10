@@ -6,7 +6,7 @@ metadata:
   name: &app maddy
   namespace: flux-system
 spec:
-  targetNamespace: *app
+  targetNamespace: &ns maddy
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -25,4 +25,5 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
-      MY_NAMESPACE: *app
+      MY_NAMESPACE: *ns
+      MY_APP: *app

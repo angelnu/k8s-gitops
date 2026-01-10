@@ -6,7 +6,7 @@ metadata:
   name: &app openshift-monitoring
   namespace: flux-system
 spec:
-  targetNamespace: *app
+  targetNamespace: &ns openshift-monitoring
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -23,4 +23,5 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
-      MY_NAMESPACE: *app
+      MY_NAMESPACE: *ns
+      MY_APP: *app

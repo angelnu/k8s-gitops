@@ -24,3 +24,4 @@ spec:
   postBuild:
     substitute:
       MY_NAMESPACE: *ns
+      MY_APP: *app
