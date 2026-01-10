@@ -20,6 +20,10 @@ spec:
       replicaCount: 2  # This creates 2 replicas + 1 primary = 3 pods
       # Tell the replicas which user to use to talk to the primary
       replicationUser: "replication-user"
+      persistence:
+        enabled: true
+        size: 1Gi
+    # For Authentik, ensure you set a password
     persistence:
       enabled: true
       size: 1Gi
