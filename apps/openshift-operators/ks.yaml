@@ -6,7 +6,7 @@ metadata:
   name: &app openshift-operators
   namespace: flux-system
 spec:
-  targetNamespace: * openshift-operators
+  targetNamespace: &ns openshift-operators
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
