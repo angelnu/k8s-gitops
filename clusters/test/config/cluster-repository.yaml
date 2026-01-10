@@ -13,5 +13,5 @@ spec:
   # secretRef:
   #   name: flux-gitea-token
   ignore: |
-    .sops.yaml
+    **.sops.yaml
 
