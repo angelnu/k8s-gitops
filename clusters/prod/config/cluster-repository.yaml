@@ -12,3 +12,5 @@ spec:
     # tag: production
   # secretRef:
   #   name: flux-gitea-token
+  ignore: |
+    .sops.yaml
