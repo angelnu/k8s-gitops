@@ -21,8 +21,8 @@ spec:
       # Tell the replicas which user to use to talk to the primary
       replicationUser: "replication-user"
     persistence:
-      enabled: false  # If I loose all replicas together "only" the sessions expire
-      size: 8Gi
+      enabled: true
+      size: 1Gi
     # For Authentik, ensure you set a password
     auth:
       enabled: true  # You must define the default user if auth is enabled
