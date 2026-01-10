@@ -7,8 +7,8 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
-  path: ./clusters/prod
-  prune: true
+  path: ./clusters/prod/config
+  prune: false
   wait: false
   dependsOn:
     - name: cluster-vars

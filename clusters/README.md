@@ -1,7 +1,8 @@
 # Create config for new tenant
 
 1. Copy an existing cluster folder
-2. Adjust the `path` at `<new cluster>/config/cluster.yaml` to point to the `clusters/<new cluster>` folder
+2. Adjust the `path` at `<new cluster>/config/cluster-config.yaml` to point to the `clusters/<new cluster>` folder
+2. Adjust the `path` at `<new cluster>/config/cluster-apps.yaml` to point to the `clusters/<new cluster>` folder
 3. Adjust the `path` at `<new cluster>/config/vars.yaml`  to point to the `clusters/<new cluster>` folder
 4. Adjust the `path` at `<new cluster>/config/global-vars.yaml`  to point to the `clusters/<new cluster>` folder
 5. Create a new Age secret for the cluster

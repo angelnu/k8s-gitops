@@ -3,15 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster
+  name: cluster-config
   namespace: flux-system
 spec:
   interval: 30m
-  path: ./clusters/test
+  path: ./clusters/prod/config
   prune: true
   wait: false
-  dependsOn:
-    - name: cluster-vars
   sourceRef:
     kind: GitRepository
     name: cluster-repository
