@@ -38,10 +38,7 @@ spec:
         # Replicas need a user with replication permissions
         replication-user:
           permissions: "+psync +replconf +ping"
-    # Disable the pod-level security context
-    podSecurityContext:
-      enabled: false
+    
+    serviceAccount:
+      name: valkey
 
-    # Disable the container-level security context
-    containerSecurityContext:
-      enabled: false

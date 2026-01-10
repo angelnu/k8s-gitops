@@ -1,0 +1,13 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: valkey-scc
+subjects:
+  - kind: ServiceAccount
+    name: valkey
+    namespace: ${MY_NAMESPACE}
+roleRef:
+  kind: ClusterRole
+  name: system:openshift:scc:nonroot
+  apiGroup: rbac.authorization.k8s.io
