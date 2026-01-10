@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app vnc-terminal
+  name: &app vpn-terminal
   namespace: flux-system
 spec:
-  targetNamespace: &ns vnc
+  targetNamespace: &ns vpn
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./apps/vnc/terminal/app
+  path: ./apps/vpn/terminal/app
   prune: true
   dependsOn:
     - name: vpn-gateway-app
