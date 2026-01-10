@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/component.json
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - cluster.yaml
+  - objectStore.yaml
+  - podMonitor.yaml
+  - scheduledBackup.yaml
+  - secret.sops.yaml

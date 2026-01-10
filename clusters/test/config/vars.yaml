@@ -7,7 +7,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
-  path: ./clusters/prod/flux/vars
+  path: ./clusters/test/flux
   prune: false
   wait: true
   sourceRef:

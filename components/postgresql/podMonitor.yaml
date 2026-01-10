@@ -1,0 +1,11 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: "${MY_APP}-db"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg
+  podMetricsEndpoints:
+    - port: metrics

@@ -1,0 +1,19 @@
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: cluster-nas-backup
+spec:
+  retentionPolicy: "30d" # Automatically clean up old backups on the NAS
+  configuration:
+    destinationPath: s3://${S3_NAS_POSTGRES_BUCKET}/
+    endpointURL: "${S3_NAS_URL}"
+    s3Credentials:
+      accessKeyId:
+        name: nas-s3-creds
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: nas-s3-creds
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip # Compresses logs before sending to NAS
