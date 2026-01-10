@@ -18,16 +18,20 @@ spec:
     replica:
       enabled: true
       replicaCount: 2  # This creates 2 replicas + 1 primary = 3 pods
+      # Tell the replicas which user to use to talk to the primary
+      replicationUser: "replication-user"
     persistence:
       enabled: false  # If I loose all replicas together "only" the sessions expire
       size: 8Gi
     # For Authentik, ensure you set a password
     auth:
-      enabled: true
-      # password: set in secret
+      enabled: true  # You must define the default user if auth is enabled
+      usersExistingSecret: "valkey-users"
+      aclUsers:
+        default:
+          # ~* (access to all keys), &* (all pub/sub), +@all (all commands)
+          permissions: "~* &* +@all"
+        # Replicas need a user with replication permissions
+        replication-user:
+          permissions: "+psync +replconf +ping"
   
-  valuesFrom:
-  - kind: Secret
-    name: "valkey-values"
-    valuesKey: values.yaml
-    optional: false
