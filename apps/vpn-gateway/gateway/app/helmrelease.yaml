@@ -59,6 +59,12 @@ spec:
             envFrom:
               - secretRef:
                   name: airvpn
+            
+            securityContext:
+              privileged: true # Required for mknod/device access
+              capabilities:
+                add:
+                  - NET_ADMIN
 
             probes:
               liveness:
