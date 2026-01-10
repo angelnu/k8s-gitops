@@ -62,25 +62,6 @@ spec:
 
     postgresql:
       enabled: false
-
-    redis:
-      enabled: true
-      persistence:
-        enabled: false
-      auth:
-        enabled: true
-        # password: #in cret
-      master:
-        resources:
-          limits:
-            cpu: 2
-            ephemeral-storage: 2Gi
-            memory: 2048Mi
-          requests:
-            cpu: 100m
-            ephemeral-storage: 50Mi
-            memory: 128Mi
-
     
     server:
       replicas: 2
