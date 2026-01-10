@@ -5,7 +5,7 @@ metadata:
   name: valkey-scc
 subjects:
   - kind: ServiceAccount
-    name: valkey
+    name: ${MY_APP}-valkey
     namespace: ${MY_NAMESPACE}
 roleRef:
   kind: ClusterRole

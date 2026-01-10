@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: valkey
-  namespace: authentik
+  namespace: flux-system
 spec:
   interval: 30m
   url: https://valkey.io/valkey-helm

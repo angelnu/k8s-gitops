@@ -11,13 +11,13 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: valkey
-        namespace: authentik
+        namespace: flux-system
       interval: 5m
   values:
     architecture: replication
     replica:
       enabled: true
-      replicaCount: 2  # This creates 2 replicas + 1 primary = 3 pods
+      replicaCount: 2 # This creates 2 replicas + 1 primary = 3 pods
       # Tell the replicas which user to use to talk to the primary
       replicationUser: "replication-user"
       persistence:
@@ -29,8 +29,8 @@ spec:
       size: 1Gi
     # For Authentik, ensure you set a password
     auth:
-      enabled: true  # You must define the default user if auth is enabled
-      usersExistingSecret: "valkey-users"
+      enabled: true # You must define the default user if auth is enabled
+      usersExistingSecret: ${MY_APP}-valkey-users
       aclUsers:
         default:
           # ~* (access to all keys), &* (all pub/sub), +@all (all commands)
@@ -38,7 +38,6 @@ spec:
         # Replicas need a user with replication permissions
         replication-user:
           permissions: "+psync +replconf +ping"
-    
-    serviceAccount:
-      name: valkey
 
+    serviceAccount:
+      name: ${MY_APP}-valkey
