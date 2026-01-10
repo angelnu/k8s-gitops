@@ -38,14 +38,10 @@ spec:
         # Replicas need a user with replication permissions
         replication-user:
           permissions: "+psync +replconf +ping"
-    containerSecurityContext:
-      enabled: true
-      runAsUser: null
-      runAsGroup: null
-      runAsNonRoot: true
+        # Disable the pod-level security context
+        podSecurityContext:
+          enabled: false
 
-    podSecurityContext:
-      enabled: true
-      fsGroup: null
-      runAsUser: null
-      runAsGroup: null
+        # Disable the container-level security context
+        containerSecurityContext:
+          enabled: false
