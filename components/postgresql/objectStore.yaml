@@ -7,7 +7,7 @@ spec:
   retentionPolicy: "30d" # Automatically clean up old backups on the NAS
   configuration:
     destinationPath: s3://${S3_NAS_POSTGRES_BUCKET}/
-    endpointURL: "${S3_NAS_URL}"
+    endpointURL: http://192.168.2.10:9000
     s3Credentials:
       accessKeyId:
         name: nas-s3-creds

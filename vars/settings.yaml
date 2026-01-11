@@ -6,7 +6,6 @@ metadata:
 data:
   # Common
   CLUSTER_DOMAIN_CERT: cluster-domain-cert
-  S3_NAS_URL: http://192.168.2.10:9000
 
   CLUSTER_MAIL_SERVER_PORT: "25"
   # mcvlan_static_range: &anchor_ip_mcvlan_static_range
