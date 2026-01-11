@@ -3,17 +3,19 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app vpn-gateway
+  name: &app vpn-prowlarr
   namespace: flux-system
 spec:
-  targetNamespace: &ns vpn-gateway
+  targetNamespace: &ns vpn
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./apps/vpn-gateway/gateway/app
+  path: ./apps/vpn/prowlarr/app
+  components:
+    - ../../../components/cephfs_pvc
   prune: true
   dependsOn:
-    - name: vpn-gateway-secret
+    - name: vpn-gateway
   sourceRef:
     kind: GitRepository
     name: cluster-repository

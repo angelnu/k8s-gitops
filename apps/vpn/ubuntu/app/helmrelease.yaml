@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: mega-vnc
+  name: ${MY_APP}
 spec:
   interval: 5m
   chart:
@@ -13,7 +13,7 @@ spec:
       interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: bjw-s-helm-charts
+        name: bjw-s
         namespace: flux-system
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
@@ -22,48 +22,34 @@ spec:
         containers:
           main:
             image:
-              repository: docker.io/johnshine/mega.syno
-              tag: latest@sha256:1625bbabd89a443677e016ec1e5bb990e16f5d53245e23631d77e44d5c901dc8
+              repository: docker.io/dorowu/ubuntu-desktop-lxde-vnc
+              tag: latest@sha256:775184eaa5bbc01bc4261a6c9596a642b3b43a433c1508637567bc724575964b
+        pod:
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroup: 0
 
     service:
       main:
         controller: main
         ports:
           http:
-            port: 6080
+            port: 80
           vnc:
             enabled: false
-            port: 5901
-
-    persistence:
-      mega:
-        enabled: true
-        type: custom
-        globalMounts:
-          - subPath: .local
-            path: /home/mega/.local
-            readOnly: false
-          - subPath: .MEGA
-            path: /home/mega/MEGA
-            readOnly: false
-          - subPath: MEGAsync Downloads
-            path: /home/mega/MEGAsync Downloads
-            readOnly: false
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_DOWNLOADS}/downloaders/mega"
+            port: 5900
 
     ingress:
       main:
         enabled: true
         annotations:
           hajimari.io/enable: "true"
-          hajimari.io/icon: simple-icons:mega
-          hajimari.io/info: MEGA Downloader
-          hajimari.io/group: media
+          hajimari.io/icon: logos:ubuntu
+          hajimari.io/info: Ubuntu
+          hajimari.io/group: tools
         hosts:
-          - host: mega.pub.${CLUSTER_DOMAIN}
+          - host: ubuntu.pub.${CLUSTER_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix

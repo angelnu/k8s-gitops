@@ -63,12 +63,14 @@ spec:
         existingClaim: recipes-media-pvc
         globalMounts:
           - path: /opt/recipes/mediafiles
+            subPath: media
             readOnly: false
       static:
         enabled: true
         existingClaim: recipes-static-pvc
         globalMounts:
           - path: /opt/recipes/staticfiles
+            subPath: static
             readOnly: false
     
     serviceAccount:

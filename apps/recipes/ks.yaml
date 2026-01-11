@@ -11,6 +11,9 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./apps/recipes/app
+  components:
+    - ../../../components/postgresql
+    - ../../../components/cephfs_pvc
   prune: true
   dependsOn:
     - name: openshift-operators
