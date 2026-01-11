@@ -11,6 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./apps/home-assistant/db/app
+  components:
+    - ../../../../components/postgresql
   prune: true
   dependsOn:
     - name: openshift-operators
