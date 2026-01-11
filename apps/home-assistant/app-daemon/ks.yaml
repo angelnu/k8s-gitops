@@ -13,7 +13,7 @@ spec:
   path: ./apps/home-assistant/app-daemon/app
   prune: true
   dependsOn:
-    - name: home-assistant-app
+    - name: home-assistant
   sourceRef:
     kind: GitRepository
     name: cluster-repository
