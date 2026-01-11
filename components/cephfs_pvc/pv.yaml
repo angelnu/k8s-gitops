@@ -1,25 +1,14 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: deepstack-pvc
-spec:
-  resources:
-    requests:
-      storage: "1Gi"
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: deepstack-storageclass
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: deepstack-pv
+  name: ${MY_APP}-pv-${MY_NAMESPACE}
 spec:
-  storageClassName: deepstack-storageclass
+  storageClassName: ${MY_APP}-storageclass
   capacity:
     storage: "1Gi"
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   csi:
     driver: cephfs.csi.ceph.com
     nodeStageSecretRef:
@@ -33,9 +22,9 @@ spec:
       # (required) CephFS filesystem name into which the volume shall be created
       "fsName": "cephfs"
       "staticVolume": "true"
-      "rootPath": /k8s/${CLUSTER_NAME}/deepstack
+      "rootPath": /k8s/${CLUSTER_NAME}/${MY_APP}
     # volumeHandle can be anything, need not to be same
     # as PV name or volume name. keeping same for brevity
-    volumeHandle: deepstack-pv
+    volumeHandle: ${MY_APP}-pv
   persistentVolumeReclaimPolicy: Delete
   volumeMode: Filesystem
