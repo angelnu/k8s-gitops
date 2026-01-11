@@ -38,7 +38,7 @@ spec:
   walStorage:
     # Separate WAL storage is recommended for production to avoid IO contention
     storageClass: longhorn-postgres-replica-storage
-    size: ${POSTGRES_WALSTORAGE_STORAGE_SIZE}
+    size: ${POSTGRES_WALSTORAGE_SIZE}
 
   externalClusters:
     - name: source
