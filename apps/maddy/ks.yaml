@@ -11,6 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./apps/maddy/app
+  components:
+    - ../../../components/postgresql
   prune: true
   dependsOn:
     - name: cert-manager-certificate
@@ -27,3 +29,5 @@ spec:
     substitute:
       MY_NAMESPACE: *ns
       MY_APP: *app
+      POSTGRES_STORAGE_SIZE: 5Gi
+      POSTGRES_WALSTORAGE_SIZE: 3Gi

@@ -11,6 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./apps/tt-rss/app
+  components:
+    - ../../../components/postgresql
   prune: true
   dependsOn:
     - name: openshift-operators
@@ -26,3 +28,5 @@ spec:
     substitute:
       MY_NAMESPACE: *ns
       MY_APP: *app
+      POSTGRES_STORAGE_SIZE: 5Gi
+      POSTGRES_WALSTORAGE_SIZE: 3Gi
