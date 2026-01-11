@@ -5,6 +5,7 @@ kind: HelmRelease
 metadata:
   name: nextcloud-push-service
 spec:
+  suspend: true
   interval: 30m
   chart:
     spec:
