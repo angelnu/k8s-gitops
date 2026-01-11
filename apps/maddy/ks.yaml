@@ -32,3 +32,4 @@ spec:
       MY_APP: *app
       POSTGRES_STORAGE_SIZE: 5Gi
       POSTGRES_WALSTORAGE_SIZE: 3Gi
+      CEPHFS_ACCESS_MODE: ReadWriteMany

@@ -28,3 +28,4 @@ spec:
     substitute:
       MY_NAMESPACE: *ns
       MY_APP: *app
+      CEPHFS_ACCESS_MODE: ReadWriteMany
