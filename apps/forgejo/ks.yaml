@@ -28,3 +28,5 @@ spec:
     substitute:
       MY_NAMESPACE: *ns
       MY_APP: *app
+      POSTGRES_STORAGE_SIZE: 3Gi
+      POSTGRES_WALSTORAGE_SIZE: 2Gi
