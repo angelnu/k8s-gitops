@@ -8,5 +8,5 @@ spec:
     requests:
       storage: "1Gi"
   accessModes:
-  - ReadWriteMany
+  - ${CEPHFS_ACCESS_MODE:=ReadWriteOnce}
   storageClassName: ${MY_APP}-storageclass
