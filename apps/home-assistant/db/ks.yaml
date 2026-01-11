@@ -26,6 +26,7 @@ spec:
   postBuild:
     substitute:
       MY_NAMESPACE: *ns
+      MY_APP: *app
       POSTGRES_STORAGE_SIZE: 10Gi
       POSTGRES_WALSTORAGE_SIZE: 5Gi
       POSTGRES_RECOVERY_SECRETNAME: home-assistant-db-app-fix
