@@ -13,6 +13,7 @@ spec:
   path: ./apps/maddy/app
   components:
     - ../../../components/postgresql
+    - ../../../components/cephfs_pvc
   prune: true
   dependsOn:
     - name: cert-manager-certificate
