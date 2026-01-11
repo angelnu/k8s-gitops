@@ -13,6 +13,7 @@ spec:
   path: ./apps/forgejo/app
   components:
     - ../../../components/postgresql
+    - ../../../components/nfs_pvc
   prune: true
   dependsOn:
     - name: ingress-nginx
@@ -30,3 +31,4 @@ spec:
       MY_APP: *app
       POSTGRES_STORAGE_SIZE: 3Gi
       POSTGRES_WALSTORAGE_SIZE: 2Gi
+      NFS_KUBERNETES_SUBFOLDER: gitea/data

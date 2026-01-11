@@ -13,6 +13,7 @@ spec:
   path: ./apps/nextcloud/app
   components:
     - ../../../components/postgresql
+    - ../../../components/nfs_pvc
   prune: true
   dependsOn:
     - name: openshift-operators
@@ -30,3 +31,4 @@ spec:
       MY_APP: *app
       POSTGRES_STORAGE_SIZE: 10Gi
       POSTGRES_WALSTORAGE_SIZE: 5Gi
+      NFS_KUBERNETES_SUBFOLDER: nextcloud

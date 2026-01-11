@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-${MY_APP}
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ${MY_APP}-storageclass
+  resources:
+    requests:
+      storage: 1T
