@@ -2,6 +2,8 @@ apiVersion: config.openshift.io/v1
 kind: ClusterVersion
 metadata:
   name: version
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   channel: stable-scos-4
   desiredUpdate:
