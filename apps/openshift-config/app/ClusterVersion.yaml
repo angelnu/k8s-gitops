@@ -7,4 +7,4 @@ metadata:
 spec:
   channel: stable-scos-4
   desiredUpdate:
-    version: 4.21.0-okd-scos.ec.17 # renovate: depName=registry.ci.openshift.org/origin/release-scos-next datasource=docker
+    version: 4.21.0-okd-scos.ec.19 # renovate: depName=registry.ci.openshift.org/origin/release-scos-next datasource=docker
