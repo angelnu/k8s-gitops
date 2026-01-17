@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ceph
+  name: &app ceph-rbd
   namespace: flux-system
 spec:
-  targetNamespace: &ns ceph
+  targetNamespace: &ns ceph-rbd
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./apps/ceph/app
+  path: ./apps/ceph-rbd/app
   prune: true
   sourceRef:
     kind: GitRepository
