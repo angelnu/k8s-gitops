@@ -421,7 +421,7 @@ spec:
                   query-name: "nextcloud.${CLUSTER_SHORT_DOMAIN}"
                   query-type: "A"
                 conditions:
-                  - "[BODY] == 192.168.5.128"
+                  - "[BODY] == ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.128"
                   - "[DNS_RCODE] == NOERROR"
               - name: home-assistant
                 group: DNS
@@ -434,7 +434,7 @@ spec:
                   query-name: "ha.${CLUSTER_SHORT_DOMAIN}"
                   query-type: "A"
                 conditions:
-                  - "[BODY] == 192.168.5.128"
+                  - "[BODY] == ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.128"
                   - "[DNS_RCODE] == NOERROR"
               
 
