@@ -23,7 +23,7 @@ spec:
           main:
             image:
               repository: docker.io/acockburn/appdaemon
-              tag: 4.5.12 # Adding sha from docker hub breaks (points to invalid arch?)
+              tag: 4.5.13 # Adding sha from docker hub breaks (points to invalid arch?)
             env:
               TZ: "Europe/Berlin"
               #LATITUDE: secret
