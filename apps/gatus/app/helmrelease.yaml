@@ -506,7 +506,7 @@ spec:
                   - "[STATUS] == 200"
                   
                   
-              - name: Gitea
+              - name: Forgejo
                 group: apps
                 url: "https://git.${CLUSTER_SHORT_DOMAIN}"
                 interval: 5m
@@ -516,9 +516,9 @@ spec:
                 conditions:
                   - "[STATUS] == 200"
 
-              - name: Gitea ssh
+              - name: Forgejo ssh
                 group: apps
-                url: "tcp://git.${CLUSTER_SHORT_DOMAIN}:2222"
+                url: "tcp://git.${HOME_DOMAIN}:2222"
                 interval: 5m
                 alerts:
                   - type: slack
