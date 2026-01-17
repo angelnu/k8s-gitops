@@ -5,10 +5,10 @@ metadata:
   name: ceph-csi
 subjects:
   - kind: ServiceAccount
-    name: ${MY_APP}-csi-rbd-nodeplugin
+    name: ${MY_APP}-nodeplugin
     namespace: ${MY_NAMESPACE}
   - kind: ServiceAccount
-    name: ${MY_APP}-csi-rbd-provisioner
+    name: ${MY_APP}-provisioner
     namespace: ${MY_NAMESPACE}
 roleRef:
   kind: ClusterRole
