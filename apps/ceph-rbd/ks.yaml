@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ceph-rbd
+  name: &app ceph-csi-rbd
   namespace: flux-system
 spec:
   targetNamespace: &ns ceph-rbd
