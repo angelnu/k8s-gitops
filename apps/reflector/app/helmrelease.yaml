@@ -14,9 +14,10 @@ spec:
         kind: HelmRepository
         name: emberstack
         namespace: reflector
+  timeout: 20m
   install:
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
