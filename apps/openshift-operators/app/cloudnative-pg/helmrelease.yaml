@@ -5,15 +5,16 @@ kind: HelmRelease
 metadata:
   name: &app plugin-barman-cloud
 spec:
-  interval: 30m
   chart:
     spec:
       chart: plugin-barman-cloud
       version: 0.3.1
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: cloudnative-pg
         namespace: openshift-operators
+  interval: 30m
   timeout: 20m
   install:
     remediation:

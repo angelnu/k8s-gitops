@@ -5,8 +5,6 @@ kind: HelmRelease
 metadata:
   name: &app cert-manager
 spec:
-  #serviceAccountName: ${TECHNICAL_ACCOUNT}
-  interval: 5m
   chart:
     spec:
       chart: cert-manager
@@ -15,7 +13,7 @@ spec:
         kind: HelmRepository
         name: jetstack
         namespace: cert-manager
-      interval: 5m
+      interval: 60m
   timeout: 20m
   install:
     remediation:

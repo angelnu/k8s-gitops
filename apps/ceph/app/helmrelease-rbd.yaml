@@ -5,15 +5,16 @@ kind: HelmRelease
 metadata:
   name: &app ceph-csi-rbd
 spec:
-  interval: 30m
   chart:
     spec:
       chart: ceph-csi-rbd
       version: 3.16.0
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: ceph-csi
         namespace: ceph
+  interval: 30m
   timeout: 20m
   install:
     remediation:
