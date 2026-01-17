@@ -14,6 +14,7 @@ spec:
         name: jetstack
         namespace: cert-manager
       interval: 60m
+  interval: 30m
   timeout: 20m
   install:
     remediation:
