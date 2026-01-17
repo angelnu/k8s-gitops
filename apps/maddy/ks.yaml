@@ -18,7 +18,7 @@ spec:
   dependsOn:
     - name: cert-manager-certificate
     - name: reflector
-    - name: ceph
+    - name: ceph-cephfs
   sourceRef:
     kind: GitRepository
     name: cluster-repository
