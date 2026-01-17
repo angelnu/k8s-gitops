@@ -8,7 +8,7 @@ spec:
   interval: 1m
   url: https://github.com/angelnu/k8s-gitops.git
   ref:
-    branch: main
+    branch: test
     # tag: production
   # secretRef:
   #   name: flux-gitea-token
