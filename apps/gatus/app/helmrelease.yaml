@@ -102,7 +102,7 @@ spec:
             endpoints:
               - name: Proxmox 1
                 group: core
-                url: "https://pve1.angelnu.com:8006"
+                url: "https://pve1.${HOME_DOMAIN}:8006"
                 interval: 5m
                 alerts:
                   - type: slack
@@ -111,7 +111,7 @@ spec:
                   - "[STATUS] == 200"
               - name: Proxmox 2
                 group: core
-                url: "https://pve2.angelnu.com:8006"
+                url: "https://pve2.${HOME_DOMAIN}:8006"
                 interval: 5m
                 alerts:
                   - type: slack
@@ -120,7 +120,7 @@ spec:
                   - "[STATUS] == 200"
               - name: Proxmox 3
                 group: core
-                url: "https://pve3.angelnu.com:8006"
+                url: "https://pve3.${HOME_DOMAIN}:8006"
                 interval: 5m
                 alerts:
                   - type: slack
@@ -129,7 +129,7 @@ spec:
                   - "[STATUS] == 200"
               - name: Proxmox 4
                 group: core
-                url: "https://pve4.angelnu.com:8006"
+                url: "https://pve4.${HOME_DOMAIN}:8006"
                 interval: 5m
                 alerts:
                   - type: slack
@@ -138,7 +138,7 @@ spec:
                   - "[STATUS] == 200"
               - name: Proxmox 5
                 group: core
-                url: "https://pve5.angelnu.com:8006"
+                url: "https://pve5.${HOME_DOMAIN}:8006"
                 interval: 5m
                 alerts:
                   - type: slack
@@ -147,7 +147,7 @@ spec:
                   - "[STATUS] == 200"
               - name: dev ssh
                 group: core
-                url: "tcp://casa96.${CLUSTER_SHORT_DOMAIN}:22322"
+                url: "tcp://casa96.${HOME_DOMAIN}:22322"
                 interval: 5m
                 alerts:
                   - type: slack
