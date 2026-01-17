@@ -3,7 +3,6 @@ kind: HelmRelease
 metadata:
   name: "${MY_APP}-valkey"
 spec:
-  interval: 5m
   chart:
     spec:
       chart: valkey
@@ -12,7 +11,17 @@ spec:
         kind: HelmRepository
         name: valkey
         namespace: flux-system
-      interval: 5m
+      interval: 60m
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   values:
     architecture: replication
     replica:

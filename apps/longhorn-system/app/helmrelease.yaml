@@ -5,15 +5,16 @@ kind: HelmRelease
 metadata:
   name: &app longhorn
 spec:
-  interval: 30m
   chart:
     spec:
       chart: longhorn
       version: 1.10.1
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: longhorn
         namespace: longhorn-system
+  interval: 30m
   timeout: 20m
   install:
     remediation:
@@ -65,5 +66,5 @@ spec:
           repository: openshift/origin-oauth-proxy
           tag: 4.20
       defaultBackupStore:
-        backupTarget: cifs://nas.home.angelnu.com/NetBackup/longhorn/${CLUSTER_NAME}
+        backupTarget: cifs://nas.home.${HOME_DOMAIN}/NetBackup/longhorn/${CLUSTER_NAME}
         backupTargetCredentialSecret: cifs-secret

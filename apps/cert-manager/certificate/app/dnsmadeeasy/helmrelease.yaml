@@ -5,16 +5,25 @@ kind: HelmRelease
 metadata:
   name: dnsmadeeasy-webhook
 spec:
-  interval: 5m
   chart:
     spec:
       chart: dnsmadeeasy-webhook
       version: 6.0.1
-      interval: 15m
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: angelnu-helm-charts
         namespace: flux-system
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/dnsmadeeasy-webhook/values.yaml
   values:
     groupName: "${CLUSTER_DOMAIN}"

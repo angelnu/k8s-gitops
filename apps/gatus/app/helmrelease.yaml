@@ -5,16 +5,25 @@ kind: HelmRelease
 metadata:
   name: gatus
 spec:
-  interval: 20m
   chart:
     spec:
       chart: app-template
       version: 4.6.2
-      interval: 15m
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     controllers:
@@ -93,7 +102,7 @@ spec:
             endpoints:
               - name: Proxmox 1
                 group: core
-                url: "https://pve1.${CLUSTER_SHORT_DOMAIN}:8006"
+                url: "https://pve1.${HOME_DOMAIN}:8006"
                 interval: 5m
                 alerts:
                   - type: slack
@@ -102,7 +111,7 @@ spec:
                   - "[STATUS] == 200"
               - name: Proxmox 2
                 group: core
-                url: "https://pve2.${CLUSTER_SHORT_DOMAIN}:8006"
+                url: "https://pve2.${HOME_DOMAIN}:8006"
                 interval: 5m
                 alerts:
                   - type: slack
@@ -111,7 +120,7 @@ spec:
                   - "[STATUS] == 200"
               - name: Proxmox 3
                 group: core
-                url: "https://pve3.${CLUSTER_SHORT_DOMAIN}:8006"
+                url: "https://pve3.${HOME_DOMAIN}:8006"
                 interval: 5m
                 alerts:
                   - type: slack
@@ -120,16 +129,25 @@ spec:
                   - "[STATUS] == 200"
               - name: Proxmox 4
                 group: core
-                url: "https://pve4.${CLUSTER_SHORT_DOMAIN}:8006"
+                url: "https://pve4.${HOME_DOMAIN}:8006"
                 interval: 5m
                 alerts:
                   - type: slack
                   - type: pagerduty
                 conditions:
-                  - "[STATUS] == 200"   
+                  - "[STATUS] == 200"
+              - name: Proxmox 5
+                group: core
+                url: "https://pve5.${HOME_DOMAIN}:8006"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                conditions:
+                  - "[STATUS] == 200"
               - name: dev ssh
                 group: core
-                url: "tcp://casa96.${CLUSTER_SHORT_DOMAIN}:22322"
+                url: "tcp://casa96.${HOME_DOMAIN}:22322"
                 interval: 5m
                 alerts:
                   - type: slack
@@ -403,7 +421,7 @@ spec:
                   query-name: "nextcloud.${CLUSTER_SHORT_DOMAIN}"
                   query-type: "A"
                 conditions:
-                  - "[BODY] == 192.168.5.128"
+                  - "[BODY] == ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.128"
                   - "[DNS_RCODE] == NOERROR"
               - name: home-assistant
                 group: DNS
@@ -416,7 +434,7 @@ spec:
                   query-name: "ha.${CLUSTER_SHORT_DOMAIN}"
                   query-type: "A"
                 conditions:
-                  - "[BODY] == 192.168.5.128"
+                  - "[BODY] == ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.128"
                   - "[DNS_RCODE] == NOERROR"
               
 
@@ -488,7 +506,7 @@ spec:
                   - "[STATUS] == 200"
                   
                   
-              - name: Gitea
+              - name: Forgejo
                 group: apps
                 url: "https://git.${CLUSTER_SHORT_DOMAIN}"
                 interval: 5m
@@ -498,9 +516,9 @@ spec:
                 conditions:
                   - "[STATUS] == 200"
 
-              - name: Gitea ssh
+              - name: Forgejo ssh
                 group: apps
-                url: "tcp://git.${CLUSTER_SHORT_DOMAIN}:2222"
+                url: "tcp://git.${HOME_DOMAIN}:2222"
                 interval: 5m
                 alerts:
                   - type: slack

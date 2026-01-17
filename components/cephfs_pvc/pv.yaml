@@ -15,7 +15,7 @@ spec:
       # node stage secret name
       name: ceph-secret
       # node stage secret namespace where above secret is created
-      namespace: ceph
+      namespace: ceph-cephfs
     volumeAttributes:
       # Required options from storageclass parameters need to be added in volumeAttributes
       "clusterID": "2ec73f92-a0c8-11eb-b84d-eb70282a4edf"
