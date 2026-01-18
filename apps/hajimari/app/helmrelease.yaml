@@ -98,7 +98,7 @@ spec:
           hajimari.io/enable: "true"
           hajimari.io/icon: weather-sunset
           hajimari.io/info: Casa96 dashboard
-          hajimari.io/group: tools
+          hajimari.io/group: Cluster
         hosts:
           - host: &host home.${CLUSTER_SHORT_DOMAIN}
             paths:
