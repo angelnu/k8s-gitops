@@ -8,6 +8,9 @@ metadata:
     cnpg.io/skipEmptyWalArchiveCheck: enabled # Allow for backup source and target to be the same
 spec:
   instances: 3 # 1 Primary + 2 Replicas for High Availability
+  
+  # This tells CNPG how to behave during a node drain
+  evictionStrategy: LiveUpdate
 
   minSyncReplicas: 1
   maxSyncReplicas: 2
