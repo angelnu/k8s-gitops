@@ -65,6 +65,10 @@ spec:
           registry: quay.io
           repository: openshift/origin-oauth-proxy
           tag: 4.20
+      defaultSettings:
+        # Recommended for databases with app-level redundancy:
+        # This allows the drain to proceed even if the volume is the last replica.
+        nodeDrainPolicy: allow-if-replica-is-stopped
       defaultBackupStore:
         backupTarget: cifs://nas.home.${HOME_DOMAIN}/NetBackup/longhorn/${CLUSTER_NAME}
         backupTargetCredentialSecret: cifs-secret
