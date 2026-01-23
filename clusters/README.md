@@ -19,7 +19,7 @@
 2. Create the secret in the cluster:
 
        ```shell
-       sops -d clusters/<cluster>/flux/vars/sops-age.secret.sops.yaml|kubectl apply -f -
+       sops -d clusters/<cluster>/vars/sops-age.secret.sops.yaml|kubectl apply -f -
        ```
 3. `kubectl -n flux-system apply -k bootstrap`
 4. `kubectl -n flux-system apply -k clusters/<cluster>/config`
