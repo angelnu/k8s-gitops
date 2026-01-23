@@ -16,6 +16,12 @@ spec:
   minSyncReplicas: 1
   maxSyncReplicas: 2
 
+  affinity:
+    # "required" ensures pods NEVER share a node
+    podAntiAffinityType: required
+    # Use "kubernetes.io/hostname" to target individual worker nodes
+    topologyKey: kubernetes.io/hostname
+
   imageName: ghcr.io/cloudnative-pg/postgresql:17.1
 
   # 1. Continuous Backup to Synology (MinIO)
