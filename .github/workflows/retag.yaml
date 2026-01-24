@@ -1,0 +1,40 @@
+name: Retag for production 
+on:
+    schedule:
+        # Saturday at 12:00 UTC
+        - cron: "0 12 * * 6"
+    workflow_dispatch: # Allows manual testing
+
+jobs:
+    retag:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0 # Required to push tags back
+
+            - name: Check if last commit tests passed
+              id: check_status
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  # Get the status of the latest commit on the default branch
+                  # 'success' means all required checks passed
+                  STATE=$(gh api repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs --jq '.check_runs[0].conclusion')
+
+                  echo "Last check conclusion: $STATE"
+                  if [ "$STATE" != "success" ]; then
+                    echo "Tests did not pass or are still running. Aborting retag."
+                    exit 1
+                  fi
+
+            - name: Update Tag
+              run: |
+                  git config user.name "angelnu-bot[bot]"
+                  git config user.email "mailto:115925344+angelnu-bot[bot]@users.noreply.github.com"
+
+                  TAG_NAME="production"
+
+                  git tag -f $TAG_NAME
+                  git push origin $TAG_NAME --force
