@@ -2,7 +2,7 @@
 # Creating Service machine.
 ##############################
 resource "proxmox_vm_qemu" "cloudinit-nodes" {
-  count = terraform.workspace == "default" ? 1 : 0
+  count       = terraform.workspace == "default" ? 1 : 0
   name        = local.service.name
   vmid        = local.service.vmid
   target_node = local.service.target_host
@@ -15,7 +15,7 @@ resource "proxmox_vm_qemu" "cloudinit-nodes" {
 
 
   cpu {
-    cores  = local.service.cores
+    cores   = local.service.cores
     limit   = 0
     numa    = false
     sockets = 1
@@ -76,13 +76,13 @@ resource "proxmox_vm_qemu" "cloudinit-nodes" {
 ###################################
 
 resource "proxmox_virtual_environment_download_file" "okd_agent_iso" {
-  count = (terraform.workspace == "default" || local.main.ipxe.enabled ) ? 0 : 1
+  count        = (terraform.workspace == "default" || local.main.ipxe.enabled) ? 0 : 1
   content_type = "iso"
   datastore_id = "cephfs"
   node_name    = "pve1"
-  provider = proxmox-bpg
-  url          = format("http://%s:8080/%s/agent.x86_64.iso", local.main.service.ip ,terraform.workspace)
-  file_name = format("okd-agent-%s.iso", terraform.workspace)
+  provider     = proxmox-bpg
+  url          = format("http://%s:8080/%s/agent.x86_64.iso", local.main.service.ip, terraform.workspace)
+  file_name    = format("okd-agent-%s.iso", terraform.workspace)
 }
 
 resource "proxmox_vm_qemu" "pxe-nodes" {
@@ -90,23 +90,24 @@ resource "proxmox_vm_qemu" "pxe-nodes" {
   name        = format("%s-%s-%s", var.vm_name_prefix, terraform.workspace, each.key)
   vmid        = each.value.vmid
   target_node = each.value.target_host
-  
+
   dynamic "disk" {
-    for_each = local.main.ipxe.enabled  ? [] : [1]
+    for_each = local.main.ipxe.enabled ? [] : [1]
     content {
-        slot    = "ide2"
-        type    = "cdrom"
-        iso     = format("cephfs:iso/%s", proxmox_virtual_environment_download_file.okd_agent_iso[0].file_name)
+      slot = "ide2"
+      type = "cdrom"
+      iso  = format("cephfs:iso/%s", proxmox_virtual_environment_download_file.okd_agent_iso[0].file_name)
     }
   }
-  
-  boot        = format("order=scsi0;%s", local.main.ipxe.enabled  ? "net0" : "ide2")
-  agent       = 0
-  tags        = format("okd,okd-%s",terraform.workspace)
-  vm_state    = each.value.boot # start once created
+
+  boot                   = format("order=scsi0;%s", local.main.ipxe.enabled ? "net0" : "ide2")
+  agent                  = 0
+  tags                   = format("okd,%s,%s", terraform.workspace, contains(keys(local.masters), each.key) ? "master" : "worker")
+  vm_state               = each.value.boot # start once created
+  define_connection_info = false
 
   cpu {
-    cores  = each.value.cores
+    cores   = each.value.cores
     limit   = 0
     numa    = false
     sockets = 1
@@ -121,7 +122,7 @@ resource "proxmox_vm_qemu" "pxe-nodes" {
 
   disk {
     slot    = "scsi0"
-    size    = "120G"
+    size    = each.value.diskSize
     type    = "disk"
     storage = "local-lvm"
     format  = "raw"
@@ -134,6 +135,7 @@ resource "proxmox_vm_qemu" "pxe-nodes" {
     tag     = local.network.vlan
     macaddr = each.value.macaddr
   }
+
   startup_shutdown {
     order            = -1
     shutdown_timeout = -1
@@ -145,7 +147,7 @@ resource "local_file" "ansible_inventory" {
   count = terraform.workspace == "default" ? 1 : 0
   content = templatefile("templates/hosts.tmpl",
     {
-      service_ip   = local.service.ip
+      service_ip = local.service.ip
     }
   )
   filename = "inventory/hosts.ini"

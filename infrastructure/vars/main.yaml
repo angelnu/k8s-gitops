@@ -12,4 +12,5 @@ service:
   macaddr: 7A:00:00:00:03:FF
   cores: 2
   ram: 2048
+  diskSize: 20G
   vmid: 400

@@ -88,7 +88,7 @@ spec:
       - name: Spotify
         token: s
         icon: simple-icons:spotify
-        searchUrl: hhttps://open.spotify.com/search/{query}
+        searchUrl: https://open.spotify.com/search/{query}
         url: https://open.spotify.com
 
     ingress:
@@ -97,8 +97,8 @@ spec:
         annotations:
           hajimari.io/enable: "true"
           hajimari.io/icon: weather-sunset
-          hajimari.io/info: Casa96 dashboard
-          hajimari.io/group: Cluster
+          hajimari.io/info: Casa96 home dashboard
+          hajimari.io/group: cluster
         hosts:
           - host: &host home.${CLUSTER_SHORT_DOMAIN}
             paths:
