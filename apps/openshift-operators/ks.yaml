@@ -12,6 +12,11 @@ spec:
       app.kubernetes.io/name: *app
   path: ./apps/openshift-operators/app
   prune: true
+  # Ignore Subscription fields changed by OLM
+  ignorePaths:
+    - /spec/startingCSV      # OLM updates this to the latest version
+    - /metadata/annotations/olm.operatorNamespace
+    - /metadata/annotations/olm.operatorGroup
   dependsOn:
     - name: openshift-marketplace
   sourceRef:
