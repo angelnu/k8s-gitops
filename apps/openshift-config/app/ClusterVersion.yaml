@@ -8,4 +8,4 @@ metadata:
 spec:
   channel: stable-scos-4
   desiredUpdate:
-    image: quay.io/okd/scos-release:4.21.0-okd-scos.1@sha256:5560b432674587280f7cb54325a62b10b0217e959ad7e9faa6721d1478f1f937 # renovate: depName=quay.io/okd/scos-release datasource=docker
+    image: registry.ci.openshift.org/origin/release-scos@sha256:c39479c49aebf8edfa6b8d6f7da97768d89471b95425bde0c3ebdc90390784f9 # renovate: depName=registry.ci.openshift.org/origin/release-scos datasource=docker
