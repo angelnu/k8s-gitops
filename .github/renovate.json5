@@ -19,4 +19,12 @@
       "/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/",
     ],
   },
+  "packageRules": [
+    {
+      "matchPackageNames": ["quay.io/okd/scos-release"],
+      "versioning": "loose",
+      "ignoreUnstable": true,
+      "allowedVersions": "!/ec|rc/"
+    }
+  ]
 }
