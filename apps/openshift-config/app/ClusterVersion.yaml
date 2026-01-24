@@ -4,6 +4,7 @@ metadata:
   name: version
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
+    kustomize.toolkit.fluxcd.io/ssa: Merge
 spec:
   channel: stable-scos-4
   desiredUpdate:

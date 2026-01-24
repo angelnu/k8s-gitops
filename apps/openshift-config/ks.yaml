@@ -14,10 +14,6 @@ spec:
   prune: true
   dependsOn:
     - name: cluster-vars
-  ignorePaths:
-    # Ignore the history and the specific image SHA OLM/CVO might inject
-    - /status
-    - /spec/desiredUpdate/image
   sourceRef:
     kind: GitRepository
     name: cluster-repository
