@@ -19,15 +19,15 @@
       "/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/",
     ],
   },
-  "packageRules": [
+  packageRules: [
     {
-      "matchPackageNames": [
+      matchPackageNames: [
         "registry.ci.openshift.org/origin/release-scos",
-        "quay.io/okd/scos-release"
+        "quay.io/okd/scos-release",
       ],
-      "versioning": "loose",
-      "ignoreUnstable": true,
-      "allowedVersions": "!/ec|rc/"
-    }
-  ]
+      versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-okd-scos\\.(?<build>\\d+)$",
+      ignoreUnstable: true,
+      allowedVersions: "/^\\d+\\.\\d+\\.\\d+-okd-scos\\.\\d+$/",
+    },
+  ],
 }
