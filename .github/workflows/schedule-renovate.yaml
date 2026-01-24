@@ -1,5 +1,11 @@
 ---
 name: Schedule - Renovate
+permissions:
+  contents: write # To create branches and commits for updates
+  pull-requests: write # To create, update, and close Pull Requests
+  issues: write # To create the Dependency Dashboard issue
+  checks: read # To see if CI passed before automerging (if enabled)
+  statuses: read # To check commit statuses
 
 on:
   workflow_dispatch:
