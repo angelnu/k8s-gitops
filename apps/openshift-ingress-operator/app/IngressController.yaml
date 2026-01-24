@@ -3,24 +3,10 @@ kind: IngressController
 metadata:
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
-  finalizers:
-    - ingresscontroller.operator.openshift.io/finalizer-ingresscontroller
-  generation: 15
+    kustomize.toolkit.fluxcd.io/ssa: Merge
   name: default
 spec:
-  clientTLS:
-    clientCA:
-      name: ""
-    clientCertificatePolicy: ""
   defaultCertificate:
     name: "${CLUSTER_DOMAIN_CERT}"
-  httpCompression: {}
   routeAdmission:
     wildcardPolicy: WildcardsAllowed
-  httpEmptyRequestsPolicy: Respond
-  httpErrorCodePages:
-    name: ""
-  replicas: 2
-  tuningOptions:
-    reloadInterval: 0s
-  unsupportedConfigOverrides: null

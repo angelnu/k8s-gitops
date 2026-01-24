@@ -2,6 +2,8 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   name: local-storage-operator
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: Merge
 spec:
   channel: alpha
   installPlanApproval: Automatic

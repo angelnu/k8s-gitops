@@ -5,6 +5,7 @@ metadata:
   name: cluster
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
+    kustomize.toolkit.fluxcd.io/ssa: Merge
 spec:
   identityProviders:
     - name: Casa96

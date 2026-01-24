@@ -3,6 +3,8 @@ kind: CatalogSource
 metadata:
   name: operatorhubio
   namespace: openshift-marketplace
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: Merge
 spec:
   sourceType: grpc
   image: quay.io/operatorhubio/catalog:latest

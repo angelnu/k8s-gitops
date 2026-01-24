@@ -2,6 +2,8 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
   name: okd
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: Merge
 spec:
   image: quay.io/okderators/catalog-index:testing-4.20
   displayName: OKDerators
