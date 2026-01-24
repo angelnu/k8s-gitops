@@ -22,8 +22,8 @@ jobs:
               env:
                   GH_TOKEN: ${{ github.token }}
               run: |
-                  MAX_ATTEMPTS=12
-                  SLEEP_TIME=300
+                  MAX_ATTEMPTS=120
+                  SLEEP_TIME=30
 
                   for ((i=1; i<=MAX_ATTEMPTS; i++)); do
                     # Fetch all check runs EXCEPT for this specific 'retag' job
