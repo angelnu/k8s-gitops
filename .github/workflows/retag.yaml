@@ -14,20 +14,36 @@ jobs:
               with:
                   fetch-depth: 0 # Required to push tags back
 
-            - name: Check if last commit tests passed
-              id: check_status
+            - name: Wait for tests to complete
+              id: wait_for_tests
               env:
-                  GH_TOKEN: ${{ github.token }}
+                GH_TOKEN: ${{ github.token }}
               run: |
-                  # Get the status of the latest commit on the default branch
-                  # 'success' means all required checks passed
-                  STATE=$(gh api repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs --jq '.check_runs[0].conclusion')
-
-                  echo "Last check conclusion: $STATE"
-                  if [ "$STATE" != "success" ]; then
-                    echo "Tests did not pass or are still running. Aborting retag."
+                # Configuration
+                MAX_ATTEMPTS=12 # 12 attempts * 5 mins = 60 minutes
+                SLEEP_TIME=300 # 5 minutes
+                
+                for ((i=1; i<=MAX_ATTEMPTS; i++)); do
+                    # Get the combined status (success, pending, failure)
+                    # This covers all GitHub Actions and external status checks
+                    STATUS=$(gh api repos/${{ github.repository }}/commits/${{ github.sha }}/status --jq '.state')
+                    
+                    echo "Attempt $i: Current commit status is '$STATUS'"
+                    
+                    if [ "$STATUS" == "success" ]; then
+                    echo "Tests passed!"
+                    exit 0
+                    elif [ "$STATUS" == "failure" ] || [ "$STATUS" == "error" ]; then
+                    echo "Tests failed. Cannot retag."
                     exit 1
-                  fi
+                    fi
+                    
+                    echo "Tests still in progress (pending)... sleeping for 5 minutes."
+                    sleep $SLEEP_TIME
+                done
+
+                echo "Timed out waiting for tests to complete."
+                exit 1
 
             - name: Update Tag
               run: |
