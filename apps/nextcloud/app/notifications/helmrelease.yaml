@@ -6,18 +6,27 @@ metadata:
   name: nextcloud-push-service
 spec:
   suspend: true
-  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 4.5.0
-      interval: 15m
+      version: 4.6.2
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
   dependsOn:
     - name: nextcloud
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     controllers:

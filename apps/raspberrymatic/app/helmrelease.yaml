@@ -3,7 +3,6 @@ kind: HelmRelease
 metadata:
   name: raspberrymatic
 spec:
-  interval: 15m
   chart:
     spec:
       # renovate: registryUrl=https://jens-maus.github.io/RaspberryMatic
@@ -14,6 +13,16 @@ spec:
         name: raspberrymatic
         namespace: raspberrymatic
       interval: 60m
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   # See https://github.com/jens-maus/RaspberryMatic/blob/master/helm/raspberrymatic/values.yaml
   values:
     #image:

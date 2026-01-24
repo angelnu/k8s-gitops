@@ -3,20 +3,22 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app ceph-csi-cephfs
+  name: &app ${MY_APP}
 spec:
-  interval: 30m
   chart:
     spec:
       chart: ceph-csi-cephfs
       version: 3.16.0
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: ceph-csi
-        namespace: ceph
+        namespace: ceph-cephfs
+  interval: 30m
+  timeout: 20m
   install:
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:

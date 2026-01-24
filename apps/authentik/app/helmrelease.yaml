@@ -3,7 +3,6 @@ kind: HelmRelease
 metadata:
   name: "${MY_APP}"
 spec:
-  interval: 5m
   chart:
     spec:
       chart: authentik
@@ -12,7 +11,17 @@ spec:
         kind: HelmRepository
         name: authentik
         namespace: authentik
-      interval: 5m
+      interval: 60m
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   values:
     global:    
       env:
@@ -72,7 +81,7 @@ spec:
           hajimari.io/enable: "true"
           hajimari.io/icon: login
           hajimari.io/info: Single Sign On for Casa96
-          hajimari.io/group: tools
+          hajimari.io/group: Cluster
           nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
           nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
           nginx.org/websocket-services: authentik

@@ -1,0 +1,16 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ceph-csi
+subjects:
+  - kind: ServiceAccount
+    name: ${MY_APP}-nodeplugin
+    namespace: ${MY_NAMESPACE}
+  - kind: ServiceAccount
+    name: ${MY_APP}-provisioner
+    namespace: ${MY_NAMESPACE}
+roleRef:
+  kind: ClusterRole
+  name: system:openshift:scc:privileged
+  apiGroup: rbac.authorization.k8s.io

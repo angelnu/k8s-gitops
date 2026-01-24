@@ -4,7 +4,6 @@ kind: HelmRelease
 metadata:
   name: reloader
 spec:
-  interval: 15m
   chart:
     spec:
       chart: reloader
@@ -14,15 +13,15 @@ spec:
         name: stakater
         namespace: reloader
       interval: 60m
-
+  interval: 30m
+  timeout: 20m
   install:
-    createNamespace: true
     remediation:
-      retries: 3
-
+      retries: -1
   upgrade:
+    cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-
   values:
     fullnameOverride: reloader

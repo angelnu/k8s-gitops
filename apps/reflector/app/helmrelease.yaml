@@ -5,18 +5,20 @@ kind: HelmRelease
 metadata:
   name: &app reflector
 spec:
-  interval: 30m
   chart:
     spec:
       chart: reflector
       version: v9.1.45
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: emberstack
         namespace: reflector
+  interval: 30m
+  timeout: 20m
   install:
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:

@@ -5,16 +5,25 @@ kind: HelmRelease
 metadata:
   name: "${MY_APP}"
 spec:
-  interval: 5m
   chart:
     spec:
       chart: app-template
-      version: 4.5.0
-      interval: 15m
+      version: 4.6.2
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     controllers:
@@ -25,7 +34,7 @@ spec:
           main:
             image:
               repository: ghcr.io/angelnu/freecad-novnc
-              tag: 1.0.2@sha256:98c44af344c2fd73651a9940c79cfa107072cadc8a73d1e033c4579dddbdce7e
+              tag: 1.0.2@sha256:8accf7879c884c9ac6fb358e876e0802a6a83f1719f7933f06a3345353682513
 
             securityContext:
               runAsUser: 33 # www-data

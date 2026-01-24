@@ -4,7 +4,6 @@ kind: HelmRelease
 metadata:
   name: "${MY_APP}"
 spec:
-  interval: 15m
   chart:
     spec:
       chart: pod-gateway
@@ -14,6 +13,16 @@ spec:
         kind: HelmRepository
         name: angelnu-helm-charts
         namespace: flux-system
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/pod-gatewa/values.yaml
   values:
     controllers:

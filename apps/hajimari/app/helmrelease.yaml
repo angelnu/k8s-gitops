@@ -3,7 +3,6 @@ kind: HelmRelease
 metadata:
   name: hajimari
 spec:
-  interval: 5m
   chart:
     spec:
       # renovate: registryUrl=https://hajimari.io
@@ -13,7 +12,17 @@ spec:
         kind: HelmRepository
         name: hajimari
         namespace: hajimari
-      interval: 5m
+      interval: 60m
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   # See https://github.com/toboshii/hajimari/tree/main/charts/hajimari
   values:
     image:
@@ -89,7 +98,7 @@ spec:
           hajimari.io/enable: "true"
           hajimari.io/icon: weather-sunset
           hajimari.io/info: Casa96 dashboard
-          hajimari.io/group: tools
+          hajimari.io/group: Cluster
         hosts:
           - host: &host home.${CLUSTER_SHORT_DOMAIN}
             paths:

@@ -5,16 +5,25 @@ kind: HelmRelease
 metadata:
   name: "${MY_APP}"
 spec:
-  interval: 5m
   chart:
     spec:
       chart: app-template
-      version: 4.5.0
-      interval: 15m
+      version: 4.6.2
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
     controllers:
@@ -25,7 +34,7 @@ spec:
           main:
             image:
               repository: ghcr.io/angelnu/prusaslicer-novnc
-              tag: 2.9.4@sha256:64c517d7600b135243803019dc38fe933fbed10145b5caf5aacb9bd76793cc0f
+              tag: 2.9.4@sha256:87b9ddeb5b003c050ec81910c0702f72704a954ae5609ecc391237d238fe9c48
             securityContext:
               privileged: true
               #runAsUser: 33 # www-data

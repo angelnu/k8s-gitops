@@ -3,7 +3,6 @@ kind: HelmRelease
 metadata:
   name: nextcloud
 spec:
-  interval: 30m
   chart:
     spec:
       # renovate: registryUrl=https://nextcloud.github.io/helm/
@@ -13,7 +12,17 @@ spec:
         kind: HelmRepository
         name: nextcloud
         namespace: nextcloud
-      interval: 5m
+      interval: 60m
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   # See https://github.com/nextcloud/helm/blob/master/charts/nextcloud/values.yaml
   values:
     # image:

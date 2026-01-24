@@ -3,16 +3,25 @@ kind: HelmRelease
 metadata:
   name: "${MY_APP}"
 spec:
-  interval: 30m
   chart:
     spec:
       chart: reverse-proxy
       version: 4.0.0
-      interval: 15m
+      interval: 60m
       sourceRef:
         kind: HelmRepository
         name: angelnu-helm-charts
         namespace: flux-system
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   #See https://github.com/angelnu/helm-charts/blob/main/charts/apps/reverse-proxy/values.yaml
   values:
     instances:
@@ -209,14 +218,3 @@ spec:
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: nas-backup.pub.${CLUSTER_DOMAIN}
-      - name: kvant
-        externalName: kvant.cloud
-        port: 443
-        test: false
-        ingress:
-          annotations:
-            hajimari.io/enable: "false"
-            nginx.ingress.kubernetes.io/enable-global-auth: "false"
-            nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-          hosts:
-            - host: kvant.pub.${CLUSTER_DOMAIN}
