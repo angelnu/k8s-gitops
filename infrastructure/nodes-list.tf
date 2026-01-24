@@ -11,6 +11,7 @@ locals {
     target_host = local.main.service.target_host
     cores       = local.main.service.cores
     ram         = local.main.service.ram
+    diskSize    = local.main.service.diskSize
     ip          = local.main.service.ip
     macaddr     = local.main.service.macaddr
     vmid        = local.main.service.vmid
@@ -24,6 +25,7 @@ locals {
       target_host = node.target_host
       cores       = node.cores
       ram         = node.ram
+      diskSize    = node.diskSize
       ip          = node.ip
       macaddr     = node.macaddr # Private MAC address. 
       vmid        = node.vmid
@@ -37,6 +39,7 @@ locals {
       target_host = node.target_host
       cores       = node.cores
       ram         = node.ram
+      diskSize    = node.diskSize
       ip          = node.ip
       macaddr     = node.macaddr # Private MAC address. 
       vmid        = node.vmid
