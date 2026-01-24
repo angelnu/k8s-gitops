@@ -230,4 +230,4 @@ spec:
             hajimari.io/group: cluster
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
-            - host: nas-backup.pub.${CLUSTER_DOMAIN}
+            - host: pikvm.pub.${CLUSTER_DOMAIN}
