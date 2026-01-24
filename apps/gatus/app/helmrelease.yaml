@@ -61,7 +61,7 @@ spec:
           hajimari.io/enable: "true"
           hajimari.io/icon: connection
           hajimari.io/info: Service Status Monitor
-          hajimari.io/group: tools
+          hajimari.io/group: cluster
         hosts:
           - host: gatus.pub.${CLUSTER_DOMAIN}
             paths:
