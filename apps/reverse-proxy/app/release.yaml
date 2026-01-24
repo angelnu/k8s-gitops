@@ -218,3 +218,16 @@ spec:
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: nas-backup.pub.${CLUSTER_DOMAIN}
+      - name: pikvm
+        ip: 192.168.2.7
+        port: 443
+        ingress:
+          annotations:
+            hajimari.io/enable: "true"
+            hajimari.io/appName: PiKVM
+            hajimari.io/icon: mdi:console-network
+            hajimari.io/info: Remote terminal for HW 
+            hajimari.io/group: cluster
+            nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          hosts:
+            - host: nas-backup.pub.${CLUSTER_DOMAIN}
