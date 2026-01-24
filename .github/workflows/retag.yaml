@@ -47,7 +47,7 @@ jobs:
                       fi
                     fi
                     
-                    echo "Other tests still running... sleeping 5m."
+                    echo "Other tests still running... sleeping $SLEEP_TIME seconds."
                     sleep $SLEEP_TIME
                   done
 
