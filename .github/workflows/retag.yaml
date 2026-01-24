@@ -5,7 +5,7 @@ permissions:
     statuses: read # Required if you use the status API
 on:
     schedule:
-        - cron: "0 12 * * 6"
+        - cron: "11 11 * * 6"
     workflow_dispatch:
 
 jobs:
