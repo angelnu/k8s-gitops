@@ -21,7 +21,10 @@
   },
   "packageRules": [
     {
-      "matchPackageNames": ["quay.io/okd/scos-release"],
+      "matchPackageNames": [
+        "registry.ci.openshift.org/origin/release-scos",
+        "quay.io/okd/scos-release"
+      ],
       "versioning": "loose",
       "ignoreUnstable": true,
       "allowedVersions": "!/ec|rc/"
