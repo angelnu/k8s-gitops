@@ -8,4 +8,4 @@ metadata:
 spec:
   channel: stable-scos-4
   desiredUpdate:
-    image: registry.ci.openshift.org/origin/release-scos:4.21.0-okd-scos.1@sha256:c39479c49aebf8edfa6b8d6f7da97768d89471b95425bde0c3ebdc90390784f9 # renovate: depName=registry.ci.openshift.org/origin/release-scos datasource=docker
+    image: registry.ci.openshift.org/origin/release-scos:4.21.0-okd-scos.1@sha256:c39479c49aebf8edfa6b8d6f7da97768d89471b95425bde0c3ebdc90390784f9
