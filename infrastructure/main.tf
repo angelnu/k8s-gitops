@@ -100,10 +100,11 @@ resource "proxmox_vm_qemu" "pxe-nodes" {
     }
   }
 
-  boot     = format("order=scsi0;%s", local.main.ipxe.enabled ? "net0" : "ide2")
-  agent    = 0
-  tags     = format("okd,okd-%s", terraform.workspace)
-  vm_state = each.value.boot # start once created
+  boot                   = format("order=scsi0;%s", local.main.ipxe.enabled ? "net0" : "ide2")
+  agent                  = 0
+  tags                   = format("okd,%s,%s", terraform.workspace, contains(keys(local.masters), each.key) ? "master" : "worker")
+  vm_state               = each.value.boot # start once created
+  define_connection_info = false
 
   cpu {
     cores   = each.value.cores
@@ -134,6 +135,7 @@ resource "proxmox_vm_qemu" "pxe-nodes" {
     tag     = local.network.vlan
     macaddr = each.value.macaddr
   }
+
   startup_shutdown {
     order            = -1
     shutdown_timeout = -1
