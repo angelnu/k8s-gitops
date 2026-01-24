@@ -79,7 +79,7 @@ spec:
         enabled: true
         annotations:
           hajimari.io/enable: "true"
-          hajimari.io/icon: authentik
+          hajimari.io/icon: simple-icons:authentik
           hajimari.io/info: Single Sign On for Casa96
           hajimari.io/group: cluster
           nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
