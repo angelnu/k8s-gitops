@@ -34,6 +34,8 @@ spec:
         rollingUpdate:
           maxUnavailable: 1
       allowSnippetAnnotations: true # Required but risky - see https://github.com/kubernetes/ingress-nginx/issues/7837 - ok as only one user in the cluster
+      # Make it the default
+      watchIngressWithoutClass: true
       ingressClassResource:
         name: nginx
         enabled: true
