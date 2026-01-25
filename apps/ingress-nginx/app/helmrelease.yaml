@@ -32,6 +32,9 @@ spec:
       updateStrategy:
         type: RollingUpdate
         rollingUpdate:
+          # DO NOT create any extra pods above the replica count
+          maxSurge: 0
+          # Allow 1 pod to be down at a time to make room for the new version
           maxUnavailable: 1
       allowSnippetAnnotations: true # Required but risky - see https://github.com/kubernetes/ingress-nginx/issues/7837 - ok as only one user in the cluster
       # Make it the default
