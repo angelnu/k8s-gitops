@@ -250,7 +250,7 @@ spec:
                   - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
-              - name: Raspberrymatic
+              - name: OpenCCU
                 group: home-assistant
                 url: "http://ccu"
                 interval: 5m

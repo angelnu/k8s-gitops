@@ -1,17 +1,17 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: raspberrymatic
-  namespace: raspberrymatic
+  name: openccu
+  namespace: openccu
 spec:
   interval: 30m
-  url: https://jens-maus.github.io/RaspberryMatic
+  url: https://openccu.github.io/OpenCCU
 
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: raspberrymatic-angelnu
+  name: openccu-angelnu
 spec:
   interval: 30m
   url: https://angelnu.github.io/RaspberryMatic

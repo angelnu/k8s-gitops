@@ -66,11 +66,11 @@ Media server
 
 [Settings](plex)
 
-## RaspberryMatic
+## OpenCCU
 
-[RaspberryMatic](https://github.com/jens-maus/RaspberryMatic) allows to control Homematic and Homematic IP devices. Is a custom CCU based on OCCU.
+[OpenCCU](https://github.com/OpenCCU/OpenCCU) allows to control Homematic and Homematic IP devices.
 
-[Settings](raspberrymatic)
+[Settings](openccu)
 
 ## Recipes
 
@@ -97,10 +97,3 @@ Media server
 [Unifi](https://unifi-network.ui.com/) ubiquiti unifi controller for wireless access points. [This version](https://github.com/jacobalberty/unifi-docker) of the controller runs as container.
 
 [Settings](unifi)
-
-## Others (to be moved)
-
-  * [drone](https://www.drone.io/) - CI with a native Kubernetes Runner
-  * [home-assistant](https://github.com/home-assistant/core) - Home Automation
-  * [RaspberryMatic](https://github.com/jens-maus/RaspberryMatic) - Homematic Home Automation platform
-  * [code-server](https://github.com/cdr/code-server) - ~~Visual Studio~~ Code Server

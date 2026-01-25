@@ -97,7 +97,7 @@ spec:
         controller: main
         type: LoadBalancer
         loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_HA}"
-        #Allows exposing the port for raspberrymatic to connect to
+        #Allows exposing the port for openccu to connect to
         publishNotReadyAddresses: true
         ports:
           http:

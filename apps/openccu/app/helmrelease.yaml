@@ -1,17 +1,16 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: raspberrymatic
+  name: "${MY_APP}"
 spec:
   chart:
     spec:
-      # renovate: registryUrl=https://jens-maus.github.io/RaspberryMatic
-      chart: raspberrymatic
+      chart: openccu
       version: "3.83.6"
       sourceRef:
         kind: HelmRepository
-        name: raspberrymatic
-        namespace: raspberrymatic
+        name: openccu
+        namespace: openccu
       interval: 60m
   interval: 30m
   timeout: 20m
@@ -23,7 +22,7 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  # See https://github.com/jens-maus/RaspberryMatic/blob/master/helm/raspberrymatic/values.yaml
+  # See https://github.com/OpenCCU/OpenCCU/blob/master/helm/openccu/values.yaml
   values:
     #image:
     #  pullPolicy: IfNotPresent
@@ -31,7 +30,7 @@ spec:
     
     persistence:
       enabled: true
-      existingClaim:  raspberrymatic-pvc
+      existingClaim:  openccu-pvc
   
     nodeSelector:
       HomematicHW: "True"

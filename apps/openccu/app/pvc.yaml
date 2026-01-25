@@ -1,21 +1,21 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: raspberrymatic-pvc
+  name: openccu-pvc
 spec:
   resources:
     requests:
       storage: "1Gi"
   accessModes:
   - ReadWriteOnce
-  storageClassName: raspberrymatic-storageclass
+  storageClassName: openccu-storageclass
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: raspberrymatic-pv
+  name: openccu-pv
 spec:
-  storageClassName: raspberrymatic-storageclass
+  storageClassName: openccu-storageclass
   capacity:
     storage: "1Gi"
   accessModes:
@@ -36,7 +36,7 @@ spec:
       # If set to rbd-nbd, use rbd-nbd on nodes that have rbd-nbd and nbd kernel modules to map rbd images
       # mounter: rbd-nbd
     # volumeHandle should be same as rbd image name
-    volumeHandle: raspberrymatic
+    volumeHandle: openccu
   persistentVolumeReclaimPolicy: Retain
   # The volumeMode can be either `Filesystem` or `Block` if you are creating Filesystem PVC it should be `Filesystem`, if you are creating Block PV you need to change it to `Block`
   volumeMode: Filesystem
