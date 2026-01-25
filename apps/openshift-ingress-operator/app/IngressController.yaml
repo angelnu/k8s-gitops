@@ -6,9 +6,6 @@ metadata:
     kustomize.toolkit.fluxcd.io/ssa: Merge
   name: default
 spec:
-  # This tells OpenShift this controller is NOT the global default
-  # which helps prevent it from aggressively claiming every Ingress.
-  defaultIngressController: false
   defaultCertificate:
     name: "${CLUSTER_DOMAIN_CERT}"
   routeAdmission:
