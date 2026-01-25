@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: authentik-ldap-outpost
   annotations:
-    metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_LDAP}"
+    metallb.io/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_LDAP}"
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Local

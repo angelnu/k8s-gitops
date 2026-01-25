@@ -96,7 +96,7 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Local #Required to keep source IP
         annotations:
-          metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_INGRESS}"
+          metallb.io/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_INGRESS}"
       #metrics:
       #  enabled: true
       #  serviceMonitor:

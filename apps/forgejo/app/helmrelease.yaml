@@ -29,7 +29,7 @@ spec:
         type: LoadBalancer
         port: 2222
         annotations:
-          metallb.universe.tf/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_FORGEJO}"
+          metallb.io/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_FORGEJO}"
     ingress:
       enabled: true
       annotations:

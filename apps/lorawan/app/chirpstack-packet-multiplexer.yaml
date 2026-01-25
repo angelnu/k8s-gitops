@@ -45,5 +45,5 @@ spec:
     service:
       main:
         annotations:
-          metallb.universe.tf/loadBalancerIPs: ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_LORAFWD}
+          metallb.io/loadBalancerIPs: ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_LORAFWD}
         type: LoadBalancer
