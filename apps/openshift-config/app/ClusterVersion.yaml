@@ -8,4 +8,4 @@ metadata:
 spec:
   channel: stable-scos-4
   desiredUpdate:
-    image: registry.ci.openshift.org/origin/release-scos:4.21.0-okd-scos.1@sha256:c39479c49aebf8edfa6b8d6f7da97768d89471b95425bde0c3ebdc90390784f9
+    image: registry.ci.openshift.org/origin/release-scos:4.21.0-okd-scos.2@sha256:32137d309334bcd0c9b4b75ac21d7c1ac5233ff0ea0b98c3077f51b4a74ebbe1
