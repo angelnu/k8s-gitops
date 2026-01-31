@@ -56,6 +56,10 @@ spec:
               value: "off"
             - name:  DOT
               value: "off"
+            - name: VPN_ENDPOINT_IP_VERSION
+              value: "v4"       # Forces Gluetun to pick an IPv4 address for the VPN server
+            - name: DOT_IPV6
+              value: "off"      # Disables IPv6 for the internal DNS over TLS (Unbound)
             # - name:  WIREGUARD_PRIVATE_KEY
             #   value: set in secret
             # - name:  WIREGUARD_PRESHARED_KEY
