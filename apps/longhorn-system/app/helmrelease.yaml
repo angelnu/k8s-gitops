@@ -63,6 +63,7 @@ spec:
       openshift:
         oauthProxy:
           registry: quay.io
+          repository: openshift/origin-oauth-proxy
           tag: 4.20 # renovate: depName=quay.io/openshift/origin-oauth-proxy datasource=docker
       defaultSettings:
         # Recommended for databases with app-level redundancy:
