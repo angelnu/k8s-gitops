@@ -7,14 +7,25 @@ spec:
   podSelector: {}
   ingress:
   - from:
-    # Only allow ingress from K8S
-    - ipBlock:
-        cidr: 10.0.0.0/8
+    - namespaceSelector:
+        matchLabels:
+          # Kubernetes automatically adds this label to namespaces
+          kubernetes.io/metadata.name: vpn-gateway
   egress:
   - to:
-    # Only allow egress to K8S
-    - ipBlock:
-        cidr: 10.0.0.0/8
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: vpn-gateway
+  # IMPORTANT: You must allow DNS or your pods will fail to find the gateway
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: openshift-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
   policyTypes:
     - Ingress
     - Egress
