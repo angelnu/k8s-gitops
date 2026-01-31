@@ -34,35 +34,35 @@ spec:
     image:
       longhorn:
         engine:
-          repository: &defaultRegistry docker.io
+          registry: &defaultRegistry docker.io
         manager:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
         ui:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
         instanceManager:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
         shareManager:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
         backingImageManager:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
         supportBundleKit:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
       csi:
         attacher:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
         provisioner:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
         nodeDriverRegistrar:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
         resizer:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
         snapshotter:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
         livenessProbe:
-          repository: *defaultRegistry
+          registry: *defaultRegistry
       openshift:
         oauthProxy:
-          repository: quay.io
+          registry: quay.io
           tag: 4.20 # renovate: depName=quay.io/openshift/origin-oauth-proxy datasource=docker
       defaultSettings:
         # Recommended for databases with app-level redundancy:
