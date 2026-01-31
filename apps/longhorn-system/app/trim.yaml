@@ -8,3 +8,4 @@ spec:
   retain: 1
   groups:
     - default # Applies to all PVCs in the default group
+    - postgres-replica-storage # Also for the DB PVCs
