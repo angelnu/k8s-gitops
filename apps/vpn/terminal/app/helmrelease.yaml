@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: radarr
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 60m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: docker.io/alpine
+              tag: sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+            command:
+            - /bin/sh
+            - -c
+            - while true; do
+                sleep 600 &
+                wait $!;
+              done
+            resources:
+              requests:
+                memory: 10Mi
+                cpu: 10m
+              limits:
+                memory: 500Mi
+                cpu: 100m
+        serviceAccount:
+          identifier: default
+
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:privileged  # For network - TBD, try with less
+            kind: ClusterRole
+          subjects:
+            - identifier: default
