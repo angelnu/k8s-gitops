@@ -34,7 +34,7 @@ spec:
     image:
       longhorn:
         engine:
-          registry: &defaultRegistry docker.io
+          repository: &defaultRegistry docker.io
         manager:
           registry: *defaultRegistry
         ui:
@@ -62,7 +62,7 @@ spec:
           registry: *defaultRegistry
       openshift:
         oauthProxy:
-          registry: quay.io/openshift/origin-oauth-proxy
+          repository: quay.io
           tag: 4.20 # renovate: depName=quay.io/openshift/origin-oauth-proxy datasource=docker
       defaultSettings:
         # Recommended for databases with app-level redundancy:
