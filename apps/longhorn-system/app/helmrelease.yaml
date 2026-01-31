@@ -36,30 +36,30 @@ spec:
         engine:
           repository: &defaultRegistry docker.io
         manager:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
         ui:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
         instanceManager:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
         shareManager:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
         backingImageManager:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
         supportBundleKit:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
       csi:
         attacher:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
         provisioner:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
         nodeDriverRegistrar:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
         resizer:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
         snapshotter:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
         livenessProbe:
-          registry: *defaultRegistry
+          repository: *defaultRegistry
       openshift:
         oauthProxy:
           repository: quay.io
