@@ -27,6 +27,6 @@ spec:
     substitute:
       MY_NAMESPACE: *ns
       MY_APP: *ns # Intentionally so we do not get -db-db in the name
-      POSTGRES_STORAGE_SIZE: 10Gi
-      POSTGRES_WALSTORAGE_SIZE: 5Gi
+      POSTGRES_STORAGE_SIZE: 5Gi
+      POSTGRES_WALSTORAGE_SIZE: 2Gi
       POSTGRES_RECOVERY_SECRETNAME: home-assistant-db-app-fix
