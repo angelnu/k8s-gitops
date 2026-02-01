@@ -47,5 +47,8 @@ okd:
   # rootfs: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/39.20231101.3.0/x86_64/fedora-coreos-39.20231101.3.0-live-rootfs.x86_64.img
   # initramfs: https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/39.20231101.3.0/x86_64/fedora-coreos-39.20231101.3.0-live-initramfs.x86_64.img
   # [4.20]
-  client: https://github.com/okd-project/okd/releases/download/4.20.0-okd-scos.14/openshift-client-linux-4.20.0-okd-scos.14.tar.gz
-  install: https://github.com/okd-project/okd/releases/download/4.20.0-okd-scos.14/openshift-install-linux-4.20.0-okd-scos.14.tar.gz
+  #client: https://github.com/okd-project/okd/releases/download/4.20.0-okd-scos.14/openshift-client-linux-4.20.0-okd-scos.14.tar.gz
+  #install: https://github.com/okd-project/okd/releases/download/4.20.0-okd-scos.14/openshift-install-linux-4.20.0-okd-scos.14.tar.gz
+  # [4.21]
+  client: https://github.com/okd-project/okd/releases/download/4.21.0-okd-scos.2/openshift-client-linux-4.21.0-okd-scos.2.tar.gz
+  install: https://github.com/okd-project/okd/releases/download/4.21.0-okd-scos.2/openshift-install-linux-4.21.0-okd-scos.2.tar.gz
