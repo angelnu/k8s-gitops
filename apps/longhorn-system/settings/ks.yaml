@@ -10,12 +10,14 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./apps/longhorn-system/app
+  path: ./apps/longhorn-system/settings/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: cluster-repository
   wait: true
+  dependsOn:
+    - name: longhorn-system-operator
   interval: 30m
   retryInterval: 1m
   timeout: 5m
