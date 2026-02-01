@@ -89,15 +89,16 @@ spec:
                     command:
                       - sh
                       - -c
-                      - COUNTRY=$(wget -q -O- https://ipinfo.io/country); echo $COUNTRY; if [ '$COUNTRY' == 'BE' ]; then exit 0; else exit $?; fi
+                      - COUNTRY=$(wget -q -O- https://ipinfo.io/country); echo $COUNTRY; if [ "$COUNTRY" == "BE" ]; then exit 0; else exit -1; fi
                   initialDelaySeconds: 30
                   periodSeconds: 60
-                  failureThreshold: 3
+                  failureThreshold: 5
                   timeoutSeconds: 5
       webhook:
         serviceAccount:
           identifier: default
         pod:
+          # The sidecar containers inserted by the webhook will use this DNS config
           dnsConfig:
             options:
               - name: ndots
@@ -142,8 +143,11 @@ spec:
             # Allow any traffic within k8s
             - to:
                 - ipBlock:
-                    # Cluster IPs (default k3s)
+                    # Cluster Pod IPs
                     cidr: 10.0.0.0/8
+                - ipBlock:
+                    # Cluster Service IPs
+                    cidr: 172.16.0.0/12
 
     routed_namespaces:
     - vpn
@@ -156,7 +160,7 @@ spec:
       # -- If VPN_BLOCK_OTHER_TRAFFIC is true, allow VPN traffic over this port
       VPN_TRAFFIC_PORT: *vpn_port
       # -- Traffic to these IPs will be send through the K8S gateway
-      VPN_LOCAL_CIDRS: "10.0.0.0/8 192.168.0.0/16"
+      VPN_LOCAL_CIDRS: "10.0.0.0/8 172.16.0.0/12 192.168.0.0/16"
     
     # -- settings to expose ports, usually through a VPN provider.
     # NOTE: if you change it you will need to manually restart the gateway POD

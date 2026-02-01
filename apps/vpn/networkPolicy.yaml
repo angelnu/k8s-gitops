@@ -8,9 +8,11 @@ spec:
   ingress:
   - from: &clusterIPs
     - ipBlock:
-        cidr: 172.0.0.0/8
-    - ipBlock:
+        # Cluster Pod IPs
         cidr: 10.0.0.0/8
+    - ipBlock:
+        # Cluster Service IPs
+        cidr: 172.16.0.0/12
   egress:
   - to: *clusterIPs
   policyTypes:
