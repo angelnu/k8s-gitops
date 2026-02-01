@@ -13,7 +13,7 @@ spec:
   path: ./apps/vpn/ubuntu/app
   prune: true
   dependsOn:
-    - name: vpn-gateway-app
+    - name: vpn-gateway
   sourceRef:
     kind: GitRepository
     name: cluster-repository
