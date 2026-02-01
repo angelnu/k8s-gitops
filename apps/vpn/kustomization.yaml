@@ -6,5 +6,6 @@ resources:
   - ns.yaml
   - networkPolicy.yaml
   - qbittorrent/ks.yaml
-  - ubuntu/ks.yaml
+  - sonarr/ks.yaml
   - terminal/ks.yaml
+  - ubuntu/ks.yaml
