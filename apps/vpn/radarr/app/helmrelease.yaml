@@ -12,7 +12,7 @@ spec:
       interval: 60m
       sourceRef:
         kind: HelmRepository
-        name: bjw-s-helm-charts
+        name: bjw-s
         namespace: flux-system
   interval: 30m
   timeout: 20m
