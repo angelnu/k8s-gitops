@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: radarr
+  name: "${MY_APP}"
 spec:
   chart:
     spec:
@@ -51,6 +51,21 @@ spec:
             runAsGroup: 568
             fsGroup: 568
             fsGroupChangePolicy: "OnRootMismatch"
+        serviceAccount:
+          identifier: default
+
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:privileged # For network - TBD, try with less
+            kind: ClusterRole
+          subjects:
+            - identifier: default
 
     persistence:
       config:
