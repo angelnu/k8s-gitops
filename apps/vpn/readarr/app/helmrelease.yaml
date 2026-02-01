@@ -1,29 +1,103 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
 metadata:
-  name: &app vpn-readarr
-  namespace: flux-system
+  name: "${MY_APP}"
 spec:
-  targetNamespace: &ns vpn
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  path: ./apps/vpn/readarr/app
-  components:
-    - ../../../components/cephfs_pvc
-  prune: true
-  dependsOn:
-    - name: vpn-gateway
-  sourceRef:
-    kind: GitRepository
-    name: cluster-repository
-  wait: true
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      interval: 60m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
   interval: 30m
-  retryInterval: 1m
-  timeout: 5m
-  postBuild:
-    substitute:
-      MY_NAMESPACE: *ns
-      MY_APP: *app
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/home-operations/readarr
+              tag: 0.4.18@sha256:8f7551205fbdccd526db23a38a6fba18b0f40726e63bb89be0fb2333ff4ee4cd
+            env:
+              TZ: "Europe/Berlin"
+              READARR__INSTANCE_NAME: Readarr (Audio)
+              READARR__PORT: &port 8787
+              READARR__LOG_LEVEL: info
+            resources:
+              requests:
+                memory: 250Mi
+                cpu: 500m
+              limits:
+                memory: 1500Mi
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: "OnRootMismatch"
+        serviceAccount:
+          identifier: default
+
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:privileged # For network - TBD, try with less
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: readarr-pvc
+      downloads:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "${NFS_SERVER}"
+            path: "${NFS_DOWNLOADS}"
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: book-open-page-variant-outline
+          hajimari.io/info: Book Search
+          hajimari.io/group: media
+        hosts:
+          - host: readarr.pub.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
