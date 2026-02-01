@@ -5,6 +5,8 @@ kind: Kustomization
 resources:
   - ns.yaml
   - networkPolicy.yaml
+  # Apps
+  - prowlarr/ks.yaml
   - qbittorrent/ks.yaml
   - radarr/ks.yaml
   - readarr/ks.yaml
