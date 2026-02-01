@@ -89,7 +89,7 @@ spec:
                     command:
                       - sh
                       - -c
-                      - COUNTRY=$(wget -q -O- https://ipinfo.io/country); echo $COUNTRY; if [ "$COUNTRY" == "BE" ]; then exit 0; else exit -1; fi
+                      - COUNTRY=$(wget -q -O- https://ipinfo.io/country); echo $COUNTRY; if [ "$COUNTRY" == "BE" ]; then exit 0; else exit 255; fi
                   initialDelaySeconds: 30
                   periodSeconds: 60
                   failureThreshold: 5
