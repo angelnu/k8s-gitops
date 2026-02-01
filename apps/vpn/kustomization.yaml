@@ -6,6 +6,7 @@ resources:
   - ns.yaml
   - networkPolicy.yaml
   # Apps
+  - lidarr/ks.yaml
   - mega/ks.yaml
   - milar3/ks.yaml
   - prowlarr/ks.yaml
