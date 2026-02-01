@@ -5,21 +5,14 @@ metadata:
   namespace: vpn
 spec:
   podSelector: {}
-  egress:
-  - to:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: vpn-gateway
-  # IMPORTANT: You must allow DNS or your pods will fail to find the gateway
-  - to:
+  ingress:
+  - from: &clusterIPs
     - ipBlock:
         cidr: 172.0.0.0/8
     - ipBlock:
         cidr: 10.0.0.0/8
-    ports:
-    - protocol: UDP
-      port: 53
-    - protocol: TCP
-      port: 53
+  egress:
+  - to: *clusterIPs
   policyTypes:
+    - Ingress
     - Egress
