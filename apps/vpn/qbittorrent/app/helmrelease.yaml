@@ -44,7 +44,7 @@ spec:
               limits:
                 memory: 6000Mi
         pod:
-          hostname: torrent # needed for an static IP
+          hostname: qbittorrent # needed for an static IP
           securityContext:
             runAsUser: 568
             runAsGroup: 568
