@@ -6,6 +6,7 @@ resources:
   - ns.yaml
   - networkPolicy.yaml
   # Apps
+  - milar3/ks.yaml
   - prowlarr/ks.yaml
   - qbittorrent/ks.yaml
   - radarr/ks.yaml
