@@ -38,6 +38,21 @@ spec:
             runAsUser: 0
             runAsGroup: 0
             fsGroup: 0
+        serviceAccount:
+          identifier: default
+
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:privileged # For network - TBD, try with less
+            kind: ClusterRole
+          subjects:
+            - identifier: default
 
     service:
       main:

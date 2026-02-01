@@ -5,4 +5,5 @@ kind: Kustomization
 resources:
   - ns.yaml
   - networkPolicy.yaml
+  - ubuntu/ks.yaml
   - terminal/ks.yaml
