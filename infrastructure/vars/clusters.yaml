@@ -30,54 +30,54 @@ clusters:
         target_host: pve1
         macaddr: 7A:00:00:00:03:13
         cores: 4
-        ram: 16384
-        diskSize: 150G
+        ram: 32000
+        diskSize: 200G
         vmid: 404
       - ip: 192.168.5.14
         target_host: pve2
         macaddr: 7A:00:00:00:03:14
         cores: 4
-        ram: 16384
-        diskSize: 150G
+        ram: 32000
+        diskSize: 200G
         vmid: 405
       - ip: 192.168.5.15
         target_host: pve3
         macaddr: 7A:00:00:00:03:15
         cores: 4
-        ram: 16384
-        diskSize: 150G
+        ram: 32000
+        diskSize: 200G
         vmid: 406
       - ip: 192.168.5.16
         target_host: pve4
         macaddr: 7A:00:00:00:03:16
         cores: 4
         ram: 16384
-        diskSize: 150G
+        diskSize: 200G
         vmid: 407
   test: # Terraform workspace name
     apiVip: 192.168.6.1
     ingressVip: 192.168.6.2
-    rendezvousIP: 192.168.6.10
+    rendezvousIP: 192.168.6.11
     masters:
-      - ip: 192.168.6.10
-        target_host: pve1
+      - ip: 192.168.6.11
+        target_host: pve4
         macaddr: 7A:00:00:00:06:10
-        cores: 8
-        ram: 24000
+        cores: 6
+        ram: 16384
         diskSize: 150G
         vmid: 601
-      - ip: 192.168.6.11
-        target_host: pve2
+    workers:
+      - ip: 192.168.6.14
+        target_host: pve4
         macaddr: 7A:00:00:00:06:11
-        cores: 8
-        ram: 24000
+        cores: 6
+        ram: 16384
         diskSize: 150G
-        vmid: 602
-      - ip: 192.168.6.12
-        target_host: pve3
+        vmid: 604
+      - ip: 192.168.6.15
+        target_host: pve5
         macaddr: 7A:00:00:00:06:12
-        cores: 8
-        ram: 24000
+        cores: 6
+        ram: 16384
         diskSize: 150G
-        vmid: 603
-    workers: []
+        vmid: 605
