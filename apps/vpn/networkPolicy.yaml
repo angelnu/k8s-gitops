@@ -13,7 +13,7 @@ spec:
   # IMPORTANT: You must allow DNS or your pods will fail to find the gateway
   - to:
     - ipBlock:
-        cidr: 172.16.0.0/12
+        cidr: 172.0.0.0/8
     - ipBlock:
         cidr: 10.0.0.0/8
     ports:
