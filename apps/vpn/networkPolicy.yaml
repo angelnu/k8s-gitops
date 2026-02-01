@@ -5,12 +5,6 @@ metadata:
   namespace: vpn
 spec:
   podSelector: {}
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          # Kubernetes automatically adds this label to namespaces
-          kubernetes.io/metadata.name: vpn-gateway
   egress:
   - to:
     - namespaceSelector:
@@ -18,14 +12,14 @@ spec:
           kubernetes.io/metadata.name: vpn-gateway
   # IMPORTANT: You must allow DNS or your pods will fail to find the gateway
   - to:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: openshift-dns
+    - ipBlock:
+        cidr: 172.16.0.0/12
+    - ipBlock:
+        cidr: 10.0.0.0/8
     ports:
     - protocol: UDP
       port: 53
     - protocol: TCP
       port: 53
   policyTypes:
-    - Ingress
     - Egress
