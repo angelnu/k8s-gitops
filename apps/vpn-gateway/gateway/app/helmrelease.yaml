@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: pod-gateway
-      version: 7.1.0
+      version: 7.1.1
       interval: 60m
       sourceRef:
         kind: HelmRepository
