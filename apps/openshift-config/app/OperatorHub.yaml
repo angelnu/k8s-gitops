@@ -1,0 +1,17 @@
+apiVersion: config.openshift.io/v1
+kind: OperatorHub
+metadata:
+  name: cluster
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+    kustomize.toolkit.fluxcd.io/ssa: Merge
+spec:
+  sources:
+    - disabled: true
+      name: certified-operators
+    - disabled: true
+      name: redhat-operators
+    - disabled: true
+      name: redhat-marketplace
+    - disabled: true
+      name: community-operators
