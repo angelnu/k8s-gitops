@@ -33,6 +33,21 @@ spec:
             image:
               repository: docker.io/johnshine/mega.syno
               tag: latest@sha256:1625bbabd89a443677e016ec1e5bb990e16f5d53245e23631d77e44d5c901dc8
+        serviceAccount:
+          identifier: default
+
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:privileged # For network - TBD, try with less
+            kind: ClusterRole
+          subjects:
+            - identifier: default
 
     service:
       main:

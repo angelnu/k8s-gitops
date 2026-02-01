@@ -3,12 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ${MY_APP}
+  name: "${MY_APP}"
 spec:
   chart:
     spec:
       chart: app-template
-      version: 4.6.2
+      version: 4.5.0
       interval: 60m
       sourceRef:
         kind: HelmRepository
@@ -31,13 +31,22 @@ spec:
         containers:
           main:
             image:
-              repository: docker.io/dorowu/ubuntu-desktop-lxde-vnc
-              tag: latest@sha256:775184eaa5bbc01bc4261a6c9596a642b3b43a433c1508637567bc724575964b
-        pod:
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-            fsGroup: 0
+              repository: docker.io/library/alpine
+              tag: latest@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+            command:
+              - /bin/sh
+              - -c
+              - while true; do
+                sleep 600 &
+                wait $!;
+                done
+            resources:
+              requests:
+                memory: 10Mi
+                cpu: 10m
+              limits:
+                memory: 500Mi
+                cpu: 100m
         serviceAccount:
           identifier: default
 
@@ -53,30 +62,3 @@ spec:
             kind: ClusterRole
           subjects:
             - identifier: default
-
-    service:
-      main:
-        controller: main
-        ports:
-          http:
-            port: 80
-          vnc:
-            enabled: false
-            port: 5900
-
-    ingress:
-      main:
-        enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: logos:ubuntu
-          hajimari.io/info: Ubuntu
-          hajimari.io/group: tools
-        hosts:
-          - host: ubuntu.pub.${CLUSTER_DOMAIN}
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: main
-                  port: http

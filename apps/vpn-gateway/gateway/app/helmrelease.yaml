@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: pod-gateway
-      version: 7.1.0
+      version: 7.1.1
       interval: 60m
       sourceRef:
         kind: HelmRepository
@@ -56,6 +56,10 @@ spec:
               value: "off"
             - name:  DOT
               value: "off"
+            - name: VPN_ENDPOINT_IP_VERSION
+              value: "v4"       # Forces Gluetun to pick an IPv4 address for the VPN server
+            - name: DOT_IPV6
+              value: "off"      # Disables IPv6 for the internal DNS over TLS (Unbound)
             # - name:  WIREGUARD_PRIVATE_KEY
             #   value: set in secret
             # - name:  WIREGUARD_PRESHARED_KEY
@@ -85,14 +89,20 @@ spec:
                     command:
                       - sh
                       - -c
-                      - COUNTRY=$(wget -q -O- https://ipinfo.io/country); echo $COUNTRY; if [ '$COUNTRY' == 'BE' ]; then exit 0; else exit $?; fi
+                      - COUNTRY=$(wget -q -O- https://ipinfo.io/country); echo $COUNTRY; if [ "$COUNTRY" == "BE" ]; then exit 0; else exit 255; fi
                   initialDelaySeconds: 30
                   periodSeconds: 60
-                  failureThreshold: 3
+                  failureThreshold: 5
                   timeoutSeconds: 5
       webhook:
         serviceAccount:
           identifier: default
+        pod:
+          # The sidecar containers inserted by the webhook will use this DNS config
+          dnsConfig:
+            options:
+              - name: ndots
+                value: '1'
         # Configure the main controller - this runs the VPN server
         containers:
           main:
@@ -133,8 +143,14 @@ spec:
             # Allow any traffic within k8s
             - to:
                 - ipBlock:
-                    # Cluster IPs (default k3s)
+                    # Cluster Pod IPs
                     cidr: 10.0.0.0/8
+                - ipBlock:
+                    # Cluster Service IPs
+                    cidr: 172.16.0.0/12
+                - ipBlock:
+                    # Local Network
+                    cidr: 192.168.0.0/16
 
     routed_namespaces:
     - vpn
@@ -147,7 +163,7 @@ spec:
       # -- If VPN_BLOCK_OTHER_TRAFFIC is true, allow VPN traffic over this port
       VPN_TRAFFIC_PORT: *vpn_port
       # -- Traffic to these IPs will be send through the K8S gateway
-      VPN_LOCAL_CIDRS: "10.0.0.0/8 192.168.0.0/16"
+      VPN_LOCAL_CIDRS: "10.0.0.0/8 172.16.0.0/12 192.168.0.0/16"
     
     # -- settings to expose ports, usually through a VPN provider.
     # NOTE: if you change it you will need to manually restart the gateway POD

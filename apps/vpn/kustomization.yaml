@@ -5,4 +5,14 @@ kind: Kustomization
 resources:
   - ns.yaml
   - networkPolicy.yaml
+  # Apps
+  - lidarr/ks.yaml
+  - mega/ks.yaml
+  - milar3/ks.yaml
+  - prowlarr/ks.yaml
+  - qbittorrent/ks.yaml
+  - radarr/ks.yaml
+  - readarr/ks.yaml
+  - sonarr/ks.yaml
   - terminal/ks.yaml
+  - ubuntu/ks.yaml

@@ -5,7 +5,7 @@ metadata:
   name: "${MY_APP}-db"
 spec:
   immediate: true
-  schedule: "0 0 0 * * *" # At midnight every day
+  schedule: "0 13 */6 * * *" # Each 6 hours
   backupOwnerReference: self
   cluster:
     name: "${MY_APP}-db"

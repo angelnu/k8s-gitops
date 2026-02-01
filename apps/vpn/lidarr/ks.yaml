@@ -3,16 +3,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app vpn-lidarr
+  name: vpn-lidarr
   namespace: flux-system
 spec:
   targetNamespace: &ns vpn
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
+      app.kubernetes.io/name: &app lidarr
   path: ./apps/vpn/lidarr/app
   components:
-    - ../../../components/cephfs_pvc
+    - ../../../../components/cephfs_pvc
   prune: true
   dependsOn:
     - name: vpn-gateway

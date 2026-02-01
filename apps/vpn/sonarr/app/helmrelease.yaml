@@ -31,15 +31,16 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/home-operations/lidarr
-              tag: 3.1.2.4902@sha256:dab0e07502a34436fc50c3e789388f0a29f8cbf681fb7a02ed703ad7c368a22c
-
+              repository: ghcr.io/home-operations/sonarr
+              tag: 4.0.16@sha256:3597fd572f4599c67abbeb8afd3cb85bce8a9e389f0779b7ea1273781544d15c
             env:
               TZ: "Europe/Berlin"
-              LIDARR__INSTANCE_NAME: Lidarr
-              LIDARR__PORT: &port 8686
-              LIDARR__LOG_LEVEL: info
-
+              PUSHOVER_DEBUG: "false"
+              PUSHOVER_APP_URL: &host "sonarr.pub.${CLUSTER_DOMAIN}"
+              SONARR__INSTANCE_NAME: Sonarr
+              SONARR__PORT: &port 8989
+              SONARR__APPLICATION_URL: "https://sonarr.pub.${CLUSTER_DOMAIN}"
+              SONARR__LOG_LEVEL: info
             resources:
               requests:
                 memory: 250Mi
@@ -71,14 +72,14 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: lidarr-pvc
-      music:
+        existingClaim: sonarr-pvc
+      videos:
         enabled: true
         type: custom
         volumeSpec:
           nfs:
             server: "${NFS_SERVER}"
-            path: "${NFS_MUSIC}"
+            path: "${NFS_VIDEO}"
       downloads:
         enabled: true
         type: custom
@@ -99,13 +100,11 @@ spec:
         enabled: true
         annotations:
           hajimari.io/enable: "true"
-          hajimari.io/icon: music-box
-          hajimari.io/info: Music Search
+          hajimari.io/icon: television-box
+          hajimari.io/info: Series Search
           hajimari.io/group: media
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          external-dns.alpha.kubernetes.io/target: "ipv4.${SECRET_DOMAIN}"
         hosts:
-          - host: lidarr.pub.${CLUSTER_DOMAIN}
+          - host: sonarr.pub.${CLUSTER_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix

@@ -3,17 +3,17 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app vpn-mega
+  name: vpn-mega
   namespace: flux-system
 spec:
   targetNamespace: &ns vpn
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
+      app.kubernetes.io/name: &app mega
   path: ./apps/vpn/mega/app
   prune: true
   dependsOn:
-    - name: vpn-gateway-app
+    - name: vpn-gateway
   sourceRef:
     kind: GitRepository
     name: cluster-repository

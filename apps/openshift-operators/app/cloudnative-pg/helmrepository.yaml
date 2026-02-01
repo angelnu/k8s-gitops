@@ -5,6 +5,8 @@ kind: HelmRepository
 metadata:
   name: cloudnative-pg
   namespace: openshift-operator
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: Merge
 spec:
   interval: 2h
   url: https://cloudnative-pg.io/charts/
