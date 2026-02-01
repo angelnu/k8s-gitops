@@ -97,10 +97,11 @@ spec:
       webhook:
         serviceAccount:
           identifier: default
-        dnsConfig:
-          options:
-            - name: ndots
-              value: '1'
+        pod:
+          dnsConfig:
+            options:
+              - name: ndots
+                value: '1'
         # Configure the main controller - this runs the VPN server
         containers:
           main:
