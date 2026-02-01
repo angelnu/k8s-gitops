@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./apps/vpn/qbittorrent/app
   components:
-    - ../../../components/cephfs_pvc
+    - ../../../../components/cephfs_pvc
   prune: true
   dependsOn:
     - name: vpn-gateway
