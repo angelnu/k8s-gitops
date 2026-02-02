@@ -9,3 +9,4 @@ spec:
   channel: stable-scos-4
   desiredUpdate:
     image: registry.ci.openshift.org/origin/release-scos:4.21.0-okd-scos.3@sha256:99029906f5f0486f3eeb44301ae1215ad6f1a6211c379f5eebfdf94b1f9bb8b1
+  upstream: https://none.example.com # Disable automatic updates
