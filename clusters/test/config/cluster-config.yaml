@@ -10,6 +10,9 @@ spec:
   path: ./clusters/test/config
   prune: true
   wait: false
+  dependsOn:
+    - name: cluster-vars
+  targetNamespace: flux-system
   sourceRef:
     kind: GitRepository
     name: cluster-repository

@@ -12,6 +12,7 @@ spec:
   wait: false
   dependsOn:
     - name: cluster-vars
+  targetNamespace: flux-system
   sourceRef:
     kind: GitRepository
     name: cluster-repository
