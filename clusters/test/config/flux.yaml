@@ -26,6 +26,23 @@ spec:
     kind: OCIRepository
     name: flux-manifests
   patches:
+    # Enable ExternalArtifact for Kustomize Controller
+    - patch: |
+        - op: add
+          path: /spec/template/spec/containers/0/args/-
+          value: --feature-gates=ExternalArtifact=true
+      target:
+        kind: Deployment
+        name: kustomize-controller
+    
+    # Enable ExternalArtifact for Source Controller (Required for ExternalArtifact CRD)
+    - patch: |
+        - op: add
+          path: /spec/template/spec/containers/0/args/-
+          value: --feature-gates=ExternalArtifact=true
+      target:
+        kind: Deployment
+        name: source-controller
     # Remove the network policies that does not work with k3s
     - patch: |
         $patch: delete
