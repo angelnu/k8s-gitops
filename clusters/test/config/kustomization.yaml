@@ -12,7 +12,9 @@ resources:
   - ./cluster-config.yaml
   - ./cluster-apps.yaml
   - ./scc.yaml
-
+images:
+  - name: fluxcd/source-watcher
+    newName: ghcr.io/fluxcd/source-watcher
 patches:
   - patch: |
       apiVersion: apps/v1
