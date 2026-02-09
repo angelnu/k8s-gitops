@@ -29,6 +29,6 @@ spec:
     substitute:
       MY_NAMESPACE: *ns
       MY_APP: *app
-      POSTGRES_STORAGE_SIZE: 6Gi
-      POSTGRES_WALSTORAGE_SIZE: 2Gi
+      POSTGRES_STORAGE_SIZE: 8Gi
+      POSTGRES_WALSTORAGE_SIZE: 5Gi
       NFS_KUBERNETES_SUBFOLDER: nextcloud
