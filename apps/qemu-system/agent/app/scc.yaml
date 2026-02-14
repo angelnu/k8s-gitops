@@ -3,10 +3,10 @@ kind: SecurityContextConstraints
 metadata:
   name: ${MY_APP}-scc
 allowPrivilegedContainer: false
-allowHostDirVolumePlugin: true
+allowHostDirVolumePlugin: true # Required for /dev access
 allowHostIPC: false
 allowHostNetwork: false
-allowHostPID: true # Required for hostPID: true in DaemonSet
+allowHostPID: true # Required to talk to host processes
 allowHostPorts: false
 readOnlyRootFilesystem: false
 runAsUser:
@@ -19,5 +19,9 @@ volumes:
 - hostPath
 - configMap
 - secret
+# ALLOWED CAPABILITIES
+allowedCapabilities:
+- DAC_OVERRIDE
+- SYS_CHROOT
 users:
 - system:serviceaccount:${MY_NAMESPACE}:${MY_APP}
