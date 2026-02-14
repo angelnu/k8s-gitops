@@ -12,7 +12,14 @@ spec:
         name: ${MY_APP}
     spec:
       serviceAccountName: ${MY_APP}
-      hostPID: true 
+      hostPID: true
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
       containers:
       - name: agent
         image: docker.io/library/alpine:latest # Or a dedicated qemu-ga image
