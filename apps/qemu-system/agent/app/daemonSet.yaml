@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ${MY_APP}
+spec:
+  selector:
+    matchLabels:
+      name: ${MY_APP}
+  template:
+    metadata:
+      labels:
+        name: ${MY_APP}
+    spec:
+      serviceAccountName: ${MY_APP}
+      hostPID: true 
+      containers:
+      - name: agent
+        image: docker.io/library/alpine:latest # Or a dedicated qemu-ga image
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            apk add --no-cache qemu-guest-agent
+            qemu-ga -d
+        securityContext:
+          privileged: false
+          capabilities:
+            add:
+              - SYS_CHROOT
+              - DAC_OVERRIDE
+        volumeMounts:
+        - name: dev
+          mountPath: /dev
+      volumes:
+      - name: dev
+        hostPath:
+          path: /dev
