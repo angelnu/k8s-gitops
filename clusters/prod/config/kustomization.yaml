@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: flux-system
 resources:
   - ./flux.yaml
-  - github.com/fluxcd/flux2/manifests/bases/source-watcher?ref=v2.7.5 # Optional flux component
+  - github.com/fluxcd/flux2/manifests/bases/source-watcher?ref=v2.8.0 # Optional flux component
   - ./cluster-repository.yaml
   - ./vars.yaml
   - ./vars-global.yaml
