@@ -118,7 +118,22 @@ spec:
       enabled: true
       failedJobsHistoryLimit: 1
       successfulJobsHistoryLimit: 1
+      sidecar:
+      resources:
+        requests:
+          cpu: 50m
+          memory: 128Mi
+        limits:
+          cpu: 100m
+          memory: 256Mi
 
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
     nextcloud:
       host: nextcloud.${CLUSTER_SHORT_DOMAIN}
       trustedDomains:
