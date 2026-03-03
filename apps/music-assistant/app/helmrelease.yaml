@@ -34,7 +34,7 @@ spec:
           main:
             image:
               repository: ghcr.io/music-assistant/server
-              tag: 2.7.9
+              tag: 2.7.10
             env:
               TZ: "Europe/Berlin"
         pod:
