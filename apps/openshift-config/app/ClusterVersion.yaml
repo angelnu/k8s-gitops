@@ -8,5 +8,5 @@ metadata:
 spec:
   channel: stable-scos-4
   desiredUpdate:
-    image: registry.ci.openshift.org/origin/release-scos:4.21.0-okd-scos.7@sha256:92d3f6d8c948ac41958f7613d48a52c7218a5a2ac2c3cb09e6ceb59b8fbb2894
+    image: registry.ci.openshift.org/origin/release-scos:4.21.0-okd-scos.8@sha256:69ddb50407c8a0293bcf1367b31158ed901f12337322271743fb00c0019439a6
   upstream: https://none.example.com # Disable automatic updates
