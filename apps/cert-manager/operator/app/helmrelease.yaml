@@ -27,16 +27,15 @@ spec:
   values:
     installCRDs: true
     # Added this section for OKD RBAC compatibility
-    controller:
-      extraClusterRoleRules:
-        # The Wildcard Fix: Granting permission to all finalizers in the ACME group
-        - apiGroups: ["acme.cert-manager.io"]
-          resources: ["*/finalizers"]
-          verbs: ["update", "patch"]
-        # Standard safety for cert-manager.io group as well
-        - apiGroups: ["cert-manager.io"]
-          resources: ["*/finalizers"]
-          verbs: ["update", "patch"]
+    extraClusterRoleRules:
+      # The Wildcard Fix: Granting permission to all finalizers in the ACME group
+      - apiGroups: ["acme.cert-manager.io"]
+        resources: ["*/finalizers"]
+        verbs: ["update", "patch"]
+      # Standard safety for cert-manager.io group as well
+      - apiGroups: ["cert-manager.io"]
+        resources: ["*/finalizers"]
+        verbs: ["update", "patch"]
     extraArgs:
     - --dns01-recursive-nameservers-only
     - --dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53
