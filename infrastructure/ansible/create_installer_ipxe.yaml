@@ -39,7 +39,7 @@
     {% endif %}
     openshift-install agent create {{ cmd }} --dir=install-dir
   environment:
-    PATH: "/usr/local/bin:{{ lookup('env', 'PATH') }}"
+    PATH: "/usr/local/bin:/usr/bin:/bin"
   register: installer_task
 
 # Make these files available on the Web server

@@ -46,7 +46,7 @@ Old setup is now archived in the [legacy k3s branch](https://github.com/angelnu/
    terraform init  # Only first time
    terraform workspace select default
    terraform apply
-   ssh ansible@192.168.251.196 # To accept ssh key
+   ssh ansible@192.168.5.250 # To accept ssh key
    ansible-playbook setup-linux.yaml
    ```
 
@@ -61,19 +61,20 @@ Old setup is now archived in the [legacy k3s branch](https://github.com/angelnu/
 3. Wait for cluster to install - this takes 30-60 minutes for my cluster. The following command logs install status and prints credentials
 
    ```shell
-   ssh ansible@192.168.251.196 openshift-install agent wait-for install-complete --dir=clusters/prod/install_dir
+   ssh ansible@192.168.5.250 openshift-install agent wait-for install-complete --dir=clusters/prod/install-dir
    ```
 
-4. Next steps:
+   Notes:
    - OKD console is available at https://console-openshift-console.apps.prod.homelab
      - you can connect with user `kubeadmin` and the password from the previous step
      - credentials (user and password) stored in the service VM at `/home/ansible/clusters/prod/install-dir/auth`
    - Service node has a webb interface at https://192.168.251.196:9090/ (or https://okd-service.homelab - replace homelab with your domain)
 
+4. [Install flux](clusters/README.md)
 ## ToDos
 
 - [x] Automate further:
-- [ ] Install flux
+- [x] Install flux
 - [x] Open to outside (install cloudflare operator)
 - [x] Check I can install 2 clusters in parallel (one for test)
 - [ ] Check how to recover cluster

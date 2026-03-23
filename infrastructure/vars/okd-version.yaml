@@ -50,5 +50,5 @@ okd:
   #client: https://github.com/okd-project/okd/releases/download/4.20.0-okd-scos.14/openshift-client-linux-4.20.0-okd-scos.14.tar.gz
   #install: https://github.com/okd-project/okd/releases/download/4.20.0-okd-scos.14/openshift-install-linux-4.20.0-okd-scos.14.tar.gz
   # [4.21]
-  client: https://github.com/okd-project/okd/releases/download/4.21.0-okd-scos.2/openshift-client-linux-4.21.0-okd-scos.2.tar.gz
-  install: https://github.com/okd-project/okd/releases/download/4.21.0-okd-scos.2/openshift-install-linux-4.21.0-okd-scos.2.tar.gz
+  client: https://github.com/okd-project/okd/releases/download/4.21.0-okd-scos.9/openshift-client-linux-4.21.0-okd-scos.9.tar.gz
+  install: https://github.com/okd-project/okd/releases/download/4.21.0-okd-scos.9/openshift-install-linux-4.21.0-okd-scos.9.tar.gz
