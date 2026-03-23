@@ -25,7 +25,8 @@ spec:
       strategy: rollback
       retries: 3
   values:
-    installCRDs: true# Added this section for OKD RBAC compatibility
+    installCRDs: true
+    # Added this section for OKD RBAC compatibility
     global:
       extraClusterRoleRules:
         # The Wildcard Fix: Granting permission to all finalizers in the ACME group
