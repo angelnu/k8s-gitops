@@ -101,7 +101,7 @@ resource "proxmox_vm_qemu" "pxe-nodes" {
   }
 
   boot                   = format("order=scsi0;%s", local.main.ipxe.enabled ? "net0" : "ide2")
-  agent                  = 0
+  agent                  = 1
   tags                   = format("okd,%s,%s", terraform.workspace, contains(keys(local.masters), each.key) ? "master" : "worker")
   vm_state               = each.value.boot # start once created
   define_connection_info = false
@@ -115,8 +115,9 @@ resource "proxmox_vm_qemu" "pxe-nodes" {
     units   = 0
     vcores  = 0
   }
-  memory = each.value.ram
-  scsihw = "virtio-scsi-pci"
+  memory  = each.value.ram
+  balloon = each.value.min_ram
+  scsihw  = "virtio-scsi-pci"
   #bootdisk = "scsi0"
   hotplug = 0
 

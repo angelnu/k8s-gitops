@@ -11,6 +11,7 @@ locals {
     target_host = local.main.service.target_host
     cores       = local.main.service.cores
     ram         = local.main.service.ram
+    min_ram     = lookup(local.main.service, "min_ram", 0)
     diskSize    = local.main.service.diskSize
     ip          = local.main.service.ip
     macaddr     = local.main.service.macaddr
@@ -25,6 +26,8 @@ locals {
       target_host = node.target_host
       cores       = node.cores
       ram         = node.ram
+      min_ram     = lookup(node, "min_ram", 0)
+
       diskSize    = node.diskSize
       ip          = node.ip
       macaddr     = node.macaddr # Private MAC address. 
@@ -39,6 +42,7 @@ locals {
       target_host = node.target_host
       cores       = node.cores
       ram         = node.ram
+      min_ram     = lookup(node, "min_ram", 0)
       diskSize    = node.diskSize
       ip          = node.ip
       macaddr     = node.macaddr # Private MAC address. 
