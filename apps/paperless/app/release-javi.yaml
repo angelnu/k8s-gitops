@@ -16,12 +16,12 @@ spec:
         namespace: flux-system
   interval: 30m
   timeout: 20m
+  install:
+    remediation:
+      retries: -1
   # Add this to force Flux to check the secret's version
   upgrade:
     force: true
-    remediation:
-      retries: -1
-  upgrade:
     cleanupOnFail: true
     remediation:
       strategy: rollback
