@@ -23,3 +23,30 @@ spec:
     substitute:
       MY_NAMESPACE: *ns
       MY_APP: *app
+  patches:
+    # This targets the Challenges ClusterRole specifically
+    - patch: |
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRole
+        metadata:
+          name: cert-manager-controller-challenges
+        rules:
+          - apiGroups: ["acme.cert-manager.io"]
+            resources: ["*/finalizers"]
+            verbs: ["update", "patch"]
+      target:
+        kind: ClusterRole
+        name: cert-manager-controller-challenges
+    # This targets the Orders ClusterRole
+    - patch: |
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRole
+        metadata:
+          name: cert-manager-controller-orders
+        rules:
+          - apiGroups: ["acme.cert-manager.io"]
+            resources: ["*/finalizers"]
+            verbs: ["update", "patch"]
+      target:
+        kind: ClusterRole
+        name: cert-manager-controller-orders
