@@ -30,6 +30,16 @@ spec:
       main:
         serviceAccount:
           identifier: default
+        pod:
+          securityContext:
+            supplementalGroups:
+              #   # Hardware acceleration using an Intel iGPU w/ QuickSync
+              #   # These IDs below should be matched to your `video` and `render` group on the host
+              #   # To obtain those IDs run the following grep statement on the host:
+              #   # $ cat /etc/group | grep "video\|render"
+              - 44
+              - 109
+              - 100
         containers:
           main:
             image:
@@ -38,15 +48,6 @@ spec:
             env:
               TZ: "Europe/Berlin"
               JELLYFIN_CACHE_DIR: "/config/cache"
-            securityContext:
-              supplementalGroups:
-                #   # Hardware acceleration using an Intel iGPU w/ QuickSync
-                #   # These IDs below should be matched to your `video` and `render` group on the host
-                #   # To obtain those IDs run the following grep statement on the host:
-                #   # $ cat /etc/group | grep "video\|render"
-                - 44
-                - 109
-                - 100
             resources:
               requests:
                 #gpu.intel.com/i915: 1
