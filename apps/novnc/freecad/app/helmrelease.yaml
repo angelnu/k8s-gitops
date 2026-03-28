@@ -30,6 +30,9 @@ spec:
       main:
         serviceAccount:
           identifier: default
+        pod:
+          securityContext:
+            fsGroup: 33  # www-data
         containers:
           main:
             image:
@@ -39,7 +42,6 @@ spec:
             securityContext:
               runAsUser: 33 # www-data
               runAsGroup: 33 # www-data
-              fsGroup: 33 # www-data
     serviceAccount:
       default:
         enabled: true

@@ -30,6 +30,9 @@ spec:
       main:
         serviceAccount:
           identifier: default
+        pod:
+          securityContext:
+            fsGroup: 33  # www-data
         containers:
           main:
             image:
@@ -37,9 +40,8 @@ spec:
               tag: 2.9.4@sha256:917de2c9b1a3ca3eec5bb07688afa3dbaede5d7071df1ae6a8c4a90060995dbf
             securityContext:
               privileged: true
-              #runAsUser: 33 # www-data
-              runAsGroup: 33 # www-data
-              fsGroup: 33 # www-data
+              #runAsUser: 33  # www-data
+              runAsGroup: 33  # www-data
     serviceAccount:
       default:
         enabled: true
