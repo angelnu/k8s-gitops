@@ -2,16 +2,17 @@
 # Creating Service machine.
 ##############################
 resource "proxmox_vm_qemu" "cloudinit-nodes" {
-  count       = terraform.workspace == "default" ? 1 : 0
-  name        = local.service.name
-  vmid        = local.service.vmid
-  target_node = local.service.target_host
-  clone       = local.service.os
-  full_clone  = true
-  boot        = "order=scsi0;net0" # "c" by default, which renders the coreos35 clone non-bootable. "cdn" is HD, DVD and Network
-  agent       = 1
-  tags        = "okd,service"
-  vm_state    = local.service.boot # start once created
+  count              = terraform.workspace == "default" ? 1 : 0
+  name               = local.service.name
+  vmid               = local.service.vmid
+  target_node        = local.service.target_host
+  clone              = local.service.os
+  full_clone         = true
+  boot               = "order=scsi0;net0" # "c" by default, which renders the coreos35 clone non-bootable. "cdn" is HD, DVD and Network
+  start_at_node_boot = true
+  agent              = 1
+  tags               = "okd,service"
+  vm_state           = local.service.boot # start once created
 
 
   cpu {
@@ -104,6 +105,7 @@ resource "proxmox_vm_qemu" "pxe-nodes" {
   agent                  = 1
   tags                   = format("okd,%s,%s", terraform.workspace, contains(keys(local.masters), each.key) ? "master" : "worker")
   vm_state               = each.value.boot # start once created
+  start_at_node_boot     = true
   define_connection_info = false
 
   cpu {
