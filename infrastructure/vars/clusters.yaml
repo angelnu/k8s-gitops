@@ -9,6 +9,7 @@ clusters:
         macaddr: 7A:00:00:00:03:10
         cores: 4
         ram: 16384
+        min_ram: 16000
         diskSize: 120G
         vmid: 401
       - ip: 192.168.5.11
@@ -16,6 +17,7 @@ clusters:
         macaddr: 7A:00:00:00:03:11
         cores: 4
         ram: 16384
+        min_ram: 16000
         diskSize: 120G
         vmid: 402
       - ip: 192.168.5.12
@@ -23,35 +25,40 @@ clusters:
         macaddr: 7A:00:00:00:03:12
         cores: 4
         ram: 16384
+        min_ram: 16000
         diskSize: 120G
         vmid: 403
     workers:
       - ip: 192.168.5.13
         target_host: pve1
         macaddr: 7A:00:00:00:03:13
-        cores: 4
+        cores: 6
         ram: 24000
+        min_ram: 16000
         diskSize: 200G
         vmid: 404
       - ip: 192.168.5.14
         target_host: pve2
         macaddr: 7A:00:00:00:03:14
-        cores: 4
+        cores: 6
         ram: 24000
+        min_ram: 16000
         diskSize: 200G
         vmid: 405
       - ip: 192.168.5.15
         target_host: pve3
         macaddr: 7A:00:00:00:03:15
-        cores: 4
+        cores: 6
         ram: 24000
+        min_ram: 16000
         diskSize: 200G
         vmid: 406
       - ip: 192.168.5.16
         target_host: pve4
         macaddr: 7A:00:00:00:03:16
-        cores: 4
+        cores: 6
         ram: 24000
+        min_ram: 16000
         diskSize: 200G
         vmid: 407
   test: # Terraform workspace name
@@ -64,7 +71,7 @@ clusters:
         macaddr: 7A:00:00:00:06:11
         cores: 6
         ram: 16384
-        min_ram: 8000
+        min_ram: 15000
         diskSize: 150G
         vmid: 601
       - ip: 192.168.6.12
@@ -72,7 +79,7 @@ clusters:
         macaddr: 7A:00:00:00:06:12
         cores: 6
         ram: 16384
-        min_ram: 8000
+        min_ram: 15000
         diskSize: 150G
         vmid: 602
       - ip: 192.168.6.13
@@ -80,31 +87,31 @@ clusters:
         macaddr: 7A:00:00:00:06:13
         cores: 6
         ram: 16384
-        min_ram: 8000
+        min_ram: 15000
         diskSize: 150G
         vmid: 603
     workers:
       - ip: 192.168.6.14
         target_host: pve4
         macaddr: 7A:00:00:00:06:14
-        cores: 6
-        ram: 16384
-        min_ram: 8000
+        cores: 8
+        ram: 24000
+        min_ram: 16000
         diskSize: 150G
         vmid: 604
       - ip: 192.168.6.15
         target_host: pve6
         macaddr: 7A:00:00:00:06:15
-        cores: 6
-        ram: 16384
-        min_ram: 8000
+        cores: 8
+        ram: 24000
+        min_ram: 16000
         diskSize: 150G
         vmid: 605
       - ip: 192.168.6.16
         target_host: pve6
         macaddr: 7A:00:00:00:06:16
         cores: 6
-        ram: 16384
-        min_ram: 8000
+        ram: 24000
+        min_ram: 16000
         diskSize: 150G
         vmid: 606

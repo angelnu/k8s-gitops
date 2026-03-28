@@ -19,7 +19,6 @@ spec:
       retries: -1
   # Add this to force Flux to check the secret's version
   upgrade:
-    force: true
     cleanupOnFail: true
     remediation:
       strategy: rollback
