@@ -10,7 +10,7 @@ spec:
 
   nodeMaintenanceWindow:
     inProgress: false
-    reusePVC: true
+    reusePVC: false
 
   # Strategy 'unsupervised' allows the operator to 
   # promote a replica to primary automatically during a drain.
