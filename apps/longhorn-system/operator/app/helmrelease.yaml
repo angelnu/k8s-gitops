@@ -71,8 +71,9 @@ spec:
         # Recommended for databases with app-level redundancy:
         # This allows the drain to proceed even if the volume is the last replica.
         nodeDrainPolicy: allow-if-replica-is-stopped
-        # This is the "Magic Switch" for 1-replica volumes in a homelab
-        allowNodeDrainWithLastHealthyReplica: true
+        # This ensures that even if the manager is stopping, 
+        # it tries to detach the volume gracefully first.
+        detachManuallyAttachedVolumesWhenCordoned: true
       defaultBackupStore:
         backupTarget: cifs://nas.home.${HOME_DOMAIN}/NetBackup/longhorn/${CLUSTER_NAME}
         backupTargetCredentialSecret: cifs-secret
