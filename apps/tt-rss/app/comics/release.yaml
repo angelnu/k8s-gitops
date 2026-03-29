@@ -41,7 +41,7 @@ spec:
           identifier: default
         type: cronjob
         cronjob:
-          backoffLimit: 6
+          backoffLimit: 2
           concurrencyPolicy: Replace
           failedJobsHistory: 1
           schedule: "0 10 * * *"
