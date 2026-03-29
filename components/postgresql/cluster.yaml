@@ -8,11 +8,16 @@ metadata:
 spec:
   instances: 3 # 1 Primary + 2 Replicas for High Availability
 
-  # This tells CNPG how to behave during a node drain
   nodeMaintenanceWindow:
     inProgress: false
     reusePVC: true
 
+  # Strategy 'unsupervised' allows the operator to 
+  # promote a replica to primary automatically during a drain.
+  primaryUpdateStrategy: unsupervised
+  
+  # This ensures we always have a synchronous stand-by 
+  # for zero data loss during the automatic failover.
   minSyncReplicas: 1
   maxSyncReplicas: 2
 
