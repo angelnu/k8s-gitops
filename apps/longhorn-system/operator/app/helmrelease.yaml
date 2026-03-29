@@ -70,7 +70,7 @@ spec:
       defaultSettings:        
         # Recommended for databases with app-level redundancy:
         # This allows the drain to proceed even if the volume is the last replica.
-        nodeDrainPolicy: allow-if-replica-is-stopped
+        nodeDrainPolicy: always-allow  # allow-if-replica-is-stopped
         # This ensures that even if the manager is stopping, 
         # it tries to detach the volume gracefully first.
         detachManuallyAttachedVolumesWhenCordoned: true
