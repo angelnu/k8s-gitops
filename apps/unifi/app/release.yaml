@@ -63,10 +63,8 @@ spec:
     service:
       main:
         controller: main
-        annotations:
-          metallb.io/loadBalancerIPs: ${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}
-          metallb.universe.tf/allow-shared-ip: unifi
         type: LoadBalancer
+        loadBalancerIP: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_UNIFI}"
         externalTrafficPolicy: Local
         ports:
           http:
