@@ -87,15 +87,15 @@ spec:
             port: 6789
             protocol: TCP
           stun:
-            enabled: true
+            enabled: false
             port: 3478
             protocol: UDP
           syslog:
-            enabled: true
+            enabled: false
             port: 5514
             protocol: UDP
           discovery:
-            enabled: true
+            enabled: false
             port: 10001
             protocol: UDP
 
