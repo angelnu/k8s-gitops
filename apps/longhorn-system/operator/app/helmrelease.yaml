@@ -67,17 +67,6 @@ spec:
           registry: quay.io
           repository: openshift/origin-oauth-proxy
           tag: 4.20 # renovate: depName=quay.io/openshift/origin-oauth-proxy datasource=docker
-      defaultSettings:        
-        # Recommended for databases with app-level redundancy:
-        # This allows the drain to proceed even if the volume is the last replica.
-        # nodeDrainPolicy: allow-if-replica-is-stopped
-        
-        podDisruptionBudgetPolicy: "false"
-        nodeDrainPolicy: "always-allow"
-
-        # This ensures that even if the manager is stopping, 
-        # it tries to detach the volume gracefully first.
-        detachManuallyAttachedVolumesWhenCordoned: true
       defaultBackupStore:
         backupTarget: cifs://nas.home.${HOME_DOMAIN}/NetBackup/longhorn/${CLUSTER_NAME}
         backupTargetCredentialSecret: cifs-secret

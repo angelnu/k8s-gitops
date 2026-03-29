@@ -1,0 +1,7 @@
+---
+apiVersion: longhorn.io/v1beta2
+kind: Setting
+metadata:
+  name: node-drain-policy
+  namespace: longhorn-system
+value: "allow-if-replica-is-stopped"
