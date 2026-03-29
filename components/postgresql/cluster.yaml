@@ -10,7 +10,7 @@ spec:
 
   # This tells CNPG how to behave during a node drain
   nodeMaintenanceWindow:
-    inProgress: true
+    inProgress: false
     reusePVC: true
 
   minSyncReplicas: 1
