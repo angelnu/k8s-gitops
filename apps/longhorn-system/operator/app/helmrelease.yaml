@@ -70,7 +70,7 @@ spec:
       defaultSettings:        
         # Recommended for databases with app-level redundancy:
         # This allows the drain to proceed even if the volume is the last replica.
-        nodeDrainPolicy: always-allow # As we have 2 storage classes and the all share the same allow-if-replica-is-stopped
+        nodeDrainPolicy: allow-if-replica-is-stopped
         # This is the "Magic Switch" for 1-replica volumes in a homelab
         allowNodeDrainWithLastHealthyReplica: true
       defaultBackupStore:
