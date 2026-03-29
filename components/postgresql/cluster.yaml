@@ -19,7 +19,7 @@ spec:
   # This ensures we always have a synchronous stand-by 
   # for zero data loss during the automatic failover.
   minSyncReplicas: 1
-  maxSyncReplicas: 1
+  maxSyncReplicas: 2
 
   affinity:
     # "required" ensures pods NEVER share a node
