@@ -9,9 +9,8 @@ data:
         containers:
           main:
             image:
-              # renovate: datasource=helm-values depName=docker lookupName=ghcr.io/paperless-ngx/paperless-ngx
               repository: ghcr.io/paperless-ngx/paperless-ngx
-              tag: 1.12.2
+              tag: 1.12.2 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
             
             env:
               PAPERLESS_OCR_LANGUAGE: deu
