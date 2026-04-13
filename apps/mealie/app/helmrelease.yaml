@@ -32,7 +32,7 @@ spec:
           main:
             image:
               repository: ghcr.io/mealie-recipes/mealie
-              tag: v3.14.0
+              tag: v3.15.0
             env:
               TZ: "Europe/Berlin"
               ALLOW_SIGNUP: "true"
