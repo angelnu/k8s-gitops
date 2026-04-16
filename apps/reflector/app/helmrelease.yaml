@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: reflector
-      version: 10.0.33
+      version: 10.0.34
       interval: 60m
       sourceRef:
         kind: HelmRepository
