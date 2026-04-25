@@ -37,7 +37,7 @@ spec:
           main:
             image:
               repository: ghcr.io/angelnu/prusaslicer-novnc
-              tag: 2.9.4@sha256:2ec286a33f1c8bd9b5fd8dfdeed7eed22bf25196dc3cc6e59cf0bfc808c606fe
+              tag: 2.9.4@sha256:7f44678f27543da3a4d71abcfc772b5453ce781e779f4d5018b56cceabfad5bf
             securityContext:
               privileged: true
               #runAsUser: 33  # www-data
