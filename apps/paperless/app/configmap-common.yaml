@@ -40,6 +40,7 @@ data:
             # path: set in chart values
       data-new:
         enabled: true
+        type: persistentVolumeClaim
         existingClaim: paperless-pvc
       media:
         enabled: true
