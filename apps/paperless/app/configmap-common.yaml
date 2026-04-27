@@ -10,7 +10,7 @@ data:
           main:
             image:
               repository: ghcr.io/paperless-ngx/paperless-ngx
-              tag: 2.20.14 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
+              tag: 2.20.15 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
             
             env:
               PAPERLESS_OCR_LANGUAGE: deu
