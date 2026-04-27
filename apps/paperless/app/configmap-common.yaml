@@ -38,6 +38,9 @@ data:
           nfs:
             server: "${NFS_SERVER}"
             # path: set in chart values
+      data-new:
+        enabled: true
+        existingClaim: paperless-pvc
       media:
         enabled: true
         type: custom

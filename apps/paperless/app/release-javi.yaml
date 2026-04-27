@@ -40,6 +40,10 @@ spec:
         volumeSpec:
           nfs:
             path: "${NFS_KUBERNETES}/paperless/javi/data"
+      data-new:
+        globalMounts:
+        - path: /usr/src/paperless/data-new
+          subpath: javi
       media:
         volumeSpec:
           nfs:

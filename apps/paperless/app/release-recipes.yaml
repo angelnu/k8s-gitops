@@ -40,6 +40,10 @@ spec:
         volumeSpec:
           nfs:
             path: "${NFS_KUBERNETES}/paperless/recipes/data"
+      data-new:
+        globalMounts:
+        - path: /usr/src/paperless/data-new
+          subpath: recipes
       media:
         volumeSpec:
           nfs:

@@ -41,6 +41,10 @@ spec:
         volumeSpec:
           nfs:
             path: "${NFS_KUBERNETES}/paperless/madrid/data"
+      data-new:
+        globalMounts:
+        - path: /usr/src/paperless/data-new
+          subpath: madrid
       media:
         volumeSpec:
           nfs:

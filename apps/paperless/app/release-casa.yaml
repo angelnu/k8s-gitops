@@ -40,6 +40,10 @@ spec:
         volumeSpec:
           nfs:
             path: "${NFS_KUBERNETES}/paperless/casa/data"
+      data-new:
+        globalMounts:
+        - path: /usr/src/paperless/data-new
+          subpath: casa
       media:
         volumeSpec:
           nfs:
