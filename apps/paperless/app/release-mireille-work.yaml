@@ -43,7 +43,7 @@ spec:
       data-new:
         globalMounts:
         - path: /usr/src/paperless/data-new
-          subpath: mireille-work
+          subPath: mireille-work
       media:
         volumeSpec:
           nfs:

@@ -44,7 +44,7 @@ spec:
       data-new:
         globalMounts:
         - path: /usr/src/paperless/data-new
-          subpath: madrid
+          subPath: madrid
       media:
         volumeSpec:
           nfs:
