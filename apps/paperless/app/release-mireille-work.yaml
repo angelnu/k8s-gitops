@@ -42,7 +42,7 @@ spec:
             path: "${NFS_KUBERNETES}/paperless/mireille-work/data"
       data-new:
         globalMounts:
-        - path: /usr/src/paperless/data-new
+        - path: /usr/src/paperless/data
           subPath: mireille-work
       media:
         volumeSpec:

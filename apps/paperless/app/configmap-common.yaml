@@ -32,7 +32,7 @@ data:
         enabled: true
         type: custom
         globalMounts:
-        - path: /usr/src/paperless/data
+        - path: /usr/src/paperless/data-old
           readOnly: false
         volumeSpec:
           nfs:
