@@ -5,6 +5,7 @@ kind: HelmRelease
 metadata:
   name: &app openebs-localpv-hostpath
 spec:
+  releaseName: openebs-localpv-hostpath
   chart:
     spec:
       chart: localpv-provisioner
