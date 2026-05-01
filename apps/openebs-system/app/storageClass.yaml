@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-hostpath-postgres
+provisioner: openebs.io/local
+parameters:
+  # This is the path on the HOST where folders will be created
+  basePath: "/var/openebs/local" 
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Delete

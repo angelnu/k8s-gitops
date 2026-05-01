@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app openebs-localpv-hostpath
+spec:
+  chart:
+    spec:
+      chart: localpv-provisioner
+      version: 4.4.0
+      interval: 60m
+      sourceRef:
+        kind: HelmRepository
+        name: openebs
+        namespace: openebs-system
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    analytics:
+      enabled: false
