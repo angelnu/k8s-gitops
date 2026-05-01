@@ -3,12 +3,11 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app openebs-localpv-hostpath
+  name: &app openebs
 spec:
-  releaseName: openebs-localpv-hostpath
   chart:
     spec:
-      chart: localpv-provisioner
+      chart: openebs
       version: 4.3.0
       interval: 60m
       sourceRef:
@@ -26,5 +25,12 @@ spec:
       strategy: rollback
       retries: 3
   values:
-    analytics:
-      enabled: false
+    engines:
+      local:
+        lvm:
+          enabled: false
+        zfs:
+          enabled: false
+      replicated:
+        mayastor:
+          enabled: false
