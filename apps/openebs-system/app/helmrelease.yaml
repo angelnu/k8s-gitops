@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: localpv-provisioner
-      version: v4.4.0
+      version: 4.4.0
       interval: 60m
       sourceRef:
         kind: HelmRepository
