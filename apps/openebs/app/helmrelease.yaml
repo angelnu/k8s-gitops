@@ -13,7 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: openebs
-        namespace: openebs-system
+        namespace: openebs
   interval: 30m
   timeout: 20m
   install:

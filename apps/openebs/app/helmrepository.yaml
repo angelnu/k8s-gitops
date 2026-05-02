@@ -4,7 +4,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: openebs
-  namespace: openebs-system
+  namespace: openebs
 spec:
   interval: 1h
   url: https://openebs.github.io/openebs
