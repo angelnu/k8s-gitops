@@ -30,14 +30,8 @@ spec:
       # Tell the replicas which user to use to talk to the primary
       replicationUser: "replication-user"
       persistence:
-        enabled: true
         size: 1Gi
         storageClass: "openebs-hostpath"
-    # For Authentik, ensure you set a password
-    persistence:
-      enabled: true
-      size: 1Gi
-      storageClass: "openebs-hostpath"
     # For Authentik, ensure you set a password
     auth:
       enabled: true # You must define the default user if auth is enabled
