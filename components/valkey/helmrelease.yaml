@@ -24,6 +24,10 @@ spec:
       retries: 3
   values:
     architecture: replication
+    dataStorage:
+      enabled: true
+      size: 1Gi
+      className: "openebs-hostpath"
     replica:
       enabled: true
       replicaCount: 2 # This creates 2 replicas + 1 primary = 3 pods
