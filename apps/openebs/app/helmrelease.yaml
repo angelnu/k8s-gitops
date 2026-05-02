@@ -27,6 +27,8 @@ spec:
   values:
     engines:
       local:
+        hostpath:
+          enabled: true
         lvm:
           enabled: false
         zfs:
@@ -34,3 +36,6 @@ spec:
       replicated:
         mayastor:
           enabled: false
+    localpv-provisioner:
+      enabled: true
+      basepath: "/var/openebs/local" # Use lowercase here

@@ -5,6 +5,6 @@ metadata:
 provisioner: openebs.io/local
 parameters:
   # This is the path on the HOST where folders will be created
-  basePath: "/var/openebs/local" 
+  basepath: "/var/openebs/local" 
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
