@@ -48,11 +48,12 @@ spec:
 
   # 3. Storage Configuration
   storage:
-    storageClass: longhorn-postgres-replica-storage
+    #storageClass: &storageClass longhorn-postgres-replica-storage
+    storageClass: &storageClass openebs-hostpath
     size: ${POSTGRES_STORAGE_SIZE}
   walStorage:
     # Separate WAL storage is recommended for production to avoid IO contention
-    storageClass: longhorn-postgres-replica-storage
+    storageClass: *storageClass
     size: ${POSTGRES_WALSTORAGE_SIZE}
 
   externalClusters:
