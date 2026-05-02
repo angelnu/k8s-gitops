@@ -6,7 +6,7 @@ metadata:
     kustomize.toolkit.fluxcd.io/prune: disabled
     kustomize.toolkit.fluxcd.io/ssa: Merge
 spec:
-  channel: 4-scos-stable
+  channel: stable-4.21
   desiredUpdate:
     image: registry.ci.openshift.org/origin/release-scos:4.21.0-okd-scos.10@sha256:6e55d5ec331e548bd7698e04b5e1459bc4f840c1d155858cc7e42364bd77a595
   upstream: https://amd64.origin.releases.ci.openshift.org/graph
