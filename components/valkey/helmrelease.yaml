@@ -6,7 +6,7 @@ spec:
   chart:
     spec:
       chart: valkey
-      version: 0.9.2
+      version: 0.9.4
       sourceRef:
         kind: HelmRepository
         name: valkey
