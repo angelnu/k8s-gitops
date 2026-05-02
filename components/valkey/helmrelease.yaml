@@ -24,10 +24,6 @@ spec:
       retries: 3
   values:
     architecture: replication
-    dataStorage:
-      enabled: true
-      size: 1Gi
-      className: "openebs-hostpath"
     replica:
       enabled: true
       replicaCount: 2 # This creates 2 replicas + 1 primary = 3 pods
@@ -50,3 +46,19 @@ spec:
 
     serviceAccount:
       name: ${MY_APP}-valkey
+    
+    podSecurityContext:
+      # Clear these to allow OpenShift to assign its own range
+      fsGroup: null 
+      runAsUser: null
+      runAsGroup: null
+      seccompProfile: null # OpenShift often manages seccomp itself
+
+    securityContext:
+      # Remove runAsUser and allowPrivilegeEscalation
+      runAsNonRoot: true
+      runAsUser: null 
+      # Drop capabilities as the default restricted SCC requires
+      capabilities:
+        drop:
+          - ALL
