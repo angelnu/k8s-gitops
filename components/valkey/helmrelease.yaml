@@ -32,6 +32,7 @@ spec:
       persistence:
         enabled: true
         size: 1Gi
+        storageClass: "openebs-hostpath"
     # For Authentik, ensure you set a password
     persistence:
       enabled: true
