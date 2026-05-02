@@ -68,7 +68,10 @@ spec:
         # port
       redis:
         host: '{{ .Release.Name }}-redis-master'
-        # password: #in cret
+        # password: #in cretmaster:
+        persistence:
+          storageClass: "openebs-hostpath" # Change this to your target SC
+          size: 8Gi
 
     postgresql:
       enabled: false

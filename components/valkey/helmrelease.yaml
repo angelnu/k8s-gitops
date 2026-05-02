@@ -36,6 +36,7 @@ spec:
     persistence:
       enabled: true
       size: 1Gi
+      storageClass: "openebs-hostpath"
     # For Authentik, ensure you set a password
     auth:
       enabled: true # You must define the default user if auth is enabled
