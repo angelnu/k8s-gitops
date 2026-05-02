@@ -4,7 +4,7 @@ metadata:
   name: local-hostpath-postgres
 provisioner: openebs.io/local
 parameters:
-  # This is the path on the HOST where folders will be created
-  basepath: "/var/openebs/local" 
+  storageType: "hostpath" # Add this line
+  basePath: "/var/openebs/local" # Ensure this matches your host directory
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
