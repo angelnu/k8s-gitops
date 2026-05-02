@@ -4,8 +4,8 @@ permissions:
   checks: read # Required to query the check-runs API
   statuses: read # Required if you use the status API
 on:
-  # schedule:
-  #     - cron: "11 11 * * 6"
+  schedule:
+    - cron: "11 11 * * 6"
   workflow_dispatch:
 
 jobs:
