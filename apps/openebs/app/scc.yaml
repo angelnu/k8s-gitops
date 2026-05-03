@@ -8,10 +8,13 @@ subjects:
     name: ${MY_APP}-localpv-provisioner
     namespace: ${MY_NAMESPACE}
   - kind: ServiceAccount
-    name: ${MY_APP}-minio
+    name: ${MY_APP}-alloy
     namespace: ${MY_NAMESPACE}
   - kind: ServiceAccount
-    name: ${MY_APP}-system-minio
+    name: loki
+    namespace: ${MY_NAMESPACE}
+  - kind: ServiceAccount
+    name: minio-sa
     namespace: ${MY_NAMESPACE}
 roleRef:
   kind: ClusterRole
