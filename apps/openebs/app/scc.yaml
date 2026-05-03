@@ -7,6 +7,9 @@ subjects:
   - kind: ServiceAccount
     name: ${MY_APP}-localpv-provisioner
     namespace: ${MY_NAMESPACE}
+  - kind: ServiceAccount
+    name: ${MY_APP}-system-minio
+    namespace: ${MY_NAMESPACE}
 roleRef:
   kind: ClusterRole
   name: system:openshift:scc:privileged
