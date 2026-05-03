@@ -8,6 +8,9 @@ subjects:
     name: ${MY_APP}-localpv-provisioner
     namespace: ${MY_NAMESPACE}
   - kind: ServiceAccount
+    name: ${MY_APP}-minio
+    namespace: ${MY_NAMESPACE}
+  - kind: ServiceAccount
     name: ${MY_APP}-system-minio
     namespace: ${MY_NAMESPACE}
 roleRef:
