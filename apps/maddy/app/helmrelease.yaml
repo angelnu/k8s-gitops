@@ -125,6 +125,12 @@ spec:
           custom: |
             msgpipeline local_routing {
                 debug yes
+
+                # If that's a disabled address - reject the message.
+                destination_in file /config/disabled-aliases { 
+                    reject
+                }
+                
                 modify {
                     # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).
                     replace_rcpt &local_rewrites
@@ -134,23 +140,14 @@ spec:
                 destination_in &local_mailboxes {
                     deliver_to &local_mailboxes
                 }
-                # If that's a disabled address - reject the message.
-                destination_in file /config/disabled-aliases { 
-                    reject
-                }
                 #Apply catchall rules
-                destination $(local_domains) {
-                    modify {
-                        replace_rcpt &local_rewrites_catchall
-                    }
-                    reroute {
-                        destination_in &local_mailboxes {
-                            deliver_to &local_mailboxes
-                        }
-                        default_destination {
-                            reject 550 5.1.1 "User doesn't exist"
-                        }
-                    }
+                modify {
+                  replace_rcpt &local_rewrites_catchall
+                }
+                
+                # Send catchall emails
+                destination_in &local_mailboxes {
+                  deliver_to &local_mailboxes
                 }
 
                 # This allows aliases to be remote
