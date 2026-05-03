@@ -1,0 +1,21 @@
+apiVersion: operator.openshift.io/v1
+kind: DNS
+metadata:
+  name: default
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+    kustomize.toolkit.fluxcd.io/ssa: Merge
+spec:
+  cache:
+    negativeTTL: 20s
+    positiveTTL: 120s
+  logLevel: Normal
+  operatorLogLevel: Normal
+  upstreamResolvers:
+    policy: Sequential
+    upstreams:
+    - type: Network
+      address: 192.168.2.1 # Your home router/DNS IP
+      port: 53
+    - port: 53
+      type: SystemResolvConf
