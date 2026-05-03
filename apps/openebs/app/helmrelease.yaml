@@ -7,7 +7,7 @@ metadata:
 spec:
   chart:
     spec:
-      chart: *app
+      chart: openebs
       version: 4.4.0
       interval: 60m
       sourceRef:
