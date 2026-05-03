@@ -28,6 +28,10 @@ spec:
   # https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/values.yaml
   values:
     controller:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
       replicaCount: 3
       updateStrategy:
         type: RollingUpdate
