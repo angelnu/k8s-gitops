@@ -46,6 +46,7 @@ spec:
         default: true 
         controllerValue: "k8s.io/ingress-nginx"
       config:
+        resolver: "172.30.0.10" # CoreDNS service IP in OpenShift
         enable-real-ip: "false"
         hostname-lookup: "false"
         custom-http-errors: 404,401,403,500,503
