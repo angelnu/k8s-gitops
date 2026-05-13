@@ -35,7 +35,7 @@ spec:
           main:
             image:
               repository: docker.io/library/nginx
-              tag: 1.30.0@sha256:50e2952b555d082947d1f70b190a6da1e731ba879116e238f4d1d5ade6b49b40
+              tag: 1.31.0@sha256:772053fe58eaa882734db7ad8d2327e982374ab3d17f302453cd850d975aba38
       cronjob:
         serviceAccount:
           identifier: default
