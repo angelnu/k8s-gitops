@@ -12,9 +12,9 @@ spec:
     inProgress: false
     reusePVC: true
 
-  # Strategy 'unsupervised' allows the operator to 
+  # Strategy 'switchover' allows the operator to 
   # promote a replica to primary automatically during a drain.
-  primaryUpdateStrategy: unsupervised
+  primaryUpdateStrategy: switchover
   
   # This ensures we always have a synchronous stand-by 
   # for zero data loss during the automatic failover.
