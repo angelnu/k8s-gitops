@@ -14,9 +14,8 @@ spec:
   
   switchoverDelay: 60 # 1 minute is plenty for "hiccup" protection
 
-  # Strategy 'switchover' allows the operator to 
-  # promote a replica to primary automatically during a drain.
-  primaryUpdateStrategy: switchover
+  # 'unsupervised' is correct. It means "Operator, take care of it."
+  primaryUpdateStrategy: unsupervised
   
   # This ensures we always have a synchronous stand-by 
   # for zero data loss during the automatic failover.
