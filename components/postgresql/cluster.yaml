@@ -11,6 +11,8 @@ spec:
   nodeMaintenanceWindow:
     inProgress: false
     reusePVC: true
+  
+  switchoverDelay: 60 # 1 minute is plenty for "hiccup" protection
 
   # Strategy 'switchover' allows the operator to 
   # promote a replica to primary automatically during a drain.
