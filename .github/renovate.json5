@@ -6,17 +6,17 @@
   repositories: ["angelnu/k8s-gitops"],
   flux: {
     managerFilePatterns: [
-      "/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/",
+      "/(apps|bootstrap|clusters|components|vars)/.+\\.ya?ml$/",
     ],
   },
   "helm-values": {
     managerFilePatterns: [
-      "/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/",
+      "/(apps|bootstrap|clusters|components|vars)/.+\\.ya?ml$/",
     ],
   },
   kubernetes: {
     managerFilePatterns: [
-      "/(apps|base|clusters|core|crds|settings)/.+\\.ya?ml$/",
+      "/(apps|bootstrap|clusters|components|vars)/.+\\.ya?ml$/",
     ],
   },
   packageRules: [
