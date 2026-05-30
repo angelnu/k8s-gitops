@@ -22,6 +22,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: flux-operator-charts
+        namespace: flux-system
   values:
     web:
       config:
