@@ -42,6 +42,10 @@ spec:
       ingress:
         enabled: true
         annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:flux
+          hajimari.io/info: Flux Operator
+          hajimari.io/group: cluster
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
           - host: flux.pub.${CLUSTER_DOMAIN}
