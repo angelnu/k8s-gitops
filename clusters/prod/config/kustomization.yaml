@@ -7,8 +7,8 @@ resources:
   - ./flux.yaml
   - github.com/fluxcd/flux2/manifests/bases/source-watcher?ref=v2.8.8 # Optional flux component
   - ./cluster-repository.yaml
-  - ./vars.yaml
-  - ./vars-global.yaml
+  - ./cluster-vars.yaml
+  - ./cluster-vars-global.yaml
   - ./cluster-config.yaml
   - ./cluster-apps.yaml
   - ./scc.yaml
