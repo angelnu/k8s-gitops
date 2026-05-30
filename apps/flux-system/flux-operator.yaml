@@ -24,5 +24,12 @@ spec:
         name: flux-operator-charts
   values:
     # This automatically activates the integrated Flux Web UI dashboard
-    ui:
-      enabled: true
+    enabled: true
+    web:
+      ingress:
+        enabled: true
+        hosts:
+          - host: flux.pub.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
