@@ -91,6 +91,19 @@ spec:
             editor:
               - path: /root/.ssh/id_rsa
                 subPath: id_rsa
+    
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:anyuid
+            kind: ClusterRole
+          subjects:
+            - identifier: default
 
     service:
       main:
