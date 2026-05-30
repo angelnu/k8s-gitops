@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./apps/metallb-system/instance
+  path: ./apps/metallb-system/instance/app
   prune: true
   dependsOn:
     - name: metallb-system-operator

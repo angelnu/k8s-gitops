@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./apps/metallb-system/operator
+  path: ./apps/metallb-system/operator/app
   prune: true
   sourceRef:
     kind: GitRepository
