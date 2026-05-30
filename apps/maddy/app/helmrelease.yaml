@@ -58,6 +58,19 @@ spec:
             add:
               - SYS_PTRACE #enable debuging
     
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:privileged  # For CAP_NET_BIND_SERVICE
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+    
     maddy:
       hostname: "mx.${CLUSTER_SHORT_DOMAIN}"
       primary_domain: "${CLUSTER_SHORT_DOMAIN}"
