@@ -18,9 +18,9 @@ spec:
     multitenant: false
     networkPolicy: true
     domain: "cluster.local"
-    kubeAPI:
-      qps: 500
-      burst: 1000
+    # kubeAPI:
+    #   qps: 500
+    #   burst: 1000
   sync:
     kind: GitRepository
     url: "https://github.com/angelnu/k8s-gitops.git"
