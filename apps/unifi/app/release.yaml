@@ -102,6 +102,15 @@ spec:
     serviceAccount:
       default:
         enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:nonroot
+            kind: ClusterRole
+          subjects:
+            - identifier: default
 
     ingress:
       main:
