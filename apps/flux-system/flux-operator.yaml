@@ -23,9 +23,16 @@ spec:
         kind: HelmRepository
         name: flux-operator-charts
   values:
-    # This automatically activates the integrated Flux Web UI dashboard
-    enabled: true
     web:
+      config:
+        baseURL: https://flux.pub.${CLUSTER_DOMAIN}
+        authentication:
+          type: OAuth2
+          oauth2:
+            provider: OIDC
+            issuerURL: https://authentik.pub.${CLUSTER_DOMAIN}/application/o/recipes
+            # clientID: set in secret
+            # clientSecret: set in secret
       ingress:
         enabled: true
         hosts:
@@ -33,3 +40,8 @@ spec:
             paths:
               - path: /
                 pathType: Prefix
+  valuesFrom:
+  - kind: Secret
+    name: flux-operator-values
+    valuesKey: values.yaml
+    optional: false
