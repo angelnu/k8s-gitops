@@ -17,9 +17,7 @@ spec:
     multitenant: false
     networkPolicy: true
     domain: "cluster.local"
-    # kubeAPI:
-    #   qps: 500
-    #   burst: 1000
+    size: medium
   sync:
     name: cluster-repository
     kind: GitRepository
@@ -30,40 +28,16 @@ spec:
   
   kustomize:
     patches:
-      # 1. Update tuning arguments for all 3 primary controllers
-      - target:
-          kind: Deployment
-          name: (kustomize-controller|helm-controller|source-controller)
-        patch: |
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --concurrent=12
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --requeue-dependency=5s
-          - op: replace
-            path: /spec/template/spec/containers/0/resources/limits/memory
-            value: 2Gi
-
-      # 2. Add specific cross-namespace and OOMWatch gates to the Helm Controller
+      # Allow accessing cluster-repository from other NSs
       - target:
           kind: Deployment
           name: helm-controller
         patch: |
           - op: add
-            path: /spec/template/spec/containers/0/args/-
+            path: /spec/template/spec/containers/0/args/-            
             value: --no-cross-namespace-refs=false
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --feature-gates=ExternalArtifact=true,OOMWatch=true
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --oom-watch-memory-threshold=95
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --oom-watch-interval=500ms
 
-      # 3. Enable In-Memory Kustomize Builds
+      # Enable In-Memory Kustomize Builds
       - target:
           kind: Deployment
           name: kustomize-controller
