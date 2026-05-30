@@ -17,7 +17,7 @@ spec:
     multitenant: false
     networkPolicy: true
     domain: "cluster.local"
-    size: medium
+    size: small
   sync:
     name: cluster-repository
     kind: GitRepository
