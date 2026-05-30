@@ -35,6 +35,8 @@ spec:
             # clientSecret: set in secret
       ingress:
         enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
           - host: flux.pub.${CLUSTER_DOMAIN}
             paths:
