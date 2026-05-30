@@ -30,9 +30,15 @@ spec:
           type: OAuth2
           oauth2:
             provider: OIDC
-            issuerURL: https://authentik.pub.${CLUSTER_DOMAIN}/application/o/flux/
+            issuerURL: https://authentik.pub.${CLUSTER_DOMAIN}/application/o/flux
             # clientID: set in secret
             # clientSecret: set in secret
+            scopes:
+            - openid
+            - profile
+            - email
+            - groups
+            - offline_access
       ingress:
         enabled: true
         annotations:
