@@ -28,6 +28,10 @@ spec:
       retries: 3
   # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
   values:
+    pod:
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
     controllers:
       main:
         serviceAccount:
@@ -42,7 +46,6 @@ spec:
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
-              fsGroup: 1001
     serviceAccount:
       default:
         enabled: true
