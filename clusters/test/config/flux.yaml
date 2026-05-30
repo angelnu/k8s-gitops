@@ -28,35 +28,35 @@ spec:
     path: "clusters/test/config"
     #pullSecret: "flux-system"
   
-  # Customizes the underlying deployments to match your tuning adjustments
-  kustomizeController:
-    resources:
-      limits:
-        memory: 2Gi
-    # Preserves your concurrent workers and temporary memory-disk adjustments
-    args:
-      - --concurrent=12
-      - --requeue-dependency=5s
-    volumes:
-      - name: temp
-        emptyDir:
-          medium: Memory
+  # # Customizes the underlying deployments to match your tuning adjustments
+  # kustomizeController:
+  #   resources:
+  #     limits:
+  #       memory: 2Gi
+  #   # Preserves your concurrent workers and temporary memory-disk adjustments
+  #   args:
+  #     - --concurrent=12
+  #     - --requeue-dependency=5s
+  #   volumes:
+  #     - name: temp
+  #       emptyDir:
+  #         medium: Memory
 
-  helmController:
-    resources:
-      limits:
-        memory: 2Gi
-    # Preserves your worker count and feature gates 
-    args:
-      - --concurrent=12
-      - --requeue-dependency=5s
-      - --feature-gates=ExternalArtifact=true,OOMWatch=true
-      - --oom-watch-memory-threshold=95
-      - --oom-watch-interval=500ms
+  # helmController:
+  #   resources:
+  #     limits:
+  #       memory: 2Gi
+  #   # Preserves your worker count and feature gates 
+  #   args:
+  #     - --concurrent=12
+  #     - --requeue-dependency=5s
+  #     - --feature-gates=ExternalArtifact=true,OOMWatch=true
+  #     - --oom-watch-memory-threshold=95
+  #     - --oom-watch-interval=500ms
 
-  sourceController:
-    resources:
-      limits:
-        memory: 2Gi
-    args:
-      - --feature-gates=ExternalArtifact=true
+  # sourceController:
+  #   resources:
+  #     limits:
+  #       memory: 2Gi
+  #   args:
+  #     - --feature-gates=ExternalArtifact=true
