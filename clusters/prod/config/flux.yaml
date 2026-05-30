@@ -20,7 +20,8 @@ metadata:
 spec:
   interval: 10m
   path: ./
-  prune: true
+  prune: false
+  suspend: true
   wait: true
   sourceRef:
     kind: OCIRepository
