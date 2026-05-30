@@ -21,6 +21,7 @@ spec:
     #   qps: 500
     #   burst: 1000
   sync:
+    name: cluster-repository
     kind: GitRepository
     url: "https://github.com/angelnu/k8s-gitops.git"
     ref: "refs/heads/main"
