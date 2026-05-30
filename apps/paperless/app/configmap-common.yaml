@@ -72,6 +72,19 @@ data:
           nfs:
             server: "${NFS_SERVER}"
             # path: set in chart values
+    
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:hostmount-anyuid-v2
+            kind: ClusterRole
+          subjects:
+            - identifier: default
 
     service:
       main:
