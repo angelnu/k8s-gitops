@@ -98,6 +98,10 @@ spec:
             enabled: false
             port: 10001
             protocol: UDP
+    
+    serviceAccount:
+      default:
+        enabled: true
 
     ingress:
       main:
