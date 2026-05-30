@@ -1,0 +1,28 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: flux-operator-charts
+  namespace: flux-system
+spec:
+  interval: 2h
+  type: oci
+  url: oci://ghcr.io/controlplaneio-fluxcd/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: flux-operator
+  namespace: flux-system
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: flux-operator
+      version: "0.50.0" # Match the current stable version targeting Flux v2.8.x
+      sourceRef:
+        kind: HelmRepository
+        name: flux-operator-charts
+  values:
+    # This automatically activates the integrated Flux Web UI dashboard
+    ui:
+      enabled: true
