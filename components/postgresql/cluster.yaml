@@ -73,7 +73,5 @@ spec:
     recovery:
       source: source
       database: app
-      secret:
-        name: ${POSTGRES_RECOVERY_SECRETNAME:=nil}
     # initdb:
     #   database: app
