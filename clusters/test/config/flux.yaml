@@ -74,13 +74,4 @@ spec:
               name: temp
               emptyDir:
                 medium: Memory
-
-      # 4. Add ExternalArtifact Feature gate to Source Controller
-      - target:
-          kind: Deployment
-          name: source-controller
-        patch: |
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --feature-gates=ExternalArtifact=true
   
