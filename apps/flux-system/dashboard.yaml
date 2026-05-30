@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flux-web
+  namespace: flux-system
+spec:
+  rules:
+    - host: "flux.pub.${CLUSTER_DOMAIN}"
+      http:
+        paths:
+          - backend:
+              service:
+                name: flux-operator
+                port:
+                  name: http-web
+            path: /
+            pathType: Prefix
