@@ -30,7 +30,7 @@ spec:
           type: OAuth2
           oauth2:
             provider: OIDC
-            issuerURL: https://authentik.pub.${CLUSTER_DOMAIN}/application/o/recipes
+            issuerURL: https://authentik.pub.${CLUSTER_DOMAIN}/application/o/recipes/
             # clientID: set in secret
             # clientSecret: set in secret
       ingress:
