@@ -24,16 +24,6 @@ spec:
         name: flux-operator-charts
         namespace: flux-system
   values:
-    # Pass the ServiceAccount token into the container environment dynamically
-    extraEnvs:
-      - name: OAUTH_CLIENT_SECRET
-        valueFrom:
-          secretKeyRef:
-            # OpenShift auto-generates a token secret matching your ServiceAccount name
-            name: flux-operator-token
-      # Point Go exactly to the platform service CA that OKD auto-mounted for you!
-      - name: SSL_CERT_FILE
-        value: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
     web:
       config:
         baseURL: https://flux.pub.${CLUSTER_DOMAIN}
@@ -41,32 +31,15 @@ spec:
           type: OAuth2
           oauth2:
             provider: OIDC
-            issuerURL: https://oauth-openshift.openshift-authentication.svc
-            
-            clientID: flux-operator
-            
-            # Bypasses the hardcoded validation check using the runtime env token
-            clientSecret: $${OAUTH_CLIENT_SECRET}
-            
+            issuerURL: https://authentik.pub.${CLUSTER_DOMAIN}/application/o/flux-app/
+            # clientID: set in secret
+            # clientSecret: set in secret
             scopes:
             - openid
-            - user:info
-            - user:groups
-      # config:
-      #   baseURL: https://flux.pub.${CLUSTER_DOMAIN}
-      #   authentication:
-      #     type: OAuth2
-      #     oauth2:
-      #       provider: OIDC
-      #       issuerURL: https://authentik.pub.${CLUSTER_DOMAIN}/application/o/flux-app/
-      #       # clientID: set in secret
-      #       # clientSecret: set in secret
-      #       scopes:
-      #       - openid
-      #       - profile
-      #       - email
-      #       - groups
-      #       - offline_access
+            - profile
+            - email
+            - groups
+            - offline_access
       ingress:
         enabled: true
         annotations:
