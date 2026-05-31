@@ -25,21 +25,48 @@ spec:
         namespace: flux-system
   values:
     web:
+      # Pass the ServiceAccount token into the container environment dynamically
+      env:
+        - name: OAUTH_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              # OpenShift auto-generates a token secret matching your ServiceAccount name
+              name: flux-operator-token 
+              key: token
+
       config:
         baseURL: https://flux.pub.${CLUSTER_DOMAIN}
         authentication:
           type: OAuth2
           oauth2:
             provider: OIDC
-            issuerURL: https://authentik.pub.${CLUSTER_DOMAIN}/application/o/flux-app/
-            # clientID: set in secret
-            # clientSecret: set in secret
+            issuerURL: https://api.${CLUSTER_DOMAIN}:6443
+            
+            # The client identity is your annotated ServiceAccount
+            clientID: system:serviceaccount:flux-system:flux-operator
+            
+            # Bypasses the hardcoded validation check using the runtime env token
+            clientSecret: ${OAUTH_CLIENT_SECRET}
+            
             scopes:
             - openid
-            - profile
-            - email
-            - groups
-            - offline_access
+            - user:info
+            - user:groups
+      # config:
+      #   baseURL: https://flux.pub.${CLUSTER_DOMAIN}
+      #   authentication:
+      #     type: OAuth2
+      #     oauth2:
+      #       provider: OIDC
+      #       issuerURL: https://authentik.pub.${CLUSTER_DOMAIN}/application/o/flux-app/
+      #       # clientID: set in secret
+      #       # clientSecret: set in secret
+      #       scopes:
+      #       - openid
+      #       - profile
+      #       - email
+      #       - groups
+      #       - offline_access
       ingress:
         enabled: true
         annotations:
