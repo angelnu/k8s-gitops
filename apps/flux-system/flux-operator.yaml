@@ -26,7 +26,7 @@ spec:
   values:
     web:
       # Pass the ServiceAccount token into the container environment dynamically
-      env:
+      extraEnvs:
         - name: OAUTH_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
