@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: flux-operator-token
+  namespace: flux-system
+  annotations:
+    # THE MAGIC: This tells OpenShift to generate a token for this specific SA
+    kubernetes.io/service-account.name: flux-operator
+type: kubernetes.io/service-account-token
