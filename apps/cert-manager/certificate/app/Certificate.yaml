@@ -23,5 +23,5 @@ spec:
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "openshift-ingress,authentik,maddy"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "openshift-ingress,openshift-ingress,authentik,maddy"
       reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
