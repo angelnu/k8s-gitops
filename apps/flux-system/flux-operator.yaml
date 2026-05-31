@@ -24,18 +24,17 @@ spec:
         name: flux-operator-charts
         namespace: flux-system
   values:
+    # Pass the ServiceAccount token into the container environment dynamically
+    extraEnvs:
+      - name: OAUTH_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            # OpenShift auto-generates a token secret matching your ServiceAccount name
+            name: flux-operator-token        
+      # 2. THE FIX: Force the Go HTTP client to trust the internal cluster CA
+      - name: SSL_CERT_FILE
+        value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
     web:
-      # Pass the ServiceAccount token into the container environment dynamically
-      extraEnvs:
-        - name: OAUTH_CLIENT_SECRET
-          valueFrom:
-            secretKeyRef:
-              # OpenShift auto-generates a token secret matching your ServiceAccount name
-              name: flux-operator-token        
-        # 2. THE FIX: Force the Go HTTP client to trust the internal cluster CA
-        - name: SSL_CERT_FILE
-          value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-
       config:
         baseURL: https://flux.pub.${CLUSTER_DOMAIN}
         authentication:

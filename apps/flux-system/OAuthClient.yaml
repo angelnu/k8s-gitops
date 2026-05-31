@@ -1,0 +1,16 @@
+apiVersion: oauth.openshift.io/v1
+kind: OAuthClient
+metadata:
+  name: flux-operator
+grantMethod: auto
+# Public client — PKCE only, no client secret.
+secret: ""
+redirectURIs:
+- https://flux.pub.${CLUSTER_DOMAIN}/oauth2/callback
+scopeRestrictions:
+- literals:
+  - user:full
+  - user:info
+  - user:check-access
+  - user:list-projects
+  - user:list-scoped-projects
