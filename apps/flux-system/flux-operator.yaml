@@ -41,7 +41,7 @@ spec:
           type: OAuth2
           oauth2:
             provider: OIDC
-            issuerURL: https://oauth-openshift.apps.${CLUSTER_DOMAIN}
+            issuerURL: https://oauth-openshift.openshift-authentication.svc
             
             clientID: flux-operator
             
