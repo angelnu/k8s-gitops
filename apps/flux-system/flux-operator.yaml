@@ -42,7 +42,7 @@ spec:
           type: OAuth2
           oauth2:
             provider: OIDC
-            issuerURL: https://api.${CLUSTER_DOMAIN}:6443
+            issuerURL: https://kubernetes.default.svc
             
             # The client identity is your annotated ServiceAccount
             clientID: system:serviceaccount:flux-system:flux-operator
