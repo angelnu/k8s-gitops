@@ -30,7 +30,8 @@ spec:
         valueFrom:
           secretKeyRef:
             # OpenShift auto-generates a token secret matching your ServiceAccount name
-            name: flux-operator-token# Point Go exactly to the platform service CA that OKD auto-mounted for you!
+            name: flux-operator-token
+      # Point Go exactly to the platform service CA that OKD auto-mounted for you!
       - name: SSL_CERT_FILE
         value: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
     web:
