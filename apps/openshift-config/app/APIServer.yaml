@@ -1,0 +1,14 @@
+apiVersion: config.openshift.io/v1
+kind: APIServer
+metadata:
+  name: cluster
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+    kustomize.toolkit.fluxcd.io/ssa: Merge
+spec:
+  servingCerts:
+    namedCertificates:
+      - names:
+          - "api.test.angelnu.com" # Replace with your exact api.${CLUSTER_DOMAIN} string if templating is enabled
+        servingCertificate:
+          name: letsencrypt-api-certs
