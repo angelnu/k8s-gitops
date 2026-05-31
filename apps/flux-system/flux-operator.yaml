@@ -31,9 +31,19 @@ spec:
           secretKeyRef:
             # OpenShift auto-generates a token secret matching your ServiceAccount name
             name: flux-operator-token        
-      # 2. THE FIX: Force the Go HTTP client to trust the internal cluster CA
-      - name: SSL_CERT_FILE
-        value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    # Overwrite the container's default trust pool directory with the OKD Service CA
+    volumeMounts:
+      - name: trusted-service-ca
+        mountPath: /etc/ssl/certs
+        readOnly: true
+    
+    volumes:
+      - name: trusted-service-ca
+        configMap:
+          name: openshift-service-ca.crt
+          items:
+            - key: service-ca.crt
+              path: ca-certificates.crt
     web:
       config:
         baseURL: https://flux.pub.${CLUSTER_DOMAIN}
