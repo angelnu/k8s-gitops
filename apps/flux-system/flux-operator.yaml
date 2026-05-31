@@ -41,10 +41,9 @@ spec:
           type: OAuth2
           oauth2:
             provider: OIDC
-            issuerURL: https://kubernetes.default.svc
+            issuerURL: https://oauth-openshift.apps.${CLUSTER_DOMAIN}
             
-            # The client identity is your annotated ServiceAccount
-            clientID: system:serviceaccount:flux-system:flux-operator
+            clientID: flux-operator
             
             # Bypasses the hardcoded validation check using the runtime env token
             clientSecret: $${OAUTH_CLIENT_SECRET}
