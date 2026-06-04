@@ -10,7 +10,7 @@ metadata:
 spec:
   inputs:
     - is_initdb: ${POSTGRES_IS_INITDB=false}
-    - existingSecretName: ${POSTGRES_EXISTING_SECRETNAME=false}
+      existingSecretName: ${POSTGRES_EXISTING_SECRETNAME}
   resources:
     - apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
