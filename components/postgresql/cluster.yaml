@@ -76,7 +76,7 @@ spec:
               name: barman-cloud.cloudnative-pg.io
               parameters:
                 barmanObjectName: cluster-nas-backup
-                serverName: *ClusterName
+                serverName: "${MY_APP}-db"
 
         backup:
           target: prefer-standby # instead of primary
