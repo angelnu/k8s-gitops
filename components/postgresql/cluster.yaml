@@ -10,7 +10,7 @@ metadata:
 spec:
   inputs:
     - is_initdb: ${POSTGRES_IS_INITDB=false}
-      existingSecretName: "${POSTGRES_EXISTING_SECRETNAME}"
+      existingSecretName: ${POSTGRES_EXISTING_SECRETNAME=false}
   resources:
     - apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
@@ -95,7 +95,7 @@ spec:
           <<- if inputs.is_initdb >>
           initdb:
             database: app
-            <<- if (empty inputs.existingSecretName) >>
+            <<- if inputs.existingSecretName >>
             secret:
               name: << inputs.existingSecretName >>
             <<- end >>
@@ -103,7 +103,7 @@ spec:
           recovery:
             source: source
             database: app
-            <<- if (empty inputs.existingSecretName) >>
+            <<- if inputs.existingSecretName >>
             secret:
               name: << inputs.existingSecretName >>
             <<- end >>
