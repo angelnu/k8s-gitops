@@ -1,77 +1,89 @@
 ---
-apiVersion: postgresql.cnpg.io/v1
-kind: Cluster
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
 metadata:
   name: &ClusterName "${MY_APP}-db"
   annotations:
-    cnpg.io/skipEmptyWalArchiveCheck: enabled # Allow for backup source and target to be the same
+    fluxcd.controlplane.io/reconcile: "enabled"
+    fluxcd.controlplane.io/reconcileEvery: "30m"
+    fluxcd.controlplane.io/reconcileTimeout: "5m"
 spec:
-  instances: 3 # 1 Primary + 2 Replicas for High Availability
-
-  nodeMaintenanceWindow:
-    inProgress: false
-    reusePVC: true
-  
-  switchoverDelay: 60 # 1 minute is plenty for "hiccup" protection
-
-  # 'unsupervised' is correct. It means "Operator, take care of it."
-  primaryUpdateStrategy: unsupervised
-  
-  # This ensures we always have a synchronous stand-by 
-  # for zero data loss during the automatic failover.
-  minSyncReplicas: 1
-  maxSyncReplicas: 2
-
-  affinity:
-    # "required" ensures pods NEVER share a node
-    podAntiAffinityType: required
-    # Use "kubernetes.io/hostname" to target individual worker nodes
-    topologyKey: kubernetes.io/hostname
-
-  imageName: ghcr.io/cloudnative-pg/postgresql:17.1
-
-  # 1. Continuous Backup to Synology (MinIO)
-  plugins:
-    - name: barman-cloud.cloudnative-pg.io
-      isWALArchiver: true
-      parameters:
-        barmanObjectName: cluster-nas-backup
-
-  # 2. Resource Management (Guaranteed QoS)
-  # Keeping requests and limits identical prevents OOM kills
+  inputs:
+    - tenant: "team1"
   resources:
-    requests:
-      memory: "192Mi"
-      cpu: "20m"
-    limits:
-      memory: "1Gi"
-      cpu: "1"
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      metadata:
+        name: *ClusterName
+        annotations:
+          cnpg.io/skipEmptyWalArchiveCheck: enabled # Allow for backup source and target to be the same
+      spec:
+        instances: 3 # 1 Primary + 2 Replicas for High Availability
 
-  # 3. Storage Configuration
-  storage:
-    #storageClass: &storageClass longhorn-postgres-replica-storage
-    storageClass: &storageClass openebs-hostpath
-    size: ${POSTGRES_STORAGE_SIZE}
-  walStorage:
-    # Separate WAL storage is recommended for production to avoid IO contention
-    storageClass: *storageClass
-    size: ${POSTGRES_WALSTORAGE_SIZE}
+        nodeMaintenanceWindow:
+          inProgress: false
+          reusePVC: true
+        
+        switchoverDelay: 60 # 1 minute is plenty for "hiccup" protection
 
-  externalClusters:
-    - name: source
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        parameters:
-          barmanObjectName: cluster-nas-backup
-          serverName: *ClusterName
+        # 'unsupervised' is correct. It means "Operator, take care of it."
+        primaryUpdateStrategy: unsupervised
+        
+        # This ensures we always have a synchronous stand-by 
+        # for zero data loss during the automatic failover.
+        minSyncReplicas: 1
+        maxSyncReplicas: 2
 
-  backup:
-    target: prefer-standby # instead of primary
-  
-  # 4. Database Initialization
-  bootstrap:
-    recovery:
-      source: source
-      database: app
-    # initdb:
-    #   database: app
+        affinity:
+          # "required" ensures pods NEVER share a node
+          podAntiAffinityType: required
+          # Use "kubernetes.io/hostname" to target individual worker nodes
+          topologyKey: kubernetes.io/hostname
+
+        imageName: ghcr.io/cloudnative-pg/postgresql:17.1
+
+        # 1. Continuous Backup to Synology (MinIO)
+        plugins:
+          - name: barman-cloud.cloudnative-pg.io
+            isWALArchiver: true
+            parameters:
+              barmanObjectName: cluster-nas-backup
+
+        # 2. Resource Management (Guaranteed QoS)
+        # Keeping requests and limits identical prevents OOM kills
+        resources:
+          requests:
+            memory: "192Mi"
+            cpu: "20m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+
+        # 3. Storage Configuration
+        storage:
+          #storageClass: &storageClass longhorn-postgres-replica-storage
+          storageClass: &storageClass openebs-hostpath
+          size: ${POSTGRES_STORAGE_SIZE}
+        walStorage:
+          # Separate WAL storage is recommended for production to avoid IO contention
+          storageClass: *storageClass
+          size: ${POSTGRES_WALSTORAGE_SIZE}
+
+        externalClusters:
+          - name: source
+            plugin:
+              name: barman-cloud.cloudnative-pg.io
+              parameters:
+                barmanObjectName: cluster-nas-backup
+                serverName: *ClusterName
+
+        backup:
+          target: prefer-standby # instead of primary
+        
+        # 4. Database Initialization
+        bootstrap:
+          recovery:
+            source: source
+            database: app
+          # initdb:
+          #   database: app
