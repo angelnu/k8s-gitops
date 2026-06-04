@@ -81,7 +81,7 @@ spec:
         backup:
           target: prefer-standby # instead of primary
         
-  resourceTemplate: |
+  resourcesTemplate: |
       ---
       apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
