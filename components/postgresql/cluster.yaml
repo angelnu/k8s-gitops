@@ -2,7 +2,7 @@
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
 metadata:
-  name: &ClusterName "${MY_APP}-db"
+  name: "${MY_APP}-db"
   annotations:
     fluxcd.controlplane.io/reconcile: "enabled"
     fluxcd.controlplane.io/reconcileEvery: "30m"
@@ -14,7 +14,7 @@ spec:
     - apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
       metadata:
-        name: *ClusterName
+        name: "${MY_APP}-db"
         namespace: << inputs.provider.namespace >>
         annotations:
           cnpg.io/skipEmptyWalArchiveCheck: enabled # Allow for backup source and target to be the same
@@ -86,7 +86,7 @@ spec:
       apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
       metadata:
-        name: *ClusterName
+        name: "${MY_APP}-db"
         namespace: << inputs.provider.namespace >>
       spec:
         # 4. Database Initialization
