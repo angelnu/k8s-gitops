@@ -9,7 +9,7 @@ metadata:
     fluxcd.controlplane.io/reconcileTimeout: "5m"
 spec:
   inputs:
-    - tenant: "team1"
+    - is_initdb: ${POSTGRES_IS_INITDB=false}
   resources:
     - apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
@@ -81,10 +81,21 @@ spec:
         backup:
           target: prefer-standby # instead of primary
         
+  resourceTemplate: |
+      ---
+      apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      metadata:
+        name: *ClusterName
+        namespace: << inputs.provider.namespace >>
+      spec:
         # 4. Database Initialization
         bootstrap:
+         <<- if inputs.is_initdb >>
+          initdb:
+            database: app
+        <<- else >>
           recovery:
             source: source
             database: app
-          # initdb:
-          #   database: app
+        <<- end >>
