@@ -10,6 +10,7 @@ metadata:
 spec:
   inputs:
     - is_initdb: ${POSTGRES_IS_INITDB=false}
+    - existingSecretName: ${POSTGRES_EXISTING_SECRETNAME=false}
   resources:
     - apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
@@ -91,11 +92,19 @@ spec:
       spec:
         # 4. Database Initialization
         bootstrap:
-         <<- if inputs.is_initdb >>
+          <<- if inputs.is_initdb >>
           initdb:
             database: app
-        <<- else >>
+            <<- if (empty inputs.existingSecretName) >>
+            secret:
+              name: << inputs.existingSecretName >>
+            <<- end >>
+          <<- else >>
           recovery:
             source: source
             database: app
-        <<- end >>
+            <<- if (empty inputs.existingSecretName) >>
+            secret:
+              name: << inputs.existingSecretName >>
+            <<- end >>
+          <<- end >>
