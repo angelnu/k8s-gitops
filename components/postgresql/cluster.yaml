@@ -15,6 +15,7 @@ spec:
       kind: Cluster
       metadata:
         name: *ClusterName
+        namespace: << inputs.provider.namespace >>
         annotations:
           cnpg.io/skipEmptyWalArchiveCheck: enabled # Allow for backup source and target to be the same
       spec:
