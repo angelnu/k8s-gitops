@@ -13,14 +13,6 @@ spec:
   path: ./apps/home-assistant/db/app
   components:
     - ../../../../components/postgresql
-  patches:
-    - target:
-        kind: Cluster
-      patch: |
-        - op: add
-          path: /spec/bootstrap/recovery/secret
-          value:
-            name: home-assistant-db-app-fix
   prune: true
   dependsOn:
     - name: openshift-operators
@@ -37,3 +29,4 @@ spec:
       MY_APP: *ns # Intentionally so we do not get -db-db in the name
       POSTGRES_STORAGE_SIZE: 8Gi
       POSTGRES_WALSTORAGE_SIZE: 3Gi
+      POSTGRES_EXISTING_SECRETNAME: home-assistant-db-app-fix
