@@ -317,7 +317,7 @@ spec:
                   - "[STATUS] == 200"
               - name: paperless-madrid
                 group: paperless
-                url: "https://paperless-madrid.home.${CLUSTER_DOMAIN}"
+                url: "https://paperless-madrid.pub.${CLUSTER_DOMAIN}"
                 interval: 5m
                 alerts:
                   - type: slack
