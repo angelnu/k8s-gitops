@@ -138,28 +138,30 @@ spec:
           custom: |
             msgpipeline local_routing {
                 debug yes
+                
+                # Modify rules are always applied before destination rules
+                # destination rules - first match wins, so the order is important.
+
+                # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).                    
+                modify {
+                    replace_rcpt &local_rewrites
+                }
 
                 # If that's a disabled address - reject the message.
                 destination_in file /config/disabled-aliases { 
                     reject
-                }
-                
-                modify {
-                    # Apply local rewrites (/etc/maddy/aliases, plus-addressing, etc).
-                    replace_rcpt &local_rewrites
                 }
 
                 # If there exists an explicitly created mailbox with that name - send it there.
                 destination_in &local_mailboxes {
                     deliver_to &local_mailboxes
                 }
-                #Apply catchall rules
-                modify {
-                  replace_rcpt &local_rewrites_catchall
-                }
-                
-                # Send catchall emails
-                destination_in &local_mailboxes {
+
+                # Apply catchall rules to 
+                destination $(local_domains) {
+                  modify {
+                    replace_rcpt &local_rewrites_catchall
+                  }
                   deliver_to &local_mailboxes
                 }
 
