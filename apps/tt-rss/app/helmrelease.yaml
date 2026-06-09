@@ -33,7 +33,7 @@ spec:
           main:
             image:
               repository: ghcr.io/angelnu/tt-rss
-              tag: 2.0.10002
+              tag: 2.0.10003
               pullPolicy: Always
 
             securityContext:
