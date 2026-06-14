@@ -11,8 +11,11 @@ spec:
   inputs:
     - is_initdb: ${POSTGRES_IS_INITDB=false}
       existingSecretName: ${POSTGRES_EXISTING_SECRETNAME=false}
-  resources:
-    - apiVersion: postgresql.cnpg.io/v1
+  resources: []
+        
+  resourcesTemplate: |
+      ---
+      apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
       metadata:
         name: "${MY_APP}-db"
@@ -82,14 +85,6 @@ spec:
         backup:
           target: prefer-standby # instead of primary
         
-  resourcesTemplate: |
-      ---
-      apiVersion: postgresql.cnpg.io/v1
-      kind: Cluster
-      metadata:
-        name: "${MY_APP}-db"
-        namespace: << inputs.provider.namespace >>
-      spec:
         # 4. Database Initialization
         bootstrap:
           <<- if eq (printf "%v" inputs.is_initdb | lower) "true" >>
