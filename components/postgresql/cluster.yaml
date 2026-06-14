@@ -90,7 +90,7 @@ spec:
           <<- if inputs.is_initdb >>
           initdb:
             database: app
-            <<- if inputs.existingSecretName >>
+            <<- if eq inputs.is_initdb true >>
             secret:
               name: << inputs.existingSecretName >>
             <<- end >>
