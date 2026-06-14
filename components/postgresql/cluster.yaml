@@ -92,7 +92,7 @@ spec:
       spec:
         # 4. Database Initialization
         bootstrap:
-          <<- if inputs.is_initdb >>
+          <<- if inputs.is_initdb | toString | trim | lower | bool >>
           initdb:
             database: app
             <<- if inputs.existingSecretName >>
@@ -103,7 +103,7 @@ spec:
           recovery:
             source: source
             database: app
-            <<- if inputs.existingSecretName >>
+            <<- if inputs.existingSecretName | toString | trim | lower | bool >>
             secret:
               name: << inputs.existingSecretName >>
             <<- end >>
