@@ -87,7 +87,7 @@ spec:
         
         # 4. Database Initialization
         bootstrap:
-          <<- if eq (printf "%v" inputs.is_initdb | lower) "true" >>
+          <<- if inputs.is_initdb >>
           initdb:
             database: app
             <<- if inputs.existingSecretName >>
@@ -98,7 +98,7 @@ spec:
           recovery:
             source: source
             database: app
-            <<- if eq (printf "%v" inputs.existingSecretName | lower) "true" >>
+            <<- if inputs.existingSecretName >>
             secret:
               name: << inputs.existingSecretName >>
             <<- end >>
