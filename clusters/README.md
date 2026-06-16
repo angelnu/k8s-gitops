@@ -15,12 +15,11 @@
 
 ## Bootstrap
 
-1. `kubectl create ns flux-system`
+1. `helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator --namespace flux-system --create-namespace`
 2. Create the secret in the cluster:
 
        ```shell
        sops -d clusters/<cluster>/vars/sops-age.secret.sops.yaml|kubectl apply -f -
        ```
-3. `helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator --namespace flux-system`
-4. `kubectl -n flux-system apply -k clusters/<cluster>/config`
-5. Install [nmstate](https://github.com/nmstate/kubernetes-nmstate/releases)
+3. `kubectl -n flux-system apply -k clusters/<cluster>/config`
+4. Install [nmstate](https://github.com/nmstate/kubernetes-nmstate/releases)

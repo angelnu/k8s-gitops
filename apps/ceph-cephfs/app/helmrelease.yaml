@@ -34,3 +34,7 @@ spec:
           - ${CEPH_MONITOR_HOST_3}
         cephFS:
           subvolumeGroup: ""
+    
+    # 🚀 --- OVERRIDE THE ROOT CSI DRIVER SETTINGS --- 🚀
+    CSIDriver:
+      seLinuxMount: false
