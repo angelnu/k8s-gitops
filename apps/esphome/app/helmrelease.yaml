@@ -30,13 +30,25 @@ spec:
       main:
         serviceAccount:
           identifier: default
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name": "localnet",
+                  "interface": "localnet",
+                  "ips": [
+                    "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LOCALNET_ESPHOME}/${CLUSTER_LOCALNET_PREFIX_LENGTH}"
+                    ]
+                }
+              ]
         containers:
           main:
             image:
               repository: ghcr.io/esphome/esphome
               tag: 2026.6.2@sha256:526a75c8d64a0d962a3b088c3af4fa7cf8ecf7161b995be57fc95b0726496a39
-            env:
-              ESPHOME_DASHBOARD_USE_PING: "true"
+            #env:
+            #  ESPHOME_DASHBOARD_USE_PING: "true"
           editor:
             image:
               repository: ghcr.io/coder/code-server
