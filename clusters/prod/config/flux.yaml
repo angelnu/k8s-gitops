@@ -6,7 +6,7 @@ metadata:
 spec:
   distribution:
     # renovate: depName=fluxcd/flux2 datasource=github-releases
-    version: "2.8.8"
+    version: "2.9.0"
     registry: "ghcr.io/fluxcd"
   components:
     - source-controller
