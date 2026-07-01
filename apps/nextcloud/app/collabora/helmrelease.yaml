@@ -40,7 +40,7 @@ spec:
           main:
             image:
               repository: docker.io/collabora/code
-              tag: 26.04.1.4.1
+              tag: 26.04.2.1.1
             env:
               extra_params: --o:ssl.termination=true --o:ssl.enable=false
             securityContext:
