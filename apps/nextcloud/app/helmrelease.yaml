@@ -94,6 +94,7 @@ spec:
         databaseKey: dbname
     cronjob:
       enabled: true
+      type: cronjob
       failedJobsHistoryLimit: 1
       successfulJobsHistoryLimit: 1
       sidecar:
