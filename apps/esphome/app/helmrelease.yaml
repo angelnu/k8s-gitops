@@ -80,13 +80,13 @@ spec:
         existingClaim: esphome-pvc
       build:
         enabled: true
+        # type: emptyDir
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 1Gi
-        # type: emptyDir
-        # globalMounts:
-        #   - path: /config/.esphome
-        #     readOnly: false
+        globalMounts:
+          - path: /config/.esphome
+            readOnly: false
       ssh-key:
         enabled: true
         type: secret
