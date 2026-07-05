@@ -118,6 +118,15 @@ spec:
         - nextcloud.${CLUSTER_SHORT_DOMAIN}
         - nextcloud.pub.${CLUSTER_DOMAIN}
         - nextcloud.home.${CLUSTER_DOMAIN}
+      extraEnv:
+        - name: TRUSTED_PROXIES
+          value: '${NETWORK_K8S_CLUSTER_CIDR}'
+        - name: FORWARDED_FOR_HEADERS
+          value: "HTTP_X_FORWARDED_FOR"
+        - name: OVERWRITEHOST
+          value: "nextcloud.${CLUSTER_SHORT_DOMAIN}"
+        - name: OVERWRITECLIURL
+          value: "https://nextcloud.${CLUSTER_SHORT_DOMAIN}"
       extraVolumes:
       - name: nfs-video
         nfs:
