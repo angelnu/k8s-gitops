@@ -203,7 +203,7 @@ spec:
       - kind: RoleBinding
         apiVersion: rbac.authorization.k8s.io/v1
         metadata:
-          name: app-scc
+          name: collabora-scc
           labels:
             '{{- include "collabora-online.labels" . | nindent 4 }}'
           subjects:
