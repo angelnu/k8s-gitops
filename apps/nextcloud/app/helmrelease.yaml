@@ -191,6 +191,26 @@ spec:
           authtype:
           name:
           password:
+
+    collabora:
+      enabled: true
+      autoscaling:
+        enabled: true
+      ingress:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+          nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_WOPISrc"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+        hosts:
+          - host: collabora.pub.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+        tls:
+        - hosts:
+          - collabora.pub.${CLUSTER_DOMAIN}
+    
     livenessProbe:
       enabled: false
     readinessProbe:
