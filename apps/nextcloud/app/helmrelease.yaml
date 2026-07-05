@@ -60,6 +60,12 @@ spec:
             log_not_found off;
             access_log off;
           }
+          location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/ {
+            deny all;
+          }
+          location ~ ^/(?:autotest|occ|issue|indie|db_|console) {
+            deny all;
+          }
       tls:
       - hosts:
         - nextcloud.${CLUSTER_SHORT_DOMAIN}
