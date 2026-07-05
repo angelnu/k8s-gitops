@@ -7,6 +7,9 @@ subjects:
   - kind: ServiceAccount
     name: nextcloud
     namespace: ${MY_NAMESPACE}
+  - kind: ServiceAccount
+    name: nextcloud-collabora
+    namespace: ${MY_NAMESPACE}
 roleRef:
   kind: ClusterRole
   name: system:openshift:scc:hostmount-anyuid-v2

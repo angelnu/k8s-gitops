@@ -201,21 +201,6 @@ spec:
         runAsGroup: 1001
       serviceAccount:
         create: true
-      extraObjects:
-      - kind: RoleBinding
-        apiVersion: rbac.authorization.k8s.io/v1
-        metadata:
-          name: collabora-scc
-          # labels:
-          #   '{{- include "collabora-online.labels" . | nindent 4 }}'
-          subjects:
-          - kind: ServiceAccount
-            name: '{{ include "collabora-online.serviceAccountName" . }}'
-            namespace: ${MY_NAMESPACE}
-        roleRef:
-          apiGroup: rbac.authorization.k8s.io
-          kind: ClusterRole
-          name: system:openshift:scc:nonroot  # For runAsUser     
       collabora:
         extra_params: --o:ssl.termination=true --o:ssl.enable=false
       ingress:
