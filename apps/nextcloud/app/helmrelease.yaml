@@ -196,6 +196,8 @@ spec:
       enabled: true
       autoscaling:
         enabled: true
+      collabora:
+        extra_params: --o:ssl.enable=false --o:mount_jail_tree=false
       ingress:
         enabled: true
         annotations:
