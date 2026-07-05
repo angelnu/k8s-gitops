@@ -87,6 +87,12 @@ spec:
         globalMounts:
           - path: /config/.esphome
             readOnly: false
+      cache:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /config/.esphome/cache
+            readOnly: false
       ssh-key:
         enabled: true
         type: secret
