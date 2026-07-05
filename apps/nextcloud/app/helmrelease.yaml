@@ -204,8 +204,8 @@ spec:
         apiVersion: rbac.authorization.k8s.io/v1
         metadata:
           name: collabora-scc
-          labels:
-            '{{- include "collabora-online.labels" . | nindent 4 }}'
+          # labels:
+          #   '{{- include "collabora-online.labels" . | nindent 4 }}'
           subjects:
           - kind: ServiceAccount
             name: '{{ include "collabora-online.serviceAccountName" . }}'
