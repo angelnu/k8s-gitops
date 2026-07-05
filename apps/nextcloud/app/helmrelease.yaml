@@ -28,14 +28,9 @@ spec:
     # image:
     #   repository: docker.io/library/nextcloud
     #   tag: 29.0.3@sha256:2ab0c5de2afd33c55721e69e87bd1667cad6c4550ba0fd0303cfeb7abb260750
-
-    env:
-      PHP_MEMORY_LIMIT: 256M
-      TRUSTED_PROXIES: '${NETWORK_K8S_CLUSTER_CIDR}'
-      FORWARDED_FOR_HEADERS: HTTP_X_FORWARDED_FOR
-      OVERWRITEPROTOCOL: "https"
-      OVERWRITEHOST: "nextcloud.${CLUSTER_SHORT_DOMAIN}"
-      OVERWRITECLIURL: "https://nextcloud.${CLUSTER_SHORT_DOMAIN}"
+    
+    phpClientHttpsFix:
+      enabled: true
 
     ingress:
       enabled: true
