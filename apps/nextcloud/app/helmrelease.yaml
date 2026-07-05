@@ -199,6 +199,8 @@ spec:
       securityContext:
         runAsUser: 1001
         runAsGroup: 1001
+      serviceAccount:
+        create: true
       extraObjects:
       - kind: RoleBinding
         apiVersion: rbac.authorization.k8s.io/v1
@@ -209,7 +211,7 @@ spec:
           subjects:
           - kind: ServiceAccount
             name: '{{ include "collabora-online.serviceAccountName" . }}'
-            namespace: '{{ .Release.Namespace }}'
+            namespace: ${MY_NAMESPACE}
         roleRef:
           apiGroup: rbac.authorization.k8s.io
           kind: ClusterRole
