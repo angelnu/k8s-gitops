@@ -80,10 +80,10 @@ spec:
         existingClaim: esphome-pvc
       build:
         enabled: true
-        # type: emptyDir
-        type: persistentVolumeClaim
-        accessMode: ReadWriteOnce
-        size: 10Gi
+        type: emptyDir
+        # type: persistentVolumeClaim
+        # accessMode: ReadWriteOnce
+        # size: 10Gi
         globalMounts:
           - path: /config/.esphome
             readOnly: false
