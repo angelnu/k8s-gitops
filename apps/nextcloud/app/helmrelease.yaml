@@ -139,17 +139,6 @@ spec:
         - nextcloud.${CLUSTER_SHORT_DOMAIN}
         - nextcloud.pub.${CLUSTER_DOMAIN}
         - nextcloud.home.${CLUSTER_DOMAIN}
-      extraEnv:
-        - name: PHP_MEMORY_LIMIT
-          value: "256M"
-        - name: TRUSTED_PROXIES
-          value: '${NETWORK_K8S_CLUSTER_CIDR}'
-        - name: FORWARDED_FOR_HEADERS
-          value: "HTTP_X_FORWARDED_FOR"
-        - name: OVERWRITEHOST
-          value: "nextcloud.${CLUSTER_SHORT_DOMAIN}"
-        - name: OVERWRITECLIURL
-          value: "https://nextcloud.${CLUSTER_SHORT_DOMAIN}"
       extraVolumes:
       - name: nfs-video
         nfs:
@@ -203,23 +192,6 @@ spec:
           $CONFIG = array (
             'bulkupload.enabled' => false,
           );
-        # Circumvention for NEXTCLOUD_TRUSTED_DOMAINS not used in old config
-        trusted_domains.config.php: |-
-          <?php
-          $trustedDomains = getenv('NEXTCLOUD_TRUSTED_DOMAINS');
-          if ($trustedDomains) {
-            $CONFIG['trusted_domains'] = array_filter(array_map('trim', explode(' ', $trustedDomains)));
-          }
-        # Circumvention for autoconfig only used first time
-        circumvention_autoconfig.config.php.config.php: |-
-          <?php
-          include \OC::$configDir . 'autoconfig.php';
-          $CONFIG = $AUTOCONFIG;
-          $CONFIG['dbpassword'] = $AUTOCONFIG['dbpass'];
-          $trustedProxies = getenv('TRUSTED_PROXIES');
-          if ($trustedProxies) {
-            $CONFIG['trusted_proxies'] = array_filter(array_map('trim', explode(' ', $trustedProxies)));
-          }
       mail:
         enabled: true
         fromAddress: nextcloud
