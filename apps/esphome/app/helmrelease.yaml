@@ -46,7 +46,7 @@ spec:
           main:
             image:
               repository: ghcr.io/esphome/esphome
-              tag: 2026.6.4@sha256:20c12b47f53d31c4d2b1eeeec03ef93e414a710f5834220d02353ec575bca1c6
+              tag: 2026.6.5@sha256:ffe23402d169fc9b8ff29fc3c9fc13b3c47e8a53726fce4569e2280bd534c84c
             #env:
             #  ESPHOME_DASHBOARD_USE_PING: "true"
           editor:
