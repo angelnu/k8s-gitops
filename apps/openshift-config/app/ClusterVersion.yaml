@@ -8,5 +8,5 @@ metadata:
 spec:
   channel: stable-4.22
   desiredUpdate:
-    image: registry.ci.openshift.org/origin/release-scos:4.22.0-okd-scos.6@sha256:f82cfb607a7b66a295f5b727bc53607dc65f8608a6165283b6eedc2435c718fb
+    image: registry.ci.openshift.org/origin/release-scos:4.22.0-okd-scos.7@sha256:790386476b24e1a1043aa865c98d2bfeebdd467aa54859f0f53ecd6c487a8036
   upstream: https://amd64.origin.releases.ci.openshift.org/graph
