@@ -41,3 +41,4 @@ spec:
       NEXTCLOUD_OIDC_GROUPS_WHITELISTED_REGEX: '/^((admin)|(.+))$/'
       KVANT_LLM_URL: ""
       KVANT_LLM_APIKEY: ""
+      SIGNALING_SECRET: ""
