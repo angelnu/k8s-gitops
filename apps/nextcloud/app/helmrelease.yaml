@@ -265,7 +265,6 @@ spec:
             deck                 # Kanban for small projects
             drawio
             # extract            # Error installing
-            files_downloadlimit
             files_external
             files_markdown
             files_mindmap
