@@ -25,12 +25,11 @@ spec:
       retries: 3
   # See https://github.com/nextcloud/helm/blob/master/charts/nextcloud/values.yaml
   values:
-    # image:
-    #   repository: docker.io/library/nextcloud
-    #   tag: 29.0.3@sha256:2ab0c5de2afd33c55721e69e87bd1667cad6c4550ba0fd0303cfeb7abb260750
-    
+
     phpClientHttpsFix:
       enabled: true
+    env:
+      PHP_MEMORY_LIMIT: 256M
 
     ingress:
       enabled: true
@@ -66,20 +65,17 @@ spec:
           location ~ ^/(?:autotest|occ|issue|indie|db_|console) {
             deny all;
           }
-      tls:
-      - hosts:
-        - nextcloud.${CLUSTER_SHORT_DOMAIN}
-    #username: admin
-    #password: password
     redis:
       enabled: true
-      # password: set in secret
       master:
         persistence:
           enabled: false
       replica:
         persistence:
           enabled: false
+      auth:
+        existingSecret: nextcloud-helm-values
+        existingSecretPasswordKey: REDIS_PASSWORD
     internalDatabase:
       enabled: false
     externalDatabase:
@@ -94,29 +90,21 @@ spec:
         databaseKey: dbname
     cronjob:
       enabled: true
-      type: cronjob
       failedJobsHistoryLimit: 1
       successfulJobsHistoryLimit: 1
       sidecar:
-      resources:
-        requests:
-          cpu: 50m
-          memory: 128Mi
-        limits:
-          cpu: 100m
-          memory: 256Mi
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 128Mi
 
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
-      limits:
-        cpu: 500m
-        memory: 1Gi
     nextcloud:
-      host: nextcloud.${CLUSTER_SHORT_DOMAIN}
+      host: ${NEXTCLOUD_OVERRIDE_HOST}
       trustedDomains:
-        - nextcloud.${CLUSTER_SHORT_DOMAIN}
+        - ${NEXTCLOUD_OVERRIDE_HOST}
         - nextcloud.pub.${CLUSTER_DOMAIN}
         - nextcloud.home.${CLUSTER_DOMAIN}
       extraEnv:
@@ -125,9 +113,62 @@ spec:
         - name: FORWARDED_FOR_HEADERS
           value: "HTTP_X_FORWARDED_FOR"
         - name: OVERWRITEHOST
-          value: "nextcloud.${CLUSTER_SHORT_DOMAIN}"
+          value: "${NEXTCLOUD_OVERRIDE_HOST}"
         - name: OVERWRITECLIURL
-          value: "https://nextcloud.${CLUSTER_SHORT_DOMAIN}"
+          value: "https://${NEXTCLOUD_OVERRIDE_HOST}"
+      phpConfigs:
+        uploadLimit.ini: |
+          upload_max_filesize = 16G
+          post_max_size = 16G
+          max_input_time = 3600
+          max_execution_time = 3600
+          default_phone_region = DE
+      configs:
+        gitops.config.php: |-
+          <?php
+          $CONFIG = array (
+            'appstoreenabled' => true,
+            #'appstoreurl' => 'https://apps.nextcloud.com/api/v0',
+            'mail_domain' => '${CLUSTER_DOMAIN}',
+          );
+        
+        #Circumvention for client freezes - https://github.com/nextcloud/desktop/issues/6990
+        bulkupload.config.php: |-
+          <?php
+          $CONFIG = array (
+            'bulkupload.enabled' => false,
+          );
+
+        oidc.config.php: |-
+          <?php
+          $CONFIG = array (
+            'allow_local_remote_servers' => true,
+            'shareapi_restrict_user_enumeration_to_group' => true,
+          );
+        
+        others.config.php: |-
+          <?php
+          $CONFIG = array (
+            'maintenance_window_start' => 1,
+          );
+        
+      mail:
+        enabled: true
+        fromAddress: nextcloud
+        domain: ${CLUSTER_DOMAIN}
+        smtp:
+          host: ${CLUSTER_MAIL_SERVER}
+          secure:
+          port: ${CLUSTER_MAIL_SERVER_PORT}
+          authtype:
+          name:
+          password:
+      
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 0
       extraVolumes:
       - name: nfs-video
         nfs:
@@ -160,38 +201,120 @@ spec:
         mountPath: "/music"
       - name: nfs-downloads
         mountPath: "/downloads"
-      phpConfigs:
-        uploadLimit.ini: |
-          upload_max_filesize = 16G
-          post_max_size = 16G
-          max_input_time = 3600
-          max_execution_time = 3600
-          default_phone_region = DE
-      configs:
-        gitops.config.php: |-
-          <?php
-          $CONFIG = array (
-            'appstoreenabled' => true,
-            #'appstoreurl' => 'https://apps.nextcloud.com/api/v0',
-            'mail_domain' => '${CLUSTER_DOMAIN}',
-          );
-        #Circumvention for client freezes - https://github.com/nextcloud/desktop/issues/5094
-        bulkupload.config.php: |-
-          <?php
-          $CONFIG = array (
-            'bulkupload.enabled' => false,
-          );
-      mail:
-        enabled: true
-        fromAddress: nextcloud
-        domain: ${CLUSTER_DOMAIN}
-        smtp:
-          host: ${CLUSTER_MAIL_SERVER}
-          secure:
-          port: ${CLUSTER_MAIL_SERVER_PORT}
-          authtype:
-          name:
-          password:
+
+      hooks:
+        post-upgrade: |
+          cd /var/www/html
+          ./occ upgrade
+          ./occ db:add-missing-indices
+
+        before-starting: |
+          #!/bin/bash
+          set -exu # Remove the -u if you encounter issues booting
+
+          cd /var/www/html
+
+          # Upgrade
+          ./occ upgrade                                || /bin/true
+          ./occ maintenance:mode --off                 || /bin/true
+          ./occ app:update --all                       || /bin/true
+          ./occ db:add-missing-indices                 || /bin/true
+          ./occ maintenance:repair --include-expensive || /bin/true
+
+          # SSO
+          test -d custom_apps/user_oidc ||  ./occ app:install user_oidc
+          ./occ user_oidc:provider kvant \
+            --clientid="${NEXTCLOUD_OIDC_CLIENT_ID}" \
+            --clientsecret="${NEXTCLOUD_OIDC_CLIENT_SECRET}" \
+            --discoveryuri="${NEXTCLOUD_OIDC_URL}" \
+            --unique-uid=0 \
+            --group-provisioning=1 \
+            --group-whitelist-regex='${NEXTCLOUD_OIDC_GROUPS_WHITELISTED_REGEX}' \
+            --group-restrict-login-to-whitelist=1 \
+            --mapping-groups=groups
+          ./occ config:app:set --value=0 user_oidc allow_multiple_user_backends # Only login with SSO
+          
+          # notify_push
+          test -d custom_apps/notify_push ||  ./occ app:install notify_push
+          ./occ notify_push:setup https://${NEXTCLOUD_OVERRIDE_HOST:=${TENANT_DOMAIN}}/push || echo "Could not setup notify_push"
+
+          # collabora
+          test -d custom_apps/richdocuments ||  ./occ app:install richdocuments
+          ./occ config:app:set richdocuments wopi_url --value https://${COLLABORA_HOST}
+          ./occ richdocuments:activate-config
+
+          # # integration_openai
+          # test -d custom_apps/integration_openai ||  ./occ app:install integration_openai
+          # ./occ config:app:set integration_openai service_name --value "kvant"
+          # ./occ config:app:set integration_openai url          --value "${KVANT_LLM_URL}"
+          # ./occ config:app:set integration_openai api_key      --value "${KVANT_LLM_APIKEY}"
+          # ./occ config:app:set integration_openai chunk_size   --value 100000
+
+          # Other installed apps
+          APPS=(
+            announcementcenter
+            assistant
+            call_summary_bot
+            context_chat
+            deck                 # Kanban for small projects
+            drawio
+            files_mindmap
+            forms
+            groupfolders
+            integration_jira
+            notes
+            #spreed               # Talk
+            whiteboard
+          )
+          for app in $${APPS[@]}; do
+            test -d custom_apps/$app ||  ./occ app:install $app
+          done
+
+          # Theme
+          ./occ theming:config name                 "Casa Nextcloud"
+          ./occ theming:config url                  "${NEXTCLOUD_OVERRIDE_HOST:=${TENANT_DOMAIN}}"
+          # ./occ theming:config imprintUrl           "https://kvant.cloud/en/terms"
+          # ./occ theming:config privacyUrl           "https://kvant.cloud/en/privacy-policy"
+          # ./occ theming:config slogan               "The Swiss Sovereign Cloud: Your Data, Our Territory"
+          # ./occ theming:config primary_color        "#8FEAFF"
+          # ./occ theming:config disable-user-theming --reset
+          # ./occ theming:config background           "/themeFiles/background.png"
+          # ./occ theming:config logo                 "/themeFiles/kvant_logo.png"
+          # ./occ theming:config logoheader           "/themeFiles/kvant_logo.png"
+          ./occ theming:config favicon              --reset
+
+          # start a task worker
+          nohup ./occ background-job:worker 'OC\TaskProcessing\SynchronousBackgroundJob' &
+
+          # # talk
+          # ./occ talk:signaling:delete https://talk-${TENANT_DOMAIN}
+          # ./occ talk:signaling:add --verify https://talk-${TENANT_DOMAIN} ${SIGNALING_SECRET}
+          # ./occ talk:turn:delete turn nextcloud-talk-turn.${TENANT_NAMESPACE}.${CLUSTER_DOMAIN} udp,tcp
+          # ./occ talk:turn:add --secret ${TURN_SECRET} turn nextcloud-talk-turn.${TENANT_NAMESPACE}.${CLUSTER_DOMAIN} udp,tcp
+
+      extraInitContainers:
+      - name: fix-permissions
+        image: docker-mirror.pub.basel.kvant.cloud/library/nextcloud:32.0.12@sha256:90fdc9f99fab6f8dcfb16f6010a2a615775f01ed8e9265fa10beed6b2f10cbae
+        volumeMounts:
+          - name: nextcloud-main
+            mountPath: /var/www/html
+            subPath: html
+        command:
+        - /bin/sh
+        - -c
+        - >-
+          cd /var/www/html;
+          mkdir -p config;
+          chown www-data:www-data *;
+          ls -l
+        resources:
+          limits:
+            cpu: 10m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 128Mi
+    
 
     collabora:
       enabled: true
@@ -221,32 +344,26 @@ spec:
           nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_WOPISrc"
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
-          - host: collabora.pub.${CLUSTER_DOMAIN}
+          - host: ${COLLABORA_HOST}
             paths:
               - path: /
                 pathType: ImplementationSpecific
         tls:
         - hosts:
-          - collabora.pub.${CLUSTER_DOMAIN}
-    
+          - ${COLLABORA_HOST}
+
     livenessProbe:
       enabled: false
     readinessProbe:
       enabled: false
-    
-    lifecycle:
-      postStartCommand:
-      - su
-      - www-data
-      - -s
-      - /bin/sh
-      - -c
-      - >-
-        cd /var/www/html;
-        ./occ upgrade;
-        ./occ db:add-missing-indices;
-        /bin/true
-
+    resources:
+      limits:
+        cpu: 1
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+        
     persistence:
       enabled: true
       existingClaim: nfs-nextcloud
@@ -256,9 +373,3 @@ spec:
       serviceaccount:
         create: true
         name: nextcloud
-
-  valuesFrom:
-    - kind: Secret
-      name: "nextcloud-helm-values"
-      valuesKey: nextcloud.yaml
-      optional: false

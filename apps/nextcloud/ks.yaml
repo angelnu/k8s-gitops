@@ -32,3 +32,9 @@ spec:
       POSTGRES_STORAGE_SIZE: 8Gi
       POSTGRES_WALSTORAGE_SIZE: 5Gi
       NFS_KUBERNETES_SUBFOLDER: nextcloud
+      NEXTCLOUD_OVERRIDE_HOST: nextcloud.${CLUSTER_SHORT_DOMAIN}
+      COLLABORA_HOST: collabora.pub.${CLUSTER_DOMAIN}
+      NEXTCLOUD_OIDC_URL: https://authentik.pub.${CLUSTER_DOMAIN}/application/o/nextcloud-app/.well-known/openid-configuration
+      NEXTCLOUD_OIDC_CLIENT_ID: nextcloud
+      NEXTCLOUD_OIDC_CLIENT_SECRET: ${OAUTH_ISSUER_CLIENT_SECRET}
+      NEXTCLOUD_OIDC_GROUPS_WHITELISTED_REGEX: '/^((admin)|(.+))$/'
