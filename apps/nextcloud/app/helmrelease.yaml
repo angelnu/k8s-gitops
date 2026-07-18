@@ -259,7 +259,6 @@ spec:
             announcementcenter
             assistant
             bookmarks
-            bruteforcesettings
             calendar
             call_summary_bot
             context_chat
