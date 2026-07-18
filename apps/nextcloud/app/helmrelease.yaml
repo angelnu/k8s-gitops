@@ -223,7 +223,7 @@ spec:
 
           # SSO
           test -d custom_apps/user_oidc ||  ./occ app:install user_oidc
-          ./occ user_oidc:provider kvant \
+          ./occ user_oidc:provider sso \
             --clientid="${NEXTCLOUD_OIDC_CLIENT_ID}" \
             --clientsecret="${NEXTCLOUD_OIDC_CLIENT_SECRET}" \
             --discoveryuri="${NEXTCLOUD_OIDC_URL}" \
@@ -231,7 +231,8 @@ spec:
             --group-provisioning=1 \
             --group-whitelist-regex='${NEXTCLOUD_OIDC_GROUPS_WHITELISTED_REGEX}' \
             --group-restrict-login-to-whitelist=1 \
-            --mapping-groups=groups
+            --mapping-groups=groups \
+            --claims-mapping='{"email":"email","name":"name"}'
           ./occ config:app:set --value=0 user_oidc allow_multiple_user_backends # Only login with SSO
           
           # notify_push
