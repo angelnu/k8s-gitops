@@ -267,8 +267,6 @@ spec:
             # extract            # Error installing
             # files_markdown     # Not updated
             files_mindmap
-            files_reminders
-            files_sharing
             files_trashbin
             forms
             groupfolders
