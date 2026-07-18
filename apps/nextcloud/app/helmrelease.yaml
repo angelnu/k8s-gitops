@@ -240,7 +240,7 @@ spec:
           
           # notify_push
           test -d custom_apps/notify_push ||  ./occ app:install notify_push
-          ./occ notify_push:setup https://${NEXTCLOUD_OVERRIDE_HOST:=${TENANT_DOMAIN}}/push || echo "Could not setup notify_push"
+          ./occ notify_push:setup https://${NEXTCLOUD_OVERRIDE_HOST}/push || echo "Could not setup notify_push"
 
           # collabora
           test -d custom_apps/richdocuments ||  ./occ app:install richdocuments
@@ -287,7 +287,7 @@ spec:
 
           # Theme
           ./occ theming:config name                 "Casa Nextcloud"
-          ./occ theming:config url                  "${NEXTCLOUD_OVERRIDE_HOST:=${TENANT_DOMAIN}}"
+          ./occ theming:config url                  "${NEXTCLOUD_OVERRIDE_HOST}"
           # ./occ theming:config imprintUrl           "https://kvant.cloud/en/terms"
           # ./occ theming:config privacyUrl           "https://kvant.cloud/en/privacy-policy"
           # ./occ theming:config slogan               "The Swiss Sovereign Cloud: Your Data, Our Territory"
@@ -304,7 +304,7 @@ spec:
           # # talk
           # ./occ talk:signaling:delete https://${TALK_HOST}
           # ./occ talk:signaling:add --verify https://${TALK_HOST} ${SIGNALING_SECRET}
-          # ./occ talk:turn:delete turn nextcloud-talk-turn.${TENANT_NAMESPACE}.${CLUSTER_DOMAIN} udp,tcp
+          # ./occ talk:turn:delete turn nextcloud-talk-turn.${NEXTCLOUD_OVERRIDE_HOST} udp,tcp
           # ./occ talk:turn:add --secret ${TURN_SECRET} turn nextcloud-talk-turn.${NEXTCLOUD_OVERRIDE_HOST} udp,tcp
 
       # extraInitContainers:
