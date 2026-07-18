@@ -258,16 +258,38 @@ spec:
           APPS=(
             announcementcenter
             assistant
+            bookmarks
+            bruteforcesettings
+            calendar
             call_summary_bot
             context_chat
+            dashboard
             deck                 # Kanban for small projects
             drawio
+            extract
+            federation           # Federation allows you to connect with other trusted servers to exchange the account directory
+            files_downloadlimit
+            files_external
+            files_markdown
             files_mindmap
+            files_pdfviewer
+            files_reminders
+            files_sharing
+            files_trashbin
             forms
             groupfolders
+            impersonate
+            integration_github
             integration_jira
+            integration_mastodon
+            integration_paperless
+            mail
             notes
-            #spreed               # Talk
+            notifications
+            serverinfo
+            sharebymail
+            spreed               # Talk
+            systemtags           # Collaborative tags
             whiteboard
           )
           for app in $${APPS[@]}; do
