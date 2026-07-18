@@ -302,10 +302,10 @@ spec:
           nohup ./occ background-job:worker 'OC\TaskProcessing\SynchronousBackgroundJob' &
 
           # # talk
-          # ./occ talk:signaling:delete https://talk-${TENANT_DOMAIN}
-          # ./occ talk:signaling:add --verify https://talk-${TENANT_DOMAIN} ${SIGNALING_SECRET}
+          # ./occ talk:signaling:delete https://${TALK_HOST}
+          # ./occ talk:signaling:add --verify https://${TALK_HOST} ${SIGNALING_SECRET}
           # ./occ talk:turn:delete turn nextcloud-talk-turn.${TENANT_NAMESPACE}.${CLUSTER_DOMAIN} udp,tcp
-          # ./occ talk:turn:add --secret ${TURN_SECRET} turn nextcloud-talk-turn.${TENANT_NAMESPACE}.${CLUSTER_DOMAIN} udp,tcp
+          # ./occ talk:turn:add --secret ${TURN_SECRET} turn nextcloud-talk-turn.${NEXTCLOUD_OVERRIDE_HOST} udp,tcp
 
       # extraInitContainers:
       # - name: fix-permissions
