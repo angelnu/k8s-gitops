@@ -262,7 +262,6 @@ spec:
             calendar
             call_summary_bot
             context_chat
-            dashboard
             deck                 # Kanban for small projects
             drawio
             extract
