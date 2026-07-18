@@ -264,7 +264,7 @@ spec:
             context_chat
             deck                 # Kanban for small projects
             drawio
-            extract
+            # extract            # Error installing
             federation           # Federation allows you to connect with other trusted servers to exchange the account directory
             files_downloadlimit
             files_external
