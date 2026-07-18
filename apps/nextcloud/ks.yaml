@@ -42,3 +42,4 @@ spec:
       KVANT_LLM_URL: ""
       KVANT_LLM_APIKEY: ""
       SIGNALING_SECRET: ""
+      TURN_SECRET: ""
