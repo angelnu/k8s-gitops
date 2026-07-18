@@ -265,9 +265,10 @@ spec:
             deck                 # Kanban for small projects
             drawio
             # extract            # Error installing
+            # files_archive      # PHP with a version lower than 8.4 is required.
             # files_markdown     # Not updated
             files_mindmap
-            files_trashbin
+            files_rightclick
             forms
             groupfolders
             impersonate
@@ -277,11 +278,7 @@ spec:
             integration_paperless
             mail
             notes
-            notifications
-            serverinfo
-            sharebymail
             spreed               # Talk
-            systemtags           # Collaborative tags
             whiteboard
           )
           for app in $${APPS[@]}; do
