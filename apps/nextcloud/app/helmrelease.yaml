@@ -231,8 +231,11 @@ spec:
             --group-provisioning=1 \
             --group-whitelist-regex='${NEXTCLOUD_OIDC_GROUPS_WHITELISTED_REGEX}' \
             --group-restrict-login-to-whitelist=1 \
+            --mapping-uid=sub \
+            --mapping-email=email \
+            --mapping-display-name=name \
             --mapping-groups=groups \
-            --mapping-quota=""
+            --mapping-quota=quota
           ./occ config:app:set --value=0 user_oidc allow_multiple_user_backends # Only login with SSO
           
           # notify_push
