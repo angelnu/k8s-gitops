@@ -268,7 +268,7 @@ spec:
             # files_archive      # PHP with a version lower than 8.4 is required.
             # files_markdown     # Not updated
             files_mindmap
-            files_rightclick
+            # files_rightclick   # cannot be installed because it is not compatible with this version of the server.
             forms
             groupfolders
             impersonate
