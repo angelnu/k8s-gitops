@@ -18,7 +18,7 @@ spec:
   chart:
     spec:
       chart: flux-operator
-      version: "0.55.0" # Match the current stable version targeting Flux v2.8.x
+      version: "0.56.0" # Match the current stable version targeting Flux v2.8.x
       sourceRef:
         kind: HelmRepository
         name: flux-operator-charts
