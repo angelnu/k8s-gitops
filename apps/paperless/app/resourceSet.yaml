@@ -93,9 +93,9 @@ spec:
                 reloader.stakater.com/auto: "true"
               containers:
                 app:
-                  image:
-                    repository: &paperless_repository ghcr.io/paperless-ngx/paperless-ngx
-                    tag: &paperless_tag 3.0.5 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
+                  image: &paperless_img
+                    repository: ghcr.io/paperless-ngx/paperless-ngx
+                    tag: 3.0.5 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
                   
                   env: &paperless_env
                     PAPERLESS_OCR_LANGUAGE: << inputs.ocr_language >>
@@ -138,7 +138,7 @@ spec:
                 ttlSecondsAfterFinished: 600
               containers:
                 app:
-                  image: *img
+                  image: *paperless_img
                   command:
                     - /bin/bash
                     - -c
