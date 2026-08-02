@@ -15,8 +15,8 @@ data:
     ]
 
     DEFAULT_SPEC = {
-        "casa_readers": {"models": DOC_MODELS, "actions": ["view"]},
-        "casa_editors": {"models": DOC_MODELS, "actions": ["view", "add", "change", "delete"]},
+        os.environ.get("PAPERLESS_BOOTSTRAP_READER_GROUP", "casa96"): {"models": DOC_MODELS, "actions": ["view"]},
+        os.environ.get("PAPERLESS_BOOTSTRAP_EDITOR_GROUP", "casa_editors"): {"models": DOC_MODELS, "actions": ["view", "add", "change", "delete"]},
     }
 
     spec = json.loads(os.environ.get("PAPERLESS_BOOTSTRAP_GROUPS", "{}")) or DEFAULT_SPEC
