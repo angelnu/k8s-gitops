@@ -117,12 +117,13 @@ spec:
         - name: OVERWRITECLIURL
           value: "https://${NEXTCLOUD_OVERRIDE_HOST}"
       phpConfigs:
+        opcache.ini: |
+          opcache.memory_consumption = 256
         uploadLimit.ini: |
           upload_max_filesize = 16G
           post_max_size = 16G
           max_input_time = 3600
           max_execution_time = 3600
-          default_phone_region = DE
       configs:
         gitops.config.php: |-
           <?php
@@ -130,6 +131,9 @@ spec:
             'appstoreenabled' => true,
             #'appstoreurl' => 'https://apps.nextcloud.com/api/v0',
             'mail_domain' => '${CLUSTER_DOMAIN}',
+            'default_phone_region' => 'DE',
+            # Single replica deployment - value is otherwise only meaningful for multi-server setups
+            'serverid' => 0,
           );
         
         #Circumvention for client freezes - https://github.com/nextcloud/desktop/issues/6990
