@@ -129,6 +129,11 @@ spec:
             secretKeyRef:
               name: nextcloud-whiteboard-secret
               key: JWT_SECRET_KEY
+        - name: TALK_SIGNALING_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: nextcloud-talk-signaling-secret
+              key: SIGNALING_SECRET
       phpConfigs:
         opcache.ini: |
           opcache.memory_consumption = 256
@@ -322,9 +327,10 @@ spec:
           # start a task worker
           nohup ./occ background-job:worker 'OC\TaskProcessing\SynchronousBackgroundJob' &
 
-          # # talk
-          # ./occ talk:signaling:delete https://${TALK_HOST}
-          # ./occ talk:signaling:add --verify https://${TALK_HOST} ${SIGNALING_SECRET}
+          # talk (High-performance backend - signaling only, no TURN yet)
+          ./occ talk:signaling:delete "wss://${TALK_HOST}" || /bin/true
+          ./occ talk:signaling:add --verify -- "wss://${TALK_HOST}" "$TALK_SIGNALING_SECRET"
+
           # ./occ talk:turn:delete turn nextcloud-talk-turn.${NEXTCLOUD_OVERRIDE_HOST} udp,tcp
           # ./occ talk:turn:add --secret ${TURN_SECRET} turn nextcloud-talk-turn.${NEXTCLOUD_OVERRIDE_HOST} udp,tcp
 

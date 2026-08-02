@@ -42,5 +42,6 @@ spec:
       NEXTCLOUD_OIDC_GROUPS_WHITELISTED_REGEX: '/^((admin)|(.+))$/'
       KVANT_LLM_URL: ""
       KVANT_LLM_APIKEY: ""
-      SIGNALING_SECRET: ""
+      # SIGNALING_SECRET is now sourced from apps/nextcloud/app/talk/secret.sops.yaml
+      # (via TALK_SIGNALING_SECRET env var), not this plaintext substitute map.
       TURN_SECRET: ""

@@ -1,0 +1,108 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nextcloud-talk-signaling
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 5.0.1
+      interval: 60m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  dependsOn:
+    - name: nextcloud
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  # See https://github.com/strukturag/nextcloud-spreed-signaling
+  # No TURN server configured yet - calls behind restrictive NATs may still
+  # fail to connect media even though signaling itself scales correctly.
+  values:
+    pod:
+      securityContext:
+        fsGroup: 601
+        runAsNonRoot: true
+    controllers:
+      main:
+        serviceAccount:
+          identifier: default
+        containers:
+          main:
+            image:
+              repository: docker.io/mwalbeck/nextcloud-spreed-signaling
+              tag: 2.1.1@sha256:3c420f7c35b066ed79d825a90f14376e624fcce51f056999b1df0cc680a22298
+            securityContext:
+              runAsUser: 601
+              runAsGroup: 601
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 500m
+                memory: 256Mi
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:nonroot  # For runAsUser
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+
+    persistence:
+      config:
+        enabled: true
+        type: secret
+        name: nextcloud-talk-signaling-secret
+        items:
+          - key: server.conf
+            path: server.conf
+        globalMounts:
+          - path: /config/server.conf
+            subPath: server.conf
+            readOnly: true
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8080
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+          nginx.ingress.kubernetes.io/enable-global-auth: "false"
+          # Keep the persistent websocket connection alive
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+        hosts:
+          - host: ${TALK_HOST}
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                service:
+                  identifier: main
+                  port: http
+        tls:
+        - hosts:
+          - ${TALK_HOST}
