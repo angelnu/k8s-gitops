@@ -7,7 +7,7 @@ metadata:
     # Nextcloud's own JSON 404 responses (e.g. .well-known/webfinger) must pass
     # through untouched - the cluster-wide custom error page strips headers
     # our own admin setup checks rely on (X-NEXTCLOUD-WELL-KNOWN).
-    nginx.ingress.kubernetes.io/custom-http-errors: ""
+    nginx.ingress.kubernetes.io/disable-proxy-intercept-errors: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 4G
     nginx.ingress.kubernetes.io/server-snippet: |-
       server_tokens off;
