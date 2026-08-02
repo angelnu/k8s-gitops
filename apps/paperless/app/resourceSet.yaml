@@ -45,6 +45,18 @@ spec:
       hostname: paperless-recipes.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
       auth_request_set: $required_usernames 'anunez|mireille'
+    - name: daniel
+      ignore_dates: “2010-2-8”
+      ocr_language: deu
+      hostname: paperless-daniel.pub.${CLUSTER_DOMAIN}
+      hajimari_group: documents
+      auth_request_set: $required_usernames 'daniel|anunez|mireille'
+    - name: alicia
+      ignore_dates: “2011-11-15”
+      ocr_language: deu
+      hostname: paperless-alicia.pub.${CLUSTER_DOMAIN}
+      hajimari_group: documents
+      auth_request_set: $required_usernames 'alicia|anunez|mireille'
   resources:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
