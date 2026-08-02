@@ -106,6 +106,8 @@ spec:
                     PAPERLESS_LOGOUT_REDIRECT_URL: https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/sign_out
                     PAPERLESS_IGNORE_DATES: << inputs.ignore_dates >>
                     PAPERLESS_URL: https://<< inputs.hostname >>
+                  envFrom:
+                    - secret: paperless-env-values
                 broker:
                   image:
                     repository: docker.io/library/redis
