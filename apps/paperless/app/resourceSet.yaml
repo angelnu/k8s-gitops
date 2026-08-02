@@ -101,9 +101,17 @@ spec:
                     #PAPERLESS_CONSUMER_RECURSIVE: "true"
                     #PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
                     PAPERLESS_REDIS: redis://localhost:6379
-                    PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
-                    PAPERLESS_ACCOUNT_ALLOW_SIGNUPS: "true"
-                    PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_X_AUTHENTIK_USERNAME
+
+                    # Remote proxy user
+                    # PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+                    # PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_X_AUTHENTIK_USERNAME
+                    
+                    # OIDC
+                    PAPERLESS_SOCIAL_AUTO_SIGNUP: "true"
+                    PAPERLESS_DISABLE_REGULAR_LOGIN: "true"
+                    PAPERLESS_REDIRECT_LOGIN_TO_SSO: "true"
+                    PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+
                     PAPERLESS_LOGOUT_REDIRECT_URL: https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/sign_out
                     PAPERLESS_IGNORE_DATES: << inputs.ignore_dates >>
                     PAPERLESS_URL: https://<< inputs.hostname >>
