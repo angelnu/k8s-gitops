@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: nextcloud-push-service
 spec:
-  suspend: true
+  suspend: false
   chart:
     spec:
       chart: app-template

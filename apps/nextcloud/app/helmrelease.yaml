@@ -116,6 +116,11 @@ spec:
           value: "${NEXTCLOUD_OVERRIDE_HOST}"
         - name: OVERWRITECLIURL
           value: "https://${NEXTCLOUD_OVERRIDE_HOST}"
+        - name: WHITEBOARD_JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nextcloud-whiteboard-secret
+              key: JWT_SECRET_KEY
       phpConfigs:
         opcache.ini: |
           opcache.memory_consumption = 256
@@ -251,6 +256,11 @@ spec:
           ./occ config:app:set richdocuments wopi_url --value https://${COLLABORA_HOST}
           ./occ richdocuments:activate-config
 
+          # whiteboard
+          test -d custom_apps/whiteboard ||  ./occ app:install whiteboard
+          ./occ config:app:set whiteboard collabBackendUrl --value "https://${WHITEBOARD_HOST}"
+          ./occ config:app:set whiteboard jwt_secret_key --value "$WHITEBOARD_JWT_SECRET_KEY"
+
           # # integration_openai
           # test -d custom_apps/integration_openai ||  ./occ app:install integration_openai
           # ./occ config:app:set integration_openai service_name --value "kvant"
@@ -283,7 +293,6 @@ spec:
             mail
             notes
             spreed               # Talk
-            whiteboard
           )
           for app in $${APPS[@]}; do
             test -d custom_apps/$app ||  ./occ app:install $app
