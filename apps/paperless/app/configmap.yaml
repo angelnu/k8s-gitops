@@ -9,6 +9,8 @@ data:
 
     from django.contrib.auth.models import Group, Permission
 
+    BASE = ["add_uisettings", "change_uisettings", "view_uisettings", "view_paperlesstask"]
+
     DOC_MODELS = [
         "document", "tag", "correspondent", "documenttype", "storagepath",
         "customfield", "savedview", "note", "sharelink", "paperlesstask",
@@ -22,15 +24,13 @@ data:
     spec = json.loads(os.environ.get("PAPERLESS_BOOTSTRAP_GROUPS", "{}")) or DEFAULT_SPEC
 
     for name, cfg in spec.items():
-        codenames = [
-            f"{action}_{model}"
-            for model in cfg["models"]
-            for action in cfg["actions"]
-        ]
-        perms = Permission.objects.filter(
-            content_type__app_label="documents",
-            codename__in=codenames,
-        )
-        group, created = Group.objects.get_or_create(name=name)
-        group.permissions.set(perms)
-        print(f"{'created' if created else 'updated'} {name}: {perms.count()} perms")
+      codenames = BASE + [
+          f"{a}_{m}" for m in cfg["models"] for a in cfg["actions"]
+      ]
+      perms = Permission.objects.filter(
+          content_type__app_label="documents",
+          codename__in=codenames,
+      )
+      group, created = Group.objects.get_or_create(name=name)
+      group.permissions.set(perms)
+      print(f"{'created' if created else 'updated'} {name}: {perms.count()} perms")
