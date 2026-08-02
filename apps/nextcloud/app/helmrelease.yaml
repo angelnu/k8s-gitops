@@ -39,15 +39,19 @@ spec:
         hajimari.io/info: File and Calendar server
         hajimari.io/group: tools
         nginx.ingress.kubernetes.io/enable-global-auth: "false"
-        # Nextcloud's own JSON 404 responses (e.g. .well-known/webfinger) must pass
-        # through untouched - the cluster-wide custom error page strips headers
-        # our own admin setup checks rely on (X-NEXTCLOUD-WELL-KNOWN).
-        nginx.ingress.kubernetes.io/disable-proxy-intercept-errors: "true"
 
         nginx.ingress.kubernetes.io/proxy-body-size: 4G
         nginx.ingress.kubernetes.io/server-snippet: |-
           server_tokens off;
           proxy_hide_header X-Powered-By;
+          # Nextcloud's own JSON 404 responses (e.g. .well-known/webfinger) must pass
+          # through untouched - the cluster-wide custom error page (error_page +
+          # proxy_intercept_errors, set globally in the ingress-nginx http block)
+          # strips headers our own admin setup checks rely on (X-NEXTCLOUD-WELL-KNOWN).
+          # The disable-proxy-intercept-errors annotation does NOT achieve this on
+          # its own - it only emits an override when this location also carries its
+          # own custom-http-errors annotation, so we set the directive directly.
+          proxy_intercept_errors off;
           rewrite ^/.well-known/webfinger /index.php/.well-known/webfinger last;
           rewrite ^/.well-known/nodeinfo /index.php/.well-known/nodeinfo last;
           rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
