@@ -125,18 +125,8 @@ spec:
                     repository: docker.io/library/redis
                     tag: 8.10@sha256:c29e49ab2f85760a3827b53882e6dd9f5c6c3f0bb7d724e07bb31cbf275a5236 # renovate: depName=docker.io/library/redis datasource=docker
 
-          persistence:
+          persistence:           
             data:
-              enabled: true
-              type: custom
-              globalMounts:
-              - path: /usr/src/paperless/data-old
-                readOnly: false
-              volumeSpec:
-                nfs:
-                  server: "${NFS_SERVER}"
-                  path: "${NFS_KUBERNETES}/paperless/<< inputs.name >>/data"                  
-            data-new:
               enabled: true
               type: persistentVolumeClaim
               existingClaim: paperless-pvc
