@@ -87,7 +87,10 @@ spec:
         # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
         values:
           controllers:
+            # Configure the main controller
             main:
+              annotations:
+                reloader.stakater.com/auto: "true"
               containers:
                 main:
                   image:
