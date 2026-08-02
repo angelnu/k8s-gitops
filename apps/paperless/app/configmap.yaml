@@ -7,7 +7,7 @@ data:
     import json
     import os
 
-    from django.contrib.auth.models import Group, Permission
+    from django.contrib.auth.models import User, Group, Permission
 
     BASE = ["add_uisettings", "change_uisettings", "view_uisettings", "view_paperlesstask"]
 
@@ -34,3 +34,9 @@ data:
       group, created = Group.objects.get_or_create(name=name)
       group.permissions.set(perms)
       print(f"{'created' if created else 'updated'} {name}: {perms.count()} perms")
+    
+    # disable local passwords
+    for u in User.objects.all():
+        u.set_unusable_password()
+        u.save()
+        print(u.username, u.password[:20])
