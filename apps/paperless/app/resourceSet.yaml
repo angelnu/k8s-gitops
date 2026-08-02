@@ -133,7 +133,11 @@ spec:
                   command:
                     - /bin/bash
                     - -c
-                    - python3 manage.py shell < /bootstrap/provision.py
+                    - |
+                      set -euxo pipefail
+                      cd /usr/src/paperless/src
+                      python3 manage.py migrate --noinput
+                      python3 manage.py shell < /bootstrap/provision.py
                   env: *paperless_env
                   envFrom: *paperless_envfrom
 
