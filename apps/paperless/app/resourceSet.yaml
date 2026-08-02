@@ -44,19 +44,19 @@ spec:
       ocr_language: deu
       hostname: paperless-recipes.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
-      auth_request_set: $required_usernames 'anunez|mireille'
+      auth_request_set: $required_usernames 'angel|mireille'
     - name: daniel
       ignore_dates: “2010-2-8”
       ocr_language: deu
       hostname: paperless-daniel.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
-      auth_request_set: $required_usernames 'daniel|anunez|mireille'
+      auth_request_set: $required_usernames 'daniel|angel|mireille'
     - name: alicia
       ignore_dates: “2011-11-15”
       ocr_language: deu
       hostname: paperless-alicia.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
-      auth_request_set: $required_usernames 'alicia|anunez|mireille'
+      auth_request_set: $required_usernames 'alicia|angel|mireille'
   resources:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
@@ -102,6 +102,7 @@ spec:
                     #PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
                     PAPERLESS_REDIS: redis://localhost:6379
                     PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+                    PAPERLESS_ACCOUNT_ALLOW_SIGNUPS: "true"
                     PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_X_AUTHENTIK_USERNAME
                     PAPERLESS_LOGOUT_REDIRECT_URL: https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/sign_out
                     PAPERLESS_IGNORE_DATES: << inputs.ignore_dates >>
