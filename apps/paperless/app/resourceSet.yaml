@@ -114,6 +114,7 @@ spec:
                     PAPERLESS_DISABLE_REGULAR_LOGIN: "true"
                     PAPERLESS_REDIRECT_LOGIN_TO_SSO: "true"
                     PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+                    PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS: "true"
                     #PAPERLESS_BOOTSTRAP_GROUPS: set in the script
 
                     PAPERLESS_LOGOUT_REDIRECT_URL: https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/sign_out
