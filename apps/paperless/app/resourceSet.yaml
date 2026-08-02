@@ -125,29 +125,35 @@ spec:
                   image:
                     repository: docker.io/library/redis
                     tag: 8.10@sha256:c29e49ab2f85760a3827b53882e6dd9f5c6c3f0bb7d724e07bb31cbf275a5236 # renovate: depName=docker.io/library/redis datasource=docker
-              initContainers:
-                bootstrap:
-                  image:
-                    repository: *paperless_repository
-                    tag: *paperless_tag
+
+            bootstrap:
+              type: job
+              annotations:
+                helm.sh/hook: post-install,post-upgrade
+                helm.sh/hook-weight: "5"
+                helm.sh/hook-delete-policy: before-hook-creation
+              job:
+                backoffLimit: 2
+                ttlSecondsAfterFinished: 600
+              containers:
+                app:
+                  image: *img
                   command:
                     - /bin/bash
                     - -c
                     - |
-                      set -euxo pipefail
+                      set -euo pipefail
                       cd /usr/src/paperless/src
-                      python3 manage.py migrate --noinput
                       python3 manage.py shell < /bootstrap/provision.py
                   env: *paperless_env
                   envFrom: *paperless_envfrom
-
           persistence:
             bootstrap:
               type: configMap
               name: paperless-bootstrap
               advancedMounts:
-                main:
-                  bootstrap:
+                bootstrap:
+                  app:
                     - path: /bootstrap
                       readOnly: true
             data:
