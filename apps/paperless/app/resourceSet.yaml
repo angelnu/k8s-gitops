@@ -91,6 +91,10 @@ spec:
             main:
               annotations:
                 reloader.stakater.com/auto: "true"
+              pod:
+                securityContext:
+                  seLinuxOptions:
+                    level: "s0:c100,c200"
               containers:
                 app:
                   image: &paperless_img
@@ -134,6 +138,10 @@ spec:
                 helm.sh/hook-weight: "5"
                 helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
                 reloader.stakater.com/auto: "true"
+              pod:
+                securityContext:
+                  seLinuxOptions:
+                    level: "s0:c100,c200"
               job:
                 backoffLimit: 2
                 ttlSecondsAfterFinished: 600
