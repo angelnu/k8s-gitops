@@ -92,12 +92,12 @@ spec:
               annotations:
                 reloader.stakater.com/auto: "true"
               containers:
-                main:
+                app:
                   image:
-                    repository: ghcr.io/paperless-ngx/paperless-ngx
-                    tag: 3.0.5 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
+                    repository: &paperless_repository ghcr.io/paperless-ngx/paperless-ngx
+                    tag: &paperless_tag 3.0.5 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
                   
-                  env:
+                  env: &paperless_env
                     PAPERLESS_OCR_LANGUAGE: << inputs.ocr_language >>
                     PAPERLESS_TIME_ZONE: "Europe/Berlin"
                     PAPERLESS_CONSUMER_POLLING: "60"
@@ -106,7 +106,7 @@ spec:
                     PAPERLESS_REDIS: redis://localhost:6379
 
                     # Remote proxy user
-                    # PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+                    #   PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
                     # PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_X_AUTHENTIK_USERNAME
                     
                     # OIDC
@@ -114,18 +114,39 @@ spec:
                     PAPERLESS_DISABLE_REGULAR_LOGIN: "true"
                     PAPERLESS_REDIRECT_LOGIN_TO_SSO: "true"
                     PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+                    #PAPERLESS_BOOTSTRAP_GROUPS: set in the script
 
                     PAPERLESS_LOGOUT_REDIRECT_URL: https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/sign_out
                     PAPERLESS_IGNORE_DATES: << inputs.ignore_dates >>
                     PAPERLESS_URL: https://<< inputs.hostname >>
-                  envFrom:
+                  envFrom: &paperless_envfrom
                     - secret: paperless-env-values
                 broker:
                   image:
                     repository: docker.io/library/redis
                     tag: 8.10@sha256:c29e49ab2f85760a3827b53882e6dd9f5c6c3f0bb7d724e07bb31cbf275a5236 # renovate: depName=docker.io/library/redis datasource=docker
+              initContainers:
+                bootstrap:
+                  image:
+                    repository: *paperless_repository
+                    tag: *paperless_tag
+                  command:
+                    - /bin/bash
+                    - -c
+                    - python3 manage.py shell < /bootstrap/provision.py
+                  volumeMounts:
+                    - name: bootstrap
+                      mountPath: /bootstrap
 
-          persistence:           
+          persistence:
+            bootstrap:
+              type: configMap
+              name: paperless-bootstrap
+              advancedMounts:
+                main:
+                  bootstrap:
+                    - path: /bootstrap
+                      readOnly: true
             data:
               enabled: true
               type: persistentVolumeClaim

@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: paperless-bootstrap
+data:
+  provision.py: |
+    import json
+    import os
+
+    from django.contrib.auth.models import Group, Permission
+
+    DOC_MODELS = [
+        "document", "tag", "correspondent", "documenttype", "storagepath",
+        "customfield", "savedview", "note", "sharelink", "paperlesstask",
+    ]
+
+    DEFAULT_SPEC = {
+        "casa_readers": {"models": DOC_MODELS, "actions": ["view"]},
+        "casa_editors": {"models": DOC_MODELS, "actions": ["view", "add", "change", "delete"]},
+    }
+
+    spec = json.loads(os.environ.get("PAPERLESS_BOOTSTRAP_GROUPS", "{}")) or DEFAULT_SPEC
+
+    for name, cfg in spec.items():
+        codenames = [
+            f"{action}_{model}"
+            for model in cfg["models"]
+            for action in cfg["actions"]
+        ]
+        perms = Permission.objects.filter(
+            content_type__app_label="documents",
+            codename__in=codenames,
+        )
+        group, created = Group.objects.get_or_create(name=name)
+        group.permissions.set(perms)
+        print(f"{'created' if created else 'updated'} {name}: {perms.count()} perms")
