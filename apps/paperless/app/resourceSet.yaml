@@ -125,9 +125,9 @@ spec:
                     PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS: "true"
 
                     # Casa app
-                    SSO_GROUP_READER: << dig "SSO_GROUP_READER" "casa_readers" inputs >>
+                    SSO_GROUP_READER: << dig "SSO_GROUP_READER" "casa96" inputs >>
                     SSO_GROUP_WRITER: << dig "SSO_GROUP_WRITER" "casa_editors" inputs >>
-                    SSO_GROUP_ADMIN:  << dig "SSO_GROUP_ADMIN" "casa_admins" inputs >>
+                    SSO_GROUP_ADMIN:  << dig "SSO_GROUP_ADMIN" "admin" inputs >>
                     PAPERLESS_EXTRA_SUPERADMIN_USERS: << dig "PAPERLESS_EXTRA_SUPERADMIN_USERS" "" inputs >>
                     PAPERLESS_PROTECTED_USERS:        << dig "PAPERLESS_PROTECTED_USERS" "admin" inputs >>
                     PAPERLESS_INSTANCE_OWNER:         << dig "PAPERLESS_INSTANCE_OWNER"  "admin" inputs >>
