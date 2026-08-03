@@ -10,20 +10,11 @@ def _resolve_owner():
     return User.objects.filter(is_superuser=True).order_by("pk").first()
 
 
-def provision_catchall_workflow(sender, **kwargs):
-    """Ensure no document can be consumed without an owner.
-
-    Ownerless documents are visible to every user, so this is the safety net.
-    It sorts first; per-folder workflows run afterwards and override the owner.
-    """
+def _apply(owner):
+    """Create or update the catch-all workflow for the given owner."""
     # Imported here: at module level this would run before the app registry
     # is ready.
     from documents.models import Workflow, WorkflowAction, WorkflowTrigger
-
-    owner = _resolve_owner()
-    if owner is None:
-        print("[casa.catchall] WARNING: no owner resolved, skipping")
-        return
 
     trigger, _ = WorkflowTrigger.objects.get_or_create(
         type=WorkflowTrigger.WorkflowTriggerType.CONSUMPTION,
@@ -45,3 +36,33 @@ def provision_catchall_workflow(sender, **kwargs):
     print(
         f"[casa.catchall] {'created' if created else 'updated'}, owner={owner.username}"
     )
+
+
+def provision_catchall_workflow(sender, **kwargs):
+    """Ensure no document can be consumed without an owner.
+
+    Ownerless documents are visible to every user, so this is the safety net.
+    It sorts first; per-folder workflows run afterwards and override the owner.
+    """
+    if getattr(sender, "label", None) != "documents":
+        return
+
+    owner = _resolve_owner()
+    if owner is None:
+        print("[casa.catchall] owner not present yet, deferring to first login")
+        return
+    _apply(owner)
+
+
+def on_user_created(sender, instance, created, **kwargs):
+    """Wire the catch-all once the instance owner logs in for the first time.
+
+    On an empty instance the owner does not exist at post_migrate time. With
+    PAPERLESS_INSTANCE_OWNER unset this latches onto the first user created,
+    which on a fresh instance is its owner.
+    """
+    if not created:
+        return
+    if INSTANCE_OWNER and instance.username != INSTANCE_OWNER:
+        return
+    _apply(instance)

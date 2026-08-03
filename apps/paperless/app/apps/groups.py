@@ -5,6 +5,9 @@ from .config import BASE_PERMS, SPEC
 
 def provision_groups(sender, **kwargs):
     """Create the SSO-backed groups and pin their model permissions."""
+    if getattr(sender, "label", None) != "documents":
+        return
+
     for name, cfg in SPEC.items():
         group, created = Group.objects.get_or_create(name=name)
 

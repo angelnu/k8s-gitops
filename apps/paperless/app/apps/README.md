@@ -37,7 +37,7 @@ env:
 | `groups.py` | `post_migrate` — creates SSO groups, pins model permissions |
 | `superadmins.py` | `post_migrate` — promotes users from `PAPERLESS_EXTRA_SUPERADMIN_USERS` |
 | `superuser_sync.py` | `m2m_changed` — mirrors the admin SSO group onto `is_superuser` |
-| `catchall_workflow.py` | `post_migrate` — workflow assigning an owner to every consumed document |
+| `catchall_workflow.py` | `post_migrate` + `post_save` — workflow assigning an owner to every consumed document |
 
 ## Rules for changing this app
 
@@ -45,8 +45,10 @@ env:
 every Django process — web, each Celery worker, every `manage.py` invocation
 — including during `migrate`, when tables may not exist yet.
 
-**Data writes go in a `post_migrate` receiver.** It fires once, after
-migrations, with tables present.
+**Data writes go in a `post_migrate` receiver.** It fires once per migrated
+app, so every handler guards on `sender.label == "documents"` to run exactly
+once with the paperless tables present. Do not connect with `sender=self`:
+this app has no migrations, so the signal would never fire.
 
 **Keep `post_migrate` receivers away from the cache.** django-treenode's own
 `post_migrate` receiver hits Redis; anything reading tags during migration
@@ -77,4 +79,64 @@ ConfigMap is an `ImportError` at startup.
 | `SSO_GROUP_ADMIN` | `casa_admins` | Membership implies `is_superuser` |
 | `PAPERLESS_EXTRA_SUPERADMIN_USERS` | *(empty)* | CSV of per-instance superadmins, no authentik group needed |
 | `PAPERLESS_PROTECTED_USERS` | `admin` | CSV of accounts the superuser reconcile never touches |
-| `PAPERLESS_INSTANCE_OWNER` | *(empty)* | Owner for the catch-all workflow; falls back to lowest-pk superuser |
+| `PAPERLESS_INSTANCE_OWNER` | *(empty)* | Owner for the catch-all workflow; falls back to lowest-pk superuser, then to the first user created |
+
+Group names must match the `groups` claim emitted by the authentik scope
+mapping. Group sync itself requires `PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS=true`
+on the instance — without it users get no groups and every API call 403s.
+
+## Permission model
+
+Group permissions are Django **model** permissions. They do not scope
+visibility: django-guardian filters querysets per object, keyed on document
+owner. Two consequences:
+
+- A document with `owner = NULL` is visible to **every** user holding
+  `view_document`. The catch-all workflow exists to prevent this.
+- No group can "see everything". Only `is_superuser` bypasses the object
+  filter, which is why the admin group maps to that flag rather than to a
+  wider permission set.
+
+`view_uisettings`, `add_uisettings` and `change_uisettings` are required by
+every user including read-only ones; the frontend calls
+`/api/ui_settings/` on load and 403s without them.
+
+## Catch-all ownership timing
+
+On a brand-new instance no user exists when `post_migrate` runs, so the
+workflow cannot be created — the handler logs and defers. A `post_save`
+receiver on `User` wires it as soon as the owner is created, which on a
+fresh instance is the first SSO login.
+
+This leaves a window between container start and first login during which a
+document arriving through the consumption folder would be ownerless, and
+therefore visible to everyone. Accepted: new instances have no scanner
+pointed at them yet. If that changes, gate consumption until provisioning
+completes.
+
+## Known caveats
+
+- `sync_superuser` only fires when group membership changes. Group sync
+  happens at login, so permission changes in authentik require a logout and
+  login. This is accepted.
+- The catch-all workflow covers the consumption folder only. API and web
+  uploads need a second trigger of type `DOCUMENT_ADDED`.
+- Workflow enum names (`WorkflowTriggerType`, `WorkflowActionType`) have
+  changed across paperless versions. Verify against the deployed image
+  before editing `catchall_workflow.py`.
+
+## Verifying a deployment
+
+```bash
+kubectl logs -n paperless deploy/<instance>-main -c app | grep '\[casa'
+```
+
+Every handler prints a prefixed line. Ownerless documents should always be
+zero:
+
+```bash
+python3 manage.py shell -c "
+from documents.models import Document
+print(Document.objects.filter(owner__isnull=True).count())
+"
+```
