@@ -129,12 +129,12 @@ spec:
                     PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS: "true"
 
                     # Casa app
-                    SSO_GROUP_READER: << inputs.SSO_GROUP_READER | default "casa_readers" >>
-                    SSO_GROUP_WRITER: << inputs.SSO_GROUP_WRITER | default "casa_editors" >>
-                    SSO_GROUP_ADMIN: << inputs.SSO_GROUP_ADMIN | default "casa_admins" >>
-                    PAPERLESS_EXTRA_SUPERADMIN_USERS: << inputs.PAPERLESS_EXTRA_SUPERADMIN_USERS | default "" >>
-                    PAPERLESS_PROTECTED_USERS:        << inputs.PAPERLESS_PROTECTED_USERS | default "admin" >>
-                    PAPERLESS_INSTANCE_OWNER:         << inputs.PAPERLESS_INSTANCE_OWNER | default "admin" >>
+                    SSO_GROUP_READER: << dig "SSO_GROUP_READER" "casa_readers" inputs >>
+                    SSO_GROUP_WRITER: << dig "SSO_GROUP_WRITER" "casa_editors" inputs >>
+                    SSO_GROUP_ADMIN:  << dig "SSO_GROUP_ADMIN" "casa_admins" inputs >>
+                    PAPERLESS_EXTRA_SUPERADMIN_USERS: << dig "PAPERLESS_EXTRA_SUPERADMIN_USERS" "" inputs >>
+                    PAPERLESS_PROTECTED_USERS:        << dig "PAPERLESS_PROTECTED_USERS" "admin" inputs >>
+                    PAPERLESS_INSTANCE_OWNER:         << dig "PAPERLESS_INSTANCE_OWNER"  "admin" inputs >>
 
                     # Hardening
                     PAPERLESS_ACCOUNT_SESSION_REMEMBER: "false"
