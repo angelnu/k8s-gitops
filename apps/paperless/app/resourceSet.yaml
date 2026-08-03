@@ -14,49 +14,54 @@ spec:
       ocr_language: deu
       hostname: paperless.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
-      auth_request_set: $required_usernames 'angel|mireille'
+      PAPERLESS_INSTANCE_OWNER: angel
     - name: edu
       ignore_dates: “1984-09-09”
       ocr_language: spa
       hostname: paperless-edu.pub.${CLUSTER_DOMAIN}
       hajimari_group: spain
-      auth_request_set: $required_usernames 'eduardo'
+      PAPERLESS_EXTRA_SUPERADMIN_USERS: eduardo
+      PAPERLESS_INSTANCE_OWNER: eduardo
     - name: javi
       ignore_dates: “1984-09-09”
       ocr_language: deu
       hostname: paperless-javi.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
       auth_request_set: $required_usernames 'javier'
+      PAPERLESS_EXTRA_SUPERADMIN_USERS: javier
+      PAPERLESS_INSTANCE_OWNER: javier
     - name: madrid
       ignore_dates: “1984-09-09”
       ocr_language: spa
       hostname: paperless-madrid.pub.${CLUSTER_DOMAIN}
       hajimari_group: spain
-      auth_request_set: $required_groups 'madrid'
+      SSO_GROUP_WRITER: madrid
+      PAPERLESS_EXTRA_SUPERADMIN_USERS: eduardo,javier
+      PAPERLESS_INSTANCE_OWNER: angelnb
     - name: mireille-work
       ignore_dates: “”
       ocr_language: eng
       hostname: paperless-mireille-work.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
-      auth_request_set: $required_usernames 'mireille'
+      PAPERLESS_INSTANCE_OWNER: mireille
     - name: recipes
       ignore_dates: “”
       ocr_language: deu
       hostname: paperless-recipes.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
-      auth_request_set: $required_usernames 'angel|mireille'
+      PAPERLESS_INSTANCE_OWNER: mireille
     - name: daniel
       ignore_dates: “2010-2-8”
       ocr_language: deu
       hostname: paperless-daniel.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
-      auth_request_set: $required_usernames 'daniel|angel|mireille'
+      PAPERLESS_INSTANCE_OWNER: daniel
     - name: alicia
       ignore_dates: “2011-11-15”
       ocr_language: deu
       hostname: paperless-alicia.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
-      auth_request_set: $required_usernames 'alicia|angel|mireille'
+      PAPERLESS_INSTANCE_OWNER: alicia
   resources:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
@@ -120,8 +125,16 @@ spec:
                     PAPERLESS_SOCIAL_AUTO_SIGNUP: "true"
                     PAPERLESS_DISABLE_REGULAR_LOGIN: "true"
                     PAPERLESS_REDIRECT_LOGIN_TO_SSO: "true"
-                    PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+                    PAPERLESS_APPS: "allauth.socialaccount.providers.openid_connect,casa"
                     PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS: "true"
+
+                    # Casa app
+                    SSO_GROUP_READER: << inputs.SSO_GROUP_READER | default "casa_readers" >>
+                    SSO_GROUP_WRITER: << inputs.SSO_GROUP_WRITER | default "casa_editors" >>
+                    SSO_GROUP_ADMIN: << inputs.SSO_GROUP_ADMIN | default "casa_admins" >>
+                    PAPERLESS_EXTRA_SUPERADMIN_USERS: << inputs.PAPERLESS_EXTRA_SUPERADMIN_USERS | default "" >>
+                    PAPERLESS_PROTECTED_USERS:        << inputs.PAPERLESS_PROTECTED_USERS | default "admin" >>
+                    PAPERLESS_INSTANCE_OWNER:         << inputs.PAPERLESS_INSTANCE_OWNER | default "admin" >>
 
                     # Hardening
                     PAPERLESS_ACCOUNT_SESSION_REMEMBER: "false"
@@ -163,14 +176,6 @@ spec:
                   env: *paperless_env
                   envFrom: *paperless_envfrom
           persistence:
-            bootstrap:
-              type: configMap
-              name: paperless-bootstrap
-              advancedMounts:
-                bootstrap:
-                  app:
-                    - path: /bootstrap
-                      readOnly: true
             data:
               enabled: true
               type: persistentVolumeClaim
@@ -208,6 +213,12 @@ spec:
                 nfs:
                   server: "${NFS_SERVER}"
                   path: "${NFS_KUBERNETES}/paperless/<< inputs.name >>/export"
+            casa-app:
+              type: configMap
+              name: paperless-casa-app
+              globalMounts:
+              - path: /usr/src/paperless/src/casa
+                readOnly: true
     
           serviceAccount:
             default:
@@ -240,8 +251,6 @@ spec:
                 nginx.ingress.kubernetes.io/proxy-body-size: 4G
                 nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
                 nginx.ingress.kubernetes.io/enable-global-auth: "false"
-                # nginx.ingress.kubernetes.io/configuration-snippet: |
-                #   auth_request_set << inputs.auth_request_set >>;
               hosts:
                 - host: << inputs.hostname >>
                   paths:

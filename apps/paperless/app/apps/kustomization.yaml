@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: paperless-casa-app
+    files:
+      - __init__.py
+      - apps.py
+      - config.py
+      - groups.py
+      - superadmins.py
+      - superuser_sync.py
+      - catchall_workflow.py
+
+generatorOptions:
+  disableNameSuffixHash: true
