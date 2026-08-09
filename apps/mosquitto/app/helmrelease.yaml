@@ -124,7 +124,7 @@ spec:
         enabled: true
         type: secret
         name: mosquitto-secret
-        defaultMode: 256
+        defaultMode: 292  # 0444 - files are owned by root, and we run as 1883
         advancedMounts:
           main:
             gen-passwd:
