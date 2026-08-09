@@ -1,0 +1,154 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: "${MY_APP}"
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 5.0.1
+      interval: 60m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+  values:
+    controllers:
+      main:
+        serviceAccount:
+          identifier: default
+        pod:
+          annotations:
+            reloader.stakater.com/auto: "true"
+        initContainers:
+          # Takes the plaintext user:password list from the sops secret and
+          # writes a hashed password_file that mosquitto can use.
+          # mosquitto_passwd -U rewrites the file in place, so it has to live
+          # on a writable emptyDir rather than the read-only secret mount.
+          gen-passwd:
+            image:
+              repository: docker.io/library/eclipse-mosquitto
+              tag: 2.0.22
+            command:
+              - sh
+              - -c
+              - |
+                set -eu
+                install -m 0600 /mosquitto/secrets/passwd /passwd/passwd
+                mosquitto_passwd -U /passwd/passwd
+            securityContext:
+              runAsUser: 1883
+              runAsGroup: 1883
+        containers:
+          main:
+            image:
+              repository: docker.io/library/eclipse-mosquitto
+              # TODO: pin the digest like the rest of the repo
+              tag: 2.0.22
+            securityContext:
+              runAsUser: 1883
+              runAsGroup: 1883
+            probes:
+              liveness:
+                enabled: true
+                type: TCP
+              readiness:
+                enabled: true
+                type: TCP
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+
+    serviceAccount:
+      default:
+        enabled: true
+    rbac:
+      bindings:
+        default:
+          type: RoleBinding
+          roleRef:
+            name: system:openshift:scc:anyuid  # For runAsUser 1883
+            kind: ClusterRole
+          subjects:
+            - identifier: default
+
+    configMaps:
+      config:
+        data:
+          mosquitto.conf: |
+            per_listener_settings true
+
+            listener 1883
+            protocol mqtt
+            allow_anonymous false
+            password_file /passwd/passwd
+
+            persistence true
+            persistence_location /mosquitto/data/
+            autosave_interval 300
+
+            log_dest stdout
+            log_type warning
+            log_type notice
+            connection_messages true
+
+            # Solis dataloggers reconnect often and are not gentle about it
+            max_keepalive 120
+
+    persistence:
+      config:
+        enabled: true
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /mosquitto/config/mosquitto.conf
+            subPath: mosquitto.conf
+            readOnly: true
+      secrets:
+        enabled: true
+        type: secret
+        name: mosquitto-secret
+        defaultMode: 256
+        advancedMounts:
+          main:
+            gen-passwd:
+              - path: /mosquitto/secrets
+                readOnly: true
+      passwd:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /passwd
+      data:
+        enabled: true
+        existingClaim: mosquitto-pvc
+        globalMounts:
+          - path: /mosquitto/data
+
+    service:
+      main:
+        controller: main
+        type: LoadBalancer
+        annotations:
+          metallb.io/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_MOSQUITTO}"
+        externalTrafficPolicy: Local
+        ports:
+          mqtt:
+            port: 1883
+            protocol: TCP
