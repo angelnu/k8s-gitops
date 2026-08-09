@@ -8,6 +8,7 @@ configMapGenerator:
       - apps.py
       - config.py
       - groups.py
+      - orphan_guard.py
       - superadmins.py
       - superuser_sync.py
       - catchall_workflow.py

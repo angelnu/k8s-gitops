@@ -8,9 +8,11 @@ class CasaConfig(AppConfig):
 
     def ready(self):
         from django.contrib.auth.models import User
+        from documents.models import Correspondent, DocumentType, StoragePath, Tag
 
         from .catchall_workflow import on_user_created, provision_catchall_workflow
         from .groups import provision_groups
+        from .orphan_guard import adopt_orphan
         from .superadmins import provision_extra_superadmins
         from .superuser_sync import sync_superuser
 
@@ -24,5 +26,10 @@ class CasaConfig(AppConfig):
         # On an empty instance the owner does not exist yet at post_migrate
         # time, so the catch-all is wired on first login instead.
         post_save.connect(on_user_created, sender=User)
+
+        # Auxiliary objects are created automatically during consumption and
+        # no workflow assigns them an owner. Ownerless means visible to all.
+        for model in (Tag, Correspondent, DocumentType, StoragePath):
+            post_save.connect(adopt_orphan, sender=model)
 
         m2m_changed.connect(sync_superuser, sender=User.groups.through)
