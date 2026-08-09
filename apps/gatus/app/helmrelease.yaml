@@ -277,8 +277,17 @@ spec:
                   - type: pagerduty
                 conditions:
                   - "[STATUS] == 200"
+              - name: Mosquitto
+                group: home-assistant
+                url: "tcp://${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_MOSQUITTO}:1883"
+                interval: 5m
+                alerts:
+                  - type: slack
+                  - type: pagerduty
+                conditions:
+                  - "[CONNECTED] == true"
 
-              
+
               - name: paperless
                 group: paperless
                 url: "https://paperless.pub.${CLUSTER_DOMAIN}"
