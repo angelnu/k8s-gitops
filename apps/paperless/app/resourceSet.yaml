@@ -10,28 +10,27 @@ metadata:
 spec:
   inputs:
     - name: casa
-      ignore_dates: “1978-09-19,1979-06-12,2010-2-8,2011-11-15”
+      ignore_dates: 1978-09-19,1979-06-12,2010-2-8,2011-11-15
       ocr_language: deu
       hostname: paperless.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
       PAPERLESS_INSTANCE_OWNER: angel
     - name: edu
-      ignore_dates: “1984-09-09”
+      ignore_dates: 1984-09-09
       ocr_language: spa
       hostname: paperless-edu.pub.${CLUSTER_DOMAIN}
       hajimari_group: spain
       PAPERLESS_EXTRA_SUPERADMIN_USERS: eduardo
       PAPERLESS_INSTANCE_OWNER: eduardo
     - name: javi
-      ignore_dates: “1984-09-09”
+      ignore_dates: 1984-09-09
       ocr_language: deu
       hostname: paperless-javi.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
-      auth_request_set: $required_usernames 'javier'
       PAPERLESS_EXTRA_SUPERADMIN_USERS: javier
       PAPERLESS_INSTANCE_OWNER: javier
     - name: madrid
-      ignore_dates: “1984-09-09”
+      ignore_dates: 1984-09-09
       ocr_language: spa
       hostname: paperless-madrid.pub.${CLUSTER_DOMAIN}
       hajimari_group: spain
@@ -39,25 +38,25 @@ spec:
       PAPERLESS_EXTRA_SUPERADMIN_USERS: eduardo,javier
       PAPERLESS_INSTANCE_OWNER: angelnb
     - name: mireille-work
-      ignore_dates: “”
+      ignore_dates: ""
       ocr_language: eng
       hostname: paperless-mireille-work.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
       PAPERLESS_INSTANCE_OWNER: mireille
     - name: recipes
-      ignore_dates: “”
+      ignore_dates: ""
       ocr_language: deu
       hostname: paperless-recipes.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
       PAPERLESS_INSTANCE_OWNER: mireille
     - name: daniel
-      ignore_dates: “2010-2-8”
+      ignore_dates: 2010-2-8
       ocr_language: deu
       hostname: paperless-daniel.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
       PAPERLESS_INSTANCE_OWNER: daniel
     - name: alicia
-      ignore_dates: “2011-11-15”
+      ignore_dates: 2011-11-15
       ocr_language: deu
       hostname: paperless-alicia.pub.${CLUSTER_DOMAIN}
       hajimari_group: documents
@@ -136,8 +135,8 @@ spec:
                     PAPERLESS_ACCOUNT_SESSION_REMEMBER: "false"
                     PAPERLESS_SESSION_COOKIE_AGE: "43200"
                     PAPERLESS_ACCOUNT_DEFAULT_HTTP_PROTOCOL: "https"
-                    PAPERLESS_CSRF_TRUSTED_ORIGINS: "https:///<< inputs.hostname >>"
-                    PAPERLESS_ALLOWED_HOSTS: /<< inputs.hostname >>
+                    PAPERLESS_CSRF_TRUSTED_ORIGINS: https://<< inputs.hostname >>
+                    PAPERLESS_ALLOWED_HOSTS: << inputs.hostname >>
                   envFrom: &paperless_envfrom
                     - secret: paperless-env-values
                 broker:
