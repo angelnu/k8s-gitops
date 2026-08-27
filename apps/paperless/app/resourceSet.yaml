@@ -34,6 +34,7 @@ spec:
       ocr_language: spa
       hostname: paperless-madrid.pub.${CLUSTER_DOMAIN}
       hajimari_group: spain
+      SSO_GROUP_READER: madrid
       SSO_GROUP_WRITER: madrid
       PAPERLESS_EXTRA_SUPERADMIN_USERS: eduardo,javier
       PAPERLESS_INSTANCE_OWNER: angelnb
@@ -100,7 +101,7 @@ spec:
                   image: &paperless_img
                     repository: ghcr.io/paperless-ngx/paperless-ngx
                     tag: 3.1.0 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
-                  
+
                   env: &paperless_env
                     PAPERLESS_OCR_LANGUAGE: << inputs.ocr_language >>
                     PAPERLESS_TIME_ZONE: "Europe/Berlin"
@@ -109,13 +110,13 @@ spec:
                     #PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
                     PAPERLESS_REDIS: redis://localhost:6379
                     PAPERLESS_LOGOUT_REDIRECT_URL: https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/sign_out
-                    PAPERLESS_IGNORE_DATES: << inputs.ignore_dates >>
+                    PAPERLESS_IGNORE_DATES: "<< inputs.ignore_dates >>"
                     PAPERLESS_URL: https://<< inputs.hostname >>
 
                     # Remote proxy user
                     # PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
                     # PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_X_AUTHENTIK_USERNAME
-                    
+
                     # OIDC
                     PAPERLESS_SOCIAL_AUTO_SIGNUP: "true"
                     PAPERLESS_DISABLE_REGULAR_LOGIN: "true"
@@ -124,12 +125,16 @@ spec:
                     PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS: "true"
 
                     # Casa app
-                    SSO_GROUP_READER: << dig "SSO_GROUP_READER" "casa96" inputs >>
-                    SSO_GROUP_WRITER: << dig "SSO_GROUP_WRITER" "casa_editors" inputs >>
-                    SSO_GROUP_ADMIN:  << dig "SSO_GROUP_ADMIN" "admin" inputs >>
-                    PAPERLESS_EXTRA_SUPERADMIN_USERS: << dig "PAPERLESS_EXTRA_SUPERADMIN_USERS" "" inputs >>
-                    PAPERLESS_PROTECTED_USERS:        << dig "PAPERLESS_PROTECTED_USERS" "admin" inputs >>
-                    PAPERLESS_INSTANCE_OWNER:         << dig "PAPERLESS_INSTANCE_OWNER"  "admin" inputs >>
+                    SSO_GROUP_READER: "<< dig "SSO_GROUP_READER" "casa96" inputs >>"
+                    SSO_GROUP_WRITER: "<< dig "SSO_GROUP_WRITER" "casa_editors" inputs >>"
+                    SSO_GROUP_ADMIN: "<< dig "SSO_GROUP_ADMIN" "admin" inputs >>"
+                    PAPERLESS_EXTRA_SUPERADMIN_USERS: "<< dig "PAPERLESS_EXTRA_SUPERADMIN_USERS" "" inputs >>"
+                    PAPERLESS_PROTECTED_USERS: "<< dig "PAPERLESS_PROTECTED_USERS" "admin" inputs >>"
+                    # Empty default on purpose: the casa app then falls back to
+                    # the lowest-pk superuser, and defers to first login if none
+                    # exists. Defaulting to "admin" would hand documents to the
+                    # local break-glass account, which has no SSO login.
+                    PAPERLESS_INSTANCE_OWNER: "<< dig "PAPERLESS_INSTANCE_OWNER" "" inputs >>"
 
                     # Hardening
                     PAPERLESS_ACCOUNT_SESSION_REMEMBER: "false"
@@ -188,7 +193,7 @@ spec:
               globalMounts:
               - path: /usr/src/paperless/src/casa
                 readOnly: true
-    
+
           serviceAccount:
             default:
               enabled: true
@@ -228,4 +233,3 @@ spec:
                       service:
                         identifier: main
                         port: http
-
