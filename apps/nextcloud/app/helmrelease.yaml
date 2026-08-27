@@ -244,6 +244,11 @@ spec:
           ./occ maintenance:repair --include-expensive || /bin/true
 
           # SSO
+          # mapping-uid must be preferred_username, not sub: Authentik's sub
+          # claim for this provider resolves to the user's email, which does
+          # not match our existing (SAML-era) short usernames - using it
+          # caused user_oidc to silently create a brand-new duplicate account
+          # per user instead of matching their existing one.
           test -d custom_apps/user_oidc ||  ./occ app:install user_oidc
           ./occ user_oidc:provider sso \
             --clientid="${NEXTCLOUD_OIDC_CLIENT_ID}" \
@@ -253,7 +258,7 @@ spec:
             --group-provisioning=1 \
             --group-whitelist-regex='${NEXTCLOUD_OIDC_GROUPS_WHITELISTED_REGEX}' \
             --group-restrict-login-to-whitelist=1 \
-            --mapping-uid=sub \
+            --mapping-uid=preferred_username \
             --mapping-email=email \
             --mapping-display-name=name \
             --mapping-groups=groups \
