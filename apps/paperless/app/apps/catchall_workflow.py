@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.db import transaction
 
 from .config import INSTANCE_OWNER
 
@@ -16,10 +17,17 @@ def _apply(owner):
     # is ready.
     from documents.models import Workflow, WorkflowAction, WorkflowTrigger
 
-    trigger, _ = WorkflowTrigger.objects.get_or_create(
-        type=WorkflowTrigger.WorkflowTriggerType.CONSUMPTION,
-        filter_path="*",
-    )
+    triggers = []
+    for trigger_type in (
+        WorkflowTrigger.WorkflowTriggerType.CONSUMPTION,
+        WorkflowTrigger.WorkflowTriggerType.DOCUMENT_ADDED,
+    ):
+        trigger, _ = WorkflowTrigger.objects.get_or_create(
+            type=trigger_type,
+            filter_path="*",
+        )
+        triggers.append(trigger)
+
     action, _ = WorkflowAction.objects.get_or_create(
         type=WorkflowAction.WorkflowActionType.ASSIGNMENT,
         assign_owner=owner,
@@ -31,7 +39,7 @@ def _apply(owner):
     workflow.order = 0
     workflow.enabled = True
     workflow.save()
-    workflow.triggers.set([trigger])
+    workflow.triggers.set(triggers)
     workflow.actions.set([action])
     print(
         f"[casa.catchall] {'created' if created else 'updated'}, owner={owner.username}"
@@ -39,7 +47,7 @@ def _apply(owner):
 
 
 def provision_catchall_workflow(sender, **kwargs):
-    """Ensure no document can be consumed without an owner.
+    """Ensure no document can be added without an owner.
 
     Ownerless documents are visible to every user, so this is the safety net.
     It sorts first; per-folder workflows run afterwards and override the owner.
@@ -57,12 +65,19 @@ def provision_catchall_workflow(sender, **kwargs):
 def on_user_created(sender, instance, created, **kwargs):
     """Wire the catch-all once the instance owner logs in for the first time.
 
-    On an empty instance the owner does not exist at post_migrate time. With
-    PAPERLESS_INSTANCE_OWNER unset this latches onto the first user created,
-    which on a fresh instance is its owner.
+    Deferred to commit: a login that rolls back after creating the user
+    would otherwise leave the workflow pointing at a row that never landed.
     """
     if not created:
         return
     if INSTANCE_OWNER and instance.username != INSTANCE_OWNER:
         return
-    _apply(instance)
+
+    pk = instance.pk
+
+    def _wire():
+        user = User.objects.filter(pk=pk).first()
+        if user is not None:
+            _apply(user)
+
+    transaction.on_commit(_wire)

@@ -8,18 +8,23 @@ class CasaConfig(AppConfig):
 
     def ready(self):
         from django.contrib.auth.models import User
-        from documents.models import Correspondent, DocumentType, StoragePath, Tag
+        from documents.models import (
+            Correspondent,
+            Document,
+            DocumentType,
+            StoragePath,
+            Tag,
+        )
 
         from .catchall_workflow import on_user_created, provision_catchall_workflow
         from .groups import provision_groups
-        from .orphan_guard import adopt_orphan
+        from .orphan_guard import adopt_orphan, adopt_orphan_document
         from .superadmins import provision_extra_superadmins
         from .superuser_sync import sync_superuser
 
         # post_migrate fires on every boot, including when no migrations are
         # pending, so this is the reconcile path. Each handler filters on
-        # sender.label == "documents" to run exactly once per migrate pass,
-        # after the paperless tables exist.
+        # sender.label == "documents" to run exactly once per migrate pass.
         post_migrate.connect(provision_groups)
         post_migrate.connect(provision_extra_superadmins)
         post_migrate.connect(provision_catchall_workflow)
@@ -32,5 +37,9 @@ class CasaConfig(AppConfig):
         # no workflow assigns them an owner. Ownerless means visible to all.
         for model in (Tag, Correspondent, DocumentType, StoragePath):
             post_save.connect(adopt_orphan, sender=model)
+
+        # Backstop in case a document reaches the DB without a workflow
+        # claiming it.
+        post_save.connect(adopt_orphan_document, sender=Document)
 
         m2m_changed.connect(sync_superuser, sender=User.groups.through)
