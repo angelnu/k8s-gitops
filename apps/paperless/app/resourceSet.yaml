@@ -116,7 +116,7 @@ spec:
                     # Cache .pyc in the container layer: compiled once per pod
                     # instead of once per manage.py invocation (~15s -> ~8s each).
                     # Costs ephemeral storage.
-                    PYTHONDONTWRITEBYTECODE: ""                    
+                    # PYTHONDONTWRITEBYTECODE: ""                    
                     
                     # Remote proxy user
                     # PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
