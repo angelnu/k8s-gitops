@@ -116,7 +116,7 @@ spec:
                     # Cache .pyc in the container layer: compiled once per pod
                     # instead of once per manage.py invocation (~15s -> ~8s each).
                     # Costs ephemeral storage.
-                    # PYTHONDONTWRITEBYTECODE: ""                    
+                    PYTHONDONTWRITEBYTECODE: ""                    
                     
                     # Remote proxy user
                     # PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
@@ -130,16 +130,16 @@ spec:
                     PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS: "true"
 
                     # Casa app
-                    SSO_GROUP_READER: "<< dig "SSO_GROUP_READER" "casa96" inputs >>"
-                    SSO_GROUP_WRITER: "<< dig "SSO_GROUP_WRITER" "casa_editors" inputs >>"
-                    SSO_GROUP_ADMIN: "<< dig "SSO_GROUP_ADMIN" "admin" inputs >>"
-                    PAPERLESS_EXTRA_SUPERADMIN_USERS: "<< dig "PAPERLESS_EXTRA_SUPERADMIN_USERS" "" inputs >>"
-                    PAPERLESS_PROTECTED_USERS: "<< dig "PAPERLESS_PROTECTED_USERS" "admin" inputs >>"
+                    SSO_GROUP_READER: '<< dig "SSO_GROUP_READER" "casa96" inputs >>'
+                    SSO_GROUP_WRITER: '<< dig "SSO_GROUP_WRITER" "casa_editors" inputs >>'
+                    SSO_GROUP_ADMIN: '<< dig "SSO_GROUP_ADMIN" "admin" inputs >>'
+                    PAPERLESS_EXTRA_SUPERADMIN_USERS: '<< dig "PAPERLESS_EXTRA_SUPERADMIN_USERS" "" inputs >>'
+                    PAPERLESS_PROTECTED_USERS: '<< dig "PAPERLESS_PROTECTED_USERS" "admin" inputs >>'
                     # Empty default on purpose: the casa app then falls back to
                     # the lowest-pk superuser, and defers to first login if none
                     # exists. Defaulting to "admin" would hand documents to the
                     # local break-glass account, which has no SSO login.
-                    PAPERLESS_INSTANCE_OWNER: "<< dig "PAPERLESS_INSTANCE_OWNER" "" inputs >>"
+                    PAPERLESS_INSTANCE_OWNER: '<< dig "PAPERLESS_INSTANCE_OWNER" "" inputs >>'
 
                     # Hardening
                     PAPERLESS_ACCOUNT_SESSION_REMEMBER: "false"
