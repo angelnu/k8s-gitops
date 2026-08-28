@@ -112,7 +112,11 @@ spec:
                     PAPERLESS_LOGOUT_REDIRECT_URL: https://authentik.pub.${CLUSTER_DOMAIN}/outpost.goauthentik.io/sign_out
                     PAPERLESS_IGNORE_DATES: "<< inputs.ignore_dates >>"
                     PAPERLESS_URL: https://<< inputs.hostname >>
-                    PYTHONDONTWRITEBYTECODE: ""  # Cache .pyc in the container layer: compiled once per pod instead of once per manage.py invocation (~15s -> ~8s each). Costs ephemeral storage.
+                    
+                    # Cache .pyc in the container layer: compiled once per pod
+                    # instead of once per manage.py invocation (~15s -> ~8s each).
+                    # Costs ephemeral storage.
+                    PYTHONDONTWRITEBYTECODE: ""                    
                     
                     # Remote proxy user
                     # PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
