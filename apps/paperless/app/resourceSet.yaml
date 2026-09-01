@@ -100,7 +100,7 @@ spec:
                 app:
                   image: &paperless_img
                     repository: ghcr.io/paperless-ngx/paperless-ngx
-                    tag: 3.1.1 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
+                    tag: 3.1.2 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
 
                   env: &paperless_env
                     PAPERLESS_OCR_LANGUAGE: << inputs.ocr_language >>
