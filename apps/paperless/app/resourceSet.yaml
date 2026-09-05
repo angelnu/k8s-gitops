@@ -152,7 +152,7 @@ spec:
                 broker:
                   image:
                     repository: docker.io/library/redis
-                    tag: 8.10@sha256:691577adaf11927f4bb8871d40a5dd69a5c300d4453b742e8f6383c3e6e8d2e1 # renovate: depName=docker.io/library/redis datasource=docker
+                    tag: 8.10@sha256:298e5b3bc566bade82f46ad5511777a4a07a294097ce16ada2f6a42be5239df5 # renovate: depName=docker.io/library/redis datasource=docker
 
           persistence:
             data:
