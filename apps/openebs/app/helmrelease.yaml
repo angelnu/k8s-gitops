@@ -39,3 +39,17 @@ spec:
     localpv-provisioner:
       enabled: true
       basepath: "/var/openebs/local" # Use lowercase here
+    loki:
+      minio:
+        # quay.io/minio/* no longer allows anonymous pulls (MinIO stopped
+        # publishing community images). Use the copies mirrored to Forgejo.
+        image:
+          repository: git.angelnu.com/angel/minio
+          tag: RELEASE.2024-12-18T13-15-44Z
+        # mc is used by the chart post-install/upgrade job (buckets/users).
+        # The MinIO server image bundles the mc release the chart expects.
+        mcImage:
+          repository: git.angelnu.com/angel/minio
+          tag: RELEASE.2024-12-18T13-15-44Z
+        imagePullSecrets:
+          - name: forgejo-registry
