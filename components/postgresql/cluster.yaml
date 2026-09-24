@@ -11,8 +11,9 @@ spec:
   inputs:
     - is_initdb: ${POSTGRES_IS_INITDB=false}
       existingSecretName: ${POSTGRES_EXISTING_SECRETNAME=false}
+      walSize: "${POSTGRES_WALSTORAGE_SIZE}"
   resources: []
-        
+
   resourcesTemplate: |
       ---
       apiVersion: postgresql.cnpg.io/v1
@@ -28,16 +29,22 @@ spec:
         nodeMaintenanceWindow:
           inProgress: false
           reusePVC: true
-        
+
         switchoverDelay: 60 # 1 minute is plenty for "hiccup" protection
 
-        # 'unsupervised' is correct. It means "Operator, take care of it."
+        # 'unsupervised' means the operator handles primary updates automatically
         primaryUpdateStrategy: unsupervised
-        
-        # This ensures we always have a synchronous stand-by 
-        # for zero data loss during the automatic failover.
-        minSyncReplicas: 1
-        maxSyncReplicas: 2
+
+        postgresql:
+          # Quorum-based synchronous replication (replaces minSyncReplicas/maxSyncReplicas)
+          synchronous:
+            method: any
+            number: 1                  # one replica confirming each commit is enough
+            dataDurability: preferred  # never block writes when no healthy replica is available
+          parameters:
+            # Cap WAL retained by an orphaned replication slot:
+            # half of the WAL volume (min 1GB), leaving room for max_wal_size
+            max_slot_wal_keep_size: "<< max 1 (div (trimSuffix "Gi" inputs.walSize | atoi) 2) >>GB"
 
         affinity:
           # "required" ensures pods NEVER share a node
@@ -54,8 +61,8 @@ spec:
             parameters:
               barmanObjectName: cluster-nas-backup
 
-        # 2. Resource Management (Guaranteed QoS)
-        # Keeping requests and limits identical prevents OOM kills
+        # 2. Resource Management
+        # NOTE: requests != limits => Burstable QoS, not Guaranteed
         resources:
           requests:
             memory: "192Mi"
@@ -66,11 +73,10 @@ spec:
 
         # 3. Storage Configuration
         storage:
-          #storageClass: &storageClass longhorn-postgres-replica-storage
           storageClass: &storageClass openebs-hostpath
           size: ${POSTGRES_STORAGE_SIZE}
         walStorage:
-          # Separate WAL storage is recommended for production to avoid IO contention
+          # Separate WAL storage avoids IO contention with data files
           storageClass: *storageClass
           size: ${POSTGRES_WALSTORAGE_SIZE}
 
@@ -84,13 +90,13 @@ spec:
 
         backup:
           target: prefer-standby # instead of primary
-        
+
         # 4. Database Initialization
         bootstrap:
           <<- if inputs.is_initdb >>
           initdb:
             database: app
-            <<- if inputs.is_initdb >>
+            <<- if inputs.existingSecretName >>
             secret:
               name: << inputs.existingSecretName >>
             <<- end >>
