@@ -67,7 +67,7 @@ spec:
         # NOTE: requests != limits => Burstable QoS, not Guaranteed
         resources:
           requests:
-            memory: "192Mi"
+            memory: "384Mi"  # observed 2026-09-24: 70-480Mi per instance
             cpu: "20m"
           limits:
             memory: "1Gi"

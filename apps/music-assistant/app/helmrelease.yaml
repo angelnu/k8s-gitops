@@ -32,6 +32,13 @@ spec:
           identifier: default
         containers:
           main:
+            # observed 2026-09-24: p95 560Mi, max 620Mi. Generous limit; review with >=1 week of Prometheus data
+            resources:
+              requests:
+                cpu: 20m
+                memory: 640Mi
+              limits:
+                memory: 1536Mi
             image:
               repository: ghcr.io/music-assistant/server
               tag: 2.10.4

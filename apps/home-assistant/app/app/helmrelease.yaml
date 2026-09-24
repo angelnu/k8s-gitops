@@ -30,6 +30,13 @@ spec:
       main:
         containers:
           main:
+            # observed 2026-09-24: p95 1.25Gi, max 1.3Gi. Generous limit; review with >=1 week of Prometheus data
+            resources:
+              requests:
+                cpu: 100m
+                memory: 1536Mi
+              limits:
+                memory: 2560Mi
             image:
               repository: ghcr.io/home-assistant/home-assistant
               tag: 2026.9.3@sha256:d8922685169707fd91e8b9729902d975f06157d005e422874d201e0261dda196

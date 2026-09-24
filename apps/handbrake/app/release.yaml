@@ -32,6 +32,13 @@ spec:
           identifier: default
         containers:
           main:
+            # observed 2026-09-24: p95 260Mi, max 260Mi. Generous limit; review with >=1 week of Prometheus data (idle; transcoding needs much more)
+            resources:
+              requests:
+                cpu: 50m
+                memory: 512Mi
+              limits:
+                memory: 4Gi
             image:
               repository: docker.io/jlesage/handbrake
               tag: v26.09.1@sha256:6f3a121e235d34e7299080e8cbac5284060e942fb2b137f777e2521fb7af65ae

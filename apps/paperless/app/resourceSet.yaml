@@ -98,6 +98,13 @@ spec:
                 reloader.stakater.com/auto: "true"
               containers:
                 app:
+                  # observed 2026-09-24: p95 0.75-1.5Gi, max 1.8Gi. Generous limit; review with >=1 week of Prometheus data (OCR peaks)
+                  resources:
+                    requests:
+                      cpu: 100m
+                      memory: 1Gi
+                    limits:
+                      memory: 3Gi
                   image: &paperless_img
                     repository: ghcr.io/paperless-ngx/paperless-ngx
                     tag: 3.2.1 # renovate: depName=ghcr.io/paperless-ngx/paperless-ngx datasource=docker
@@ -150,6 +157,13 @@ spec:
                   envFrom: &paperless_envfrom
                     - secret: paperless-env-values
                 broker:
+                  # redis broker
+                  resources:
+                    requests:
+                      cpu: 10m
+                      memory: 32Mi
+                    limits:
+                      memory: 256Mi
                   image:
                     repository: docker.io/library/redis
                     tag: 8.10@sha256:8a1efc5f479551822b47424ccae982026b633f28818eab0387348120a61e10e2 # renovate: depName=docker.io/library/redis datasource=docker

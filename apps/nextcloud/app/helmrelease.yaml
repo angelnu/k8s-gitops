@@ -403,13 +403,14 @@ spec:
       enabled: false
     readinessProbe:
       enabled: false
+    # observed 2026-09-24: p95 860Mi, max 940Mi (was hitting the old 1Gi limit)
     resources:
       limits:
         cpu: 1
-        memory: 1Gi
+        memory: 2Gi
       requests:
         cpu: 100m
-        memory: 128Mi
+        memory: 1Gi
         
     persistence:
       enabled: true

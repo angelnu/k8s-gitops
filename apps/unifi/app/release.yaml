@@ -30,6 +30,13 @@ spec:
       main:
         containers:
           main:
+            # observed 2026-09-24: p95 1.6Gi, max 1.7Gi. Generous limit; review with >=1 week of Prometheus data (JVM heap max 1024M + overhead)
+            resources:
+              requests:
+                cpu: 150m
+                memory: 1792Mi
+              limits:
+                memory: 2560Mi
             image:
               repository: docker.io/jacobalberty/unifi
               tag: v10.0.162

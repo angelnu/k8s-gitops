@@ -35,6 +35,13 @@ spec:
             fsGroup: 33  # www-data
         containers:
           main:
+            # observed 2026-09-24: p95 540Mi, max 1.1Gi. Generous limit; review with >=1 week of Prometheus data
+            resources:
+              requests:
+                cpu: 20m
+                memory: 640Mi
+              limits:
+                memory: 2Gi
             image:
               repository: ghcr.io/angelnu/freecad-novnc
               tag: 1.1.3@sha256:fd7919695e414b8d015b527e9fddf85001e49c88d0926a9b2822896ea42d68c7

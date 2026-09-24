@@ -77,6 +77,13 @@ spec:
       enabled: false
     
     server:
+      # observed 2026-09-24: p95 735Mi, max 740Mi. Generous limit; review with >=1 week of Prometheus data
+      resources:
+        requests:
+          cpu: 150m
+          memory: 768Mi
+        limits:
+          memory: 1536Mi
       replicas: 2
 
       ingress:
@@ -99,6 +106,13 @@ spec:
           - authentik.pub.${CLUSTER_DOMAIN}
 
     worker:
+      # observed 2026-09-24: p95 1.2Gi, max 1.2Gi. Generous limit; review with >=1 week of Prometheus data
+      resources:
+        requests:
+          cpu: 150m
+          memory: 1280Mi
+        limits:
+          memory: 2Gi
       replicas: 2
   
   valuesFrom:

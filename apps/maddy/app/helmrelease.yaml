@@ -29,6 +29,13 @@ spec:
       main:
         containers:
           main:
+            # observed 2026-09-24: p95 640Mi, max 650Mi. Generous limit; review with >=1 week of Prometheus data
+            resources:
+              requests:
+                cpu: 50m
+                memory: 768Mi
+              limits:
+                memory: 1536Mi
             image:
               # -- image repository (official)
               repository: ghcr.io/foxcpp/maddy # Dockerhub - foxcpp/maddy

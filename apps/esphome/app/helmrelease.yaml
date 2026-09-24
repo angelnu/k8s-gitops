@@ -44,6 +44,13 @@ spec:
               ]
         containers:
           main:
+            # observed 2026-09-24: p95 220Mi, max 220Mi. Generous limit; review with >=1 week of Prometheus data (idle; compiles need much more)
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 3Gi
             image:
               repository: ghcr.io/esphome/esphome
               tag: 2026.9.0@sha256:f6509fcf917a732fd80058567b237d5b9286b9dc6c8dde1b655fbb69ebd600ad
