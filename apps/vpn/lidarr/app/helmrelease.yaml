@@ -103,7 +103,6 @@ spec:
           hajimari.io/info: Music Search
           hajimari.io/group: media
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          external-dns.alpha.kubernetes.io/target: "ipv4.${SECRET_DOMAIN}"
         hosts:
           - host: lidarr.pub.${CLUSTER_DOMAIN}
             paths:
