@@ -26,14 +26,16 @@ spec:
       spec:
         instances: 3 # 1 Primary + 2 Replicas for High Availability
 
-        nodeMaintenanceWindow:
-          inProgress: false
-          reusePVC: true
+        # PodDisruptionBudgets: never evict more than one instance at a time;
+        # the operator switches the primary away before its node is drained
+        enablePDB: true
 
         switchoverDelay: 60 # 1 minute is plenty for "hiccup" protection
 
         # 'unsupervised' means the operator handles primary updates automatically
         primaryUpdateStrategy: unsupervised
+        # Switch over to a synced replica instead of restarting the primary in place
+        primaryUpdateMethod: switchover
 
         postgresql:
           # Quorum-based synchronous replication (replaces minSyncReplicas/maxSyncReplicas)
