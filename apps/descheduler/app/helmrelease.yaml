@@ -1,0 +1,84 @@
+---
+# Rebalances worker memory after node drains (e.g. OKD/MCO updates), which otherwise
+# leave the first-drained nodes crowded and the last-drained node almost empty.
+# See https://github.com/kubernetes-sigs/descheduler
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ${MY_APP}
+spec:
+  chart:
+    spec:
+      chart: descheduler
+      version: 0.36.0
+      interval: 60m
+      sourceRef:
+        kind: HelmRepository
+        name: descheduler
+        namespace: descheduler
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    fullnameOverride: ${MY_APP}
+    # Long-running Deployment instead of the default CronJob (every 2 minutes)
+    kind: Deployment
+    deschedulingInterval: 15m
+    # Set to true for a dry run: only logs which pods it would evict
+    cmdOptions:
+      v: 3
+      dry-run: false
+    resources:
+      requests:
+        cpu: 20m
+        memory: 64Mi
+      limits:
+        memory: 256Mi
+    deschedulerPolicy:
+      # Limit churn: at most 2 evictions per node and run
+      maxNoOfPodsToEvictPerNode: 2
+      profiles:
+        - name: rebalance-memory
+          pluginConfig:
+            - name: DefaultEvictor
+              args:
+                # Only evict if the pod fits on another node
+                nodeFit: true
+                # Leave recently (re)started pods alone: gives the cluster time to settle after an update
+                minPodAge: 30m
+                # Never touch platform/infra pods (openshift-user-critical and above, incl. longhorn-critical)
+                priorityThreshold:
+                  name: openshift-user-critical
+                # Never evict CNPG instances: they are pinned to their node by local volumes
+                labelSelector:
+                  matchExpressions:
+                    - key: cnpg.io/cluster
+                      operator: DoesNotExist
+            - name: LowNodeUtilization
+              args:
+                # Memory requests only; thresholds are deviations from the workers' mean:
+                # nodes > mean+15% give pods to nodes < mean-15%
+                useDeviationThresholds: true
+                thresholds:
+                  memory: 15
+                targetThresholds:
+                  memory: 15
+                evictableNamespaces:
+                  exclude:
+                    - openebs          # Loki/MinIO pinned to local volumes
+                    - longhorn-system
+                    - flux-system
+                    - descheduler
+          plugins:
+            balance:
+              enabled:
+                - LowNodeUtilization
+      # Only consider worker nodes
+      nodeSelector: node-role.kubernetes.io/worker=

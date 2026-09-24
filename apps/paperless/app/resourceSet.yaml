@@ -91,6 +91,17 @@ spec:
             retries: 3
         # See https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
         values:
+          # Spread the paperless instances across workers (soft constraint)
+          defaultPodOptions:
+            labels:
+              app.kubernetes.io/part-of: paperless
+            topologySpreadConstraints:
+              - maxSkew: 1
+                topologyKey: kubernetes.io/hostname
+                whenUnsatisfiable: ScheduleAnyway
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/part-of: paperless
           controllers:
             # Configure the main controller
             main:
