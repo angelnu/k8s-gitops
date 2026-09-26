@@ -64,14 +64,35 @@ spec:
               barmanObjectName: cluster-nas-backup
 
         # 2. Resource Management
-        # NOTE: requests != limits => Burstable QoS, not Guaranteed
+        # NOTE: requests != limits => Burstable QoS, not Guaranteed.
+        # The 2Gi limit gives headroom for the page cache (shared_buffers
+        # below is sized to match) while the low request keeps schedulability.
         resources:
           requests:
             memory: "384Mi"  # observed 2026-09-24: 70-480Mi per instance
             cpu: "20m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "1"
+
+        # 2b. PostgreSQL tuning
+        # - pg_stat_statements for query performance visibility. Declaring the
+        #   extension makes CNPG add shared_preload_libraries automatically.
+        # - More aggressive autovacuum for hot, frequently-updated app tables
+        #   (e.g. Nextcloud oc_filecache / oc_jobs) that never reach the
+        #   default 0.2 / 0.1 scale-factor thresholds.
+        # - Cache sizing matched to the 2Gi memory limit: the operator default
+        #   leaves shared_buffers too small (128MB) and effective_cache_size
+        #   misleadingly large (4GB) relative to the container limit.
+        postgresql:
+          extensions:
+            - pg_stat_statements
+          parameters:
+            autovacuum_vacuum_scale_factor: "0.05"
+            autovacuum_analyze_scale_factor: "0.02"
+            autovacuum_vacuum_cost_limit: "2000"
+            shared_buffers: "512MB"
+            effective_cache_size: "1536MB"
 
         # 3. Storage Configuration
         storage:
