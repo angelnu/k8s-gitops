@@ -92,6 +92,8 @@ spec:
             autovacuum_vacuum_cost_limit: "2000"
             shared_buffers: "512MB"
             effective_cache_size: "1536MB"
+            # Log queries slower than 1s (query-visibility without pg_stat_statements)
+            log_min_duration_statement: "1000"
 
         # 3. Storage Configuration
         storage:

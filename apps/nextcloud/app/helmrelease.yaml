@@ -75,12 +75,31 @@ spec:
           }
     redis:
       enabled: true
+      # Loosened probes: the exec probe + tight timeouts (readiness 1s/2s,
+      # liveness period 5s, failureThreshold 5) killed the replicas (clean
+      # exit 0, 144 restarts) whenever the node briefly saturated.
       master:
         persistence:
           enabled: false
+        livenessProbe:
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 10
+        readinessProbe:
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 10
       replica:
         persistence:
           enabled: false
+        livenessProbe:
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 10
+        readinessProbe:
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 10
       auth:
         existingSecret: nextcloud-helm-values
         existingSecretPasswordKey: REDIS_PASSWORD
