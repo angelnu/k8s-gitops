@@ -69,15 +69,16 @@ spec:
         # below is sized to match) while the low request keeps schedulability.
         resources:
           requests:
-            memory: "384Mi"  # observed 2026-09-24: 70-480Mi per instance
+            memory: "512Mi"  # observed 2026-09-24: 70-480Mi per instance; CNPG requires request >= shared_buffers
             cpu: "20m"
           limits:
             memory: "2Gi"
             cpu: "1"
 
         # 2b. PostgreSQL tuning
-        # - pg_stat_statements for query performance visibility. Declaring the
-        #   extension makes CNPG add shared_preload_libraries automatically.
+        # - pg_stat_statements for query performance visibility. Preloaded via
+        #   shared_preload_libraries (ships with the CNPG image); run
+        #   CREATE EXTENSION pg_stat_statements once per database to expose it.
         # - More aggressive autovacuum for hot, frequently-updated app tables
         #   (e.g. Nextcloud oc_filecache / oc_jobs) that never reach the
         #   default 0.2 / 0.1 scale-factor thresholds.
@@ -85,9 +86,8 @@ spec:
         #   leaves shared_buffers too small (128MB) and effective_cache_size
         #   misleadingly large (4GB) relative to the container limit.
         postgresql:
-          extensions:
-            - name: pg_stat_statements
           parameters:
+            shared_preload_libraries: "pg_stat_statements"
             autovacuum_vacuum_scale_factor: "0.05"
             autovacuum_analyze_scale_factor: "0.02"
             autovacuum_vacuum_cost_limit: "2000"
