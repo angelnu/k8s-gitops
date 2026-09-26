@@ -76,18 +76,17 @@ spec:
             cpu: "1"
 
         # 2b. PostgreSQL tuning
-        # - pg_stat_statements for query performance visibility. Preloaded via
-        #   shared_preload_libraries (ships with the CNPG image); run
-        #   CREATE EXTENSION pg_stat_statements once per database to expose it.
         # - More aggressive autovacuum for hot, frequently-updated app tables
         #   (e.g. Nextcloud oc_filecache / oc_jobs) that never reach the
         #   default 0.2 / 0.1 scale-factor thresholds.
         # - Cache sizing matched to the 2Gi memory limit: the operator default
         #   leaves shared_buffers too small (128MB) and effective_cache_size
         #   misleadingly large (4GB) relative to the container limit.
+        # NOTE: shared_preload_libraries is a fixed operator parameter; enabling
+        # pg_stat_statements requires spec.postgresql.extensions with an
+        # explicit extension image reference (no image catalog configured).
         postgresql:
           parameters:
-            shared_preload_libraries: "pg_stat_statements"
             autovacuum_vacuum_scale_factor: "0.05"
             autovacuum_analyze_scale_factor: "0.02"
             autovacuum_vacuum_cost_limit: "2000"
