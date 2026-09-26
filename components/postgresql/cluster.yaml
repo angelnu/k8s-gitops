@@ -86,7 +86,7 @@ spec:
         #   misleadingly large (4GB) relative to the container limit.
         postgresql:
           extensions:
-            - pg_stat_statements
+            - name: pg_stat_statements
           parameters:
             autovacuum_vacuum_scale_factor: "0.05"
             autovacuum_analyze_scale_factor: "0.02"
