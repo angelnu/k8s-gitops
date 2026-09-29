@@ -53,7 +53,7 @@ spec:
                 memory: 3Gi
             image:
               repository: ghcr.io/esphome/esphome
-              tag: 2026.9.0@sha256:f6509fcf917a732fd80058567b237d5b9286b9dc6c8dde1b655fbb69ebd600ad
+              tag: 2026.9.1@sha256:776a845d508909bf426d2ee7bdd81796361ebe6a7f091807ce1d6d0b48985413
             #env:
             #  ESPHOME_DASHBOARD_USE_PING: "true"
           editor:
