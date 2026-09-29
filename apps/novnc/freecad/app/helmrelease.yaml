@@ -44,7 +44,7 @@ spec:
                 memory: 2Gi
             image:
               repository: ghcr.io/angelnu/freecad-novnc
-              tag: 1.1.3@sha256:e3b205533c6382e1905755f82b7bf770b87b3816756421997c4f98eb8b4ddb9b
+              tag: 1.1.4@sha256:209fdbc9a146ac2fc42240c7228c93542cc9a896ecee305dec606e55a5433d4f
 
             securityContext:
               runAsUser: 33 # www-data
