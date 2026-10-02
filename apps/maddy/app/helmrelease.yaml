@@ -111,10 +111,9 @@ spec:
         ldap:
             # urls:  set in secret
             # dn_template: set in secret
-
-            bind plain: null
-            base_dn: null
-            filter: null
+            # bind plain: set in secret
+            # base_dn: set in secret
+            # filter: set in secret            
             debug: 'true'
             connect_timeout: 1m
       smtp_rules:
