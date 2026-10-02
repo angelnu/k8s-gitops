@@ -41,7 +41,7 @@ spec:
                 memory: 1536Mi
             image:
               repository: ghcr.io/music-assistant/server
-              tag: 2.10.4
+              tag: 2.10.5
             env:
               TZ: "Europe/Berlin"
         pod:
