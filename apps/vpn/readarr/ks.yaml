@@ -14,6 +14,8 @@ spec:
   components:
     - ../../../../components/cephfs_pvc
   prune: true
+  # Component disabled: Readarr project was retired upstream (2025-06-27). See README.md
+  suspend: true
   dependsOn:
     - name: vpn-gateway
   sourceRef:
