@@ -5,7 +5,7 @@ metadata:
   annotations:
     kustomize.toolkit.fluxcd.io/ssa: Merge
 spec:
-  image: quay.io/okderators/catalog-index:testing-4.20
+  image: quay.io/okderators/catalog-index:4.21
   displayName: OKDerators
   publisher: OKDerators
   sourceType: grpc
