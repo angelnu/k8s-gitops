@@ -47,6 +47,12 @@ Backups of pre-migration auth state live in the PVC:
 auth_header component) and `/config/configuration.yaml.bak-*`.
 Delete them once OIDC has proven stable.
 
+## Upstream
+
+- Feature request (pairing screen UX on companion apps — "Continue on this
+device" in-WebView login): christiaangoossens/hass-oidc-auth **discussion #431**
+  (https://github.com/christiaangoossens/hass-oidc-auth/discussions/431)
+
 ## Notes
 
 - The LDAP outpost is still used by other apps (maddy, tt-rss) — do not remove.
