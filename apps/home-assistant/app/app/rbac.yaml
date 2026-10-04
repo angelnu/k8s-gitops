@@ -1,0 +1,28 @@
+---
+# Grant the home-assistant service account the use of the dedicated 'home-assistant' SCC
+# (which allows adding NET_RAW/NET_ADMIN for ICMP ping + DHCP discovery)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: home-assistant-scc
+rules:
+  - apiGroups:
+      - security.openshift.io
+    resources:
+      - securitycontextconstraints
+    resourceNames:
+      - home-assistant
+    verbs:
+      - use
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: home-assistant-scc
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: home-assistant-scc
+subjects:
+  - kind: ServiceAccount
+    name: default

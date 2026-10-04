@@ -49,6 +49,13 @@ authentik users (if added to `ha-users`) get a *fresh* HA profile on first
 login; re-enable linking temporarily only if you need to bind an existing HA
 account.
 
+## ToDo
+
+- [ ] **ef_ble (EcoFlow EF-P31574)**: entry disabled (2026-10-04, `disabled_by: user`)
+  because setup fails with "Stored configuration is missing the device user ID".
+  Pending: check if the device user ID can be recovered/extracted — if not,
+  remove the device and pair it again to repair the config entry.
+
 ## Upstream
 
 - Feature request (pairing screen UX on companion apps — "Continue on this
