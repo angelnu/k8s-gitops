@@ -25,4 +25,4 @@ roleRef:
   name: home-assistant-scc
 subjects:
   - kind: ServiceAccount
-    name: default
+    name: home-assistant
