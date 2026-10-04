@@ -99,7 +99,6 @@ spec:
         proxy-body-size: "4000m"
       extraArgs:
         default-ssl-certificate: "cert-manager/${CLUSTER_DOMAIN_CERT}"
-      use-forwarded-headers: "true"
       service:
         type: LoadBalancer
         externalTrafficPolicy: Local #Required to keep source IP
