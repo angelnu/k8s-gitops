@@ -55,12 +55,27 @@ account.
   because setup fails with "Stored configuration is missing the device user ID".
   Pending: check if the device user ID can be recovered/extracted — if not,
   remove the device and pair it again to repair the config entry.
+- [ ] **homematic → homematic(IP) Local** (`homematicip_local`, HACS): replace the
+  deprecated pyhomematic-based `homematic` integration (unmaintained library,
+  blocking RPC calls stall the event loop). Supports OpenCCU/CCU3/RaspberryMatic
+  over XML-RPC and multiple CCUs (covers `rf` + `rf_pueblo`). Creates NEW
+  entities — migrate references progressively (automations, lovelace, AppDaemon
+  apps: `dimmer_*`, `buttons_*`, `boiler` reading `climate.valve_*`), then
+  disable the legacy integration.
 
 ## Upstream
 
-- Feature request (pairing screen UX on companion apps — "Continue on this
-device" in-WebView login): christiaangoossens/hass-oidc-auth **discussion #431**
-  (https://github.com/christiaangoossens/hass-oidc-auth/discussions/431)
+- In-WebView mobile login ("Continue on this device"): request
+  christiaangoossens/hass-oidc-auth discussion **#431** was closed as duplicate
+  of **PR #317** (closed, `not-planned`: the companion apps use an embedded
+  WebView — WKWebView/Custom Tabs — without session sharing or WebAuthn, so it
+  would break some users). Upstream tracker for that WebView limitation in the
+  companion app: home-assistant/iOS **issue #4661**
+  (https://github.com/home-assistant/iOS/issues/4661, also closed `not_planned`,
+  proposes ASWebAuthenticationSession with WKWebView fallback). Active work on
+  the integration side: PR **#383** (Baseline Device Code and UX Groundwork,
+  draft). Do not request changes from the HA team — they have made clear there
+  will be no further support for custom auth for now.
 
 ## Notes
 
