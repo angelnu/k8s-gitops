@@ -42,10 +42,12 @@ kubectl -n home-assistant exec -it deploy/home-assistant -c main -- \
 # log in via the local form, then revert the configuration.yaml change
 ```
 
-Backups of pre-migration auth state live in the PVC:
-`/config/.bak-purge-local-auth/` (old password store, ldap-auth.py,
-auth_header component) and `/config/configuration.yaml.bak-*`.
-Delete them once OIDC has proven stable.
+Pre-migration auth backups (old password store, ldap-auth.py, auth_header
+component, configuration.yaml.bak-*) were **deleted on 2026-10-04** after all
+users completed SSO linking. `automatic_user_linking` is now `false`: new
+authentik users (if added to `ha-users`) get a *fresh* HA profile on first
+login; re-enable linking temporarily only if you need to bind an existing HA
+account.
 
 ## Upstream
 
