@@ -182,7 +182,23 @@ Implementation candidates: **Envoy Gateway** (richest policy CRDs) or **Traefik*
 **Decision criteria** (owner preference): open source solutions preferred in general — paid licenses only if
 there is no viable open-source alternative.
 
-- **Status**: TBD
-- **Decided on**: <date>
-- **Chosen option**: <Option X>
-- **Rationale**: <fill in when decided>
+- **Status**: Accepted
+- **Decided on**: 2026-10-05
+- **Chosen option**: **Option 3 - Gateway API with Envoy Gateway**
+- **Rationale**:
+  - **100% open source, zero licenses** (owner preference): Envoy Gateway is Apache-2.0 with no commercial
+    tier — every feature we need (SecurityPolicy extAuth, BackendTrafficPolicy, direct responses) is in the
+    open source edition.
+  - **Official successor**: Gateway API is the migration path recommended by Kubernetes in the ingress-nginx
+    retirement announcement — no future re-migration needed.
+  - Option 1 (OpenShift Router) discarded: hard blockers (no forward-auth, no config snippets, no custom
+    error pages) — would require redesigning auth for every protected app (OAuth proxy sidecars).
+  - Option 2 (F5 NIC) feasible with the OSS edition, but it is a single-vendor project whose cleanest auth
+    path (native OIDC policy) is paywalled (NGINX Plus subscription); staying on NGINX keeps the snippet
+    debt and does not adopt the standard.
+  - Gaps accepted with documented mitigations: hajimari Ingress-only discovery (manual services config or
+    replacement), WOPI document affinity (keep collabora at 1 replica), global custom error pages
+    (per-route/deny-route alternatives).
+- **Migration tracked in**: Jira [E26-5312](https://phoenixsystems.atlassian.net/browse/E26-5312)
+  ("MIGRATION: ingress-nginx → Gateway API (Envoy Gateway)", 17 subtasks E26-5313..E26-5329).
+  Related planning task: E26-4627.
