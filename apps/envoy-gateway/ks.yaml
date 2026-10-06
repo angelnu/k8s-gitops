@@ -1,16 +1,18 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+# Two Kustomizations to break the dependency cycle: the EG/Gateway-API CRDs are
+# installed by the HelmRelease (operator/), so the CR-based manifests (app/)
+# must only be applied once the CRDs exist.
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app envoy-gateway
+  name: &app envoy-gateway-operator
   namespace: flux-system
 spec:
   targetNamespace: &ns envoy-gateway
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
-  path: ./apps/envoy-gateway/app
+      app.kubernetes.io/name: envoy-gateway
+  path: ./apps/envoy-gateway/operator
   prune: true
   dependsOn:
     - name: metallb-system-instance
@@ -24,4 +26,30 @@ spec:
   postBuild:
     substitute:
       MY_NAMESPACE: *ns
+      MY_APP: *app
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app envoy-gateway
+  namespace: flux-system
+spec:
+  targetNamespace: *app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./apps/envoy-gateway/app
+  prune: true
+  dependsOn:
+    - name: envoy-gateway-operator
+  sourceRef:
+    kind: GitRepository
+    name: cluster-repository
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+  postBuild:
+    substitute:
+      MY_NAMESPACE: envoy-gateway
       MY_APP: *app
