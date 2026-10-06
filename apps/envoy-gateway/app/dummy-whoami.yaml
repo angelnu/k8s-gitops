@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: whoami
-          image: docker.io/traefik/whoami:v1.11
+          image: docker.io/traefik/whoami:v1.12
           args: ["-port", "8080"] # <1024 needs NET_BIND_SERVICE; pod uid is SCC-assigned on OKD
           ports: [{containerPort: 8080}]
           securityContext:
