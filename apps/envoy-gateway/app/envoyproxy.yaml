@@ -10,19 +10,29 @@ spec:
     type: Kubernetes
     kubernetes:
       envoyDeployment:
+        # OKD restricted-v2: replace the container securityContexts without the
+        # hardcoded uid/gid 65532 so the SCC assigns ids from the namespace range.
         patch:
-          type: JSONPatch
-          jsonPatch:
-            # OKD restricted-v2: drop the hardcoded uid/gid 65532 so the SCC
-            # assigns ids from the namespace range (keeps runAsNonRoot etc.)
-            - op: remove
-              path: /spec/template/spec/containers/0/securityContext/runAsUser
-            - op: remove
-              path: /spec/template/spec/containers/0/securityContext/runAsGroup
-            - op: remove
-              path: /spec/template/spec/containers/1/securityContext/runAsUser
-            - op: remove
-              path: /spec/template/spec/containers/1/securityContext/runAsGroup
+          type: StrategicMerge
+          value:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: envoy
+                      securityContext:
+                        $patch: replace
+                        allowPrivilegeEscalation: false
+                        capabilities: {drop: ["ALL"]}
+                        runAsNonRoot: true
+                        seccompProfile: {type: RuntimeDefault}
+                    - name: shutdown-manager
+                      securityContext:
+                        $patch: replace
+                        allowPrivilegeEscalation: false
+                        capabilities: {drop: ["ALL"]}
+                        runAsNonRoot: true
+                        seccompProfile: {type: RuntimeDefault}
       envoyService:
         type: LoadBalancer
         externalTrafficPolicy: Local # keep source IP, same as ingress-nginx today
