@@ -1,0 +1,16 @@
+---
+# Shared proxy config for all Gateways: MetalLB IP + source-IP preservation
+# (same behaviour as the current ingress-nginx service, see apps/ingress-nginx).
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: gateway-config
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: LoadBalancer
+        externalTrafficPolicy: Local # keep source IP, same as ingress-nginx today
+        annotations:
+          metallb.io/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_GATEWAY}"

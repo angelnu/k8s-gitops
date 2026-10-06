@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# Upstream: https://gateway.envoyproxy.io/latest/install/install-helm/
+# The chart's crds/ dir bundles Gateway API CRDs (experimental channel) + EG CRDs.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: envoy-gateway
+spec:
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: envoy-gateway-helm
+  # renovate: datasource=docker depName=envoyproxy/gateway-helm
+  version: "v1.9.2"
+  maxHistory: 3
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  values:
+    # defaults are fine for OKD (controller runs non-root, restricted-v2 compatible)
+    config:
+      envoyGateway:
+        logging:
+          level:
+            default: info

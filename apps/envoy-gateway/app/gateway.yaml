@@ -1,0 +1,17 @@
+---
+# Main Gateway: will serve *.pub.${CLUSTER_DOMAIN} and *.home.${CLUSTER_DOMAIN}.
+# During the migration it runs ALONGSIDE ingress-nginx with its own MetalLB IP,
+# so routes can be migrated host by host without downtime (ADR: apps/ingress-nginx/README.md).
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: main
+spec:
+  gatewayClassName: eg
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All # apps live in their own namespaces
