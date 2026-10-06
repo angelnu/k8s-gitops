@@ -21,8 +21,6 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
-  dependsOn:
-    - name: envoy-gateway-crds
   values:
     # OKD manages the Gateway API CRDs (Ingress Operator, v1.4.1 standard) ->
     # the chart must not touch them; EG CRDs come from the envoy-gateway-crds release.
