@@ -26,6 +26,30 @@ spec:
     # the chart must not touch them; EG CRDs come from the envoy-gateway-crds release.
     crds:
       enabled: false
+    # OKD restricted-v2: strip the hardcoded uid/gid 65532 so the SCC assigns
+    # ids from the namespace range (helm nulls remove the chart defaults).
+    topologyInjector:
+      enabled: false # optional zone-aware LB helper; not needed in a home cluster
+    deployment:
+      pod:
+        securityContext:
+          runAsUser: null
+          runAsGroup: null
+          fsGroup: null
+      envoyGateway:
+        securityContext:
+          runAsUser: null
+          runAsGroup: null
+    certgen:
+      job:
+        securityContext:
+          runAsUser: null
+          runAsGroup: null
+        pod:
+          securityContext:
+            runAsUser: null
+            runAsGroup: null
+            fsGroup: null
     config:
       envoyGateway:
         logging:
