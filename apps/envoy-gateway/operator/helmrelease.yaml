@@ -11,8 +11,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: envoy-gateway-helm
-  # renovate: datasource=docker depName=envoyproxy/gateway-helm
-  version: "v1.9.2"
+  # version pinned by the OCIRepository ref (semver 1.9.x; renovate: datasource=docker depName=envoyproxy/gateway-helm)
   maxHistory: 3
   install:
     crds: CreateReplace
