@@ -167,8 +167,6 @@ spec:
           hajimari.io/icon: vscode-icons:file-type-vscode
           hajimari.io/info: Home-Assistant Editor
           hajimari.io/group: automation
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            auth_request_set $required_groups 'casa_editors';
         hosts:
           - host: ha-editor.pub.${CLUSTER_DOMAIN}
             paths: &paths_editor

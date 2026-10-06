@@ -133,8 +133,6 @@ spec:
           hajimari.io/icon: simple-icons:esphome
           hajimari.io/info: Programs esphome devices
           hajimari.io/group: automation
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            auth_request_set $required_groups 'casa_editors';
         hosts:
           - host: esphome.pub.${CLUSTER_DOMAIN}
             paths: &paths
@@ -152,8 +150,6 @@ spec:
           hajimari.io/icon: vscode-icons:file-type-vscode
           hajimari.io/info: Esphome editor
           hajimari.io/group: automation
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            auth_request_set $required_groups 'casa_editors';
         hosts:
           - host: esphome-editor.home.${CLUSTER_DOMAIN}
             paths: &paths_editor

@@ -80,8 +80,6 @@ spec:
           hajimari.io/icon: game-icons:meal
           hajimari.io/info: Meal Recipes
           hajimari.io/group: documents
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            auth_request_set $required_groups 'casa_editors';
         hosts:
           - host: mealie.pub.${CLUSTER_DOMAIN}
             paths: &paths
