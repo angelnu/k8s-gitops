@@ -32,13 +32,15 @@ spec:
           identifier: default
         containers:
           main:
-            # observed 2026-09-24: p95 560Mi, max 620Mi. Generous limit; review with >=1 week of Prometheus data
+            # 2026-10-07: 1536Mi limit caused SIGBUS (exit 135) at MA 2.10.5 startup (providers+ffmpeg spike);
+            # crashloop corrupted library.db (issue #6435). MA docs recommend >=4Gi for full features (Smart Fades).
+            # steady-state p95 is ~560Mi, so requests stay modest; limits give startup headroom.
             resources:
               requests:
                 cpu: 20m
-                memory: 640Mi
+                memory: 1Gi
               limits:
-                memory: 1536Mi
+                memory: 4Gi
             image:
               repository: ghcr.io/music-assistant/server
               tag: 2.10.5
