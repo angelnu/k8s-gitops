@@ -9,6 +9,20 @@ spec:
   provider:
     type: Kubernetes
     kubernetes:
+      envoyDeployment:
+        patch:
+          type: JSONPatch
+          jsonPatch:
+            # OKD restricted-v2: drop the hardcoded uid/gid 65532 so the SCC
+            # assigns ids from the namespace range (keeps runAsNonRoot etc.)
+            - op: remove
+              path: /spec/template/spec/containers/0/securityContext/runAsUser
+            - op: remove
+              path: /spec/template/spec/containers/0/securityContext/runAsGroup
+            - op: remove
+              path: /spec/template/spec/containers/1/securityContext/runAsUser
+            - op: remove
+              path: /spec/template/spec/containers/1/securityContext/runAsGroup
       envoyService:
         type: LoadBalancer
         externalTrafficPolicy: Local # keep source IP, same as ingress-nginx today
