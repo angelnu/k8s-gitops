@@ -149,3 +149,13 @@ spec:
         parentRefs:
           - name: main
             namespace: envoy-gateway
+        # explicit match: auto-generated rules default to / and would shadow
+        # nothing, but the /scrapping/ path must win over the tt-rss route's /
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /scrapping/
+            backendRefs:
+              - identifier: main
+                port: http
