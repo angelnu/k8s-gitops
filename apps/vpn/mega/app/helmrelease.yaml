@@ -94,3 +94,17 @@ spec:
                 service:
                   identifier: main
                   port: http
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:mega
+          hajimari.io/info: MEGA Downloader
+          hajimari.io/group: media
+        hostnames:
+          - mega.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

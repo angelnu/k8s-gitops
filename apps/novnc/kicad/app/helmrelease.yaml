@@ -107,6 +107,20 @@ spec:
                 service:
                   identifier: main
                   port: http
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:kicad
+          hajimari.io/info: KiCad
+          hajimari.io/group: tools
+        hostnames:
+          - "kicad.pub.${CLUSTER_DOMAIN}"
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
     image:
       repository: ghcr.io/angelnu/kicad-novnc
       tag: 7.0.9@sha256:2e0b872d092d81e2555cdfcade898336f72210be1f18a03c720af3d71174cd6c

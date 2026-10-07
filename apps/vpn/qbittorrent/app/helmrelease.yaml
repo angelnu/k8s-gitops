@@ -125,3 +125,17 @@ spec:
                 service:
                   identifier: main
                   port: http
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: cloud-download
+          hajimari.io/info: Torrent Downloader
+          hajimari.io/group: media
+        hostnames:
+          - torrent.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

@@ -111,3 +111,17 @@ spec:
                 service:
                   identifier: main
                   port: http
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: music-box
+          hajimari.io/info: Music Search
+          hajimari.io/group: media
+        hostnames:
+          - lidarr.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

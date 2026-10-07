@@ -117,3 +117,18 @@ spec:
                   port: http
           - host: photos.home.${CLUSTER_DOMAIN}
             paths: *paths
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: arcticons:photoprism
+          hajimari.io/info: Manage Photos
+          hajimari.io/group: media
+        hostnames:
+          - photos.pub.${CLUSTER_DOMAIN}
+          - photos.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

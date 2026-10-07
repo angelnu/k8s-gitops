@@ -104,3 +104,18 @@ spec:
                   port: http
           - host: handbrake.home.${CLUSTER_DOMAIN}
             paths: *paths
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: file-video
+          hajimari.io/info: Video editor
+          hajimari.io/group: media
+        hostnames:
+          - handbrake.pub.${CLUSTER_DOMAIN}
+          - handbrake.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

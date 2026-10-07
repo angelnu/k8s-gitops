@@ -1,0 +1,44 @@
+---
+# ReferenceGrant so SecurityPolicies running in the app namespaces (ext_authz
+# forward-auth) may reach the authentik outpost service ak-outpost-ingress.
+# The `from` list grows as apps migrate to Gateway API (pattern: step 3.3 demo,
+# one entry per app namespace). Also covers the whoami demo SecurityPolicy in
+# ns envoy-gateway (its hand-applied `ext-auth-outpost` grant in this namespace
+# is deleted together with the demo in 3.10).
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: ext-auth-outpost-apps
+spec:
+  from:
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: envoy-gateway
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: vpn
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: novnc
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: jellyfin
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: photoprism
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: handbrake
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: apache-musicindex
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: searxng
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: deepstack
+  to:
+    - group: ""
+      kind: Service
+      name: ak-outpost-ingress

@@ -98,3 +98,17 @@ spec:
                 service:
                   identifier: main
                   port: https
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: folder-music
+          hajimari.io/info: Streams local music via Apache
+          hajimari.io/group: media
+        hostnames:
+          - music.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

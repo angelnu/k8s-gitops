@@ -15,3 +15,15 @@ spec:
       allowedRoutes:
         namespaces:
           from: All # apps live in their own namespaces
+    - name: https
+      protocol: HTTPS
+      port: 443
+      tls:
+        # shared wildcard cert (letsencrypt-prod DNS01, auto-renewed) reflected
+        # from ns cert-manager via reflector
+        certificateRefs:
+          - kind: Secret
+            name: cluster-domain-cert
+      allowedRoutes:
+        namespaces:
+          from: All

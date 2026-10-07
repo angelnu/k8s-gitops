@@ -107,3 +107,17 @@ spec:
                 service:
                   identifier: main
                   port: http
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:mdbook
+          hajimari.io/info: Comic Book
+          hajimari.io/group: media
+        hostnames:
+          - milar3.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

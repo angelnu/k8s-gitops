@@ -94,3 +94,18 @@ spec:
                   port: ui
           - host: deepstack.home.${CLUSTER_DOMAIN}
             paths: *paths
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: cctv
+          hajimari.io/info: Image recognition
+          hajimari.io/group: automation
+        hostnames:
+          - deepstack.pub.${CLUSTER_DOMAIN}
+          - deepstack.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

@@ -114,3 +114,17 @@ spec:
                 service:
                   identifier: main
                   port: http
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: mdi:file-cad-box
+          hajimari.io/info: FreeCAD
+          hajimari.io/group: tools
+        hostnames:
+          - "freecad.pub.${CLUSTER_DOMAIN}"
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
