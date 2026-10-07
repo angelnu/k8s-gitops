@@ -80,9 +80,6 @@ spec:
       namespace: gatus
     - group: gateway.envoyproxy.io
       kind: SecurityPolicy
-      namespace: hajimari
-    - group: gateway.envoyproxy.io
-      kind: SecurityPolicy
       namespace: routeboard
     - group: gateway.envoyproxy.io
       kind: SecurityPolicy
