@@ -36,7 +36,7 @@ data:
 ---
 # BackendTLSPolicy so Envoy Gateway connects to the unifi controller (port
 # 'http' = 8443) over TLS and validates its self-signed cert
-apiVersion: gateway.networking.k8s.io/v1alpha3
+apiVersion: gateway.networking.k8s.io/v1
 kind: BackendTLSPolicy
 metadata:
   name: unifi-backend-tls
