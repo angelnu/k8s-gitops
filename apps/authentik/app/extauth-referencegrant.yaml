@@ -75,6 +75,15 @@ spec:
     - group: gateway.envoyproxy.io
       kind: SecurityPolicy
       namespace: music-assistant
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: gatus
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: hajimari
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: reverse-proxy
   to:
     - group: ""
       kind: Service
