@@ -1,0 +1,70 @@
+---
+# BackendTLSPolicies so Envoy Gateway connects to the Proxmox hosts (port 8006)
+# over TLS and validates their Let's Encrypt certificates (SAN DNS:pveN.angelnu.com,
+# issued by Let's Encrypt, auto-renewed on the hosts). The system CA trust store
+# (wellKnownCACertificates: System) validates the chain - no per-host cert copies
+# to maintain.
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: reverse-proxy-pve1-backend-tls
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: reverse-proxy-pve1
+  validation:
+    hostname: pve1.angelnu.com
+    wellKnownCACertificates: System
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: reverse-proxy-pve2-backend-tls
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: reverse-proxy-pve2
+  validation:
+    hostname: pve2.angelnu.com
+    wellKnownCACertificates: System
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: reverse-proxy-pve3-backend-tls
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: reverse-proxy-pve3
+  validation:
+    hostname: pve3.angelnu.com
+    wellKnownCACertificates: System
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: reverse-proxy-pve4-backend-tls
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: reverse-proxy-pve4
+  validation:
+    hostname: pve4.angelnu.com
+    wellKnownCACertificates: System
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: reverse-proxy-pve5-backend-tls
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: reverse-proxy-pve5
+  validation:
+    hostname: pve5.angelnu.com
+    wellKnownCACertificates: System

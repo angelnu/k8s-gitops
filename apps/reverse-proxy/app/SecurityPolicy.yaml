@@ -1,0 +1,401 @@
+---
+# Forward-auth via authentik outpost (envoy ext_authz mode), pattern rehearsed in step 3.3.
+# ONE SecurityPolicy per protected named route. nas and nas-backup are PUBLIC
+# (nginx.ingress.kubernetes.io/enable-global-auth: "false" in release.yaml) and
+# get NO policy; router/nas/nas-backup/pikvm are not migrated at all (see
+# HTTPRoute.yaml header).
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-fritz-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-fritz
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-mobile-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-mobile
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-pve1-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-pve1
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-pve2-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-pve2
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-pve3-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-pve3
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-pve4-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-pve4
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-pve5-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-pve5
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-octoprint-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-octoprint
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-octoprint-mini-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-octoprint-mini
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-printer-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-printer
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: reverse-proxy-prusa-sla-forward-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: reverse-proxy-prusa-sla
+  extAuth:
+    failOpen: false
+    recomputeRoute: true
+    headersToExtAuth:
+      - "X-Forwarded-For"
+      - "X-Real-Ip"
+      - "accept"
+      - "cookie"
+      - "authorization"
+      - "proxy-authorization"
+      - "x-forwarded-proto"
+    http:
+      backendRefs:
+        - kind: Service
+          name: ak-outpost-ingress
+          namespace: authentik
+          port: 9000
+      path: /outpost.goauthentik.io/auth/envoy
+      headersToBackend:
+        - "Set-Cookie"
+        - "X-authentik-uid"
+        - "X-authentik-username"
+        - "X-authentik-name"
+        - "X-authentik-email"
+        - "X-authentik-groups"
+        - "X-authentik-entitlements"

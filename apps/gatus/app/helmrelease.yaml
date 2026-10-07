@@ -71,6 +71,20 @@ spec:
                   identifier: main
                   port: http
 
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: connection
+          hajimari.io/info: Service Status Monitor
+          hajimari.io/group: cluster
+        hostnames:
+          - gatus.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
+
     configMaps:
       config:
         # -- Store gatus configuration as a ConfigMap

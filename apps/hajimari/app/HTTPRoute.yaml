@@ -1,0 +1,23 @@
+---
+# Raw HTTPRoute: the hajimari chart (2.0.2) has no route.<name> support, so the
+# route lives next to the HelmRelease; the chart ingress stays untouched (rule 1).
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: hajimari
+  annotations:
+    hajimari.io/enable: "true"
+    hajimari.io/icon: weather-sunset
+    hajimari.io/info: Casa96 home dashboard
+    hajimari.io/group: cluster
+spec:
+  parentRefs:
+    - name: main
+      namespace: envoy-gateway
+  hostnames:
+    - home.${CLUSTER_SHORT_DOMAIN}
+  rules:
+    - backendRefs:
+        - kind: Service
+          name: hajimari
+          port: 3000

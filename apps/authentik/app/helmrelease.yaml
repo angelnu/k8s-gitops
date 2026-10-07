@@ -105,6 +105,20 @@ spec:
         - hosts:
           - authentik.pub.${CLUSTER_DOMAIN}
 
+      route:
+        main:
+          enabled: true
+          annotations:
+            hajimari.io/enable: "true"
+            hajimari.io/icon: simple-icons:authentik
+            hajimari.io/info: Single Sign On for Casa96
+            hajimari.io/group: cluster
+          hostnames:
+            - authentik.pub.${CLUSTER_DOMAIN}
+          parentRefs:
+            - name: main
+              namespace: envoy-gateway
+
     worker:
       # observed 2026-09-24: p95 1.2Gi, max 1.2Gi. Generous limit; review with >=1 week of Prometheus data
       resources:

@@ -263,3 +263,17 @@ spec:
                       service:
                         identifier: main
                         port: http
+
+          route:
+            main:
+              enabled: true
+              annotations:
+                hajimari.io/enable: "true"
+                hajimari.io/icon: arcticons:paperless
+                hajimari.io/info: Store PDFs
+                hajimari.io/group: << inputs.hajimari_group >>
+              hostnames:
+                - << inputs.hostname >>
+              parentRefs:
+                - name: main
+                  namespace: envoy-gateway

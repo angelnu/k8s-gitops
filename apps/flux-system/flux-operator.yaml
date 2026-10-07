@@ -53,6 +53,18 @@ spec:
             paths:
               - path: /
                 pathType: Prefix
+      httpRoute:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:flux
+          hajimari.io/info: Flux Operator
+          hajimari.io/group: cluster
+        hostnames:
+          - flux.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
   valuesFrom:
   - kind: Secret
     name: flux-operator-values
