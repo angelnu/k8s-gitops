@@ -12,8 +12,6 @@ spec:
       app.kubernetes.io/name: *app
   path: ./apps/photoprism/app
   prune: true
-  dependsOn:
-    - name: ingress-nginx
   sourceRef:
     kind: GitRepository
     name: cluster-repository

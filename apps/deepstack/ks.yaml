@@ -14,8 +14,6 @@ spec:
   components:
     - ../../../components/cephfs_pvc
   prune: true
-  dependsOn:
-    - name: ingress-nginx
   sourceRef:
     kind: GitRepository
     name: cluster-repository

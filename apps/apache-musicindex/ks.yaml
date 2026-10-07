@@ -13,7 +13,6 @@ spec:
   path: ./apps/apache-musicindex/app
   prune: true
   dependsOn:
-    - name: ingress-nginx
     - name: ceph-csi-cephfs
   sourceRef:
     kind: GitRepository

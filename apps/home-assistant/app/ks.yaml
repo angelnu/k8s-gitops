@@ -15,7 +15,6 @@ spec:
     - ../../../../components/cephfs_pvc
   prune: true
   dependsOn:
-    - name: ingress-nginx
     - name: home-assistant-db
     - name: cluster-common
   sourceRef:

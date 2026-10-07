@@ -16,7 +16,6 @@ spec:
     - ../../../components/nfs_pvc
   prune: true
   dependsOn:
-    - name: ingress-nginx
     - name: ceph-csi-cephfs
   sourceRef:
     kind: GitRepository

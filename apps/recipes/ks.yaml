@@ -17,7 +17,6 @@ spec:
   prune: true
   dependsOn:
     - name: openshift-operators
-    - name: ingress-nginx
   sourceRef:
     kind: GitRepository
     name: cluster-repository
