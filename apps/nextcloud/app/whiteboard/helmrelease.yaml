@@ -65,7 +65,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           # Keep the persistent websocket connection alive
@@ -84,6 +84,8 @@ spec:
           - ${WHITEBOARD_HOST}
     route:
       main:
+        annotations:
+          routeboard.io/hidden: "true"
         enabled: true
         hostnames:
           - ${WHITEBOARD_HOST}

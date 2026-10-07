@@ -139,7 +139,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         annotations:
           nginx.org/websocket-services: home-assistant
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
@@ -157,7 +157,7 @@ spec:
           - host: ha.home.${CLUSTER_DOMAIN}
             paths: *paths
       editor:
-        enabled: true
+        enabled: false
         hosts:
           - host: ha-editor.pub.${CLUSTER_DOMAIN}
             paths: &paths_editor
@@ -169,6 +169,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "automation"
         enabled: true
         hostnames:
           - ha.${CLUSTER_SHORT_DOMAIN}
@@ -183,6 +185,8 @@ spec:
               - identifier: main
                 port: http
       editor:
+        annotations:
+          routeboard.io/group: "automation"
         enabled: true
         hostnames:
           - ha-editor.pub.${CLUSTER_DOMAIN}

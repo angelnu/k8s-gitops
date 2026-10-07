@@ -118,7 +118,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
@@ -134,6 +134,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "media"
         enabled: true
         hostnames:
           - jellyfin.home.${CLUSTER_DOMAIN}

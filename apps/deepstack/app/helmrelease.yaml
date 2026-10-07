@@ -78,7 +78,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: deepstack.pub.${CLUSTER_DOMAIN}
             paths: &paths
@@ -92,6 +92,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "automation"
         enabled: true
         hostnames:
           - deepstack.pub.${CLUSTER_DOMAIN}

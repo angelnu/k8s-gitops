@@ -73,6 +73,7 @@ spec:
 
     ingress:
       main:
+        enabled: false
         hosts:
           - host: "search.${CLUSTER_SHORT_DOMAIN}"
             paths: &paths
@@ -86,6 +87,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "tools"
         enabled: true
         hostnames:
           - "search.${CLUSTER_SHORT_DOMAIN}"

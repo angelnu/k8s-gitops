@@ -111,7 +111,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: torrent.pub.${CLUSTER_DOMAIN}
             paths:
@@ -123,6 +123,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "media"
         enabled: true
         hostnames:
           - torrent.pub.${CLUSTER_DOMAIN}

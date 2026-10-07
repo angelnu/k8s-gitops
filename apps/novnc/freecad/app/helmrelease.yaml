@@ -100,7 +100,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: "freecad.pub.${CLUSTER_DOMAIN}"
             paths:
@@ -112,6 +112,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "tools"
         enabled: true
         hostnames:
           - "freecad.pub.${CLUSTER_DOMAIN}"

@@ -56,7 +56,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: gatus.pub.${CLUSTER_DOMAIN}
             paths:
@@ -68,6 +68,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "cluster"
         enabled: true
         hostnames:
           - gatus.pub.${CLUSTER_DOMAIN}

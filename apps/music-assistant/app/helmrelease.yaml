@@ -110,7 +110,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: ma.pub.${CLUSTER_DOMAIN}
             paths: &paths
@@ -120,7 +120,7 @@ spec:
                   identifier: main
                   port: http
       home:
-        enabled: true
+        enabled: false
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
@@ -135,6 +135,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "media"
         enabled: true
         hostnames:
           - ma.pub.${CLUSTER_DOMAIN}
@@ -142,6 +144,8 @@ spec:
           - name: main
             namespace: envoy-gateway
       home:
+        annotations:
+          routeboard.io/hidden: "true"
         enabled: true
         hostnames:
           - ma.home.${CLUSTER_DOMAIN}

@@ -97,7 +97,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: sonarr.pub.${CLUSTER_DOMAIN}
             paths:
@@ -109,6 +109,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "media"
         enabled: true
         hostnames:
           - sonarr.pub.${CLUSTER_DOMAIN}

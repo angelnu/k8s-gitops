@@ -121,7 +121,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         annotations:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
@@ -138,6 +138,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "network"
         enabled: true
         hostnames:
           - unifi.pub.${CLUSTER_DOMAIN}

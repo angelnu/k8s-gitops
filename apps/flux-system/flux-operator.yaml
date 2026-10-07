@@ -41,7 +41,7 @@ spec:
             - groups
             - offline_access
       ingress:
-        enabled: true
+        enabled: false
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:
@@ -50,6 +50,8 @@ spec:
               - path: /
                 pathType: Prefix
       httpRoute:
+        annotations:
+          routeboard.io/group: "cluster"
         enabled: true
         hostnames:
           - flux.pub.${CLUSTER_DOMAIN}

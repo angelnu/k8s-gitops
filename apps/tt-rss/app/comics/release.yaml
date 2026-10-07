@@ -122,7 +122,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         annotations:
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           #nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
@@ -139,6 +139,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/hidden: "true"
         enabled: true
         hostnames:
           - rss.${CLUSTER_SHORT_DOMAIN}

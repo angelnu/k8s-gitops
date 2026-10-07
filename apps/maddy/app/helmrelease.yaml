@@ -370,6 +370,7 @@ spec:
 
     ingress:
       editor:
+        enabled: false
         hosts:
           - host: maddy-editor.pub.${CLUSTER_DOMAIN}
             paths: &paths_editor
@@ -381,6 +382,8 @@ spec:
 
     route:
       editor:
+        annotations:
+          routeboard.io/group: "tools"
         enabled: true
         hostnames:
           - maddy-editor.pub.${CLUSTER_DOMAIN}

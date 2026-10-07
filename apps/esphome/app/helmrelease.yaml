@@ -127,7 +127,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: esphome.pub.${CLUSTER_DOMAIN}
             paths: &paths
@@ -139,7 +139,7 @@ spec:
           - host: esphome.home.${CLUSTER_DOMAIN}
             paths: *paths
       editor:
-        enabled: true
+        enabled: false
         hosts:
           - host: esphome-editor.home.${CLUSTER_DOMAIN}
             paths: &paths_editor
@@ -153,6 +153,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "automation"
         enabled: true
         hostnames:
           - esphome.pub.${CLUSTER_DOMAIN}
@@ -166,6 +168,8 @@ spec:
               - identifier: main
                 port: http
       editor:
+        annotations:
+          routeboard.io/group: "automation"
         enabled: true
         hostnames:
           - esphome-editor.home.${CLUSTER_DOMAIN}

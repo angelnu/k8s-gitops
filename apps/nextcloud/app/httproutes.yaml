@@ -6,6 +6,8 @@ kind: HTTPRoute
 metadata:
   name: nextcloud
   namespace: nextcloud
+  annotations:
+    routeboard.io/group: "tools"
 spec:
   parentRefs:
     - name: main
@@ -131,6 +133,8 @@ kind: HTTPRoute
 metadata:
   name: nextcloud-collabora
   namespace: nextcloud
+  annotations:
+    routeboard.io/hidden: "true"
 spec:
   parentRefs:
     - name: main

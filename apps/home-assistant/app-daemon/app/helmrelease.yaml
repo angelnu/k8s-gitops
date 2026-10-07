@@ -64,7 +64,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: ha-app.home.${CLUSTER_DOMAIN}
             paths: &paths
@@ -78,6 +78,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "automation"
         enabled: true
         hostnames:
           - ha-app.home.${CLUSTER_DOMAIN}

@@ -87,7 +87,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: readarr.pub.${CLUSTER_DOMAIN}
             paths:

@@ -157,3 +157,22 @@ spec:
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: pikvm.pub.${CLUSTER_DOMAIN}
+
+  # The chart (4.0.0) has no per-instance ingress disable flag and always
+  # templates an Ingress per instance. Those Ingresses are inert since the
+  # ingress-nginx decommission (the HTTPRoutes in HTTPRoute.yaml are the real
+  # routes and reference the chart's Services, which must stay). Delete the
+  # rendered Ingress objects post-render so RouteBoard stops seeing the
+  # duplicate Ingress routes (dashboard parity, 3.9 follow-up of #6432).
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Ingress
+              labelSelector: app.kubernetes.io/instance=reverse-proxy
+            patch: |-
+              $patch: delete
+              apiVersion: networking.k8s.io/v1
+              kind: Ingress
+              metadata:
+                name: unused

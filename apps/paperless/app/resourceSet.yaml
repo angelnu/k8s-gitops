@@ -246,7 +246,7 @@ spec:
 
           ingress:
             main:
-              enabled: true
+              enabled: false
               annotations:
                 nginx.ingress.kubernetes.io/proxy-body-size: 4G
                 nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
@@ -262,6 +262,8 @@ spec:
 
           route:
             main:
+              annotations:
+                routeboard.io/group: << inputs.hajimari_group >>
               enabled: true
               hostnames:
                 - << inputs.hostname >>

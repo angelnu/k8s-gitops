@@ -100,7 +100,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: 4G
         hosts:
@@ -116,6 +116,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "media"
         enabled: true
         hostnames:
           - photos.pub.${CLUSTER_DOMAIN}

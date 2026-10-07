@@ -22,6 +22,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-fritz
   annotations:
+    routeboard.io/group: "network"
 spec:
   parentRefs:
     - name: main
@@ -40,6 +41,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-mobile
   annotations:
+    routeboard.io/group: "network"
 spec:
   parentRefs:
     - name: main
@@ -58,6 +60,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-pve1
   annotations:
+    routeboard.io/group: "admin"
 spec:
   parentRefs:
     - name: main
@@ -76,6 +79,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-pve2
   annotations:
+    routeboard.io/group: "admin"
 spec:
   parentRefs:
     - name: main
@@ -94,6 +98,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-pve3
   annotations:
+    routeboard.io/group: "admin"
 spec:
   parentRefs:
     - name: main
@@ -112,6 +117,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-pve4
   annotations:
+    routeboard.io/group: "admin"
 spec:
   parentRefs:
     - name: main
@@ -130,6 +136,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-pve5
   annotations:
+    routeboard.io/group: "admin"
 spec:
   parentRefs:
     - name: main
@@ -148,6 +155,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-octoprint
   annotations:
+    routeboard.io/group: "Printers"
 spec:
   parentRefs:
     - name: main
@@ -166,6 +174,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-octoprint-mini
   annotations:
+    routeboard.io/group: "Printers"
 spec:
   parentRefs:
     - name: main
@@ -184,6 +193,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-printer
   annotations:
+    routeboard.io/group: "Printers"
 spec:
   parentRefs:
     - name: main
@@ -202,6 +212,7 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-prusa-sla
   annotations:
+    routeboard.io/group: "Printers"
 spec:
   parentRefs:
     - name: main

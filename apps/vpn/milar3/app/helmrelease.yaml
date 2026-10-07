@@ -93,7 +93,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: milar3.pub.${CLUSTER_DOMAIN}
             paths:
@@ -105,6 +105,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "media"
         enabled: true
         hostnames:
           - milar3.pub.${CLUSTER_DOMAIN}

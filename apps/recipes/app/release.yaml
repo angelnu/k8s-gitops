@@ -104,7 +104,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
           # nginx.ingress.kubernetes.io/configuration-snippet: |

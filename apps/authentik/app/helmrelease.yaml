@@ -87,7 +87,7 @@ spec:
       replicas: 2
 
       ingress:
-        enabled: true
+        enabled: false
         annotations:
           nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
           nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
@@ -103,6 +103,8 @@ spec:
 
       route:
         main:
+          annotations:
+            routeboard.io/group: "cluster"
           enabled: true
           hostnames:
             - authentik.pub.${CLUSTER_DOMAIN}

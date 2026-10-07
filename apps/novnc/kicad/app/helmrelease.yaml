@@ -93,7 +93,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: "kicad.pub.${CLUSTER_DOMAIN}"
             paths:
@@ -105,6 +105,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "tools"
         enabled: true
         hostnames:
           - "kicad.pub.${CLUSTER_DOMAIN}"

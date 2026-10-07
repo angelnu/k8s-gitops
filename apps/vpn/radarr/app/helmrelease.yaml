@@ -95,7 +95,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
+        enabled: false
         hosts:
           - host: radarr.pub.${CLUSTER_DOMAIN}
             paths:
@@ -107,6 +107,8 @@ spec:
 
     route:
       main:
+        annotations:
+          routeboard.io/group: "media"
         enabled: true
         hostnames:
           - radarr.pub.${CLUSTER_DOMAIN}
