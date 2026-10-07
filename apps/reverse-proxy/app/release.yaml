@@ -40,7 +40,9 @@ spec:
             - host: router.home.${CLUSTER_DOMAIN}
             - host: router.pub.${CLUSTER_DOMAIN}
       - name: fritz
-        externalName: fritz.box
+        # EG (v1.9) does not support ExternalName services as HTTPRoute backends
+        # -> pin the device IP (matches the current fritz.box DNS record, static DHCP)
+        ip: 192.168.2.182
         port: 80
         ingress:
           annotations:
@@ -53,7 +55,8 @@ spec:
             - host: fritz.home.${CLUSTER_DOMAIN}
             - host: fritz.pub.${CLUSTER_DOMAIN}
       - name: mobile
-        externalName: mobile.box
+        # EG does not support ExternalName backends -> pinned IP (mobile.box)
+        ip: 192.168.62.1
         port: 80
         ingress:
           annotations:
@@ -66,7 +69,7 @@ spec:
             - host: mobile.home.${CLUSTER_DOMAIN}
             - host: mobile.pub.${CLUSTER_DOMAIN}
       - name: pve1
-        externalName: 192.168.4.11
+        ip: 192.168.4.11
         port: 8006
         ingress:
           annotations:
@@ -80,7 +83,7 @@ spec:
             - host: pve1.home.${CLUSTER_DOMAIN}
             - host: pve1.pub.${CLUSTER_DOMAIN}
       - name: pve2
-        externalName: 192.168.4.12
+        ip: 192.168.4.12
         port: 8006
         ingress:
           annotations:
@@ -94,7 +97,7 @@ spec:
             - host: pve2.home.${CLUSTER_DOMAIN}
             - host: pve2.pub.${CLUSTER_DOMAIN}
       - name: pve3
-        externalName: 192.168.4.13
+        ip: 192.168.4.13
         port: 8006
         ingress:
           annotations:
@@ -108,7 +111,7 @@ spec:
             - host: pve3.home.${CLUSTER_DOMAIN}
             - host: pve3.pub.${CLUSTER_DOMAIN}
       - name: pve4
-        externalName: 192.168.4.14
+        ip: 192.168.4.14
         port: 8006
         ingress:
           annotations:
@@ -122,7 +125,7 @@ spec:
             - host: pve4.home.${CLUSTER_DOMAIN}
             - host: pve4.pub.${CLUSTER_DOMAIN}
       - name: pve5
-        externalName: 192.168.4.15
+        ip: 192.168.4.15
         port: 8006
         ingress:
           annotations:
@@ -136,7 +139,8 @@ spec:
             - host: pve5.home.${CLUSTER_DOMAIN}
             - host: pve5.pub.${CLUSTER_DOMAIN}
       - name: octoprint
-        externalName: prusa.lan
+        # EG does not support ExternalName backends -> pinned IP (prusa.lan)
+        ip: 192.168.2.171
         port: 80
         ingress:
           annotations:
@@ -149,7 +153,8 @@ spec:
             - host: prusa.home.${CLUSTER_DOMAIN}
             - host: prusa.pub.${CLUSTER_DOMAIN}
       - name: octoprint-mini
-        externalName: prusa-mini.lan
+        # EG does not support ExternalName backends -> pinned IP (prusa-mini.lan)
+        ip: 192.168.2.47
         port: 80
         test: false
         ingress:
@@ -163,7 +168,8 @@ spec:
             - host: prusa-mini.home.${CLUSTER_DOMAIN}
             - host: prusa-mini.pub.${CLUSTER_DOMAIN}
       - name: printer
-        externalName: printer-canon.lan
+        # EG does not support ExternalName backends -> pinned IP (printer-canon.lan)
+        ip: 192.168.2.117
         port: 80
         ingress:
           annotations:
@@ -176,7 +182,8 @@ spec:
             - host: print.pub.${CLUSTER_DOMAIN}
             - host: print.home.${CLUSTER_DOMAIN}
       - name: prusa-sla
-        externalName: prusa-sla.lan
+        # EG does not support ExternalName backends -> pinned IP (prusa-sla.lan)
+        ip: 192.168.2.98
         port: 80
         test: false
         ingress:

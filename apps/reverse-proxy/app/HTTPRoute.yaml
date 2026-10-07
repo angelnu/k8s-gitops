@@ -4,6 +4,10 @@
 # release.yaml and the chart ingress stays untouched (rule 1 — both models
 # coexist until the final cutover).
 #
+# Envoy Gateway (v1.9) does not support ExternalName services as HTTPRoute
+# backends, so the migrated instances in release.yaml were switched from
+# externalName to pinned device IPs (chart's native ip/Endpoints mode).
+#
 # Skipped instances (backend cannot be served through Envoy Gateway yet, they
 # keep running via ingress-nginx):
 #   - router: backend casa96.lan no longer resolves (503 via ingress-nginx too);
