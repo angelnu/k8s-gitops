@@ -139,3 +139,24 @@ spec:
                   port: http
           - host: unifi.home.${CLUSTER_DOMAIN}
             paths: *paths
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: wifi
+          hajimari.io/info: Manage Unifi Devices
+          hajimari.io/group: network
+        hostnames:
+          - unifi.pub.${CLUSTER_DOMAIN}
+          - unifi.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
+        # explicit rules: service main has several enabled ports and the route
+        # would otherwise auto-pick the alphabetically first one (controller 8080)
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: http

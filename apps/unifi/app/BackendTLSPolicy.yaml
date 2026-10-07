@@ -1,0 +1,54 @@
+---
+# The unifi controller serves its WebUI over HTTPS with a self-signed cert
+# (keystore alias 'unifi', SAN DNS:UniFi, valid until 2028-04-06). The cert
+# below was extracted from the running controller with:
+#   oc -n unifi exec deploy/unifi -- keytool -exportcert -rfc \
+#        -keystore /usr/lib/unifi/data/keystore -alias unifi \
+#        -storepass aircontrolenterprise
+# Update it here if the controller ever regenerates its cert.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unifi-backend-ca
+data:
+  ca.crt: |
+    -----BEGIN CERTIFICATE-----
+    MIIDfTCCAmWgAwIBAgIEaVdKTDANBgkqhkiG9w0BAQsFADBrMQswCQYDVQQGEwJV
+    UzERMA8GA1UECAwITmV3IFlvcmsxETAPBgNVBAcMCE5ldyBZb3JrMRYwFAYDVQQK
+    DA1VYmlxdWl0aSBJbmMuMQ4wDAYDVQQLDAVVbmlGaTEOMAwGA1UEAwwFVW5pRmkw
+    HhcNMjYwMTAyMDQzMjEyWhcNMjgwNDA2MDQzMjEyWjBrMQswCQYDVQQGEwJVUzER
+    MA8GA1UECAwITmV3IFlvcmsxETAPBgNVBAcMCE5ldyBZb3JrMRYwFAYDVQQKDA1V
+    YmlxdWl0aSBJbmMuMQ4wDAYDVQQLDAVVbmlGaTEOMAwGA1UEAwwFVW5pRmkwggEi
+    MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDLBc+mOkApfHCxvFUV48N5D0Lc
+    Wef9aC4deMJ/4dylPZ3MqCw6j5zDbGAs/3h7pvN120cRmJlWDx7eisKbRPvTcaPT
+    rFlsR7odtxtZT7rULWsH8JBqfl6vPNrudB64Z8fVeqnJgloyiS46LJ0iLgrTYAty
+    j/BE5Jp8rwW977C6MipCj2elSaVUHen+WI9e9/lKqI/aN9RnOnSlPVjR2Gmqy3y7
+    8oYo2398FJ+OThsjI2uw3i5bOc8qOP7PsqnwCXFpfi938GcUJzzpyDaMzlEjGvke
+    h0i3O1nLOuOvoimuyxw+ynI+iKxL7KJcvKqOVKvSvxsaz8CfUjfh9TVhjThhAgMB
+    AAGjKTAnMBAGA1UdEQQJMAeCBVVuaUZpMBMGA1UdJQQMMAoGCCsGAQUFBwMBMA0G
+    CSqGSIb3DQEBCwUAA4IBAQAhENgbG+PHysz1tHo5yrDXOzNEKCEtI140ElBELG6z
+    NWP3ppeYdZ/6UlBXMTePb6gXICwiz/17AmQwtUn8D7bkQFVKK+wEr/1eBWJTmDQy
+    eP4eRM+GaoJmdRDC7+RRG2ic8mA35yJbX2i2JjsHiKdm4h4VYLO9dgHsvJoBXnNR
+    PaL0X/C/8c4HhAX5ErFvM7hltbu+3uHAHVb0ytOKELMQjFlNjBnyKAheRlvR9gYv
+    4Q2sDS5XkEA4gfTpjLANDolOrzWhgm8jj2DhYA+kocoW0CTO0zVDsJDY+v3YScFg
+    NIr8+B9bn48NMjIUEsr+k9CrF+wNi17ed49uDH370sJz
+    -----END CERTIFICATE-----
+---
+# BackendTLSPolicy so Envoy Gateway connects to the unifi controller (port
+# 'http' = 8443) over TLS and validates its self-signed cert
+apiVersion: gateway.networking.k8s.io/v1alpha3
+kind: BackendTLSPolicy
+metadata:
+  name: unifi-backend-tls
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: unifi
+      sectionName: http
+  validation:
+    hostname: unifi
+    caCertificateRefs:
+      - group: ""
+        kind: ConfigMap
+        name: unifi-backend-ca

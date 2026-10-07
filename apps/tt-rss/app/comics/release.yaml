@@ -137,3 +137,15 @@ spec:
                   port: http
           - host: rss.home.${CLUSTER_DOMAIN}
             paths: *paths
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+        hostnames:
+          - rss.${CLUSTER_SHORT_DOMAIN}
+          - rss.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

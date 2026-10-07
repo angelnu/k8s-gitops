@@ -123,3 +123,18 @@ spec:
                   port: http
           - host: recipes.home.${CLUSTER_DOMAIN}
             paths: *paths
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: game-icons:meal
+          hajimari.io/info: Meal Recipes
+          hajimari.io/group: documents
+        hostnames:
+          - recipes.pub.${CLUSTER_DOMAIN}
+          - recipes.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

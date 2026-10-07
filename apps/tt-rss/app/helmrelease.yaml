@@ -89,6 +89,20 @@ spec:
         tls:
           - hosts:
               - rss.${CLUSTER_SHORT_DOMAIN}
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: rss
+          hajimari.io/info: Feed reader
+          hajimari.io/group: tools
+        hostnames:
+          - rss.${CLUSTER_SHORT_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
     postgresql:
       enabled: false # use own chart
 

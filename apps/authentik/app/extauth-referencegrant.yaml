@@ -38,6 +38,21 @@ spec:
     - group: gateway.envoyproxy.io
       kind: SecurityPolicy
       namespace: deepstack
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: mealie
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: recipes
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: unifi
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: openccu
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: maddy
   to:
     - group: ""
       kind: Service

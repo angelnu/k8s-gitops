@@ -385,6 +385,27 @@ spec:
                   identifier: editor
                   port: http
 
+    route:
+      editor:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: Maddy Mail Server
+          hajimari.io/icon: vscode-icons:file-type-vscode
+          hajimari.io/info: Edit Mail Rules
+          hajimari.io/group: tools
+        hostnames:
+          - maddy-editor.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
+        # explicit rules: the release enables two services, so automatic
+        # Service detection is not possible
+        rules:
+          - backendRefs:
+              - identifier: editor
+                port: http
+
 
   valuesFrom:
   - kind: Secret
