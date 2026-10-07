@@ -53,6 +53,19 @@ spec:
     - group: gateway.envoyproxy.io
       kind: SecurityPolicy
       namespace: maddy
+  to:
+    - group: ""
+      kind: Service
+      name: ak-outpost-ingress
+---
+# Second grant: the ReferenceGrant API caps spec.from at 16 items, so further
+# app namespaces get their own grant (same `to` target).
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: ext-auth-outpost-apps-2
+spec:
+  from:
     - group: gateway.envoyproxy.io
       kind: SecurityPolicy
       namespace: home-assistant
