@@ -139,3 +139,8 @@ spec:
         parentRefs:
           - name: main
             namespace: envoy-gateway
+        # explicit rule: 2 services (main + bittorrent) defeat automatic detection
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: http
