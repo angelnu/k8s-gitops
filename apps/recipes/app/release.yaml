@@ -106,10 +106,6 @@ spec:
       main:
         enabled: true
         annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: game-icons:meal
-          hajimari.io/info: Meal Recipes
-          hajimari.io/group: documents
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
           # nginx.ingress.kubernetes.io/configuration-snippet: |
           #   more_set_input_headers "REMOTE-USER: $upstream_http_X_authentik_username"; Waiting for https://github.com/kubernetes/ingress-nginx/issues/7811
@@ -127,11 +123,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: game-icons:meal
-          hajimari.io/info: Meal Recipes
-          hajimari.io/group: documents
         hostnames:
           - recipes.pub.${CLUSTER_DOMAIN}
           - recipes.home.${CLUSTER_DOMAIN}

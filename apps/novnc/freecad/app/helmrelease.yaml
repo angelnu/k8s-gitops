@@ -101,11 +101,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: mdi:file-cad-box
-          hajimari.io/info: FreeCAD
-          hajimari.io/group: tools
         hosts:
           - host: "freecad.pub.${CLUSTER_DOMAIN}"
             paths:
@@ -118,11 +113,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: mdi:file-cad-box
-          hajimari.io/info: FreeCAD
-          hajimari.io/group: tools
         hostnames:
           - "freecad.pub.${CLUSTER_DOMAIN}"
         parentRefs:

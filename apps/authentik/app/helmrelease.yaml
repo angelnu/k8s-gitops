@@ -89,10 +89,6 @@ spec:
       ingress:
         enabled: true
         annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: simple-icons:authentik
-          hajimari.io/info: Single Sign On for Casa96
-          hajimari.io/group: cluster
           nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
           nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
           nginx.org/websocket-services: authentik
@@ -108,11 +104,6 @@ spec:
       route:
         main:
           enabled: true
-          annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/icon: simple-icons:authentik
-            hajimari.io/info: Single Sign On for Casa96
-            hajimari.io/group: cluster
           hostnames:
             - authentik.pub.${CLUSTER_DOMAIN}
           parentRefs:

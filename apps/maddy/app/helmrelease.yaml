@@ -370,12 +370,6 @@ spec:
 
     ingress:
       editor:
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/appName: Maddy Mail Server
-          hajimari.io/icon: vscode-icons:file-type-vscode
-          hajimari.io/info: Edit Mail Rules
-          hajimari.io/group: tools
         hosts:
           - host: maddy-editor.pub.${CLUSTER_DOMAIN}
             paths: &paths_editor
@@ -388,12 +382,6 @@ spec:
     route:
       editor:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/appName: Maddy Mail Server
-          hajimari.io/icon: vscode-icons:file-type-vscode
-          hajimari.io/info: Edit Mail Rules
-          hajimari.io/group: tools
         hostnames:
           - maddy-editor.pub.${CLUSTER_DOMAIN}
         parentRefs:

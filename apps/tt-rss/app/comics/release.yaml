@@ -124,7 +124,6 @@ spec:
       main:
         enabled: true
         annotations:
-          hajimari.io/enable: "false"
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           #nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
         hosts:
@@ -141,8 +140,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "false"
         hostnames:
           - rss.${CLUSTER_SHORT_DOMAIN}
           - rss.home.${CLUSTER_DOMAIN}

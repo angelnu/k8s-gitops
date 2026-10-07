@@ -67,11 +67,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: logos:ubuntu
-          hajimari.io/info: Ubuntu
-          hajimari.io/group: tools
         hosts:
           - host: ubuntu.pub.${CLUSTER_DOMAIN}
             paths:
@@ -84,11 +79,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: logos:ubuntu
-          hajimari.io/info: Ubuntu
-          hajimari.io/group: tools
         hostnames:
           - ubuntu.pub.${CLUSTER_DOMAIN}
         parentRefs:

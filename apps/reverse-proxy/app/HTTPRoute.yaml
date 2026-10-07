@@ -22,11 +22,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-fritz
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: DSL Router
-    hajimari.io/icon: arcticons:fritz-app-wlan
-    hajimari.io/info: Fritzbox Router
-    hajimari.io/group: network
 spec:
   parentRefs:
     - name: main
@@ -45,11 +40,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-mobile
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: Movile Router
-    hajimari.io/icon: cib:huawei
-    hajimari.io/info: Mobile Router
-    hajimari.io/group: network
 spec:
   parentRefs:
     - name: main
@@ -68,11 +58,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-pve1
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: Proxmox 1
-    hajimari.io/icon: simple-icons:proxmox
-    hajimari.io/info: Over Internet
-    hajimari.io/group: admin
 spec:
   parentRefs:
     - name: main
@@ -91,11 +76,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-pve2
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: Proxmox 2
-    hajimari.io/icon: simple-icons:proxmox
-    hajimari.io/info: Over Internet
-    hajimari.io/group: admin
 spec:
   parentRefs:
     - name: main
@@ -114,11 +94,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-pve3
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: Proxmox 3
-    hajimari.io/icon: simple-icons:proxmox
-    hajimari.io/info: Over Internet
-    hajimari.io/group: admin
 spec:
   parentRefs:
     - name: main
@@ -137,11 +112,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-pve4
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: Proxmox 4
-    hajimari.io/icon: simple-icons:proxmox
-    hajimari.io/info: Over Internet
-    hajimari.io/group: admin
 spec:
   parentRefs:
     - name: main
@@ -160,11 +130,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-pve5
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: Proxmox 5
-    hajimari.io/icon: simple-icons:proxmox
-    hajimari.io/info: Over Internet
-    hajimari.io/group: admin
 spec:
   parentRefs:
     - name: main
@@ -183,11 +148,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-octoprint
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: Large Prusa
-    hajimari.io/icon: eos-icons:3d-print
-    hajimari.io/info: 3D Printer
-    hajimari.io/group: Printers
 spec:
   parentRefs:
     - name: main
@@ -206,11 +166,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-octoprint-mini
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: Small Prusa
-    hajimari.io/icon: eos-icons:3d-print
-    hajimari.io/info: 3D Printer
-    hajimari.io/group: Printers
 spec:
   parentRefs:
     - name: main
@@ -229,11 +184,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-printer
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: Paper Printer
-    hajimari.io/icon: printer
-    hajimari.io/info: Cannon
-    hajimari.io/group: Printers
 spec:
   parentRefs:
     - name: main
@@ -252,11 +202,6 @@ kind: HTTPRoute
 metadata:
   name: reverse-proxy-prusa-sla
   annotations:
-    hajimari.io/enable: "true"
-    hajimari.io/appName: Resine Prusa
-    hajimari.io/icon: eos-icons:3d-print
-    hajimari.io/info: 3D Printer
-    hajimari.io/group: Printers
 spec:
   parentRefs:
     - name: main

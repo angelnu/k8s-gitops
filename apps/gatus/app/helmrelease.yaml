@@ -57,11 +57,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: connection
-          hajimari.io/info: Service Status Monitor
-          hajimari.io/group: cluster
         hosts:
           - host: gatus.pub.${CLUSTER_DOMAIN}
             paths:
@@ -74,11 +69,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: connection
-          hajimari.io/info: Service Status Monitor
-          hajimari.io/group: cluster
         hostnames:
           - gatus.pub.${CLUSTER_DOMAIN}
         parentRefs:
@@ -571,7 +561,7 @@ spec:
                 conditions:
                   - "[STATUS] == 200"
                   
-              - name: Hajimari
+              - name: RouteBoard
                 group: apps
                 url: "https://home.${CLUSTER_SHORT_DOMAIN}"
                 interval: 5m

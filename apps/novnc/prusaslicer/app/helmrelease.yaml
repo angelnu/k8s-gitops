@@ -94,11 +94,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: mdi:printer-3d
-          hajimari.io/info: Prusa Slicer
-          hajimari.io/group: tools
         hosts:
           - host: "prusaslicer.pub.${CLUSTER_DOMAIN}"
             paths:
@@ -111,11 +106,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: mdi:printer-3d
-          hajimari.io/info: Prusa Slicer
-          hajimari.io/group: tools
         hostnames:
           - "prusaslicer.pub.${CLUSTER_DOMAIN}"
         parentRefs:

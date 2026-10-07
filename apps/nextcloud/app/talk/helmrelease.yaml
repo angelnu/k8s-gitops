@@ -90,7 +90,6 @@ spec:
       main:
         enabled: true
         annotations:
-          hajimari.io/enable: "false"
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           # Keep the persistent websocket connection alive
           nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
@@ -109,8 +108,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "false"
         hostnames:
           - ${TALK_HOST}
         parentRefs:

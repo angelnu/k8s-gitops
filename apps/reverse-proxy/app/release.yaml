@@ -30,11 +30,6 @@ spec:
         port: 443
         ingress:
           annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Router
-            hajimari.io/icon: router
-            hajimari.io/info: Router
-            hajimari.io/group: network
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: router.home.${CLUSTER_DOMAIN}
@@ -45,12 +40,6 @@ spec:
         ip: 192.168.2.182
         port: 80
         ingress:
-          annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: DSL Router
-            hajimari.io/icon: arcticons:fritz-app-wlan
-            hajimari.io/info: Fritzbox Router
-            hajimari.io/group: network
           hosts:
             - host: fritz.home.${CLUSTER_DOMAIN}
             - host: fritz.pub.${CLUSTER_DOMAIN}
@@ -59,12 +48,6 @@ spec:
         ip: 192.168.62.1
         port: 80
         ingress:
-          annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Movile Router
-            hajimari.io/icon: cib:huawei
-            hajimari.io/info: Mobile Router
-            hajimari.io/group: network
           hosts:
             - host: mobile.home.${CLUSTER_DOMAIN}
             - host: mobile.pub.${CLUSTER_DOMAIN}
@@ -73,11 +56,6 @@ spec:
         port: 8006
         ingress:
           annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Proxmox 1
-            hajimari.io/icon: simple-icons:proxmox
-            hajimari.io/info: Over Internet
-            hajimari.io/group: admin
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: pve1.home.${CLUSTER_DOMAIN}
@@ -87,11 +65,6 @@ spec:
         port: 8006
         ingress:
           annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Proxmox 2
-            hajimari.io/icon: simple-icons:proxmox
-            hajimari.io/info: Over Internet
-            hajimari.io/group: admin
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: pve2.home.${CLUSTER_DOMAIN}
@@ -101,11 +74,6 @@ spec:
         port: 8006
         ingress:
           annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Proxmox 3
-            hajimari.io/icon: simple-icons:proxmox
-            hajimari.io/info: Over Internet
-            hajimari.io/group: admin
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: pve3.home.${CLUSTER_DOMAIN}
@@ -115,11 +83,6 @@ spec:
         port: 8006
         ingress:
           annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Proxmox 4
-            hajimari.io/icon: simple-icons:proxmox
-            hajimari.io/info: Over Internet
-            hajimari.io/group: admin
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: pve4.home.${CLUSTER_DOMAIN}
@@ -129,11 +92,6 @@ spec:
         port: 8006
         ingress:
           annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Proxmox 5
-            hajimari.io/icon: simple-icons:proxmox
-            hajimari.io/info: Over Internet
-            hajimari.io/group: admin
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: pve5.home.${CLUSTER_DOMAIN}
@@ -143,12 +101,6 @@ spec:
         ip: 192.168.2.171
         port: 80
         ingress:
-          annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Large Prusa
-            hajimari.io/icon: eos-icons:3d-print
-            hajimari.io/info: 3D Printer
-            hajimari.io/group: Printers
           hosts:
             - host: prusa.home.${CLUSTER_DOMAIN}
             - host: prusa.pub.${CLUSTER_DOMAIN}
@@ -158,12 +110,6 @@ spec:
         port: 80
         test: false
         ingress:
-          annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Small Prusa
-            hajimari.io/icon: eos-icons:3d-print
-            hajimari.io/info: 3D Printer
-            hajimari.io/group: Printers
           hosts:
             - host: prusa-mini.home.${CLUSTER_DOMAIN}
             - host: prusa-mini.pub.${CLUSTER_DOMAIN}
@@ -172,12 +118,6 @@ spec:
         ip: 192.168.2.117
         port: 80
         ingress:
-          annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Paper Printer
-            hajimari.io/icon: printer
-            hajimari.io/info: Cannon
-            hajimari.io/group: Printers
           hosts:
             - host: print.pub.${CLUSTER_DOMAIN}
             - host: print.home.${CLUSTER_DOMAIN}
@@ -187,12 +127,6 @@ spec:
         port: 80
         test: false
         ingress:
-          annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: Resine Prusa
-            hajimari.io/icon: eos-icons:3d-print
-            hajimari.io/info: 3D Printer
-            hajimari.io/group: Printers
           hosts:
             - host: prusa-sla.pub.${CLUSTER_DOMAIN}
             - host: prusa-sla.home.${CLUSTER_DOMAIN}
@@ -201,11 +135,6 @@ spec:
         port: 5001
         ingress:
           annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: NAS
-            hajimari.io/icon: mdi:nas
-            hajimari.io/info: Synology
-            hajimari.io/group: tools
             nginx.ingress.kubernetes.io/enable-global-auth: "false"
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
@@ -216,11 +145,6 @@ spec:
         port: 5001
         ingress:
           annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: NAS backup
-            hajimari.io/icon: mdi:nas
-            hajimari.io/info: Synology
-            hajimari.io/group: tools
             nginx.ingress.kubernetes.io/enable-global-auth: "false"
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
@@ -230,11 +154,6 @@ spec:
         port: 443
         ingress:
           annotations:
-            hajimari.io/enable: "true"
-            hajimari.io/appName: PiKVM
-            hajimari.io/icon: mdi:console-network
-            hajimari.io/info: Remote terminal for HW 
-            hajimari.io/group: cluster
             nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: pikvm.pub.${CLUSTER_DOMAIN}

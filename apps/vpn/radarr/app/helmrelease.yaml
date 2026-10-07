@@ -96,11 +96,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: filmstrip
-          hajimari.io/info: Film Search
-          hajimari.io/group: media
         hosts:
           - host: radarr.pub.${CLUSTER_DOMAIN}
             paths:
@@ -113,11 +108,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: filmstrip
-          hajimari.io/info: Film Search
-          hajimari.io/group: media
         hostnames:
           - radarr.pub.${CLUSTER_DOMAIN}
         parentRefs:

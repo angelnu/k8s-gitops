@@ -98,10 +98,6 @@ spec:
       main:
         enabled: true
         annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: music-box
-          hajimari.io/info: Music Search
-          hajimari.io/group: media
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
         hosts:
           - host: lidarr.pub.${CLUSTER_DOMAIN}
@@ -115,11 +111,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: music-box
-          hajimari.io/info: Music Search
-          hajimari.io/group: media
         hostnames:
           - lidarr.pub.${CLUSTER_DOMAIN}
         parentRefs:

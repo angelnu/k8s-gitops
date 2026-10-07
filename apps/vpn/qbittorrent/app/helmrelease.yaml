@@ -112,11 +112,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: cloud-download
-          hajimari.io/info: Torrent Downloader
-          hajimari.io/group: media
         hosts:
           - host: torrent.pub.${CLUSTER_DOMAIN}
             paths:
@@ -129,11 +124,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: cloud-download
-          hajimari.io/info: Torrent Downloader
-          hajimari.io/group: media
         hostnames:
           - torrent.pub.${CLUSTER_DOMAIN}
         parentRefs:

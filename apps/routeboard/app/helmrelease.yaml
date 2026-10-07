@@ -39,7 +39,6 @@ spec:
       # Same dashboard title hajimari served
       title: Casa96
       # watchIngress/watchHTTPRoute default true: RouteBoard auto-discovers both
-      # route resources cluster-wide (replaces the hajimari.io/* annotation
       # discovery, step 3.9)
 
     # Distroless non-root image; OKD restricted-v2 rejects the chart's

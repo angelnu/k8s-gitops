@@ -102,11 +102,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: cloud-search
-          hajimari.io/info: Media Search
-          hajimari.io/group: media
         hosts:
           - host: prowlarr.pub.${CLUSTER_DOMAIN}
             paths:
@@ -119,11 +114,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: cloud-search
-          hajimari.io/info: Media Search
-          hajimari.io/group: media
         hostnames:
           - prowlarr.pub.${CLUSTER_DOMAIN}
         parentRefs:

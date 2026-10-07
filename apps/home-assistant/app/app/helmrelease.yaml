@@ -141,10 +141,6 @@ spec:
       main:
         enabled: true
         annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: home-assistant
-          hajimari.io/info: Home Automation
-          hajimari.io/group: automation
           nginx.org/websocket-services: home-assistant
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/ssl-redirect: "false" #Required by Reolink integration to push images via http
@@ -162,11 +158,6 @@ spec:
             paths: *paths
       editor:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: vscode-icons:file-type-vscode
-          hajimari.io/info: Home-Assistant Editor
-          hajimari.io/group: automation
         hosts:
           - host: ha-editor.pub.${CLUSTER_DOMAIN}
             paths: &paths_editor
@@ -179,11 +170,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: home-assistant
-          hajimari.io/info: Home Automation
-          hajimari.io/group: automation
         hostnames:
           - ha.${CLUSTER_SHORT_DOMAIN}
           - ha.pub.${CLUSTER_DOMAIN}
@@ -198,11 +184,6 @@ spec:
                 port: http
       editor:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: vscode-icons:file-type-vscode
-          hajimari.io/info: Home-Assistant Editor
-          hajimari.io/group: automation
         hostnames:
           - ha-editor.pub.${CLUSTER_DOMAIN}
         parentRefs:

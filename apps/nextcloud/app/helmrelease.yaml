@@ -34,10 +34,6 @@ spec:
     ingress:
       enabled: true
       annotations:
-        hajimari.io/enable: "true"
-        hajimari.io/icon: simple-icons:nextcloud
-        hajimari.io/info: File and Calendar server
-        hajimari.io/group: tools
         nginx.ingress.kubernetes.io/enable-global-auth: "false"
 
         nginx.ingress.kubernetes.io/proxy-body-size: 4G
@@ -406,7 +402,6 @@ spec:
       ingress:
         enabled: true
         annotations:
-          hajimari.io/enable: "false"
           nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_WOPISrc"
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
         hosts:

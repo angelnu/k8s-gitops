@@ -83,10 +83,6 @@ spec:
       main:
         enabled: true
         annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: folder-music
-          hajimari.io/info: Streams local music via Apache
-          hajimari.io/group: media
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -102,11 +98,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: folder-music
-          hajimari.io/info: Streams local music via Apache
-          hajimari.io/group: media
         hostnames:
           - music.home.${CLUSTER_DOMAIN}
         parentRefs:

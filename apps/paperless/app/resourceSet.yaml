@@ -248,10 +248,6 @@ spec:
             main:
               enabled: true
               annotations:
-                hajimari.io/enable: "true"
-                hajimari.io/icon: arcticons:paperless
-                hajimari.io/info: Store PDFs
-                hajimari.io/group: << inputs.hajimari_group >>
                 nginx.ingress.kubernetes.io/proxy-body-size: 4G
                 nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
                 nginx.ingress.kubernetes.io/enable-global-auth: "false"
@@ -267,11 +263,6 @@ spec:
           route:
             main:
               enabled: true
-              annotations:
-                hajimari.io/enable: "true"
-                hajimari.io/icon: arcticons:paperless
-                hajimari.io/info: Store PDFs
-                hajimari.io/group: << inputs.hajimari_group >>
               hostnames:
                 - << inputs.hostname >>
               parentRefs:

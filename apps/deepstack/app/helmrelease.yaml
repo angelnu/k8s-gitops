@@ -79,11 +79,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: cctv
-          hajimari.io/info: Image recognition
-          hajimari.io/group: automation
         hosts:
           - host: deepstack.pub.${CLUSTER_DOMAIN}
             paths: &paths
@@ -98,11 +93,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: cctv
-          hajimari.io/info: Image recognition
-          hajimari.io/group: automation
         hostnames:
           - deepstack.pub.${CLUSTER_DOMAIN}
           - deepstack.home.${CLUSTER_DOMAIN}

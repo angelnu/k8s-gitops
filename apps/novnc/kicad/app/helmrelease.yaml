@@ -94,11 +94,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: simple-icons:kicad
-          hajimari.io/info: KiCad
-          hajimari.io/group: tools
         hosts:
           - host: "kicad.pub.${CLUSTER_DOMAIN}"
             paths:
@@ -111,11 +106,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: simple-icons:kicad
-          hajimari.io/info: KiCad
-          hajimari.io/group: tools
         hostnames:
           - "kicad.pub.${CLUSTER_DOMAIN}"
         parentRefs:

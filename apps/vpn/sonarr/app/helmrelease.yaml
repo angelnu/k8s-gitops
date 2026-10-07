@@ -98,11 +98,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: television-box
-          hajimari.io/info: Series Search
-          hajimari.io/group: media
         hosts:
           - host: sonarr.pub.${CLUSTER_DOMAIN}
             paths:
@@ -115,11 +110,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: television-box
-          hajimari.io/info: Series Search
-          hajimari.io/group: media
         hostnames:
           - sonarr.pub.${CLUSTER_DOMAIN}
         parentRefs:

@@ -73,11 +73,6 @@ spec:
 
     ingress:
       main:
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: cloud-search-outline
-          hajimari.io/info: Internet Search
-          hajimari.io/group: tools
         hosts:
           - host: "search.${CLUSTER_SHORT_DOMAIN}"
             paths: &paths
@@ -92,11 +87,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: cloud-search-outline
-          hajimari.io/info: Internet Search
-          hajimari.io/group: tools
         hostnames:
           - "search.${CLUSTER_SHORT_DOMAIN}"
           - "search.pub.${CLUSTER_DOMAIN}"

@@ -88,11 +88,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: book-open-page-variant-outline
-          hajimari.io/info: Book Search
-          hajimari.io/group: media
         hosts:
           - host: readarr.pub.${CLUSTER_DOMAIN}
             paths:
@@ -105,11 +100,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: book-open-page-variant-outline
-          hajimari.io/info: Book Search
-          hajimari.io/group: media
         hostnames:
           - readarr.pub.${CLUSTER_DOMAIN}
         parentRefs:

@@ -9,7 +9,6 @@ metadata:
   name: routeboard
   annotations:
     # RouteBoard's own discovery annotations so the dashboard lists itself in
-    # the cluster group (routeboard.io/* replaced hajimari.io/* in step 3.9)
     routeboard.io/title: "RouteBoard"
     routeboard.io/description: "Casa96 home dashboard"
     routeboard.io/group: "cluster"

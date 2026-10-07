@@ -75,10 +75,6 @@ spec:
       main:
         enabled: true
         annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: rss
-          hajimari.io/info: Feed reader
-          hajimari.io/group: tools
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
         hosts:
@@ -93,11 +89,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: rss
-          hajimari.io/info: Feed reader
-          hajimari.io/group: tools
         hostnames:
           - rss.${CLUSTER_SHORT_DOMAIN}
         parentRefs:

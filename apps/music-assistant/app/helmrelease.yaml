@@ -111,11 +111,6 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: home-manager
-          hajimari.io/info: Music Assistant for Home Assistant
-          hajimari.io/group: media
         hosts:
           - host: ma.pub.${CLUSTER_DOMAIN}
             paths: &paths
@@ -127,7 +122,6 @@ spec:
       home:
         enabled: true
         annotations:
-          hajimari.io/enable: "false"
           nginx.ingress.kubernetes.io/enable-global-auth: "false"
           nginx.ingress.kubernetes.io/whitelist-source-range: "${INGRESS_WHITELIST_SOURCE_RANGE}"
         hosts:
@@ -142,11 +136,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: home-manager
-          hajimari.io/info: Music Assistant for Home Assistant
-          hajimari.io/group: media
         hostnames:
           - ma.pub.${CLUSTER_DOMAIN}
         parentRefs:
@@ -154,8 +143,6 @@ spec:
             namespace: envoy-gateway
       home:
         enabled: true
-        annotations:
-          hajimari.io/enable: "false"
         hostnames:
           - ma.home.${CLUSTER_DOMAIN}
         parentRefs:

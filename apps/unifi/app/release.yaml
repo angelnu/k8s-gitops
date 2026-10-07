@@ -123,10 +123,6 @@ spec:
       main:
         enabled: true
         annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: wifi
-          hajimari.io/info: Manage Unifi Devices
-          hajimari.io/group: network
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           nginx.ingress.kubernetes.io/proxy-body-size: "8000m"
         hosts:
@@ -143,11 +139,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: wifi
-          hajimari.io/info: Manage Unifi Devices
-          hajimari.io/group: network
         hostnames:
           - unifi.pub.${CLUSTER_DOMAIN}
           - unifi.home.${CLUSTER_DOMAIN}
