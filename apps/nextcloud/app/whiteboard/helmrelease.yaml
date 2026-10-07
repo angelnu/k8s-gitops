@@ -83,3 +83,13 @@ spec:
         tls:
         - hosts:
           - ${WHITEBOARD_HOST}
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+        hostnames:
+          - ${WHITEBOARD_HOST}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

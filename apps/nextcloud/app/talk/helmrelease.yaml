@@ -106,3 +106,13 @@ spec:
         tls:
         - hosts:
           - ${TALK_HOST}
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+        hostnames:
+          - ${TALK_HOST}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

@@ -1,0 +1,149 @@
+---
+# Nextcluster UI + DAV over Gateway API - step 3.4 of #6432.
+# The official nextcluster chart has no route: support -> raw HTTPRoute + HTTPRouteFilter manifests.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+spec:
+  parentRefs:
+    - name: main
+      namespace: envoy-gateway
+  hostnames:
+    - nextcloud.${CLUSTER_SHORT_DOMAIN}
+    - nextcloud.home.${CLUSTER_DOMAIN}
+  rules:
+    # RFC 6764 discovery redirects (mirrors the server-snippet 301s)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /.well-known/carddav
+        - path:
+            type: PathPrefix
+            value: /.well-known/caldav
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            statusCode: 301
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /remote.php/dav
+    # Nextcloud's own JSON 404s must pass through untouched (mirrors the server-snippet rewrites)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /.well-known/webfinger
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /index.php/.well-known/webfinger
+      backendRefs:
+        - kind: Service
+          name: nextcloud
+          port: 8080
+          weight: 1
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /.well-known/nodeinfo
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /index.php/.well-known/nodeinfo
+      backendRefs:
+        - kind: Service
+          name: nextcloud
+          port: 8080
+          weight: 1
+    # Sensitive paths -> 403 (mirrors the server-snippet deny blocks)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /build/
+        - path:
+            type: PathPrefix
+            value: /tests/
+        - path:
+            type: PathPrefix
+            value: /config/
+        - path:
+            type: PathPrefix
+            value: /lib/
+        - path:
+            type: PathPrefix
+            value: /3rdparty/
+        - path:
+            type: PathPrefix
+            value: /templates/
+        - path:
+            type: PathPrefix
+            value: /data/
+        - path:
+            type: PathPrefix
+            value: /autotest
+        - path:
+            type: PathPrefix
+            value: /occ
+        - path:
+            type: PathPrefix
+            value: /issue
+        - path:
+            type: PathPrefix
+            value: /indie
+        - path:
+            type: PathPrefix
+            value: /db_
+        - path:
+            type: PathPrefix
+            value: /console
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.envoyproxy.io
+            kind: HTTPRouteFilter
+            name: deny-403
+    # UI (Envoy streams by default - no proxy-body-size equivalent needed)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            remove:
+              - X-Powered-By
+      backendRefs:
+        - kind: Service
+          name: nextcloud
+          port: 8080
+          weight: 1
+---
+# Collabora upstream over Gateway API - step 3.4 of #6432.
+# NOTE: upstream-hash-by $arg_WOPISrc affinity is not supported in Gateway API - accepted
+# gap (autoscaling minReplicas: 1; performance only).
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: nextcloud-collabora
+  namespace: nextcloud
+spec:
+  parentRefs:
+    - name: main
+      namespace: envoy-gateway
+  hostnames:
+    - ${COLLABORA_HOST}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - kind: Service
+          name: nextcloud-collabora
+          port: 9980
+          weight: 1

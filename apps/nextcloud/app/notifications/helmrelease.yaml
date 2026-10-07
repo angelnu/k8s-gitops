@@ -99,3 +99,14 @@ spec:
                   port: http
           - host: nextcloud.home.${CLUSTER_DOMAIN}
             paths: *paths
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+        hostnames:
+          - nextcloud.${CLUSTER_SHORT_DOMAIN}
+          - nextcloud.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

@@ -1,0 +1,14 @@
+---
+# Direct 403 for sensitive paths - step 3.4 of #6432.
+# Envoy Gateway exposes fixed responses via HTTPRouteFilter (referenced from
+# HTTPRoute rules with ExtensionRef), since Gateway API has no native direct response.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: HTTPRouteFilter
+metadata:
+  name: deny-403
+  namespace: nextcloud
+spec:
+  directResponse:
+    statusCode: 403
+    body:
+      inline: "Forbidden\n"
