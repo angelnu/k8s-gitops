@@ -175,3 +175,41 @@ spec:
                 service:
                   identifier: editor
                   port: http
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: home-assistant
+          hajimari.io/info: Home Automation
+          hajimari.io/group: automation
+        hostnames:
+          - ha.${CLUSTER_SHORT_DOMAIN}
+          - ha.pub.${CLUSTER_DOMAIN}
+          - ha.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
+        # explicit rule: 2 services (main + editor) defeat automatic detection
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: http
+      editor:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: vscode-icons:file-type-vscode
+          hajimari.io/info: Home-Assistant Editor
+          hajimari.io/group: automation
+        hostnames:
+          - ha-editor.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
+        # explicit rule: 2 services (main + editor) defeat automatic detection
+        rules:
+          - backendRefs:
+              - identifier: editor
+                port: http

@@ -160,3 +160,41 @@ spec:
                   port: http
           - host: esphome-editor.pub.${CLUSTER_DOMAIN}
             paths: *paths_editor
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: simple-icons:esphome
+          hajimari.io/info: Programs esphome devices
+          hajimari.io/group: automation
+        hostnames:
+          - esphome.pub.${CLUSTER_DOMAIN}
+          - esphome.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
+        # explicit rule: 2 services (main + editor) defeat automatic detection
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: http
+      editor:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: vscode-icons:file-type-vscode
+          hajimari.io/info: Esphome editor
+          hajimari.io/group: automation
+        hostnames:
+          - esphome-editor.home.${CLUSTER_DOMAIN}
+          - esphome-editor.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
+        # explicit rule: 2 services (main + editor) defeat automatic detection
+        rules:
+          - backendRefs:
+              - identifier: editor
+                port: http

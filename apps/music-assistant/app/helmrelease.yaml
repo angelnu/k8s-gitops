@@ -138,3 +138,26 @@ spec:
                 service:
                   identifier: main
                   port: http
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: home-manager
+          hajimari.io/info: Music Assistant for Home Assistant
+          hajimari.io/group: media
+        hostnames:
+          - ma.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway
+      home:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "false"
+        hostnames:
+          - ma.home.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

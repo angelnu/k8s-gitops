@@ -80,3 +80,18 @@ spec:
                   port: http
           - host: ha-app.pub.${CLUSTER_DOMAIN}
             paths: *paths
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: home-automation
+          hajimari.io/info: Home Automation scripts
+          hajimari.io/group: automation
+        hostnames:
+          - ha-app.home.${CLUSTER_DOMAIN}
+          - ha-app.pub.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: main
+            namespace: envoy-gateway

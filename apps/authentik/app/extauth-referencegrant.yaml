@@ -53,6 +53,15 @@ spec:
     - group: gateway.envoyproxy.io
       kind: SecurityPolicy
       namespace: maddy
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: home-assistant
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: esphome
+    - group: gateway.envoyproxy.io
+      kind: SecurityPolicy
+      namespace: music-assistant
   to:
     - group: ""
       kind: Service
