@@ -159,6 +159,17 @@ Implementation candidates: **Envoy Gateway** (richest policy CRDs) or **Traefik*
 4. Adapt hajimari: configure services manually (or switch to a Gateway-aware dashboard).
 5. Cut over the LB IP / DNS, then decommission ingress-nginx.
 
+> **Step 3.9 (2026-10-07) - dashboard replaced**: with all `hajimari.io/*` annotations
+> migrated to HTTPRoutes in steps 3.4-3.8, hajimari no longer discovers anything
+> (it reads Ingress only). Replaced by **RouteBoard** (`apps/routeboard/`) - auto-discovers
+> Ingress + HTTPRoute resources, health monitoring - serving the same dashboard URL
+> `home.${CLUSTER_SHORT_DOMAIN}` through the EG Gateway `main`, with the same authentik
+> forward-auth SecurityPolicy. The manual catalog (hajimari customApps + globalBookmarks)
+> was ported to RouteBoard static routes (`ROUTEBOARD_STATIC_ROUTES`, SOPS-encrypted
+> ConfigMap). Authentik matches by hostname, so no authentik change was needed.
+> Note: leftover `hajimari.io/*` annotations in other apps' manifests are inert
+> (nothing reads them) and can be swept later.
+
 ---
 
 ## Comparison

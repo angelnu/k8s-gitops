@@ -1,0 +1,88 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: routeboard
+spec:
+  chart:
+    spec:
+      chart: routeboard
+      version: "0.2.0"
+      sourceRef:
+        kind: HelmRepository
+        name: routeboard
+        namespace: routeboard
+      interval: 60m
+  interval: 30m
+  timeout: 20m
+  install:
+    remediation:
+      retries: -1
+  # Add this to force Flux to check the secret's version
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  # See https://github.com/dhia-gharsallaoui/routeboard/tree/main/deploy/helm/routeboard
+  values:
+    image:
+      # -- image repository
+      repository: ghcr.io/dhia-gharsallaoui/routeboard
+      # -- image pull policy
+      pullPolicy: IfNotPresent
+      # -- image tag
+      tag: "0.2.0"
+
+    config:
+      # Same dashboard title hajimari served
+      title: Casa96
+      # watchIngress/watchHTTPRoute default true: RouteBoard auto-discovers both
+      # route resources cluster-wide (replaces the hajimari.io/* annotation
+      # discovery, step 3.9)
+
+    # Distroless non-root image; OKD restricted-v2 rejects the chart's
+    # runAsUser 65534 unless the SA gets the nonroot SCC (app/scc.yaml)
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+
+  # The chart (0.2.0) has no ROUTEBOARD_STATIC_ROUTES plumbing — its deployment
+  # template hardcodes the env list and renders neither pod annotations nor
+  # volumes. Patch the Deployment post-render: mount the static-routes
+  # ConfigMap (SOPS-encrypted catalog ported from hajimari) and point the app
+  # at it. reloader restarts the pod on ConfigMap change (the file is read once
+  # at startup).
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              group: apps
+              version: v1
+              kind: Deployment
+              name: routeboard
+            patch: |-
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: routeboard
+              spec:
+                template:
+                  metadata:
+                    annotations:
+                      reloader.stakater.com/auto: "true"
+                  spec:
+                    containers:
+                      - name: routeboard
+                        env:
+                          - name: ROUTEBOARD_STATIC_ROUTES
+                            value: /config/routes.yaml
+                        volumeMounts:
+                          - name: static-routes
+                            mountPath: /config
+                            readOnly: true
+                    volumes:
+                      - name: static-routes
+                        configMap:
+                          name: routeboard-static-routes
