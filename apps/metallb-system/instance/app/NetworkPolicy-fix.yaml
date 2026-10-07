@@ -1,0 +1,58 @@
+---
+# Workaround for metallb-operator 4.21 regression (#6438): the operator's roll
+# added a namespace-wide `default-deny` NetworkPolicy plus allow policies only
+# for the operator itself and the webhook. The controller pod (component=controller)
+# is covered by NO allow policy -> all its egress (incl. API access) is dropped
+# -> crashloop ("unable to start manager ... dial 172.30.0.1:443 i/o timeout"),
+# so new LoadBalancer services never get an IP.
+# NetworkPolicies are additive (union of allows), so these grant the controller
+# and speaker pods back what they need.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: controller-allow-operand-traffic
+spec:
+  podSelector:
+    matchLabels:
+      component: controller
+  policyTypes: [Ingress, Egress]
+  ingress:
+    # webhook (9443) + metrics via kube-rbac-proxy
+    - ports:
+        - {port: 9443, protocol: TCP}
+        - {port: 7472, protocol: TCP}
+  egress:
+    # kube-apiserver (svc 443 / endpoints 6443)
+    - ports:
+        - {port: 443, protocol: TCP}
+        - {port: 6443, protocol: TCP}
+    # DNS (openshift-dns)
+    - ports:
+        - {port: 53, protocol: UDP}
+        - {port: 53, protocol: TCP}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: speaker-allow-operand-traffic
+spec:
+  podSelector:
+    matchLabels:
+      component: speaker
+  policyTypes: [Ingress, Egress]
+  ingress:
+    # memberlist (speaker<->speaker) + metrics
+    - ports:
+        - {port: 7472, protocol: TCP}
+        - {port: 7472, protocol: UDP}
+        - {port: 7473, protocol: TCP}
+  egress:
+    - ports:
+        - {port: 7472, protocol: TCP}
+        - {port: 7472, protocol: UDP}
+    - ports:
+        - {port: 443, protocol: TCP}
+        - {port: 6443, protocol: TCP}
+    - ports:
+        - {port: 53, protocol: UDP}
+        - {port: 53, protocol: TCP}
