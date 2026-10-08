@@ -100,9 +100,11 @@ spec:
             paths: *paths
     route:
       main:
-        annotations:
-          routeboard.io/hidden: "true"
-        enabled: true
+        # Disabled: /push is served by a dedicated rule in the raw nextcloud
+        # HTTPRoute (apps/nextcloud/app/httproutes.yaml). The chart has no
+        # path-filter support for routes -> enabling this would create a
+        # catch-all rule that shadows nextcloud on the same hostnames.
+        enabled: false
         hostnames:
           - nextcloud.${CLUSTER_SHORT_DOMAIN}
           - nextcloud.home.${CLUSTER_DOMAIN}

@@ -109,6 +109,19 @@ spec:
             group: gateway.envoyproxy.io
             kind: HTTPRouteFilter
             name: deny-403
+    # notify_push (client push) - public: the push service validates user
+    # sessions against Nextcloud itself; gateway-level auth would break mobile
+    # clients (mirrors the old nginx enable-global-auth: "false" annotation).
+    # More specific path -> wins over the catch-all UI rule below.
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /push
+      backendRefs:
+        - kind: Service
+          name: nextcloud-push-service
+          port: 7867
+          weight: 1
     # UI (Envoy streams by default - no proxy-body-size equivalent needed)
     - matches:
         - path:
