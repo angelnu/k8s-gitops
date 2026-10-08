@@ -80,12 +80,13 @@ spec:
 
     persistence:
       data:
+        # Music Assistant only supports sqlite (aiosqlite/sqlite3 hardcoded) and
+        # sqlite memory-maps its DB (~2GiB mmap_size on this host) -> SIGBUS on the
+        # NFS-backed /data. Move ONLY the sqlite data to a Longhorn PVC (fast, non-NFS)
+        # so MA is stable. The music/downloads content stays on NFS.
         enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NFS_SERVER}"
-            path: "${NFS_KUBERNETES}/music-manager/data"
+        type: persistentVolumeClaim
+        existingClaim: music-assistant-data
       music:
         enabled: true
         type: custom

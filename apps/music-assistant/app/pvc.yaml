@@ -1,0 +1,18 @@
+---
+# Music Assistant data volume: sqlite DBs + config + cache.
+# MUST NOT be NFS: MA memory-maps sqlite (~2GiB mmap) which SIGBUSes over NFS.
+# Longhorn (fast, replicated) keeps MA stable; music/downloads stay on NFS.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: music-assistant-data
+  namespace: music-assistant
+  labels:
+    app.kubernetes.io/name: music-assistant
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 2Gi
