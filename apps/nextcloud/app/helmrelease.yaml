@@ -34,34 +34,42 @@ spec:
   postRenderers:
     - kustomize:
         patches:
+          # Strategic merge patch: matches the container by its merge key
+          # (name: nextcloud), NOT by list index - robust against upstream
+          # chart changes that reorder/add containers (issue #10).
           - target:
               kind: Deployment
               name: nextcloud
             patch: |-
-              - op: add
-                path: /spec/template/spec/containers/0/livenessProbe
-                value:
-                  exec:
-                    command:
-                      - sh
-                      - -c
-                      - 'curl -sf -m 5 -H "Host: ${NEXTCLOUD_OVERRIDE_HOST}" http://localhost/status.php >/dev/null 2>&1 || ! flock -n /var/www/html/nextcloud-init-sync.lock true 2>/dev/null || ! flock -n /var/www/html/data/nextcloud-hook.lock true 2>/dev/null || pgrep -f "[o]cc upgrade" >/dev/null 2>&1 || pgrep -x php >/dev/null 2>&1'
-                  initialDelaySeconds: 20
-                  periodSeconds: 15
-                  timeoutSeconds: 10
-                  failureThreshold: 2
-              - op: add
-                path: /spec/template/spec/containers/0/readinessProbe
-                value:
-                  exec:
-                    command:
-                      - sh
-                      - -c
-                      - 'curl -sf -m 5 -H "Host: ${NEXTCLOUD_OVERRIDE_HOST}" http://localhost/status.php >/dev/null 2>&1'
-                  initialDelaySeconds: 20
-                  periodSeconds: 15
-                  timeoutSeconds: 5
-                  failureThreshold: 3
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: nextcloud
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - name: nextcloud
+                        livenessProbe:
+                          exec:
+                            command:
+                              - sh
+                              - -c
+                              - 'curl -sf -m 5 -H "Host: ${NEXTCLOUD_OVERRIDE_HOST}" http://localhost/status.php >/dev/null 2>&1 || ! flock -n /var/www/html/nextcloud-init-sync.lock true 2>/dev/null || ! flock -n /var/www/html/data/nextcloud-hook.lock true 2>/dev/null || pgrep -f "[o]cc upgrade" >/dev/null 2>&1 || pgrep -x php >/dev/null 2>&1'
+                          initialDelaySeconds: 20
+                          periodSeconds: 15
+                          timeoutSeconds: 10
+                          failureThreshold: 2
+                        readinessProbe:
+                          exec:
+                            command:
+                              - sh
+                              - -c
+                              - 'curl -sf -m 5 -H "Host: ${NEXTCLOUD_OVERRIDE_HOST}" http://localhost/status.php >/dev/null 2>&1'
+                          initialDelaySeconds: 20
+                          periodSeconds: 15
+                          timeoutSeconds: 5
+                          failureThreshold: 3
   # See https://github.com/nextcloud/helm/blob/master/charts/nextcloud/values.yaml
   values:
 
