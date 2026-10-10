@@ -23,6 +23,45 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
+  # Issue #10: inject progress-aware exec probes. The chart hardcodes
+  # httpGet probes, which kill the pod during slow upgrades (the entrypoint
+  # runs `occ upgrade` with apache stopped -> connection refused). These
+  # liveness exec probes pass while the upgrade is still running:
+  #   - server responds (status.php), OR
+  #   - the entrypoint init flock is held (rsync+upgrade in progress), OR
+  #   - an `occ upgrade` process is alive (char-class avoids self-match)
+  # Real hangs (no server, no upgrade process) fail -> killed in ~30s.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: nextcloud
+            patch: |-
+              - op: add
+                path: /spec/template/spec/containers/0/livenessProbe
+                value:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - 'curl -sf -m 5 -H "Host: ${NEXTCLOUD_OVERRIDE_HOST}" http://localhost/status.php >/dev/null 2>&1 || ! flock -n /var/www/html/nextcloud-init-sync.lock true 2>/dev/null || pgrep -f "[o]cc upgrade" >/dev/null 2>&1'
+                  initialDelaySeconds: 20
+                  periodSeconds: 15
+                  timeoutSeconds: 10
+                  failureThreshold: 2
+              - op: add
+                path: /spec/template/spec/containers/0/readinessProbe
+                value:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - 'curl -sf -m 5 -H "Host: ${NEXTCLOUD_OVERRIDE_HOST}" http://localhost/status.php >/dev/null 2>&1'
+                  initialDelaySeconds: 20
+                  periodSeconds: 15
+                  timeoutSeconds: 5
+                  failureThreshold: 3
   # See https://github.com/nextcloud/helm/blob/master/charts/nextcloud/values.yaml
   values:
 
@@ -413,30 +452,15 @@ spec:
         - hosts:
           - ${COLLABORA_HOST}
 
-    # Probes: re-enabled with a startupProbe guard (issue #10).
-    # While the startupProbe has not succeeded once, Kubernetes does NOT run
-    # liveness/readiness - so slow upgrades / first init (minutes) never get
-    # the pod killed. After it succeeds, the short-failureThreshold liveness
-    # takes over to catch deadlocks quickly.
-    # Window: failureThreshold 45 x period 10s = ~7.5 min for worst-case upgrade.
-    startupProbe:
-      enabled: true
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 45
+    # Probes stay chart-disabled (chart would render httpGet /status.php with
+    # tight defaults that kill the pod during slow upgrades). The real probes
+    # are injected by the postRenderers kustomize patch below (issue #10) as
+    # EXEC probes that pass while an upgrade is in progress (entrypoint init
+    # flock held / occ upgrade running) instead of a blind time threshold.
     livenessProbe:
-      enabled: true
-      initialDelaySeconds: 20
-      periodSeconds: 15
-      timeoutSeconds: 5
-      failureThreshold: 2
+      enabled: false
     readinessProbe:
-      enabled: true
-      initialDelaySeconds: 20
-      periodSeconds: 15
-      timeoutSeconds: 5
-      failureThreshold: 3
+      enabled: false
     # observed 2026-09-24: p95 860Mi, max 940Mi (was hitting the old 1Gi limit)
     resources:
       limits:
