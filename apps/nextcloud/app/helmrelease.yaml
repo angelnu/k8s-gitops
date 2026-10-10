@@ -45,7 +45,7 @@ spec:
                     command:
                       - sh
                       - -c
-                      - 'curl -sf -m 5 -H "Host: ${NEXTCLOUD_OVERRIDE_HOST}" http://localhost/status.php >/dev/null 2>&1 || ! flock -n /var/www/html/nextcloud-init-sync.lock true 2>/dev/null || pgrep -f "[o]cc upgrade" >/dev/null 2>&1'
+                      - 'curl -sf -m 5 -H "Host: ${NEXTCLOUD_OVERRIDE_HOST}" http://localhost/status.php >/dev/null 2>&1 || ! flock -n /var/www/html/nextcloud-init-sync.lock true 2>/dev/null || ! flock -n /var/www/html/data/nextcloud-hook.lock true 2>/dev/null || pgrep -f "[o]cc upgrade" >/dev/null 2>&1 || pgrep -x php >/dev/null 2>&1'
                   initialDelaySeconds: 20
                   periodSeconds: 15
                   timeoutSeconds: 10
@@ -289,6 +289,20 @@ spec:
           set -exu # Remove the -u if you encounter issues booting
 
           cd /var/www/html
+
+          # Hold a lock for the whole hook (issue #10). This hook runs AFTER
+          # the entrypoint released nextcloud-init-sync.lock and BEFORE apache
+          # starts: during all occ app:update/app:install commands below the
+          # lock would otherwise be free with apache down, and the exec
+          # liveness probe would kill the pod mid-hook. Re-exec under flock:
+          # the lock is held from here until the script exits. Uses its own
+          # lock file in data/ (www-data writable - the entrypoint's
+          # nextcloud-init-sync.lock is root-owned and not lockable by us).
+          if [ -z "${HOOK_LOCK_HELD:-}" ]; then
+            [ -f data/nextcloud-hook.lock ] || touch data/nextcloud-hook.lock
+            export HOOK_LOCK_HELD=1
+            exec flock /var/www/html/data/nextcloud-hook.lock /bin/bash "$0" "$@"
+          fi
 
           # Upgrade
           ./occ upgrade                                || /bin/true
