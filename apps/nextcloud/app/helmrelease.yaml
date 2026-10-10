@@ -413,10 +413,30 @@ spec:
         - hosts:
           - ${COLLABORA_HOST}
 
+    # Probes: re-enabled with a startupProbe guard (issue #10).
+    # While the startupProbe has not succeeded once, Kubernetes does NOT run
+    # liveness/readiness - so slow upgrades / first init (minutes) never get
+    # the pod killed. After it succeeds, the short-failureThreshold liveness
+    # takes over to catch deadlocks quickly.
+    # Window: failureThreshold 45 x period 10s = ~7.5 min for worst-case upgrade.
+    startupProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 45
     livenessProbe:
-      enabled: false
+      enabled: true
+      initialDelaySeconds: 20
+      periodSeconds: 15
+      timeoutSeconds: 5
+      failureThreshold: 2
     readinessProbe:
-      enabled: false
+      enabled: true
+      initialDelaySeconds: 20
+      periodSeconds: 15
+      timeoutSeconds: 5
+      failureThreshold: 3
     # observed 2026-09-24: p95 860Mi, max 940Mi (was hitting the old 1Gi limit)
     resources:
       limits:
