@@ -13,7 +13,7 @@ spec:
         namespace: nextcloud
       interval: 60m
   interval: 30m
-  timeout: 20m
+  timeout: 40m # before-starting hook (occ app:update/install over NFS) runs on every boot and can take >10 min
   install:
     remediation:
       retries: -1
@@ -46,6 +46,7 @@ spec:
               metadata:
                 name: nextcloud
               spec:
+                progressDeadlineSeconds: 1800 # 30 min: default 600s expires while the before-starting hook runs
                 template:
                   spec:
                     containers:
