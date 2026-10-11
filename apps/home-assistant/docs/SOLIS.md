@@ -37,8 +37,11 @@ tuning session of 2026-10-10/11 and the final configuration.
 
 ## Key findings
 
-1. **Register 33073 is mislabelled** "A Phase Voltage" in this firmware — it is actually the
-   grid current (0.6-0.8 ≈ 0.7 A standby). Confirmed with an independent clamp meter.
+1. **Correction (2026-10-11): register 33073 is NOT mislabelled — it is A Phase Voltage**
+   (~232 V grid-tied, ~0-1.5 V islanded). The 2026-10-10 session confused it with the
+   grid current, which is the separate A Phase Current register
+   (`sensor.solis_s6_eh1p_a_phase_current`): 0.5-0.8 A per inverter at standby,
+   ~1-1.4 A for both combined — mostly reactive (see [Incident 2026-10-11](#incident-2026-10-11-morning-1-a-draw-with-batteries-at-51)).
 2. **Night standby (~70-100 W) is hardware auxiliary consumption** drawn directly from the
    grid terminals. The firmware ignores all export/zero-export/peak control parameters for
    it. It only disappears in island mode (differential open), where the battery covers ~230 W.
@@ -86,6 +89,34 @@ Export calibration -30 → 0 written at ~00:32 CEST:
   ~0.95 kW (5 A slot), then grid back to ~1-2 W once repurchased. (With calibration=0 this
   path is still pending one confirmation.)
 
+## Incident 2026-10-11 morning: "1 A draw with batteries at 51%"
+
+Report: ~1 A of grid consumption with batteries at 51%; the user opened the
+differential (11:46 CEST) until the batteries were somewhat charged. Diagnosis from
+the recorder data — **nothing was broken**, two separate phenomena were conflated:
+
+1. **The ~1 A reading is reactive standby/magnetising current of both inverters, not
+   consumption.** Each inverter's own `a_phase_current` register read 0.5-0.8 A all
+   night (Tuya meter `energy_meter_pueblo_phase_a_current`: 0.82-1.07 A every hour,
+   at any SOC 52-64%). The active component was only 12-15 W (consumo counter
+   +0.01 kWh per ~45 min) — the export calibration fix was holding. It vanishes in
+   island mode. For real consumption read `contador_red_electrica_pueblo_potencia`
+   (kW) or the consumo counter; the phase-A current sensor is RMS and includes
+   reactive current.
+2. **The real grid import happened in bursts when SOC reached the ToU cut-off (50%)
+   at 10:24.** With the all-day (00:00-23:59) ToU charge slot armed and SOC at the
+   cut-off, the inverter inhibits battery discharge (holds the battery at the cut-off)
+   and morning house load spikes (1.2-2.4 kW at 10:15-10:45 and 11:10-11:34) fell
+   back to the grid: bursts up to 3.1 kW (≈ 14 A), ~0.8 kWh total. Same "load falls
+   back to grid" behaviour as finding 4. At 51% the battery was still load-following
+   (SOC fell 51→50 with grid at the floor); discharge stopped exactly at 50%, then
+   SOC oscillated 50↔51% from 10:24 to 11:35 (PV pushing it just above the cut-off).
+
+Timeline: differential opened 11:46 (island: grid 0 A/0 W, PV 727-1390 W charging the
+battery +681 W, house on the backup port 0.7-0.9 A), re-closed 12:15 with SOC 53% and
+PV 897 W. If left open with weak PV the battery drains to `off_grid_overdischarge_soc`
+(30%) and the house goes dark — re-close physically before evening (finding 6).
+
 ## Secondary inverter: `essential` → `full` profile (2026-10-11)
 
 The secondary only exposed 141 of 573 entities because its config entry used
@@ -126,6 +157,11 @@ Gotchas:
 - Register references: 43195 export calibration; 43707 ToU enable bitmask (bit 6 = discharge
   period 1); register definitions in the integration at
   `/config/custom_components/solis_modbus/sensor_data/` inside the HA pod.
+- For real grid consumption use the Tuya potencia (kW) / consumo (kWh) sensors; the
+  phase-A current sensor includes reactive standby current (~1 A for both inverters).
+- `battery_power` sensors are unreliable at night (read +265/+450 W "charging" while
+  SOC fell 1%/h) — same signed/unsigned bug family as finding 7. Diagnose from SOC
+  trend + Tuya meters + PV instead.
 
 ## Pending
 
