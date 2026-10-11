@@ -30,7 +30,7 @@ spec:
     fullnameOverride: ${MY_APP}
     # Long-running Deployment instead of the default CronJob (every 2 minutes)
     kind: Deployment
-    deschedulingInterval: 15m
+    deschedulingInterval: 60m
     # Set to true for a dry run: only logs which pods it would evict
     cmdOptions:
       v: 3
@@ -42,8 +42,8 @@ spec:
       limits:
         memory: 256Mi
     deschedulerPolicy:
-      # Limit churn: at most 2 evictions per node and run
-      maxNoOfPodsToEvictPerNode: 2
+      # Limit churn: at most 1 eviction per node and run
+      maxNoOfPodsToEvictPerNode: 1
       profiles:
         - name: rebalance-memory
           pluginConfig:
@@ -52,7 +52,8 @@ spec:
                 # Only evict if the pod fits on another node
                 nodeFit: true
                 # Leave recently (re)started pods alone: gives the cluster time to settle after an update
-                minPodAge: 30m
+                # (6h: a pod moved during rebalancing must not ping-pong on the next cycle)
+                minPodAge: 6h
                 # Never touch platform/infra pods (openshift-user-critical and above, incl. longhorn-critical)
                 priorityThreshold:
                   name: openshift-user-critical
@@ -64,18 +65,27 @@ spec:
             - name: LowNodeUtilization
               args:
                 # Memory requests only; thresholds are deviations from the workers' mean:
-                # nodes > mean+15% give pods to nodes < mean-15%
+                # nodes > mean+30% give pods to nodes < mean-30% (tighter values made the
+                # descheduler fire every cycle forever: the structural request imbalance
+                # between workers (42%..85%) never converged)
                 useDeviationThresholds: true
                 thresholds:
-                  memory: 15
+                  memory: 30
                 targetThresholds:
-                  memory: 15
+                  memory: 30
                 evictableNamespaces:
                   exclude:
                     - openebs          # Loki/MinIO pinned to local volumes
                     - longhorn-system
                     - flux-system
                     - descheduler
+                    # Pet apps: moving them restarts them (home-assistant has a
+                    # stale-pid crashloop on move). They are the bulk of the request
+                    # imbalance; excluding them limits the descheduler to post-drain
+                    # rebalancing of small pods.
+                    - home-assistant
+                    - appdaemon
+                    - esphome
           plugins:
             balance:
               enabled:
