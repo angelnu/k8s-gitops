@@ -64,6 +64,15 @@ tuning session of 2026-10-10/11 and the final configuration.
    are only operated physically.
 7. **Entity bug**: `sensor.solis_s6_eh1p_backup_load_power` shows 65446 W — a signed/unsigned
    bug (S16 0xFFA6 = -90 W read as U16). Known quirk of the integration.
+8. **One string per inverter (2026-10-11)**: each inverter has a single connected string;
+   the complementary input reads residual voltage (47-70 V) with 0 A — that is MPPT
+   noise, NOT a disconnected/broken string. Do not chase it as an incident (checked
+   2026-10-11 afternoon against a suspected primary shadow: the daily aggregate ratios
+   were consistent, 1.85 today vs 1.83 yesterday; the primary's midday plateau is
+   zero-export curtailment + the secondary taking over in the afternoon, both days).
+   The producing string appears on the registers the integration labels `pv_*_2`
+   (~114-122 V x 13-14 A) — register string numbering does not match the physical
+   connector labels (user's physical input is PV1).
 
 ## Evidence (night 2026-10-10 → 11, Tuya "Contador Red Electrica")
 
