@@ -131,6 +131,16 @@ spec:
             enabled: true
             port: 2001
             targetPort: 2001
+          #Callback ports for the homematicip_local integration (CCU pushes
+          #XML-RPC events to HA on these): BidCos-RF 2010, HmIP-RF 2011
+          homematicproxy-bidcos-rf:
+            enabled: true
+            port: 2010
+            targetPort: 2010
+          homematicproxy-hmip-rf:
+            enabled: true
+            port: 2011
+            targetPort: 2011
       editor:
         controller: main
         ports:
