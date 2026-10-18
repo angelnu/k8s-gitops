@@ -68,12 +68,22 @@ spec:
             securityContext:
               runAsUser: 0
         pod:
-          # hostAliases:
-          #   # We cannot access the ingress LB address directly - go through external IP
-          #   - ip: "${FIX_EXTERNAL_IP}"
-          #     hostnames:
-          #       - "nextcloud.${CLUSTER_DOMAIN}"
-          #       - "jellyfin.pub.${CLUSTER_DOMAIN}"
+          hostAliases:
+            # The pod's UDN localnet route (192.168.0.0/19) shadows eth0 for all LAN
+            # IPs, including the envoy-gateway LB VIP. OVN UDN-localnet pods cannot
+            # reach a LB VIP whose backend pod is on the same node (hairpin drops the
+            # return path) - this hung hass-oidc-auth's server-side OIDC discovery
+            # fetch, so envoy answered "upstream request timeout" (504) on
+            # /auth/oidc/redirect (observed 2026-10-18 after the Gateway API migration
+            # gave envoy its own VIP on the HA node).
+            # Resolve authentik via the gateway ClusterIP instead: TLS terminates at
+            # envoy with the proper cert, so the OIDC discovery/token/JWKS calls work.
+            # If EG ever recreates the proxy Service (Gateway spec change), its
+            # ClusterIP changes - re-check and update ${ENVOY_GATEWAY_CLUSTER_IP}
+            # in clusters/prod/vars/cluster-settings.yaml.
+            - ip: "${ENVOY_GATEWAY_CLUSTER_IP}"
+              hostnames:
+                - "authentik.pub.${CLUSTER_DOMAIN}"
 
           annotations:
             k8s.v1.cni.cncf.io/networks: |
