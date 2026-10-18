@@ -20,13 +20,21 @@ Other docs:
   because setup fails with "Stored configuration is missing the device user ID".
   Pending: check if the device user ID can be recovered/extracted — if not,
   remove the device and pair it again to repair the config entry.
-- [ ] **homematic → homematic(IP) Local** (`homematicip_local`, HACS): replace the
-  deprecated pyhomematic-based `homematic` integration (unmaintained library,
-  blocking RPC calls stall the event loop). Supports OpenCCU/CCU3/RaspberryMatic
-  over XML-RPC and multiple CCUs (covers `rf` + `rf_pueblo`). Creates NEW
-  entities — migrate references progressively (automations, lovelace, AppDaemon
-  apps: `dimmer_*`, `buttons_*`, `boiler` reading `climate.valve_*`), then
-  disable the legacy integration.
+- [x] **homematic → homematic(IP) Local** (`homematicip_local`, HACS) — DONE
+  2026-10-18: all entities migrated to the new integration and every reference
+  migrated with them — dashboard (clima/windows macros + floorplan boiler
+  switch icons), clima package template sensors, `boiler.py` (valve discovery
+  on `climate.<room>_valve_*` + readings from the `sensor.*_valve_opening`
+  sensors, which had to be enabled in the entity registry — they are
+  disabled-by-default), `boiler.yaml` (`boilerControl` now on the
+  `homematicip_local` PCBS switch channels), kitchen extractor, covers,
+  google assistant, and the AppDaemon button apps (`buttons_light`,
+  `buttons_cover`, `buttons_homematic_music`, `buttons_homematic_climate`) now
+  listening on the new `event.*` entities instead of `homematic.keypress`.
+  The legacy pyhomematic integration is disabled (commented out in
+  `packages/homematic.yaml`, kept for re-enable). Remaining: physical
+  button-press field test (e.g. kitchen mute), and optional cleanup of the
+  orphaned legacy entities in the entity registry.
 
 ## Notes
 
