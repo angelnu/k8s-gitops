@@ -21,20 +21,23 @@ Other docs:
   Pending: check if the device user ID can be recovered/extracted — if not,
   remove the device and pair it again to repair the config entry.
 - [x] **homematic → homematic(IP) Local** (`homematicip_local`, HACS) — DONE
-  2026-10-18: all entities migrated to the new integration and every reference
-  migrated with them — dashboard (clima/windows macros + floorplan boiler
-  switch icons), clima package template sensors, `boiler.py` (valve discovery
-  on `climate.<room>_valve_*` + readings from the `sensor.*_valve_opening`
-  sensors, which had to be enabled in the entity registry — they are
-  disabled-by-default), `boiler.yaml` (`boilerControl` now on the
-  `homematicip_local` PCBS switch channels), kitchen extractor, covers,
-  google assistant, and the AppDaemon button apps (`buttons_light`,
-  `buttons_cover`, `buttons_homematic_music`, `buttons_homematic_climate`) now
+  2026-10-18: entities migrated to the new integration and all references
+  migrated with them — dashboard (clima/windows macros, floorplan boiler
+  switch icons and weather badges), clima package template sensors, `boiler.py`
+  (valve discovery on `climate.<room>_valve_*` + readings from the
+  `sensor.*_valve_opening` sensors — these are disabled-by-default by the
+  integration and had to be enabled in the entity registry), `boiler.yaml`
+  (`boilerControl` on the `homematicip_local` PCBS switch channels), kitchen
+  extractor switch (`switch.kitchen_kitchenextractor`), covers (incl. the
+  outdoor weather sensor temperature), watering apps, google assistant, and the
+  AppDaemon button apps (`buttons_light`, `buttons_cover`,
+  `buttons_homematic_music`, `buttons_homematic_climate`) now
   listening on the new `event.*` entities instead of `homematic.keypress`.
   The legacy pyhomematic integration is disabled (commented out in
   `packages/homematic.yaml`, kept for re-enable). Remaining: physical
-  button-press field test (e.g. kitchen mute), and optional cleanup of the
-  orphaned legacy entities in the entity registry.
+  button-press field test (e.g. kitchen mute); optional cleanup of the ~260
+  orphaned legacy entities still in the entity registry (they currently cause
+  "Referenced entities ... missing" warning noise from setTemperature).
 
 ## Notes
 
