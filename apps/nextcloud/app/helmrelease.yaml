@@ -78,6 +78,15 @@ spec:
   # See https://github.com/nextcloud/helm/blob/master/charts/nextcloud/values.yaml
   values:
 
+    # PHP2Shell (CVE-2026-109618 / CVE-2026-109619): PHP < 8.2.35 / 8.3.36 /
+    # 8.4.27 / 8.5.12 is vulnerable (CVSS 9.2, exploited in the wild since
+    # 2026-10-21). Pin the rebuilt 35.0.2-apache image - it bundles patched
+    # PHP 8.5.12. Without the pin, the mutable tag + pullPolicy IfNotPresent
+    # keeps nodes on the pre-patch cached image. Update the digest when
+    # bumping the version.
+    image:
+      tag: 35.0.2-apache@sha256:301e07b7f661c122752cc2c01b76f15036a156f2b6d794c76621b7d0a6bb8a50
+
     phpClientHttpsFix:
       enabled: true
     env:
@@ -209,6 +218,12 @@ spec:
           post_max_size = 16G
           max_input_time = 3600
           max_execution_time = 3600
+        hardening.ini: |
+          ; PHP2Shell (CVE-2026-109619): session.upload_progress writes upload
+          ; filenames unsanitized into session files and is confirmed exploitable
+          ; even on patched PHP. Hardly used and hardly tested - disable it
+          ; (PHP recommends keeping it off even after patching).
+          session.upload_progress.enabled = 0
       configs:
         gitops.config.php: |-
           <?php
