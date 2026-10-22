@@ -36,7 +36,7 @@ spec:
           main:
             image:
               repository: ghcr.io/nextcloud-releases/whiteboard
-              tag: v2.1.0@sha256:855227c360799d1dcb405b7e85362793f3123013760ab7e6734a975ce0dca75d
+              tag: v2.1.1@sha256:87955a2c7c92262b7d3d936fed15ce3c040b2eb194cad99e158e6fe5b9b6ee4f
             env:
               NEXTCLOUD_URL: http://nextcloud:8080
               STORAGE_STRATEGY: lru
