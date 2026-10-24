@@ -177,7 +177,7 @@ spec:
                       memory: 256Mi
                   image:
                     repository: docker.io/library/redis
-                    tag: 8.10@sha256:2c2dff791878316e3b083188be0d578423b24813cdda5de0e80ea4f7b3e6bfd6 # renovate: depName=docker.io/library/redis datasource=docker
+                    tag: 8.10@sha256:97ec88159e6d7cfb5ddef9015386087d58a912de80112f06ebdfa78fa5989901 # renovate: depName=docker.io/library/redis datasource=docker
 
           persistence:
             data:
