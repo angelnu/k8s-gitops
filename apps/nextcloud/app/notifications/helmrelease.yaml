@@ -40,7 +40,7 @@ spec:
               # PHP2Shell (CVE-2026-109618/109619): digest bumped to the 2026-10-21
               # rebuild (bundles patched PHP 8.5.12). This container only runs the
               # Rust notify_push binary (no PHP request processing) - refreshed for hygiene.
-              tag: 35.0.2@sha256:301e07b7f661c122752cc2c01b76f15036a156f2b6d794c76621b7d0a6bb8a50
+              tag: 35.0.2@sha256:89af7ee7a96ff5e9668280566209268ae6b2d02327f6ef6d56f6d68228cf9431
             # How to Enable
             # 1. Install "client push" app within nextcloud
             # 2. sudo -u www-data php -d memory_limit=-1 /var/www/html/occ notify_push:setup https://nextcloud.mydomain.com/push
