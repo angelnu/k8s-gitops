@@ -69,7 +69,12 @@ spec:
         APP_NAME: "Forgejo for ${CLUSTER_SHORT_DOMAIN}"
         #RUN_MODE: dev
         server:
-          SSH_PORT : 2222   
+          # ROOT_URL must be explicit: with ingress disabled (Gateway API
+          # migration, raw HTTPRoute the chart cannot see) the chart's
+          # auto-generated ROOT_URL falls back to http://DOMAIN, which breaks
+          # the authentik OAuth2 redirect_uri (400 invalid redirection URI)
+          ROOT_URL: "https://git.${CLUSTER_SHORT_DOMAIN}"
+          SSH_PORT : 2222
           SSH_LISTEN_PORT : 2222
         security:
           PASSWORD_COMPLEXITY: spec
