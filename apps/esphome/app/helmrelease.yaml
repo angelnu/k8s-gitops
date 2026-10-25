@@ -44,13 +44,14 @@ spec:
               ]
         containers:
           main:
-            # observed 2026-09-24: p95 220Mi, max 220Mi. Generous limit; review with >=1 week of Prometheus data (idle; compiles need much more)
+            # observed 2026-09-24: p95 220Mi, max 220Mi idle. Compiles saturate 3Gi
+            # (esp-idf build + dashboard -> OOM kill 2026-10-25, exit 137 on l04)
             resources:
               requests:
                 cpu: 50m
-                memory: 256Mi
+                memory: 512Mi
               limits:
-                memory: 3Gi
+                memory: 5Gi
             image:
               repository: ghcr.io/esphome/esphome
               tag: 2026.10.0@sha256:1dff19a59070cdb523b76576cdc74d200f862d43c1407809088855920cf57145
