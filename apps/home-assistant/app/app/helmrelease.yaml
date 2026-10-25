@@ -44,7 +44,7 @@ spec:
                 memory: 2560Mi
             image:
               repository: ghcr.io/home-assistant/home-assistant
-              tag: 2026.10.3@sha256:407b89cd11a8cb67d388d21739a226c74acbbebe1ac59e3b83b11b43ce76b98f
+              tag: 2026.10.4@sha256:23f4dfbb69ce76315dbc4de7915504f1c2dcecd7ca2648113a493a385972e133
             env:
               TZ: "Europe/Berlin"
             probes:
