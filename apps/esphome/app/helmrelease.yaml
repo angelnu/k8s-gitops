@@ -46,11 +46,15 @@ spec:
           main:
             # observed 2026-09-24: p95 220Mi, max 220Mi idle. Compiles saturate 3Gi
             # (esp-idf build + dashboard -> OOM kill 2026-10-25, exit 137 on l04)
+            # Low cpu request = low CFS weight (reduced priority under node
+            # contention); 2-cpu limit keeps the compiles from starving other
+            # pods on the (6-cpu) worker.
             resources:
               requests:
-                cpu: 50m
+                cpu: 100m
                 memory: 512Mi
               limits:
+                cpu: "2"
                 memory: 5Gi
             image:
               repository: ghcr.io/esphome/esphome
