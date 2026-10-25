@@ -36,7 +36,7 @@ spec:
               # 2.0.10087 built 2026-10-22 with php8.5 8.5.9-0ubuntu2.1 from the
               # Ubuntu 26.10 security pocket (USN-8948-1) - patched for PHP2Shell
               # (CVE-2026-109618/109619). 2.0.10086 (2026-10-18) is vulnerable.
-              tag: 2.0.10089
+              tag: 2.0.10093
               pullPolicy: Always
 
             securityContext:
