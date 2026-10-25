@@ -98,11 +98,15 @@ spec:
         items:
           - key: id_rsa
             path: id_rsa
+          - key: known_hosts
+            path: known_hosts
         advancedMounts:
           main:
             editor:
               - path: /root/.ssh/id_rsa
                 subPath: id_rsa
+              - path: /root/.ssh/known_hosts
+                subPath: known_hosts
     
     serviceAccount:
       default:
