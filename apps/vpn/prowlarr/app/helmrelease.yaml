@@ -32,7 +32,7 @@ spec:
           main:
             image:
               repository: ghcr.io/home-operations/prowlarr
-              tag: 2.6.5@sha256:6152751c3ea2e7751564f5952173d5e83eed0e09f3fabd2cb6bdb58690c39e2f
+              tag: 2.6.6@sha256:8ead2b6f1b5d744fc52849d455896809b2d290f2b78b05f1b3fb21f410866b58
             env:
               TZ: "Europe/Berlin"
               PROWLARR__INSTANCE_NAME: Prowlarr
