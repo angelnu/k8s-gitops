@@ -32,7 +32,7 @@ spec:
           main:
             image:
               repository: ghcr.io/home-operations/sonarr
-              tag: 4.0.20@sha256:1f19eb5e0f421418c1a956bbe01310a0141423afe28bd9a4b1dcb8629ff2bce2
+              tag: 5.0.0@sha256:75866f930b8e49c0acfc965c8ace0429231cdc69e2e4b287eb51443aa3249d86
             env:
               TZ: "Europe/Berlin"
               PUSHOVER_DEBUG: "false"
