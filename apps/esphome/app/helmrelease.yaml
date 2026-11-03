@@ -58,7 +58,7 @@ spec:
                 memory: 5Gi
             image:
               repository: ghcr.io/esphome/esphome
-              tag: 2026.10.1@sha256:eab8cd6b4f51077c3883af4cedc058280ddc34a94f3b2ffee23e9d2cd5f1db64
+              tag: 2026.10.2@sha256:4a918585150e95e7675be84a347384ff308fde1bd32d0e4472666e1252cc0e8f
             #env:
             #  ESPHOME_DASHBOARD_USE_PING: "true"
           editor:
