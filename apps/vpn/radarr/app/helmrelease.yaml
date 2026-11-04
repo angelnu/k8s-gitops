@@ -32,7 +32,7 @@ spec:
           main:
             image:
               repository: ghcr.io/home-operations/radarr
-              tag: 6.4.4@sha256:dc66c010c5d9a0ea131fa3c1716fd0f9493b64c1d3d9f938ebed6b7fab580e5b
+              tag: 7.0.1@sha256:ffe1f4d7c30b33a1e1256e14ace0eefddf120b37d8defceba208e9c190772f8d
             env:
               TZ: "Europe/Berlin"
               RADARR__INSTANCE_NAME: Radarr
