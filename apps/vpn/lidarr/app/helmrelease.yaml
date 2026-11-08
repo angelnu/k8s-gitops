@@ -32,7 +32,7 @@ spec:
           main:
             image:
               repository: ghcr.io/home-operations/lidarr
-              tag: 3.2.0.5144@sha256:25b09e80e76d9680a3e0802c9f87e456925b1224ad3b726eae5bb0914dcc074b
+              tag: 3.2.1.5196@sha256:ecbcc0dc629576ccba4af6d54de2fd0ac83b175f3c4fccf3024c44a2d01dbc7f
 
             env:
               TZ: "Europe/Berlin"
