@@ -11,12 +11,15 @@ data:
   CLUSTER_EXTERNAL_SUBNET_PREFIX: "192.168.5"
   CLUSTER_LB_RANGE: "192.168.5.128-192.168.5.192"
 
-  # ClusterIP of the envoy-gateway proxy Service (name: envoy-envoy-gateway-main-<gw-hash>).
-  # Some apps attached to the UDN localnet cannot reach the gateway LB VIP when the
-  # envoy proxy pod is on the same node (OVN UDN hairpin) - they resolve the affected
-  # hostnames to this ClusterIP via pod hostAliases instead. If the Gateway spec
-  # changes, EG may recreate the Service with a new ClusterIP: re-check with
-  #   kubectl -n envoy-gateway get svc | grep envoy
+  # ClusterIP of the envoy-gateway proxy Service. The EnvoyProxy patch
+  # (apps/envoy-gateway/app/envoyproxy.yaml) pins the Service to this value, so
+  # it stays stable across proxy Service recreations (deletion, EG reinstall,
+  # gateway rename). Apps attached to the UDN localnet cannot reach the gateway
+  # LB VIP when the envoy proxy pod is on the same node (OVN UDN hairpin) - they
+  # resolve the affected hostnames to this ClusterIP via pod hostAliases instead.
+  # To move it deliberately: pick a free IP in the service CIDR (172.30.0.0/16)
+  # and change BOTH this value and the EnvoyProxy patch together (same value,
+  # one Flux apply - the Service update keeps the old IP until both land).
   ENVOY_GATEWAY_CLUSTER_IP: "172.30.187.158"
 
   FLUX_NOTIFICATIONS_CHANNEL: k8s
