@@ -11,6 +11,11 @@ data:
   CLUSTER_EXTERNAL_SUBNET_PREFIX: "192.168.6"
   CLUSTER_LB_RANGE: "192.168.6.128-192.168.6.192"
 
+  # ClusterIP of the envoy-gateway proxy Service (pinned via the EnvoyProxy
+  # patch, apps/envoy-gateway/app/envoyproxy.yaml - stable across proxy Service
+  # recreations). Same hairpin workaround applies if any app here ever needs it.
+  ENVOY_GATEWAY_CLUSTER_IP: "172.30.251.70"
+
   FLUX_NOTIFICATIONS_CHANNEL: k8s-staging
   BOTKUBE_NOTIFICATIONS_CHANNEL: k8s-staging
 

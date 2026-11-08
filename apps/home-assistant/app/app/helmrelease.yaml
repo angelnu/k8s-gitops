@@ -68,12 +68,27 @@ spec:
             securityContext:
               runAsUser: 0
         pod:
-          # hostAliases:
-          #   # We cannot access the ingress LB address directly - go through external IP
-          #   - ip: "${FIX_EXTERNAL_IP}"
-          #     hostnames:
-          #       - "nextcloud.${CLUSTER_DOMAIN}"
-          #       - "jellyfin.pub.${CLUSTER_DOMAIN}"
+          hostAliases:
+            # The pod's UDN localnet route (192.168.0.0/19) shadows eth0 for all LAN
+            # IPs, including the envoy-gateway LB VIP. OVN UDN-localnet pods cannot
+            # reach a LB VIP whose backend pod is on the same node (hairpin drops the
+            # return path) - this hung hass-oidc-auth's server-side OIDC discovery
+            # fetch, so envoy answered "upstream request timeout" (504) on
+            # /auth/oidc/redirect (observed 2026-10-18 after the Gateway API migration
+            # gave envoy its own VIP on the HA node).
+            # Resolve the ingress hostnames via the pinned gateway ClusterIP instead:
+            # TLS terminates at envoy with the proper cert, so the OIDC
+            # discovery/token/JWKS calls work. The ClusterIP is pinned by the
+            # EnvoyProxy patch (apps/envoy-gateway/app/envoyproxy.yaml), so it is
+            # stable across proxy Service recreations - no re-check needed.
+            # NOTE: /etc/hosts does not follow CNAMEs - hass-oidc-auth resolves
+            # authentik.pub.* directly, so THAT entry is the one that matters;
+            # casa96-ingress.* (the CNAME target of the *.pub DNS) is listed for
+            # anything resolving it directly.
+            - ip: "${ENVOY_GATEWAY_CLUSTER_IP}"
+              hostnames:
+                - "casa96-ingress.${CLUSTER_DOMAIN}"
+                - "authentik.pub.${CLUSTER_DOMAIN}"
 
           annotations:
             k8s.v1.cni.cncf.io/networks: |

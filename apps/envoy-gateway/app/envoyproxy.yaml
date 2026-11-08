@@ -38,3 +38,16 @@ spec:
         externalTrafficPolicy: Local # keep source IP, same as ingress-nginx today
         annotations:
           metallb.io/loadBalancerIPs: "${CLUSTER_EXTERNAL_SUBNET_PREFIX}.${CLUSTER_LB_GATEWAY}"
+        # Pin the internal ClusterIP: EG applies this patch to the rendered Service
+        # BEFORE creating/updating it (EG v1.9.3 MergeWithPatch in the render), so
+        # the ClusterIP survives any proxy Service recreation (deletion, EG
+        # reinstall, gateway rename). Apps attached to the UDN localnet reach the
+        # gateway through this ClusterIP via pod hostAliases (the LB VIP hairpins
+        # - see apps/home-assistant/app/app/helmrelease.yaml). To move it
+        # deliberately: pick a free IP in the service CIDR and change it in BOTH
+        # this patch and the per-cluster ENVOY_GATEWAY_CLUSTER_IP together.
+        patch:
+          type: StrategicMerge
+          value:
+            spec:
+              clusterIP: "${ENVOY_GATEWAY_CLUSTER_IP}"
