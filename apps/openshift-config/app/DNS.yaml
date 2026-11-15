@@ -11,11 +11,36 @@ spec:
     positiveTTL: 120s
   logLevel: Normal
   operatorLogLevel: Normal
+  # The home router was the only upstream: the "Network" resolver *and* the
+  # node's /etc/resolv.conf behind "SystemResolvConf" both pointed at it. It
+  # SERVFAILs on external names after a ~5s timeout, so every query for a
+  # public name paid that penalty (e.g. the slow Home Assistant UI). Split
+  # resolution instead of sending everything to the router:
+  #   * public names     -> reliable public resolvers (global "." server)
+  #   * local-only names -> the router (spec.servers below)
   upstreamResolvers:
-    policy: Sequential
+    policy: Random # spread queries over both public resolvers
     upstreams:
     - type: Network
-      address: 192.168.2.1 # Your home router/DNS IP
+      address: 9.9.9.9
       port: 53
-    - port: 53
-      type: SystemResolvConf
+    - type: Network
+      address: 1.1.1.1
+      port: 53
+  # Local-only zones answered by the router. The LAN suffix is ".lan" (used by
+  # the router ExternalName in the reverse-proxy app) and ${CLUSTER_DOMAIN} -
+  # including its "home." subzone - is split-horizon DNS hosted on the router
+  # (api.<domain>, *.apps.<domain>, *.home.<domain>). Longest-suffix match
+  # routes those queries here; every other name falls through to the public
+  # resolvers above. Rollback: drop spec.servers and restore the router as the
+  # upstreamResolvers entry.
+  servers:
+  - name: local
+    zones:
+    - lan
+    - home.${CLUSTER_DOMAIN}
+    - ${CLUSTER_DOMAIN}
+    forwardPlugin:
+      policy: Sequential
+      upstreams:
+      - 192.168.2.1:53 # Your home router/DNS IP
