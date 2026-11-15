@@ -41,8 +41,40 @@ spec:
               HA_URL: "http://home-assistant-main:8123"
               DASH_URL: "http://0.0.0.0:5050"
               # TOKEN: secret
+              # 4.5.16 switched to a uv-based entrypoint. Under the restricted-v2
+              # SCC the pod runs as a random UID with no HOME, so uv tried to
+              # create /.cache/uv and the container died instantly with
+              # "Permission denied (os error 13)" -> CrashLoopBackOff. /tmp is
+              # writable, so point HOME and the uv cache there.
+              HOME: "/tmp"
+              UV_CACHE_DIR: "/tmp/uv-cache"
             envFrom:
               - secret: appdaemon-env
+            probes:
+              liveness:
+                enabled: true
+                type: TCP
+                port: 5050
+                spec:
+                  initialDelaySeconds: 30
+                  periodSeconds: 20
+                  timeoutSeconds: 5
+                  failureThreshold: 6
+              readiness:
+                enabled: true
+                type: TCP
+                port: 5050
+                spec:
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 6
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+              limits:
+                memory: 256Mi
 
     persistence:
       config:
