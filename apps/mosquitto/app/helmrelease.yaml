@@ -41,7 +41,7 @@ spec:
           gen-passwd:
             image:
               repository: docker.io/library/eclipse-mosquitto
-              tag: 2.0.22
+              tag: 2.0.23
             command:
               - sh
               - -c
@@ -57,7 +57,7 @@ spec:
             image:
               repository: docker.io/library/eclipse-mosquitto
               # TODO: pin the digest like the rest of the repo
-              tag: 2.0.22
+              tag: 2.0.23
             securityContext:
               runAsUser: 1883
               runAsGroup: 1883
