@@ -115,13 +115,15 @@ spec:
             path: id_rsa
           - key: known_hosts
             path: known_hosts
+        # Mount the whole Secret at /root/.ssh instead of mounting each file
+        # with subPath: Kubernetes does NOT refresh subPath mounts when the
+        # Secret changes, so a rotated known_hosts/id_rsa only reached the pods
+        # on the next pod recreation (2026-11-21: the Forgejo SSH host key
+        # changed and the running pods kept the stale key).
         advancedMounts:
           main:
             editor:
-              - path: /root/.ssh/id_rsa
-                subPath: id_rsa
-              - path: /root/.ssh/known_hosts
-                subPath: known_hosts
+              - path: /root/.ssh
     
     serviceAccount:
       default:
