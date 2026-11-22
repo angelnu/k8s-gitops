@@ -42,7 +42,7 @@ spec:
           main:
             image:
               repository: docker.io/mwalbeck/nextcloud-spreed-signaling
-              tag: 2.1.1@sha256:0dddca2fb7161bed9f621c01a74325bc59506f5638d42dfacaf9e09aba6997d3
+              tag: 2.2.0@sha256:ab9c090161aab3b9da96a938d9ef3a4006716357df3417768221d2bb97d7cd5f
             securityContext:
               runAsUser: 601
               runAsGroup: 601
