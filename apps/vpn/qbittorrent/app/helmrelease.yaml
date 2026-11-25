@@ -32,7 +32,7 @@ spec:
           main:
             image:
               repository: ghcr.io/home-operations/qbittorrent
-              tag: 5.3.0@sha256:4e3f801cee7d2449c8df4a222ece0ab745153d92899870cde06b43ca9cbca468
+              tag: 5.3.1@sha256:fcdbc4ac4a66d8c205ac67e4fe1b578158aaee0a50369c3d04918977f4f359c4
             env:
               TZ: "Europe/Berlin"
               QBITTORRENT__PORT: &port 8080
